@@ -2,9 +2,9 @@
   
   <!-- These are specific to this Unity project and can't be overridden -->
   <PropertyGroup>
-    <UnityProjectAssetsPath>C:\Users\Adam6\Desktop\PhotonProjects\Multi_Platform_Photon_IATK\MP_IATK\Assets</UnityProjectAssetsPath>
+    <UnityProjectAssetsPath>C:\Users\Adam6\Desktop\Photon_IATK_Git\MP_IATK_HL2\Assets</UnityProjectAssetsPath>
     
-    <_MSBuildForUnityGeneratedOutputDirectory>C:\Users\Adam6\Desktop\PhotonProjects\Multi_Platform_Photon_IATK\MP_IATK\MSBuild</_MSBuildForUnityGeneratedOutputDirectory>
+    <_MSBuildForUnityGeneratedOutputDirectory>C:\Users\Adam6\Desktop\Photon_IATK_Git\MP_IATK_HL2\MSBuild</_MSBuildForUnityGeneratedOutputDirectory>
     <MSBuildForUnityGeneratedProjectDirectory>$(_MSBuildForUnityGeneratedOutputDirectory)\Projects</MSBuildForUnityGeneratedProjectDirectory>
   </PropertyGroup>
   
