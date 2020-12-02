@@ -163,9 +163,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Adam6\\Desktop\\PhotonProjects\\Multi_Platform_Photon_IATK\\MP_IATK\\Assets\\MP_IATK.Dependencies.msb4u.csproj",
-      "projectName": "MP_IATK.Dependencies.msb4u",
-      "projectPath": "C:\\Users\\Adam6\\Desktop\\PhotonProjects\\Multi_Platform_Photon_IATK\\MP_IATK\\Assets\\MP_IATK.Dependencies.msb4u.csproj",
+      "projectUniqueName": "C:\\Users\\Adam6\\Desktop\\PhotonProjects\\Multi_Platform_Photon_IATK\\MP_IATK\\Assets\\IATK_HL2.Dependencies.msb4u.csproj",
+      "projectName": "IATK_HL2.Dependencies.msb4u",
+      "projectPath": "C:\\Users\\Adam6\\Desktop\\PhotonProjects\\Multi_Platform_Photon_IATK\\MP_IATK\\Assets\\IATK_HL2.Dependencies.msb4u.csproj",
       "packagesPath": "C:\\Users\\Adam6\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Adam6\\Desktop\\PhotonProjects\\Multi_Platform_Photon_IATK\\MP_IATK\\MSBuild\\Output\\obj\\Dependencies\\",
       "projectStyle": "PackageReference",

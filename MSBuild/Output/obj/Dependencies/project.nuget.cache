@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "hBMifCc7XRX4v4bGhQO5a5jVvrp70KfL6hyhzf5ySH/DEh3asW02G1P3qMg5NvKcKkDOgefPz17dOd2Mfcd2og==",
+  "dgSpecHash": "amRVnSsrH6kCRmApebC5HZfY0txc7mBgaAxOLAIRYwgP3ReWLnKeLOb5dpsSLLlhqGldHw/FjP9XYqRNFFm0Rg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Adam6\\Desktop\\PhotonProjects\\Multi_Platform_Photon_IATK\\MP_IATK\\Assets\\MP_IATK.Dependencies.msb4u.csproj",
+  "projectFilePath": "C:\\Users\\Adam6\\Desktop\\PhotonProjects\\Multi_Platform_Photon_IATK\\MP_IATK\\Assets\\IATK_HL2.Dependencies.msb4u.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Adam6\\.nuget\\packages\\microsoft.windows.mixedreality.dotnetwinrt\\0.5.1049\\microsoft.windows.mixedreality.dotnetwinrt.0.5.1049.nupkg.sha512",
     "C:\\Users\\Adam6\\.nuget\\packages\\msbuildforunity\\0.9.1-123842\\msbuildforunity.0.9.1-123842.nupkg.sha512",
