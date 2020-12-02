@@ -7,9 +7,14 @@ using System.IO;
 //using UnityEditor.Build.Reporting;
 using UnityEngine.XR;
 
+
+
+namespace Photon_IATK
+{
 #if UNITY_EDITOR
-[ExecuteInEditMode]
-public class Tools : Editor
+    [ExecuteInEditMode]
+
+    public class Tools : Editor
 {
 
     #region Menu Items
@@ -31,10 +36,10 @@ public class Tools : Editor
 
     #region Private Variables
 
-    static private string className = "Script-Custom Tools:";
-    static private string ColorStartGreen = "<color=green>";
-    static private string ColorStartRed = "<color=Red>";
-    static private string colorEnd = "</color>";
+    static private string className = "Tools.cs:";
+    static private string ColorStartGreen = GlobalVariables.green;
+    static private string ColorStartRed = GlobalVariables.red;
+    static private string colorEnd = GlobalVariables.endColor;
 
     #endregion
 
@@ -44,23 +49,46 @@ public class Tools : Editor
     static void setPlatformDesktop()
     {
         clearLog();
-        setBuildPlatformDesktop();
-        setPlatformSymbolsDesktop();
-        logSettings();
+        BuildManager buildManager = new BuildManager { };
+        if (buildManager.GetCurrentPlatform() != "DESKTOP")
+        {
+            setBuildPlatformDesktop();
+            setPlatformSymbolsDesktop();
+        } else
+        {
+            Debug.Log(ColorStartGreen + " Desktop already set as platform" + colorEnd + " Tools.cs");
+        }
+            logSettings();
     }
 
     static void setPlatformHL2()
     {
         clearLog();
-        setBuildPlatformHL2();
-        setPlatformSymbolsHL2();
+        BuildManager buildManager = new BuildManager { };
+        if (buildManager.GetCurrentPlatform() != "HL2")
+        {
+            setBuildPlatformHL2();
+            setPlatformSymbolsHL2();
+        }
+        else
+        {
+            Debug.Log(ColorStartGreen + " HL2 already set as platform" + colorEnd + " Tools.cs");
+        }
         logSettings();
     }
     static void setPlatformVive()
     {
         clearLog();
-        setBuildPlatformVive();
-        setPlatformSymbolsVive();
+        BuildManager buildManager = new BuildManager { };
+        if (buildManager.GetCurrentPlatform() != "VIVE")
+        {
+            setBuildPlatformVive();
+            setPlatformSymbolsVive();
+        }
+        else
+        {
+            Debug.Log(ColorStartGreen + " VIVE already set as platform" + colorEnd + " Tools.cs");
+        }
         logSettings();
     }
 
@@ -74,15 +102,16 @@ public class Tools : Editor
 
         //Script - Custom Tools: -Build Target Group: Metro, Build Standalone: StandaloneWindows, Build Path: C: \Users\Adam6\Desktop\PhotonProjects\PhotonIATK\PhotonDesktop\PhotonDesktop\Builds\HL2
 
-        Debug.Log(ColorStartGreen + className + " start log dump " + colorEnd);
-        Debug.Log(ColorStartGreen + "Build Target Group: " + colorEnd + ColorStartRed + buildTarget + colorEnd);
-        Debug.Log(ColorStartGreen + "Build Target: " + colorEnd + ColorStartRed + buildTargetStandalone + colorEnd);
+        //Debug.Log(ColorStartGreen + className + " start log dump " + colorEnd);
+        //Debug.Log(ColorStartGreen + "Build Target Group: " + colorEnd + ColorStartRed + buildTarget + colorEnd);
+        //Debug.Log(ColorStartGreen + "Build Target: " + colorEnd + ColorStartRed + buildTargetStandalone + colorEnd);
         Debug.Log(ColorStartGreen + "Build Path: " + colorEnd + ColorStartRed + buildPath + colorEnd);
         BuildManager buildManager = new BuildManager { };
-        Debug.Log(ColorStartGreen + className + " Current symbols for" + " project:" + colorEnd + ColorStartRed + buildManager.getBuildDefineSymbols() + colorEnd);
-        Debug.Log(ColorStartGreen + "XR Enabled: " + colorEnd + ColorStartRed + XRSettings.enabled + colorEnd);
+        Debug.Log(ColorStartGreen + className + " Current symbol: " + colorEnd + ColorStartRed + buildManager.GetCurrentPlatform() + colorEnd);
+        Debug.Log(ColorStartGreen + className + " Current symbols for" + " project: " + colorEnd + ColorStartRed + buildManager.getBuildDefineSymbols() + colorEnd);
+        //Debug.Log(ColorStartGreen + "XR Enabled: " + colorEnd + ColorStartRed + XRSettings.enabled + colorEnd);
         Debug.Log(ColorStartGreen + "XR Device Active: " + colorEnd + ColorStartRed + XRSettings.loadedDeviceName + colorEnd);
-        Debug.Log(ColorStartGreen + "XR Device Name: " + colorEnd + ColorStartRed + XRSettings.isDeviceActive + colorEnd);
+        //Debug.Log(ColorStartGreen + "XR Device Name: " + colorEnd + ColorStartRed + XRSettings.isDeviceActive + colorEnd);
         Debug.Log(ColorStartGreen + className + " End log dump " + colorEnd);
 
     }
@@ -139,10 +168,16 @@ public class Tools : Editor
         BuildManager buildManager = new BuildManager { };
         string newSymbols = buildManager.setBuildDefineSymbols(BuildManager.allSymbols.VIVE);
     }
+    }
+#endif
 
 }
 
-public class BuildManager
+namespace Photon_IATK
+{
+#if UNITY_EDITOR
+    [ExecuteInEditMode]
+    public class BuildManager
 {
 
     public enum allSymbols
@@ -191,7 +226,27 @@ public class BuildManager
         return getBuildDefineSymbols();
     }
 
+    public string GetCurrentPlatform()
+    {
+        //Get symbols
+        string currentSymbols = PlayerSettings.GetScriptingDefineSymbolsForGroup(EditorUserBuildSettings.selectedBuildTargetGroup);
+        string currentPlatfrom = "";
+        //Remove old platform symbol
+        string[] SymbolNames = System.Enum.GetNames(typeof(GlobalVariables.allSymbols));
+        for (int i = 0; i < SymbolNames.Length; i++)
+        {
+            string symbolName = SymbolNames[i];
+            if (currentSymbols.Contains(symbolName))
+            {
+                currentPlatfrom = symbolName;
+            }
+        }
+        return (currentPlatfrom);
+    }
+
+}
+#endif
 }
 
-#endif
+
 
