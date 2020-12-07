@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using Photon.Pun;
+﻿using Photon.Pun;
 using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
@@ -15,7 +14,7 @@ namespace Photon_IATK
 {
     public class Photon_Lobby : MonoBehaviourPunCallbacks
     {
-        #region Private Fields
+        #region Fields
         // This client's version number. Users are separated from each other by gameVersion (which allows you to make breaking changes).
         string gameVersion = "2";
 
@@ -26,13 +25,9 @@ namespace Photon_IATK
         /// </summary>
         bool isConnecting;
 
-        [Tooltip("The Ui Panel to let the user enter name, connect and play")]
+        [Tooltip("Should the application connect automatically")]
         [SerializeField]
-        private GameObject controlPanel;
-
-        [Tooltip("The UI Label to inform the user that the connection is in progress")]
-        [SerializeField]
-        private GameObject progressLabel;
+        public bool AutoConnect;
 
         #endregion
 
@@ -43,16 +38,17 @@ namespace Photon_IATK
         {
             // this makes sure we can use PhotonNetwork.LoadLevel() on the master client and all clients in the same room sync their level automatically
             PhotonNetwork.AutomaticallySyncScene = true;
-
         }
 
         // MonoBehaviour method called on GameObject by Unity during initialization phase.
         void Start()
         {
-            //progressLabel.SetActive(false);
-            //controlPanel.SetActive(true);
-            //setup();
-            Connect();
+            setup();
+            if (AutoConnect)
+            {
+                Connect();
+            }
+
         }
         #endregion
 
@@ -65,8 +61,6 @@ namespace Photon_IATK
         /// </summary>
         public void Connect()
         {
-            //progressLabel.SetActive(true);
-            //controlPanel.SetActive(false);
             // we check if we are connected or not, we join if we are , else we initiate the connection to the server.
             if (PhotonNetwork.IsConnected)
             {
@@ -102,8 +96,6 @@ namespace Photon_IATK
         public override void OnDisconnected(DisconnectCause cause)
         {
             isConnecting = false;
-            progressLabel.SetActive(false);
-            controlPanel.SetActive(true);
             Debug.LogWarningFormat(this.GetType() + " : OnDisconnected() was called by PUN with reason {0}", cause);
         }
 
@@ -151,9 +143,9 @@ namespace Photon_IATK
         }
 
 #elif HL2
-                void setup()
+        void setup()
         {
-            disableVR();
+            Debug.Log(this.GetType() + ": No Setup needed");
         }
 
 #elif VIVE
@@ -165,7 +157,7 @@ namespace Photon_IATK
 
         void setup()
         {
-
+            Debug.Log(this.GetType() + ": ERROR! No directive set");
         }
 
 #endif

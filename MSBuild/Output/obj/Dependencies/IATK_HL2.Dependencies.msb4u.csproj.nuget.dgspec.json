@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Adam6\\Desktop\\Photon_IATK_Git\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj": {}
+    "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Adam6\\Desktop\\Photon_IATK_Git\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj": {
+    "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Adam6\\Desktop\\Photon_IATK_Git\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj",
+        "projectUniqueName": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj",
         "projectName": "IATK_HL2.Dependencies.msb4u",
-        "projectPath": "C:\\Users\\Adam6\\Desktop\\Photon_IATK_Git\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj",
-        "packagesPath": "C:\\Users\\Adam6\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Adam6\\Desktop\\Photon_IATK_Git\\MP_IATK_HL2\\MSBuild\\Output\\obj\\Dependencies\\",
+        "projectPath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj",
+        "packagesPath": "C:\\Users\\NuiLab00\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2\\MSBuild\\Output\\obj\\Dependencies\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\Adam6\\Desktop\\Photon_IATK_Git\\MP_IATK_HL2\\Assets\\NuGet.Config",
-          "C:\\Users\\Adam6\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2\\Assets\\NuGet.Config",
+          "C:\\Users\\NuiLab00\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -31,6 +31,7 @@
         },
         "frameworks": {
           "net46": {
+            "targetAlias": "net46",
             "projectReferences": {}
           }
         },
@@ -42,15 +43,22 @@
       },
       "frameworks": {
         "net46": {
+          "targetAlias": "net46",
           "dependencies": {
             "MSBuildForUnity": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers",
               "suppressParent": "Analyzers",
               "target": "Package",
               "version": "[0.9.1-*, 0.9.1]"
+            },
+            "Microsoft.NETFramework.ReferenceAssemblies": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.0, )",
+              "autoReferenced": true
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.302\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
         }
       }
     }

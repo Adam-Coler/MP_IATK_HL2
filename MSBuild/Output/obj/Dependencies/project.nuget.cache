@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "kEFzKJWgpFI9SZkpIXD1u2hQd2uhuYE6nhFEgjhqp0kpyBzp3qJwb4mf2obDPIpTaSQAtzVWhrc95TIIosFcsg==",
+  "dgSpecHash": "C2GH529xry3grZOAtTZ9JCrXgyXcd/xkaPYWbp3EFND4sk4ksJxCI1Lyp+hgX6t702ka52AXdI+MtJskF8M2Dg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Adam6\\Desktop\\Photon_IATK_Git\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj",
+  "projectFilePath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Adam6\\.nuget\\packages\\msbuildforunity\\0.9.1-123842\\msbuildforunity.0.9.1-123842.nupkg.sha512"
+    "C:\\Users\\NuiLab00\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.0\\microsoft.netframework.referenceassemblies.1.0.0.nupkg.sha512",
+    "C:\\Users\\NuiLab00\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net46\\1.0.0\\microsoft.netframework.referenceassemblies.net46.1.0.0.nupkg.sha512",
+    "C:\\Users\\NuiLab00\\.nuget\\packages\\msbuildforunity\\0.9.1-123842\\msbuildforunity.0.9.1-123842.nupkg.sha512"
   ],
   "logs": []
 }

@@ -5,12 +5,16 @@ namespace Photon_IATK
 {
     public class setLocationOfMenus : MonoBehaviour
     {
-        Camera camera;
-        Transform this_transform;
-        Transform camera_transform;
 
         public Vector3 cameraOffset = Vector3.zero;
-        float smoothSpeed = 1f;
+        public float smoothSpeed = 1f;
+
+        private Camera camera;
+        private Transform this_transform;
+        private Transform camera_transform;
+
+
+
 
         // Start is called before the first frame update
         void Start()
