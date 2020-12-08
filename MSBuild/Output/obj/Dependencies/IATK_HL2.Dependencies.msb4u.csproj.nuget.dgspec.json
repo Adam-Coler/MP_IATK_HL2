@@ -32,7 +32,12 @@
         "frameworks": {
           "net46": {
             "targetAlias": "net46",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj": {
+                "projectPath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj",
+                "privateAssets": "analyzers"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -56,6 +61,61 @@
               "target": "Package",
               "version": "[1.0.0, )",
               "autoReferenced": true
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj",
+        "projectName": "DotNetAdapter",
+        "projectPath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj",
+        "packagesPath": "C:\\Users\\NuiLab00\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\.obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\NuiLab00\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net46"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net46": {
+            "targetAlias": "net46",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net46": {
+          "targetAlias": "net46",
+          "dependencies": {
+            "Microsoft.NETFramework.ReferenceAssemblies": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[1.0.0, )",
+              "autoReferenced": true
+            },
+            "Microsoft.Windows.MixedReality.DotNetWinRT": {
+              "suppressParent": "Analyzers",
+              "target": "Package",
+              "version": "[0.5.1049, )"
             }
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.100\\RuntimeIdentifierGraph.json"

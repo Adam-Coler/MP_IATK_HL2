@@ -1,12 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "vnrKev2fnIx0hAy+1rDMf9eM5/qLplSRiVEFUwpG7MKAnpcNFkjtZcqdDrnZYSJNbswFSt9xUeUhTvCUlWILYQ==",
+  "dgSpecHash": "/rclFI/FjKdZUlVqCi2+UlvVpxaQeTzfckfG717RFTwYls9jQWWhctEwCOmGZWrPrPLJRXigEXTXpxeFEatX/A==",
   "success": true,
   "projectFilePath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\NuiLab00\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.0\\microsoft.netframework.referenceassemblies.1.0.0.nupkg.sha512",
     "C:\\Users\\NuiLab00\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net46\\1.0.0\\microsoft.netframework.referenceassemblies.net46.1.0.0.nupkg.sha512",
-    "C:\\Users\\NuiLab00\\.nuget\\packages\\msbuildforunity\\0.9.1-123842\\msbuildforunity.0.9.1-123842.nupkg.sha512"
+    "C:\\Users\\NuiLab00\\.nuget\\packages\\microsoft.windows.mixedreality.dotnetwinrt\\0.5.1049\\microsoft.windows.mixedreality.dotnetwinrt.0.5.1049.nupkg.sha512",
+    "C:\\Users\\NuiLab00\\.nuget\\packages\\msbuildforunity\\0.9.1-123842\\msbuildforunity.0.9.1-123842.nupkg.sha512",
+    "C:\\Users\\NuiLab00\\.nuget\\packages\\system.drawing.primitives\\4.3.0\\system.drawing.primitives.4.3.0.nupkg.sha512"
   ],
   "logs": []
 }
