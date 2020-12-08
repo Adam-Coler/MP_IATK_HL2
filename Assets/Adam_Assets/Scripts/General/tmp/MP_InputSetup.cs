@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Valve.VR;
 using UnityEngine.UI;
 
 
@@ -60,7 +59,6 @@ namespace Photon_IATK
             Debug.Log(GlobalVariables.green + "Setting up room inputs for VIVE" + GlobalVariables.endColor + " : " + this.GetType().Name);
 
             controller = Instantiate(contollerPrefab, new Vector3(0, 0, 0), Quaternion.identity);
-            //SteamVR_Actions.default_InteractUI.AddOnStateDownListener(TriggerPressed, SteamVR_Input_Sources.LeftHand);
 
             //If we are in the editor using the mouse and keyboard is nice
 #if UNITY_EDITOR
@@ -89,9 +87,11 @@ namespace Photon_IATK
         }
 
 #else
+        private void setup()
+        { }
 
 #endif
-    }
+        }
 
 }
 

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using Photon.Pun;
-using Valve.VR;
 using Microsoft.MixedReality.Toolkit;
 
 namespace Photon_IATK
@@ -138,7 +137,7 @@ private void setup(){
                     isSetup = true;
                     GameObject leftController;
                     leftController = PhotonNetwork.Instantiate("ViveLeftController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-                    leftController.AddComponent<SteamVR_Behaviour_Pose>();
+                    //leftController.AddComponent<SteamVR_Behaviour_Pose>();
                 }
             }
 

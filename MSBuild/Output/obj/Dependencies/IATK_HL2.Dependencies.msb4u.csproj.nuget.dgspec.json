@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj": {}
+    "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj": {}
   },
   "projects": {
-    "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj": {
+    "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj",
+        "projectUniqueName": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj",
         "projectName": "IATK_HL2.Dependencies.msb4u",
-        "projectPath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj",
+        "projectPath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj",
         "packagesPath": "C:\\Users\\NuiLab00\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2\\MSBuild\\Output\\obj\\Dependencies\\",
+        "outputPath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\MSBuild\\Output\\obj\\Dependencies\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2\\Assets\\NuGet.Config",
+          "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Assets\\NuGet.Config",
           "C:\\Users\\NuiLab00\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
