@@ -68,23 +68,23 @@ namespace Photon_IATK
 
         }
 
-        //This will be removed when more than one button exists
-        private void TriggerPressed(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
-        {
-            GameObject[] buttonTagedObjects = GameObject.FindGameObjectsWithTag("Button");
-            Debug.Log(buttonTagedObjects.Length);
-            foreach (GameObject obj in buttonTagedObjects)
-            {
-                Button btn = obj.GetComponent<Button>();
-                if (btn != null)
-                {
-                    btn.Select();
-                    btn.onClick.Invoke();
-                    Debug.Log(btn.name);
-                }
-            }
-            Debug.Log(fromSource);
-        }
+        ////This will be removed when more than one button exists
+        //private void TriggerPressed(SteamVR_Action_Boolean fromAction, SteamVR_Input_Sources fromSource)
+        //{
+        //    GameObject[] buttonTagedObjects = GameObject.FindGameObjectsWithTag("Button");
+        //    Debug.Log(buttonTagedObjects.Length);
+        //    foreach (GameObject obj in buttonTagedObjects)
+        //    {
+        //        Button btn = obj.GetComponent<Button>();
+        //        if (btn != null)
+        //        {
+        //            btn.Select();
+        //            btn.onClick.Invoke();
+        //            Debug.Log(btn.name);
+        //        }
+        //    }
+        //    Debug.Log(fromSource);
+        //}
 
 #else
         private void setup()

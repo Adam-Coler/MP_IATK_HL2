@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Adam_Assets/Scenes/UniLevel_Scenes/EntryPoint.unity
+    guid: bfc01936a91adc34b9dac86788fbf740
+  - enabled: 1
     path: Assets/Adam_Assets/Scenes/MRTK_Lobby.unity
     guid: a0299247aba365a4c8e7244751777fee
   - enabled: 1

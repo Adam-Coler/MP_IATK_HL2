@@ -4,6 +4,7 @@ using UnityEngine;
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
 using Microsoft.MixedReality.Toolkit;
+using UnityEngine.XR;
 
 namespace Photon_IATK
 {
@@ -23,6 +24,32 @@ namespace Photon_IATK
                     transform.rotation = eventData.InputData.Rotation;
             }
         }
+
+        public void Awake()
+        {
+            //add code to find the controller if it wasnt found on detect
+            //var inputDevices = new List<InputDevice>();
+            //UnityEngine.XR.InputDevices.GetDevices(inputDevices);
+            //foreach (var device in inputDevices)
+            //{
+            //    Debug.Log(string.Format("Device found with name '{0}' and role '{1}'",
+            //              device.name, device.role.ToString()));
+
+            //}
+            IMixedRealityInputSystem inputSystem;
+            MixedRealityServiceRegistry.TryGetService<IMixedRealityInputSystem>(out inputSystem);
+            Debug.Log(GlobalVariables.green + inputSystem.DetectedControllers + GlobalVariables.endColor);
+            foreach (IMixedRealityController controller in inputSystem.DetectedControllers)
+            {
+                if(controller.ControllerHandedness == Handedness)
+                {
+                    Controller = controller;
+                    Debug.Log(GlobalVariables.green + "Controller Set" + GlobalVariables.endColor);
+                }
+                
+            }
+            }
+
 
         public override void OnSourceDetected(SourceStateEventData eventData)
         {

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "/rclFI/FjKdZUlVqCi2+UlvVpxaQeTzfckfG717RFTwYls9jQWWhctEwCOmGZWrPrPLJRXigEXTXpxeFEatX/A==",
+  "dgSpecHash": "p+VRADzuSgRZE/iBz6DQ8uZRl8mbiPdJ5J8Qx060++sXrSZ2sRGVztbLKRSYmvRoXj/6x7wnunCny7bdeiabBQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj",
+  "projectFilePath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\NuiLab00\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.0\\microsoft.netframework.referenceassemblies.1.0.0.nupkg.sha512",
     "C:\\Users\\NuiLab00\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net46\\1.0.0\\microsoft.netframework.referenceassemblies.net46.1.0.0.nupkg.sha512",

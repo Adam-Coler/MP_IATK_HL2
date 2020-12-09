@@ -86,18 +86,36 @@ namespace Photon_IATK {
         var player = PhotonNetwork.Instantiate(photonUserPrefab.name, Vector3.zero, Quaternion.identity);
     }
 
-            // private void CreateMainLunarModule()
-            // {
-            //     module = PhotonNetwork.Instantiate(roverExplorerPrefab.name, Vector3.zero, Quaternion.identity);
-            //     pv.RPC("Rpc_SetModuleParent", RpcTarget.AllBuffered);
-            // }
-            //
-            // [PunRPC]
-            // private void Rpc_SetModuleParent()
-            // {
-            //     Debug.Log("Rpc_SetModuleParent- RPC Called");
-            //     module.transform.parent = TableAnchor.Instance.transform;
-            //     module.transform.localPosition = moduleLocation;
-            // }
+        // private void CreateMainLunarModule()
+        // {
+        //     module = PhotonNetwork.Instantiate(roverExplorerPrefab.name, Vector3.zero, Quaternion.identity);
+        //     pv.RPC("Rpc_SetModuleParent", RpcTarget.AllBuffered);
+        // }
+        //
+        // [PunRPC]
+        // private void Rpc_SetModuleParent()
+        // {
+        //     Debug.Log("Rpc_SetModuleParent- RPC Called");
+        //     module.transform.parent = TableAnchor.Instance.transform;
+        //     module.transform.localPosition = moduleLocation;
+        // }
+
+        #region CUSTOM
+
+
+
+#if DESKTOP
+
+
+#elif HL2
+
+
+#elif VIVE
+
+#else
+
+#endif
+        #endregion
+
     }
 }
