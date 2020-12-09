@@ -355,7 +355,6 @@ MonoBehaviour:
   txtNickName: {fileID: 9103845924643272921}
   VivePrefab: {fileID: 7301446135125428367, guid: 0c5c181400b5d954cab36e5e1c043bcc,
     type: 3}
-  configurationProfile: {fileID: 0}
 --- !u!114 &4072795461329610504
 MonoBehaviour:
   m_ObjectHideFlags: 0

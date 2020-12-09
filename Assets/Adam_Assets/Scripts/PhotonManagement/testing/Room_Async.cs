@@ -15,7 +15,7 @@ namespace Photon_IATK {
     private Player[] photonPlayers;
     private int playersInRoom;
     private int myNumberInRoom;
-
+    
     // private GameObject module;
     // private Vector3 moduleLocation = Vector3.zero;
 
@@ -24,7 +24,7 @@ namespace Photon_IATK {
         base.OnPlayerEnteredRoom(newPlayer);
         photonPlayers = PhotonNetwork.PlayerList;
         playersInRoom++;
-    }
+        }
 
     private void Awake()
     {
@@ -77,11 +77,11 @@ namespace Photon_IATK {
 
     private void StartGame()
     {
-        CreatPlayer();
+        CreatePlayer();
         if (!PhotonNetwork.IsMasterClient) return;
     }
 
-    private void CreatPlayer()
+    private void CreatePlayer()
     {
         var player = PhotonNetwork.Instantiate(photonUserPrefab.name, Vector3.zero, Quaternion.identity);
     }

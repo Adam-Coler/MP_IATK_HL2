@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 using Microsoft.MixedReality.Toolkit;
+using UnityEngine.SceneManagement;
 
 namespace Photon_IATK
 {
@@ -22,8 +23,6 @@ namespace Photon_IATK
         [SerializeField]
         public GameObject VivePrefab;
 
-        [SerializeField]
-        public MixedRealityToolkitConfigurationProfile configurationProfile;
         #endregion
 
         #region Private Fields
@@ -66,6 +65,7 @@ namespace Photon_IATK
 #if UNITY_5_4_OR_NEWER
             // Unity 5.4 has a new scene management. register a method to call CalledOnLevelWasLoaded.
             UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
+            MRTK_Scene_Manager.loadPIDEntrySceneAsync();
 #endif
         }
 
@@ -102,11 +102,24 @@ namespace Photon_IATK
         {
             // Always call the base to remove callbacks
             base.OnDisable();
-            UnityEngine.SceneManagement.SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 #endif
 
         #endregion
+
+
+        [PunRPC]
+        void setNickname(PhotonMessageInfo info)
+        {
+
+            txtNickName.text = photonView.Owner.NickName;
+            // the photonView.RPC() call is the same as without the info parameter.
+            // the info.Sender is the player who called the RPC.
+            Debug.LogFormat("Info: {0} {1} {2}", info.Sender, info.photonView, info.SentServerTime);
+        }
+
+
 
         #region Custom
 #if DESKTOP
@@ -128,7 +141,7 @@ namespace Photon_IATK
         }
         }
 #elif VIVE
-private void setup(){
+        private void setup(){
             Debug.Log(GlobalVariables.green + "VIVE Setup... " + GlobalVariables.endColor + this.GetType().Name.ToString());
             if (photonView.IsMine)
             {
@@ -137,7 +150,6 @@ private void setup(){
                     isSetup = true;
                     GameObject leftController;
                     leftController = PhotonNetwork.Instantiate("ViveLeftController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-                    //leftController.AddComponent<SteamVR_Behaviour_Pose>();
                 }
             }
 
