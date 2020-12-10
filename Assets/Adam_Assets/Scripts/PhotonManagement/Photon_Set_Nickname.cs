@@ -43,23 +43,7 @@ namespace Photon_IATK
 
             PlayerPrefs.SetString(playerNamePrefKey, value);
 
-            var tmp = (GameObject.FindGameObjectsWithTag("Player"));
-            foreach (GameObject obj in tmp)
-            {
-                PhotonView photon = obj.GetComponent<PhotonView>();
-                Photon_Player photonPlayer = obj.GetComponent<Photon_Player>();
-                Debug.Log(photon.name);
-                if (photon != null & photonPlayer != null)
-                {
-                    if (photon.IsMine)
-                    {
-                        photon.RPC("setNickname", RpcTarget.All);
-                        return;
-                    }
-                }
-
-            }
-            
+            Pun_RPC_Calls.rpc_setNickName();
 
         }
 

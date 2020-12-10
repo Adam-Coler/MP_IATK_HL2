@@ -2,7 +2,7 @@
 using Photon.Pun;
 using Microsoft.MixedReality.Toolkit;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.EventSystems;
 namespace Photon_IATK
 {
     public class Photon_Player : MonoBehaviourPunCallbacks
@@ -13,6 +13,9 @@ namespace Photon_IATK
 
         [Tooltip("The local player instance. Use this to know if the local player is represented in the Scene")]
         public static GameObject LocalPlayerInstance;
+
+        [Tooltip("The local player instance. Use this to know if the local player is represented in the Scene")]
+        public bool isMine = false;
 
         [SerializeField]
         public Photon_Cammera_Manager _Cammera_Manager;
@@ -49,6 +52,7 @@ namespace Photon_IATK
             if (photonView.IsMine)
             {
                 Photon_Player.LocalPlayerInstance = this.gameObject;
+                isMine = true;
             }
             // #Critical
             // we flag as don't destroy on load so that instance survives level synchronization, thus giving a seamless experience when levels load.
@@ -65,7 +69,11 @@ namespace Photon_IATK
 #if UNITY_5_4_OR_NEWER
             // Unity 5.4 has a new scene management. register a method to call CalledOnLevelWasLoaded.
             UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
-            MRTK_Scene_Manager.loadPIDEntrySceneAsync();
+
+            if (photonView.IsMine)
+            {
+                MRTK_Scene_Manager.loadPIDEntrySceneAsync();
+            }
 #endif
         }
 
@@ -125,20 +133,25 @@ namespace Photon_IATK
 #if DESKTOP
         private void setup()
         {
+            if (!photonView.IsMine)
+            {
+                return;
+            }
             this.gameObject.AddComponent<DESKTOP_Movement>();
                         //unity has predefined tags "Player" is one
             if (this.gameObject.GetComponent<Photon_Cammera_Manager>() != null)
-        {
-            if (photonView.IsMine)
             {
                 _Cammera_Manager.trackedObj = this.gameObject;
                 _Cammera_Manager.OnStartFollowing();
             }
-        }
-        else
-        {
-            Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
-        }
+            else
+            {
+                Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
+            }
+
+            this.gameObject.AddComponent<EventSystem>();
+            this.gameObject.AddComponent<StandaloneInputModule>();
+
         }
 #elif VIVE
         private void setup(){

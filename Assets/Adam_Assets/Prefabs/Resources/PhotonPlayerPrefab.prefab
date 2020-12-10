@@ -351,6 +351,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e01e42836bbc6542b541527c262b0d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isMine: 0
   _Cammera_Manager: {fileID: 4072795461329610504}
   txtNickName: {fileID: 9103845924643272921}
   VivePrefab: {fileID: 7301446135125428367, guid: 0c5c181400b5d954cab36e5e1c043bcc,

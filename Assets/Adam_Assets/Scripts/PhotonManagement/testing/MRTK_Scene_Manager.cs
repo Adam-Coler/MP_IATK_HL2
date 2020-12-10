@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Microsoft.MixedReality.Toolkit.SceneSystem;
 using Microsoft.MixedReality.Toolkit;
+using Photon.Pun;
+using Photon.Realtime;
 
 namespace Photon_IATK
 {
@@ -11,32 +13,37 @@ namespace Photon_IATK
         private static string _this = "MRTK_Scene_Manager";
 
         public static async System.Threading.Tasks.Task loadPIDEntrySceneAsync()
-        {
-            IMixedRealitySceneSystem sceneSystem = MixedRealityToolkit.Instance.GetService<IMixedRealitySceneSystem>();
-            // First do an additive scene load
+        {            // First do an additive scene load
             // SceneOperationInProgress will be true for the duration of this operation
             // SceneOperationProgress will show 0-1 as it completes
             //await sceneSystem.LoadContent("PIDEntry");
 
-            //this loads all scenes with this tag
-            await sceneSystem.LoadContentByTag("PIDEntry");
+            getLocalPlayerPhotonView glppv = new getLocalPlayerPhotonView();
+            if (glppv.getLocalPlayer() != null)
+            {
+                IMixedRealitySceneSystem sceneSystem = MixedRealityToolkit.Instance.GetService<IMixedRealitySceneSystem>();
 
-            // Wait until stage 1 is complete
+                //this loads all scenes with this tag
+                await sceneSystem.LoadContentByTag("PIDEntry");
 
-            Debug.Log(GlobalVariables.green + "PIDEntry Loaded" + GlobalVariables.endColor + " : " + "loadPIDEntrySceneAsync()" + " : " + _this);
-
+                // Wait until stage 1 is complete
+                Debug.Log(GlobalVariables.green + "PIDEntry Loaded" + GlobalVariables.endColor + " : " + "loadPIDEntrySceneAsync()" + " : " + _this);
+            }
         }
 
         public static async System.Threading.Tasks.Task unLoadPIDEntrySceneAsync()
         {
-            IMixedRealitySceneSystem sceneSystem = MixedRealityToolkit.Instance.GetService<IMixedRealitySceneSystem>();
-            //this unloads all scenes with this tag
-            await sceneSystem.UnloadContentByTag("PIDEntry");
 
-            // Wait until stage 1 is complete
+            getLocalPlayerPhotonView glppv = new getLocalPlayerPhotonView();
+            if (glppv.getLocalPlayer() != null)
+            {
+                IMixedRealitySceneSystem sceneSystem = MixedRealityToolkit.Instance.GetService<IMixedRealitySceneSystem>();
+                //this unloads all scenes with this tag
+                await sceneSystem.UnloadContentByTag("PIDEntry");
 
-            Debug.Log(GlobalVariables.green + "PIDEntry Unloaded" + GlobalVariables.endColor + " : " + "loadPIDEntrySceneAsync()" + " : " + _this);
-
+                // Wait until stage 1 is complete
+                Debug.Log(GlobalVariables.green + "PIDEntry Unloaded" + GlobalVariables.endColor + " : " + "loadPIDEntrySceneAsync()" + " : " + _this);
+            }
         }
 
 
