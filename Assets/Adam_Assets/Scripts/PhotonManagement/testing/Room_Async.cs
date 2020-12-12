@@ -84,7 +84,10 @@ namespace Photon_IATK {
     private void CreatePlayer()
     {
         var player = PhotonNetwork.Instantiate(photonUserPrefab.name, Vector3.zero, Quaternion.identity);
-    }
+        
+        var tracker = PhotonNetwork.Instantiate("Tracker", Vector3.zero, Quaternion.identity);
+            //Microsoft.MixedReality.Toolkit.MixedRealityPlayspace.AddChild(tracker.transform);
+        }
 
         // private void CreateMainLunarModule()
         // {

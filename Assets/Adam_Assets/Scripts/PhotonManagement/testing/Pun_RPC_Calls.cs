@@ -19,6 +19,17 @@ namespace Photon_IATK
             }
         }
 
+        public static bool isLocal()
+        {
+            bool isLocal = false;
+
+            if (PhotonNetwork.LocalPlayer.UserId == "1") {
+                isLocal = true;
+            }
+
+            return isLocal;
+        }
+
     }
 
 

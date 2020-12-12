@@ -8,6 +8,7 @@ TagManager:
   - Button
   - Input
   - PIDEntry
+  - PlaySpace
   layers:
   - Default
   - TransparentFX

@@ -132,7 +132,7 @@ GameObject:
   - component: {fileID: 110355379}
   m_Layer: 0
   m_Name: MixedRealityPlayspace
-  m_TagString: Untagged
+  m_TagString: PlaySpace
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -241,7 +241,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &831890170
 GameObject:
@@ -400,6 +400,7 @@ GameObject:
   - component: {fileID: 1416030802}
   - component: {fileID: 1416030806}
   - component: {fileID: 1416030801}
+  - component: {fileID: 1416030807}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -517,7 +518,7 @@ Transform:
   m_LocalScale: {x: 0.05, y: 0.05, z: 0.05}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1416030806
 MonoBehaviour:
@@ -538,6 +539,22 @@ MonoBehaviour:
   additionalOffset: {x: 0, y: 0, z: 1}
   additionalRotation: {x: 0, y: 0, z: 0}
   updateSolvers: 1
+--- !u!114 &1416030807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1416030800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fa5e79de94dcd74cbe770c71b698708, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CurrentTransform: {x: 0, y: 0, z: 0}
+  NewTransform: {x: 0, y: 0, z: 0}
+  localSpace: {fileID: 0}
+  worldSpace: {fileID: 0}
 --- !u!1 &1463585013
 GameObject:
   m_ObjectHideFlags: 0

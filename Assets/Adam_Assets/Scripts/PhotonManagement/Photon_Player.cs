@@ -26,6 +26,9 @@ namespace Photon_IATK
         [SerializeField]
         public GameObject VivePrefab;
 
+        public Vector3 CurrentTransform;
+        public Vector3 NewTransform;
+
         #endregion
 
         #region Private Fields
@@ -85,6 +88,28 @@ namespace Photon_IATK
             this.tag = "Player";
         }
 
+        public void synchornizeOnMe()
+        {
+            //if (!photonView.IsMine) { return; };
+
+            //Photon_Player[] players = FindObjectsOfType<Photon_Player>();
+
+            //foreach (Photon_Player player in players)
+            //{
+            //    if (!player.photonView.IsMine)
+            //    {
+
+            //        var transform = player.gameObject.transform.position;
+            //        var rotation = player.gameObject.transform.rotation;
+            //        MixedRealityPlayspace.Position = transform;
+            //        MixedRealityPlayspace.Rotation = rotation;
+
+            //        Debug.Log(GlobalVariables.purple + "Setting Transform " + GlobalVariables.endColor + GlobalVariables.green + "T: " + transform + GlobalVariables.endColor + " " + GlobalVariables.red + " R: " + rotation + GlobalVariables.endColor);
+            //    }
+            //}
+
+        }
+
         /// <summary>
         /// </summary>
         //void Update()
@@ -116,7 +141,7 @@ namespace Photon_IATK
 
         #endregion
 
-
+        #region PunRPC
         [PunRPC]
         void setNickname(PhotonMessageInfo info)
         {
@@ -129,6 +154,17 @@ namespace Photon_IATK
 
 
 
+        [PunRPC]
+        void setOrgin(PhotonMessageInfo info)
+        {
+            Transform transform = this.transform;
+
+
+            Debug.LogFormat("Info: {0} {1} {2}", info.Sender, info.photonView, info.SentServerTime);
+        }
+
+
+        #endregion
         #region Custom
 #if DESKTOP
         private void setup()
@@ -183,6 +219,8 @@ namespace Photon_IATK
 
         void Update()
         {
+                synchornizeOnMe();
+
             if (photonView.IsMine || PhotonNetwork.IsConnected == false)
             {
                 this.gameObject.transform.position = Camera.allCameras[0].transform.position;
@@ -206,6 +244,11 @@ namespace Photon_IATK
 
         void Update()
         {
+            //if (NewTransform != CurrentTransform)
+            //{
+            //    synchornizeOnMe();
+            //}
+
             if (photonView.IsMine || PhotonNetwork.IsConnected == false)
             {
                 this.gameObject.transform.position = Camera.allCameras[0].transform.position;
