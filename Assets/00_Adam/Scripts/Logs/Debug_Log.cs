@@ -4,11 +4,12 @@
 namespace Photon_IATK
 {
     public class Debug_Log : MonoBehaviour
-    {        static string myLog = "";
+    {   
+        static string myLog = "";
         private string output;
         private string stack;
 
-        public TMPro.TextMeshProUGUI DebugLog;
+        public TMPro.TextMeshPro DebugLog;
 
         void Start()
         {

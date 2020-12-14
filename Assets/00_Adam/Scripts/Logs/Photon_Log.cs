@@ -7,9 +7,9 @@ using System;
 
 namespace Photon_IATK
 {
-    public class DESKTOP_Photon_Log : MonoBehaviour
+    public class Photon_Log : MonoBehaviour
     {
-        public TMPro.TextMeshProUGUI LogText;
+        public TMPro.TextMeshPro LogText;
         private int nextUpdate = 1;
 
         void Start()
