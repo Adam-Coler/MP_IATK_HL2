@@ -6,12 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Adam_Assets/Scenes/UniLevel_Scenes/EntryPoint.unity
-    guid: bfc01936a91adc34b9dac86788fbf740
-  - enabled: 0
-    path: Assets/Adam_Assets/Scenes/UniLevel_Scenes/Lighting.unity
-    guid: 0bdfb21da1c776241939732a92e515d9
+    path: Assets/00_Adam/Scenes/00_EntryPoint.unity
+    guid: 4ff564b49bec2294e99a585d22d26319
   - enabled: 1
-    path: Assets/Adam_Assets/Scenes/UniLevel_Scenes/PIDEntry.unity
-    guid: 53e6ddae50df52c40bc9e5fb4ed0c300
+    path: Assets/00_Adam/Scenes/02_EnterPID.unity
+    guid: 531665cd66c67fe45b5298cdf4c1722a
+  - enabled: 1
+    path: Assets/00_Adam/Scenes/01_SetupMenu.unity
+    guid: c269e3834cd65a74288678321d14c6de
   m_configObjects: {}

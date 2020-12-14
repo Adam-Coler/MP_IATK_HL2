@@ -4,11 +4,14 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Bullet
-  - Button
-  - Input
   - PIDEntry
   - PlaySpace
+  - NetworkManager
+  - Menu
+  - Button
+  - PhotonLog
+  - DebugLog
+  - Bullet
   layers:
   - Default
   - TransparentFX
