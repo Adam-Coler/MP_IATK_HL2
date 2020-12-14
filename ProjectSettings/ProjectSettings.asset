@@ -315,8 +315,9 @@ PlayerSettings:
   - m_BuildTarget: Windows Store Apps
     m_Enabled: 1
     m_Devices:
-    - OpenVR
     - WindowsMR
+    - None
+    - OpenVR
   openGLRequireES31: 0
   openGLRequireES31AEP: 0
   openGLRequireES32: 0
