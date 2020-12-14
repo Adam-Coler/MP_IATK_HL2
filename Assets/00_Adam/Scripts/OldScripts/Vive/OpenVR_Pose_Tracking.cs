@@ -15,7 +15,7 @@ namespace Photon_IATK
     // this script updates the attached objects transfrom to match a controllers transform
     public class OpenVR_Pose_Tracking : ControllerPoseSynchronizer
     {
-        public Handedness Handedness;
+        public Handedness _handedness;
         public PhotonView photonView;
         private new IMixedRealityController Controller;
 
@@ -59,10 +59,10 @@ namespace Photon_IATK
                 foreach (IMixedRealityController controller in inputSystem.DetectedControllers)
                 {
                     Debug.Log(GlobalVariables.green + controller.InputSource + GlobalVariables.endColor);
-                    if (controller.ControllerHandedness == Handedness)
+                    if (controller.ControllerHandedness == _handedness)
                     {
                         Controller = controller;
-                        Debug.Log("Awake: Tracking - " + GlobalVariables.green + Handedness + " controller" + GlobalVariables.endColor + " : ID=" + Controller.InputSource.SourceId + " : Name = " + Controller.InputSource.SourceName + " : Source Type = " + Controller.InputSource.SourceType);
+                        Debug.Log("Awake: Tracking - " + GlobalVariables.green + _handedness + " controller" + GlobalVariables.endColor + " : ID=" + Controller.InputSource.SourceId + " : Name = " + Controller.InputSource.SourceName + " : Source Type = " + Controller.InputSource.SourceType);
                     }
 
                 }
@@ -74,10 +74,10 @@ namespace Photon_IATK
         {
             if (photonView.IsMine)
             {
-                if (eventData.Controller.ControllerHandedness == Handedness)
+                if (eventData.Controller.ControllerHandedness == _handedness)
                 {
                     Controller = eventData.Controller;
-                    Debug.Log("OnSourceDetected: Tracking - " + GlobalVariables.green + Handedness + " controller" + GlobalVariables.endColor + " : ID=" + Controller.InputSource.SourceId + " : Name = " + Controller.InputSource.SourceName + " : Source Type = " + Controller.InputSource.SourceType);
+                    Debug.Log("OnSourceDetected: Tracking - " + GlobalVariables.green + _handedness + " controller" + GlobalVariables.endColor + " : ID=" + Controller.InputSource.SourceId + " : Name = " + Controller.InputSource.SourceName + " : Source Type = " + Controller.InputSource.SourceType);
                 } else
                 {
                     Debug.Log("OnSourceDetected: " + GlobalVariables.red + "No controller found" + GlobalVariables.endColor);

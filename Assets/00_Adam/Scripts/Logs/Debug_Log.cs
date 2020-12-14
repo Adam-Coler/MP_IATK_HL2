@@ -1,13 +1,9 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
-using Photon.Pun;
-using Photon.Realtime;
-using System.Collections;
-using UnityEngine;
+
 
 namespace Photon_IATK
 {
-    public class DESKTOP_Debug_Log : MonoBehaviour
+    public class Debug_Log : MonoBehaviour
     {        static string myLog = "";
         private string output;
         private string stack;

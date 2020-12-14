@@ -7,11 +7,11 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/00_Adam/Scenes/00_EntryPoint.unity
-    guid: 4ff564b49bec2294e99a585d22d26319
-  - enabled: 1
-    path: Assets/00_Adam/Scenes/02_EnterPID.unity
-    guid: 531665cd66c67fe45b5298cdf4c1722a
+    guid: fddc30b1df0f33543b7371925943c0e7
   - enabled: 1
     path: Assets/00_Adam/Scenes/01_SetupMenu.unity
     guid: c269e3834cd65a74288678321d14c6de
+  - enabled: 1
+    path: Assets/00_Adam/Scenes/02_EnterPID.unity
+    guid: 531665cd66c67fe45b5298cdf4c1722a
   m_configObjects: {}

@@ -15,14 +15,13 @@ namespace Photon_IATK {
         {
             yield return new WaitForSeconds(2);
 
-            
             GameObject Menu = GameObject.FindGameObjectWithTag("Menu");
             if (Menu == null)
             {
-                Debug.Log(GlobalVariables.green + "Loading menu :" + GlobalVariables.endColor + "LoadMenus() : " + this.GetType());
-                Btn_Functions_For_In_Scene_Scripts Btns = new Btn_Functions_For_In_Scene_Scripts();
+                Btn_Functions_For_In_Scene_Scripts Btns = gameObject.AddComponent<Btn_Functions_For_In_Scene_Scripts>();
                 Debug.Log(GlobalVariables.green + "Loading Main Menu " + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
                 Btns.sceneManager_Load_01_SetupMenu();
+                Destroy(Btns);
             }
 
             Destroy(this);

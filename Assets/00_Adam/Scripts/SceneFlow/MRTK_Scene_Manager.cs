@@ -7,6 +7,9 @@ using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.SceneManagement;
 
+// loading levels is asynchoirnous so we get an error due to the interface functions being voids
+#pragma warning disable CS4014
+
 namespace Photon_IATK
 {
     public class MRTK_Scene_Manager : MonoBehaviour

@@ -33,9 +33,12 @@ namespace Photon_IATK
                     Debug.Log(GlobalVariables.green + "Lobby Destoryed then Set" + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
                 }
             }
+
             setup();
-            DontDestroyOnLoad(gameObject);
-            }
+            DontDestroyOnLoad(gameObject.transform.root);
+        }
+
+
 
         #endregion
 

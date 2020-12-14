@@ -20,7 +20,7 @@ MonoBehaviour:
     Included: 1
     BuildIndex: 0
     Tag: Untagged
-    Asset: {fileID: 102900000, guid: 4ff564b49bec2294e99a585d22d26319, type: 3}
+    Asset: {fileID: 102900000, guid: fddc30b1df0f33543b7371925943c0e7, type: 3}
   useLightingScene: 0
   defaultLightingSceneIndex: 0
   lightingScenes:
@@ -34,13 +34,13 @@ MonoBehaviour:
   - Name: 01_SetupMenu
     Path: Assets/00_Adam/Scenes/01_SetupMenu.unity
     Included: 1
-    BuildIndex: 2
+    BuildIndex: 1
     Tag: Untagged
     Asset: {fileID: 102900000, guid: c269e3834cd65a74288678321d14c6de, type: 3}
   - Name: 02_EnterPID
     Path: Assets/00_Adam/Scenes/02_EnterPID.unity
     Included: 1
-    BuildIndex: 1
+    BuildIndex: 2
     Tag: Untagged
     Asset: {fileID: 102900000, guid: 531665cd66c67fe45b5298cdf4c1722a, type: 3}
   permittedLightingSceneComponentTypes:
