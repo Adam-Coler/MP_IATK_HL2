@@ -9,7 +9,7 @@ namespace Photon_IATK
 {
     public class Photon_Log : MonoBehaviour
     {
-        public TMPro.TextMeshPro LogText;
+        public TMPro.TextMeshProUGUI LogText;
         private int nextUpdate = 1;
 
         void Start()
@@ -38,7 +38,7 @@ namespace Photon_IATK
                 string IsMasterClient = PhotonNetwork.IsMasterClient.ToString();
                 LogText.text += formatText("IsMasterClient", IsMasterClient);
 
-                string PlayerCount = Convert.ToInt32(PhotonNetwork.CurrentRoom.PlayerCount).ToString();
+                string PlayerCount = Convert.ToInt32(PhotonNetwork.CountOfPlayersInRooms).ToString();
                 LogText.text += formatText("PlayerCount", PlayerCount);
 
                 string ActiveSceneName = SceneManagerHelper.ActiveSceneName;

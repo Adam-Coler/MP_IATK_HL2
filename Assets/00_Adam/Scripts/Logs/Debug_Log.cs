@@ -9,7 +9,7 @@ namespace Photon_IATK
         private string output;
         private string stack;
 
-        public TMPro.TextMeshPro DebugLog;
+        public TMPro.TextMeshProUGUI DebugLog;
 
         void Start()
         {
