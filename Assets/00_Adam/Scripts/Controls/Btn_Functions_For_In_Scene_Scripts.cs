@@ -93,7 +93,8 @@ namespace Photon_IATK
         {
             if (GameObject.FindGameObjectWithTag("DebugLog") != null)
             {
-                GameObject.FindGameObjectWithTag("DebugLog").transform.GetChild(0).gameObject.SetActive(true);
+                GameObject menuObj = GameObject.FindGameObjectWithTag("DebugLog").transform.GetChild(0).gameObject;
+                GameObject.FindGameObjectWithTag("DebugLog").transform.GetChild(0).gameObject.SetActive(!menuObj.activeSelf);
             }
             else
             {
@@ -101,12 +102,12 @@ namespace Photon_IATK
             }
         }
 
-
         public void showPhotonLog()
         {
             if (GameObject.FindGameObjectWithTag("PhotonLog") != null)
             {
-                GameObject.FindGameObjectWithTag("PhotonLog").transform.GetChild(0).gameObject.SetActive(true);
+                GameObject menuObj = GameObject.FindGameObjectWithTag("PhotonLog").transform.GetChild(0).gameObject;
+                GameObject.FindGameObjectWithTag("PhotonLog").transform.GetChild(0).gameObject.SetActive(!menuObj.activeSelf);
             }
             else
             {
