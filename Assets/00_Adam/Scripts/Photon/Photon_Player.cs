@@ -230,7 +230,7 @@ namespace Photon_IATK
                 if (!isSetup)
                 {
                     isSetup = true;
-
+                    Microsoft.MixedReality.Toolkit.MixedRealityPlayspace.AddChild(this.gameObject.transform);
                 }
             }
         }

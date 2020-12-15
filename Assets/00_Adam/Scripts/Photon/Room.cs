@@ -78,9 +78,9 @@ namespace Photon_IATK {
 
     private void CreatePlayer()
     {
-        var player = PhotonNetwork.Instantiate(photonUserPrefab.name, Vector3.zero, Quaternion.identity);
-        
-        var tracker = PhotonNetwork.Instantiate("Tracker", Vector3.zero, Quaternion.identity);
+            var player = PhotonNetwork.Instantiate(photonUserPrefab.name, Vector3.zero, Quaternion.identity);
+
+            var tracker = PhotonNetwork.Instantiate("Tracker", Vector3.zero, Quaternion.identity);
             tracker.name = "Room Orgin";
 
         }
