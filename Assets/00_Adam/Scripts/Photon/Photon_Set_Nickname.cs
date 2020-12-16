@@ -11,7 +11,7 @@ namespace Photon_IATK
 
         public TMPro.TMP_InputField InputFeild;
 
-        static string playerNamePrefKey = GlobalVariables.PlayerPrefsKeys.ParticipantID.ToString();
+        private string playerNamePrefKey = GlobalVariables.PlayerPrefsKeys.ParticipantID.ToString();
 
         // Start is called before the first frame update
         void Start()

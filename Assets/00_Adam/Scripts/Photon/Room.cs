@@ -65,8 +65,6 @@ namespace Photon_IATK {
         photonPlayers = PhotonNetwork.PlayerList;
         playersInRoom = photonPlayers.Length;
         myNumberInRoom = playersInRoom;
-        PhotonNetwork.NickName = myNumberInRoom.ToString();
-
         StartGame();
     }
 

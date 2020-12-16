@@ -84,8 +84,12 @@ namespace Photon_IATK
             if (PlayerPrefs.HasKey(GlobalVariables.PlayerPrefsKeys.ParticipantID.ToString()))
             {
                 PhotonNetwork.NickName = PlayerPrefs.GetString(GlobalVariables.PlayerPrefsKeys.ParticipantID.ToString());
+
+                Debug.Log(GlobalVariables.green + "Nickname found, setting nickname to " + PhotonNetwork.NickName + GlobalVariables.endColor + " : " + "OnConnectedToMaster()" + " : " + this.GetType());
             } else
             {
+                Debug.Log(GlobalVariables.green + "No Nickname found, setting nickname to " + PhotonNetwork.AuthValues.UserId + GlobalVariables.endColor + " : " + "OnConnectedToMaster()" + " : " + this.GetType());
+
                 PhotonNetwork.NickName = PhotonNetwork.AuthValues.UserId;
             }
 

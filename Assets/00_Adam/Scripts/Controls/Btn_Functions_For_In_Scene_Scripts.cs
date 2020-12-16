@@ -83,7 +83,10 @@ namespace Photon_IATK
         #region Photon
         public void Lobby_Connect()
         {
-            GetOrAddComponent<Lobby>().Connect();
+            if (!PhotonNetwork.IsConnected)
+            {
+                GetOrAddComponent<Lobby>().Connect();
+            }
         }
         #endregion
 
