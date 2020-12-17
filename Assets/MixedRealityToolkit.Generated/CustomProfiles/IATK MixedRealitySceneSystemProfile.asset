@@ -43,6 +43,12 @@ MonoBehaviour:
     BuildIndex: 2
     Tag: Untagged
     Asset: {fileID: 102900000, guid: 531665cd66c67fe45b5298cdf4c1722a, type: 3}
+  - Name: 03_Vuforia_Setup
+    Path: Assets/00_Adam/Scenes/03_Vuforia_Setup.unity
+    Included: 1
+    BuildIndex: 3
+    Tag: Untagged
+    Asset: {fileID: 102900000, guid: c26ba392a1bce684d83ac704ea7973bf, type: 3}
   permittedLightingSceneComponentTypes:
   - reference: UnityEngine.Transform, UnityEngine.CoreModule
   - reference: UnityEngine.GameObject, UnityEngine.CoreModule

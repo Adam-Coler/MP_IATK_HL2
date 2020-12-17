@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/00_Adam/Scenes/02_EnterPID.unity
     guid: 531665cd66c67fe45b5298cdf4c1722a
+  - enabled: 1
+    path: Assets/00_Adam/Scenes/03_Vuforia_Setup.unity
+    guid: c26ba392a1bce684d83ac704ea7973bf
   m_configObjects: {}

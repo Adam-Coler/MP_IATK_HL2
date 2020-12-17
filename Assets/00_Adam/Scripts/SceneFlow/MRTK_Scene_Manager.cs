@@ -6,6 +6,7 @@ using Microsoft.MixedReality.Toolkit;
 using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine.SceneManagement;
+using System;
 
 // loading levels is asynchoirnous so we get an error due to the interface functions being voids
 #pragma warning disable CS4014
@@ -78,6 +79,20 @@ namespace Photon_IATK
             _unload_02_EnterPID();
         }
 
+        public void load_03_Vuforia_Setup()
+        {
+            Debug.Log(GlobalVariables.purple + "Loading new level" + GlobalVariables.endColor + " : " + "load_03_Vuforia_Setup()" + " : " + _this);
+            _load_03_Vuforia_Setup();
+        }
+
+        public void unload_03_Vuforia_Setup()
+        {
+            Debug.Log(GlobalVariables.purple + "Unloading level" + GlobalVariables.endColor + " : " + "unload_03_Vuforia_Setup()" + " : " + _this);
+            _unload_03_Vuforia_Setup();
+        }
+
+
+
         #endregion
 
         #region Loaders
@@ -86,7 +101,6 @@ namespace Photon_IATK
         {
             if (isMine)
             {
-                Debug.Log(GlobalVariables.green + "01_SetupMenu Loaded" + GlobalVariables.endColor + " : " + "loadPIDEntrySceneAsync()" + " : " + _this);
                 await sceneSystem.LoadContent("01_SetupMenu", LoadSceneMode.Single);
             }
         }
@@ -95,7 +109,6 @@ namespace Photon_IATK
         {
             if (isMine)
             {
-                Debug.Log(GlobalVariables.green + "01_SetupMenu Unloaded" + GlobalVariables.endColor + " : " + "loadPIDEntrySceneAsync()" + " : " + _this);
                 await sceneSystem.UnloadContent("01_SetupMenu");
             }
         }
@@ -104,7 +117,6 @@ namespace Photon_IATK
         {
             if (isMine)
             {
-                Debug.Log(GlobalVariables.green + "02_EnterPID Loaded" + GlobalVariables.endColor + " : " + "loadPIDEntrySceneAsync()" + " : " + _this);
                 await sceneSystem.LoadContent("02_EnterPID", LoadSceneMode.Single);
             }
         }
@@ -113,10 +125,26 @@ namespace Photon_IATK
         {
             if (isMine)
             {
-                Debug.Log(GlobalVariables.green + "02_EnterPID Unloaded" + GlobalVariables.endColor + " : " + "loadPIDEntrySceneAsync()" + " : " + _this);
                 await sceneSystem.UnloadContent("02_EnterPID");
             }
         }
+
+        private async System.Threading.Tasks.Task _load_03_Vuforia_Setup()
+        {
+            if (isMine)
+            {
+                await sceneSystem.LoadContent("03_Vuforia_Setup", LoadSceneMode.Single);
+            }
+        }
+
+        private async System.Threading.Tasks.Task _unload_03_Vuforia_Setup()
+        {
+            if (isMine)
+            {
+                await sceneSystem.UnloadContent("03_Vuforia_Setup");
+            }
+        }
+
 
         #endregion
 

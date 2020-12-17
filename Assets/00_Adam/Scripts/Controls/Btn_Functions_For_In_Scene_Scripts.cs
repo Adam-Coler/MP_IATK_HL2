@@ -78,6 +78,11 @@ namespace Photon_IATK
         {
             GetOrAddComponent<MRTK_Scene_Manager>().load_02_EnterPID();
         }
+
+        public void sceneManager_load_03_VuforiaSetup()
+        {
+            GetOrAddComponent<MRTK_Scene_Manager>().load_03_Vuforia_Setup();
+        }
         #endregion
 
         #region Photon

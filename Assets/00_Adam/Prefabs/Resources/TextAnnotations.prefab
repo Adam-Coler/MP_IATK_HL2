@@ -2322,6 +2322,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 662c693341221034b9c19a4de7bec2da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tMP_InputField: {fileID: 8510788851692383997}
 --- !u!1 &8510788851756998926
 GameObject:
   m_ObjectHideFlags: 0

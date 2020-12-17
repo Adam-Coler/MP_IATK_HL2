@@ -1,28 +1,63 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Vuforia;
+using UnityEngine.SceneManagement;
 
-public class DisableEnableVuforia : MonoBehaviour
+namespace Photon_IATK
 {
-
-    public bool startWithVuforia = false;
-
-    void Start()
+    public class DisableEnableVuforia : MonoBehaviour
     {
-        VuforiaBehaviour.Instance.enabled = startWithVuforia;
+        public bool startWithVuforia = true;
+        void Awake()
+        {
+            if(VuforiaBehaviour.Instance == null)
+            {
 
-        if (startWithVuforia)
+                Debug.Log(GlobalVariables.red + "No VuforiaBehaviour in scene, " + GlobalVariables.endColor + "Awake()" + " : " + this.GetType());
+                return;
+            }
+
+            Debug.Log(GlobalVariables.green + "Vuforia instance enabled = " + VuforiaBehaviour.Instance.enabled + GlobalVariables.endColor + "Awake()" + " : " + this.GetType());
+
+            VuforiaBehaviour.Instance.enabled = startWithVuforia;
+
+            if (startWithVuforia)
+            {
+                VuforiaRuntime.Instance.InitVuforia();
+                CameraDevice.Instance.Start();
+                SceneManager.sceneUnloaded += LevelUnloaded;
+
+                Debug.Log(GlobalVariables.yellow + "Enabling Vuforia Cammera Feed, " + GlobalVariables.endColor + "Awake()" + " : " + this.GetType());
+            }
+
+        }
+
+        public void setVuforiaEnabled()
         {
-            CameraDevice.Instance.Start();
-        } else
+            VuforiaBehaviour.Instance.enabled = !VuforiaBehaviour.Instance.enabled;
+            if (VuforiaBehaviour.Instance.enabled)
+            {
+                VuforiaRuntime.Instance.InitVuforia();
+                CameraDevice.Instance.Start();
+                Debug.Log(GlobalVariables.yellow + "Enabling Vuforia Cammera Feed, " + GlobalVariables.endColor + "setVuforiaEnabled()" + " : " + this.GetType());
+            }
+            else
+            {
+                VuforiaRuntime.Instance.UnloadVuforia();
+                CameraDevice.Instance.Stop();
+                Debug.Log(GlobalVariables.purple + "Enabling Vuforia Cammera Feed, " + GlobalVariables.endColor + "setVuforiaEnabled()" + " : " + this.GetType());
+            }
+        }
+
+
+        private void LevelUnloaded<Scene>(Scene scene)
         {
+            SceneManager.sceneUnloaded -= LevelUnloaded;
             CameraDevice.Instance.Stop();
+
+            VuforiaBehaviour.Instance.enabled = false;
+            Debug.Log(GlobalVariables.purple + "Disabling Vuforia Cammera Feed, " + GlobalVariables.endColor + "LevelUnloaded()" + " : " + this.GetType());
         }
 
     }
-
-
-
-
 }
+
