@@ -55,38 +55,40 @@ namespace Photon_IATK
             Debug.LogFormat(GlobalVariables.yellow + "VuforiaBehaviour Enabled = {0}" + GlobalVariables.endColor + " enableDisableVuforia() : " + this.GetType(), VuforiaBehaviour.Instance.enabled);
         }
 
-
-        public void enableDisableVuforiaCamera()
-        {
-            CameraDevice.Instance.IsActive();
-
-
-
-            if (CameraDevice.Instance.IsActive())
-            {
-                CameraDevice.Instance.Stop();
-            }
-            else
-            {
-
-                foreach (PIXEL_FORMAT px_format in PIXEL_FORMAT.GetValues(typeof(PIXEL_FORMAT)))
-                {
-                    if (CameraDevice.Instance.SetFrameFormat(px_format, true))
-                    {
-                        CameraDevice.Instance.Init();
-                        CameraDevice.Instance.Start();
-                        Debug.LogFormat(GlobalVariables.green + "PIXEL_FORMAT set to {0}" + GlobalVariables.endColor + " enableDisableVuforiaCamera() : " + this.GetType(), px_format);
-                        break;
-                    } else
-                    {
-                        Debug.LogFormat(GlobalVariables.red + "PIXEL_FORMAT is not {0}" + GlobalVariables.endColor + " enableDisableVuforiaCamera() : " + this.GetType(), px_format);
-                    }
-                }
-
-            }
-
-            Debug.LogFormat(GlobalVariables.yellow + "Camera Enabled = {0}" + GlobalVariables.endColor + " enableDisableVuforia() : " + this.GetType(), CameraDevice.Instance.IsActive());
-        }
-
     }
 }
+
+
+// does not help. it looks like enable behaviour allows init of camera
+//public void enableDisableVuforiaCamera()
+//{
+//    CameraDevice.Instance.IsActive();
+
+
+
+//    if (CameraDevice.Instance.IsActive())
+//    {
+//        CameraDevice.Instance.Stop();
+//    }
+//    else
+//    {
+
+//        foreach (PIXEL_FORMAT px_format in PIXEL_FORMAT.GetValues(typeof(PIXEL_FORMAT)))
+//        {
+//            if (CameraDevice.Instance.SetFrameFormat(px_format, true))
+//            {
+//                CameraDevice.Instance.Init();
+//                CameraDevice.Instance.Start();
+//                Debug.LogFormat(GlobalVariables.green + "PIXEL_FORMAT set to {0}" + GlobalVariables.endColor + " enableDisableVuforiaCamera() : " + this.GetType(), px_format);
+//                break;
+//            }
+//            else
+//            {
+//                Debug.LogFormat(GlobalVariables.red + "PIXEL_FORMAT is not {0}" + GlobalVariables.endColor + " enableDisableVuforiaCamera() : " + this.GetType(), px_format);
+//            }
+//        }
+
+//    }
+
+//    Debug.LogFormat(GlobalVariables.yellow + "Camera Enabled = {0}" + GlobalVariables.endColor + " enableDisableVuforia() : " + this.GetType(), CameraDevice.Instance.IsActive());
+//}
