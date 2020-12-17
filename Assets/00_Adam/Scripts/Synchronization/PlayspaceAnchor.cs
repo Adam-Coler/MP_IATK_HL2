@@ -1,18 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class PlayspaceAnchor : MonoBehaviour
+namespace Photon_IATK
 {
-    // Start is called before the first frame update
-    void Start()
+    public class PlayspaceAnchor : MonoBehaviour
     {
-        
-    }
+        public static PlayspaceAnchor Instance;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private void Start()
+        {
+            if (Instance == null)
+            {
+                Debug.Log(GlobalVariables.green + "Setting PlayspaceAnchor.Instance " + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
+                Instance = this;
+            }
+            else
+            {
+                if (Instance == this) return;
+
+                Debug.Log(GlobalVariables.green + "Destroying then setting PlayspaceAnchor.Instance " + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
+
+                Destroy(Instance.gameObject);
+                Instance = this;
+            }
+        }
     }
 }

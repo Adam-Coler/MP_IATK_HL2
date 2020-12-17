@@ -36,7 +36,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.256, y: 0.14}
+  m_AnchoredPosition: {x: 0.256, y: 0.0995}
   m_SizeDelta: {x: 16, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &5966722848645261106
@@ -217,6 +217,7 @@ GameObject:
   - component: {fileID: 7063603630193427948}
   - component: {fileID: 9073483100879710932}
   - component: {fileID: 4072795461329610504}
+  - component: {fileID: 4475275744106828187}
   m_Layer: 0
   m_Name: PhotonPlayerPrefab
   m_TagString: Untagged
@@ -273,6 +274,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 7063603630193427948}
+  - {fileID: 4475275744106828187}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -318,7 +320,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7063603630193427939}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e399cfdddb17b7a449c9fda27b86ff9c, type: 3}
   m_Name: 
@@ -329,6 +331,19 @@ MonoBehaviour:
   followOnStart: 0
   smoothSpeed: 0.75
   trackedObj: {fileID: 0}
+--- !u!114 &4475275744106828187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7063603630193427939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 168a5fceeba8ef545ab3a5db46b6aab7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isUser: 1
 --- !u!1001 &4661218205453499594
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -399,17 +414,17 @@ PrefabInstance:
     - target: {fileID: 2785116988715428988, guid: c1e504c4233d326468b87d19eb464d5b,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2785116988715428988, guid: c1e504c4233d326468b87d19eb464d5b,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2785116988715428988, guid: c1e504c4233d326468b87d19eb464d5b,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1e504c4233d326468b87d19eb464d5b, type: 3}

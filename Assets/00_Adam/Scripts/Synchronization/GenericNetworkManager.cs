@@ -16,13 +16,17 @@ namespace Photon_IATK
         {
             if (Instance == null)
             {
+                Debug.Log(GlobalVariables.green + "Setting GenericNetworkManager.Instance " + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
                 Instance = this;
             }
             else
             {
                 if (Instance != this)
                 {
+                    Debug.Log(GlobalVariables.green + "Destroying then setting GenericNetworkManager.Instance " + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
+
                     Destroy(Instance.gameObject);
+
                     Instance = this;
                 }
             }

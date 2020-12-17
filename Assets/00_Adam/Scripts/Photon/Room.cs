@@ -76,10 +76,19 @@ namespace Photon_IATK {
 
     private void CreatePlayer()
     {
+
+            Debug.Log(GlobalVariables.green + "Photon Instantisateing the player" + GlobalVariables.endColor + " : " + "CreatePlayer()" + " : " + this.GetType());
+
+
             var player = PhotonNetwork.Instantiate(photonUserPrefab.name, Vector3.zero, Quaternion.identity);
+
+            Debug.Log(GlobalVariables.green + "Photon Instantisateing the Room Orgin Tracker" + GlobalVariables.endColor + " : " + "CreatePlayer()" + " : " + this.GetType());
 
             var tracker = PhotonNetwork.Instantiate("Tracker", Vector3.zero, Quaternion.identity);
             tracker.name = "Room Orgin";
+
+            Debug.Log(GlobalVariables.green + "Photon Instantisateing the Finger Tracker" + GlobalVariables.endColor + " : " + "CreatePlayer()" + " : " + this.GetType());
+            this.gameObject.AddComponent<TrackerToFinger>();
 
         }
 

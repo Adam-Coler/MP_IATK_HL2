@@ -8,10 +8,9 @@ TagManager:
   - PlaySpace
   - NetworkManager
   - Menu
-  - Button
   - PhotonLog
   - DebugLog
-  - Bullet
+  - ImageTargets
   layers:
   - Default
   - TransparentFX
