@@ -10,10 +10,29 @@ namespace Photon_IATK
 
         private PhotonView photonView;
         private bool isMine;
+        public static Btn_Functions_For_In_Scene_Scripts Instance;
 
         #endregion
 
         #region Private Functions
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Debug.Log(GlobalVariables.green + "Setting Btn_Functions_For_In_Scene_Scripts.Instance " + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
+                Instance = this;
+            }
+            else
+            {
+                if (Instance == this) return;
+
+                Debug.Log(GlobalVariables.green + "Destroying then setting Btn_Functions_For_In_Scene_Scripts.Instance " + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
+
+                Destroy(Instance.gameObject);
+                Instance = this;
+            }
+        }
 
         private bool checkSetViewOwnership()
         {

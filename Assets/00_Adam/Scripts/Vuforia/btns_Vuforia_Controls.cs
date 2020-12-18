@@ -6,10 +6,6 @@ namespace Photon_IATK
     public class btns_Vuforia_Controls : MonoBehaviour
     {
 
-        public bool isVuforiaInit = false;
-        public bool isVuforiaEnabled = false;
-        public bool isVuforiaCameraEnabled = false;
-
         public void enableDisableLightHouseTarget()
         {
             GameObject ImageTarget = GameObject.FindGameObjectWithTag("ImageTargets");

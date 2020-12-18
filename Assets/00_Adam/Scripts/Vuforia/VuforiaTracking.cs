@@ -16,15 +16,25 @@ namespace Photon_IATK {
             if (!PhotonNetwork.IsConnected)
             {
                 if (tracker == null)
+                {
+                    tracker = Instantiate(trackerPrefab, Vector3.zero, Quaternion.identity);
+                }
+            }
+            else
             {
-                tracker = Instantiate(trackerPrefab, Vector3.zero, Quaternion.identity);
-                tracker.name = "Local Vuforia Tracker";
-                tracker.transform.localScale = new Vector3(.25f, .25f, .25f);
+                if (tracker == null)
+                {
+                    tracker = PhotonNetwork.Instantiate(trackerPrefab.name, Vector3.zero, Quaternion.identity);
+                }
             }
-                tracker.transform.position = this.gameObject.transform.position;
-                tracker.transform.rotation = this.gameObject.transform.rotation;
-                //UnityEngine.XR.InputTracking.Recenter();
-            }
+
+            tracker.name = "Local Vuforia Tracker";
+            tracker.transform.localScale = new Vector3(.25f, .25f, .25f);
+            tracker.transform.position = this.gameObject.transform.position;
+            tracker.transform.rotation = this.gameObject.transform.rotation;
+            //UnityEngine.XR.InputTracking.Recenter();
+
+            Debug.LogFormat(GlobalVariables.green + "{1} Instantiated" + GlobalVariables.endColor + " OnTargetFound() : " + this.GetType(), tracker.name, gameObject.activeSelf);
 
             centerPlayspace();
         }
@@ -48,17 +58,16 @@ namespace Photon_IATK {
 
                 Debug.Log(GlobalVariables.green + "Setting playspaceAnchorTransform," + GlobalVariables.endColor + GlobalVariables.yellow + " New position: " + newPosition + ", New Rotation: " + newRotation + GlobalVariables.endColor + GlobalVariables.red + " Old Position: " + oldPosition + ", Old Rotation: " + oldRotation + GlobalVariables.endColor + ", centerPlayspace() : " + this.GetType());
 
-                VuforiaBehaviour.Instance.enabled = false;
-                //CameraDevice.Instance.Stop();
-                VuforiaRuntime.Instance.UnloadVuforia();
 
-                if (FindObjectOfType<ImageTargetBehaviour>() != null)
-                {
-                    Destroy(FindObjectOfType<ImageTargetBehaviour>().gameObject);
-                }
+                tracker.transform.SetParent(playspaceAnchorTransform);
+
+                //if (FindObjectOfType<ImageTargetBehaviour>() != null)
+                //{
+                //    Destroy(FindObjectOfType<ImageTargetBehaviour>().gameObject);
+                //}
 
 
-                FindObjectOfType<MRTK_Scene_Manager>().load_01_SetupMenu();
+                //FindObjectOfType<MRTK_Scene_Manager>().load_01_SetupMenu();
             }
         }
 
