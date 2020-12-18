@@ -1,11 +1,16 @@
 ﻿using UnityEngine;
 
-public class DontDestoryOnLoad : MonoBehaviour
+namespace Photon_IATK
 {
-    // Use this for initialization
-    void Start()
+    public class DontDestoryOnLoad : MonoBehaviour
     {
-        DontDestroyOnLoad(this.gameObject);
-    }
+        // Use this for initialization
+        void Start()
+        {
+            Debug.Log(GlobalVariables.green + "Moving " + this.gameObject.name + " to do not destroy on load" + GlobalVariables.endColor + " OnStatusChanged() : " + this.GetType());
 
+            DontDestroyOnLoad(this.gameObject);
+        }
+
+    }
 }

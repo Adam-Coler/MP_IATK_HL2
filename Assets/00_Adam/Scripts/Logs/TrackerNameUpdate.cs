@@ -13,22 +13,25 @@ public class TrackerNameUpdate : MonoBehaviour
 
     public void setTrackerName()
     {
-        if (this.gameObject.GetComponentInChildren<TMPro.TextMeshPro>() != null)
-        {
+            if (this.gameObject.GetComponentInChildren<TMPro.TextMeshPro>() == null)
+            {
+                Debug.Log(GlobalVariables.red + "No tracker name text found" + GlobalVariables.endColor + ", setTrackerName() : " + this.GetType());
+                return;
+            }
 
-                string newName = this.gameObject.transform.parent.gameObject.name;
-                if (newName.Contains("lone")) { newName = ""; };
+            if (this.gameObject.transform.parent.gameObject.name == null)
+            {
+                Debug.Log(GlobalVariables.red + "No parent object found" + GlobalVariables.endColor + ", setTrackerName() : " + this.GetType());
+                return;
+            }
 
+            string newName = this.gameObject.transform.parent.gameObject.name;
+            if (newName.Contains("lone")) { newName = ""; };
             this.gameObject.GetComponentInChildren<TMPro.TextMeshPro>().text = newName;
 
-                Debug.LogFormat(GlobalVariables.green + "Updating tracker name: {0}" + GlobalVariables.endColor + ", setTrackerName() : " + this.GetType(), this.gameObject.name);
+            Debug.LogFormat(GlobalVariables.green + "Updating tracker name: {0}" + GlobalVariables.endColor + ", setTrackerName() : " + this.GetType(), this.gameObject.name);
         } 
-        else
-        {
-                Debug.Log(GlobalVariables.red + "No tracker name text found" + GlobalVariables.endColor + ", setTrackerName() : " + this.GetType());
-            }
-    }
 
-}
+    }
 
 }

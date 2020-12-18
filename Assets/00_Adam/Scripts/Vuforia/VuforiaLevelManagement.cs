@@ -60,7 +60,7 @@ namespace Photon_IATK
             {
                 centerPlayspace();
 
-                Debug.LogFormat(GlobalVariables.green + "Setting Location" + GlobalVariables.endColor + " OnStatusChanged() : " + this.GetType());
+                Debug.Log(GlobalVariables.green + "Setting Location" + GlobalVariables.endColor + " OnStatusChanged() : " + this.GetType());
             }
 
 
