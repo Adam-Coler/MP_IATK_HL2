@@ -6,13 +6,15 @@ namespace Photon_IATK
 {
     public class FindAndRegisterLighthouseLocations : MonoBehaviour
     {
-
+#if VIVE
 
         public static FindAndRegisterLighthouseLocations Instance;
         public Vector3 closestTrackerPosition;
         public Quaternion closestTrackerRotation;
         public ulong closestTrackerID;
         public InputDevice trackingReferanceDevice;
+
+        public Vector3 positionOffset;
 
         private float distanceToClosestTrackingReferance = 999f;
 
@@ -62,7 +64,7 @@ namespace Photon_IATK
             InputTracking.GetNodeStates(nodeStates);
             nodeStates.RemoveAll(x => x.nodeType != XRNode.TrackingReference);
 
-            foreach(XRNodeState nodeState in nodeStates)
+            foreach (XRNodeState nodeState in nodeStates)
             {
                 if (!nodeState.TryGetPosition(out closestTrackerPosition))
                 {
@@ -82,6 +84,7 @@ namespace Photon_IATK
                 {
                     distanceToClosestTrackingReferance = tmpDistanceToTrackingReferance;
                     setPosition();
+                    centerPlayspace();
 
                     Debug.LogFormat(GlobalVariables.yellow + "Moving to closest trackingReferance: {0}, Position: {1}, Rotation: {2} " + GlobalVariables.endColor + " : " + "getTrackingReferances()" + " : " + this.GetType(), distanceToClosestTrackingReferance, closestTrackerPosition, closestTrackerRotation);
                     return;
@@ -89,21 +92,35 @@ namespace Photon_IATK
 
                 Debug.LogFormat(GlobalVariables.red + "Tracked node failed to give its rotation, type: {0}, ID: {1} " + GlobalVariables.endColor + " : " + "getTrackingReferances()" + " : " + this.GetType(), nodeState.nodeType, nodeState.uniqueID);
             }
-
-
         }
+
+             private void centerPlayspace()
+            {
+                Debug.Log(GlobalVariables.green + "centerPlayspaceCalled" + GlobalVariables.endColor + ", centerPlayspace() : " + this.GetType());
+
+                if (PlayspaceAnchor.Instance != null)
+                {
+                    Transform playspaceAnchorTransform = PlayspaceAnchor.Instance.transform;
+
+                    Vector3 newPosition = this.gameObject.transform.position + positionOffset;
+                    Quaternion newRotation = this.gameObject.transform.rotation;
+
+                    Vector3 oldPosition = playspaceAnchorTransform.position;
+                    Quaternion oldRotation = playspaceAnchorTransform.rotation;
+
+                    playspaceAnchorTransform.position = newPosition;
+                    playspaceAnchorTransform.rotation = newRotation;
+
+                    Debug.Log(GlobalVariables.green + "Setting playspaceAnchorTransform," + GlobalVariables.endColor + GlobalVariables.yellow + " New position: " + newPosition + ", New Rotation: " + newRotation + GlobalVariables.endColor + GlobalVariables.red + " Old Position: " + oldPosition + ", Old Rotation: " + oldRotation + GlobalVariables.endColor + ", centerPlayspace() : " + this.GetType());
+                }
+
+            }
+#else
+        private void Awake()
+        {
+                            Debug.LogFormat(GlobalVariables.red + "Destorying {0} " + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType(), this.name);
+            Destroy(this);
+        }
+#endif
     }
 }
-
-
-//private void setUpLightHouses()
-//{
-
-//    var nodeStates = new List<XRNodeState>();
-//    InputTracking.GetNodeStates(nodeStates);
-
-//    nodeStates.RemoveAll(x => x.nodeType != XRNode.TrackingReference);
-
-//    Debug.LogFormat(GlobalVariables.yellow + "Node List Length: {0}" + GlobalVariables.endColor + ", setUpLightHouses() : " + this.GetType(), nodeStates.Count);
-
-//}
