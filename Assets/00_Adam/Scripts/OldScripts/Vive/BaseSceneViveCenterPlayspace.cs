@@ -4,7 +4,7 @@ using UnityEngine;
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
 using Microsoft.MixedReality.Toolkit;
-using Microsoft.MixedReality.Toolkit.OpenVR.Input;
+//using Microsoft.MixedReality.Toolkit.OpenVR.Input;
 using UnityEngine.XR;
 using Photon.Pun;
 using Photon.Realtime;
@@ -108,7 +108,9 @@ namespace Photon_IATK
         {
 
         }
-    }
 
 #endif
+    }
+
+
 }

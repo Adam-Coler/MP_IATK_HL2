@@ -192,6 +192,7 @@ namespace Photon_IATK
                     isSetup = true;
                     GameObject leftController;
                     leftController = PhotonNetwork.Instantiate("ViveLeftController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+                    leftController.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
                 }
             }
 
