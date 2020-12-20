@@ -19,7 +19,8 @@ public class TrackerNameUpdate : MonoBehaviour
                 return;
             }
 
-            if (this.gameObject.transform.parent.gameObject.name == null)
+
+            if (this.gameObject.transform.parent == null)
             {
                 Debug.Log(GlobalVariables.red + "No parent object found" + GlobalVariables.endColor + ", setTrackerName() : " + this.GetType());
                 return;

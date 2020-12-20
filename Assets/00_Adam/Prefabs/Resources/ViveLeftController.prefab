@@ -170,5 +170,5 @@ MonoBehaviour:
     description: None
     axisConstraint: 0
   handedness: 1
-  Handedness: 1
+  _handedness: 0
   photonView: {fileID: -2983643477022752481}
