@@ -9,7 +9,9 @@ namespace Photon_IATK
         #region Fields
         // This client's version number. Users are separated from each other by gameVersion (which allows you to make breaking changes).
         private string gameVersion = "2";
-    
+
+        public bool isAutoConnect = false;
+
         public static Lobby _Lobby;
 
         #endregion
@@ -35,6 +37,12 @@ namespace Photon_IATK
             }
 
             setup();
+
+            if (isAutoConnect) { 
+                Connect();
+                Debug.Log(GlobalVariables.green + "Lobby AutoConnect" + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
+            };
+
             DontDestroyOnLoad(gameObject.transform.root);
         }
 

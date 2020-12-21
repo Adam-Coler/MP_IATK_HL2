@@ -1,12 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
 using Microsoft.MixedReality.Toolkit;
-using UnityEngine.XR;
 using Photon.Pun;
-using Photon.Realtime;
 
 namespace Photon_IATK
 {
@@ -67,7 +63,7 @@ namespace Photon_IATK
 
                 }
             }
-            }
+        }
 
 
         public override void OnSourceDetected(SourceStateEventData eventData)

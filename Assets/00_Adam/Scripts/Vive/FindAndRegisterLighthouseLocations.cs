@@ -15,9 +15,30 @@ namespace Photon_IATK
         public InputDevice trackingReferanceDevice;
 
         public Vector3 positionOffset;
+        public Vector3 rotationOffset;
+
+        private Vector3 lastPositionOffset = Vector3.zero;
+        private Vector3 lastRotationOffset = Vector3.zero;
 
         private float distanceToClosestTrackingReferance = 999f;
 
+        private void Update()
+        {
+            if(lastRotationOffset != rotationOffset)
+            {
+                lastRotationOffset = rotationOffset;
+                centerPlayspace();
+            }
+
+            if (lastPositionOffset != positionOffset)
+            {
+
+                lastPositionOffset = positionOffset;
+                centerPlayspace();
+            }
+
+            centerPlayspace();
+        }
 
         private void Start()
         {
@@ -103,12 +124,16 @@ namespace Photon_IATK
                     Transform playspaceAnchorTransform = PlayspaceAnchor.Instance.transform;
 
                     Vector3 newPosition = this.gameObject.transform.position + positionOffset;
-                    Quaternion newRotation = this.gameObject.transform.rotation;
+                //Quaternion newRotation = this.gameObject.transform.rotation * rotationOffset;
 
-                    Vector3 oldPosition = playspaceAnchorTransform.position;
+                Quaternion newRotation = this.gameObject.transform.rotation * Quaternion.Euler(rotationOffset);
+
+                //newRotation = Quaternion.Inverse(newRotation);
+
+                Vector3 oldPosition = playspaceAnchorTransform.position;
                     Quaternion oldRotation = playspaceAnchorTransform.rotation;
 
-                    playspaceAnchorTransform.position = newPosition;
+                    playspaceAnchorTransform.position = newPosition;              
                     playspaceAnchorTransform.rotation = newRotation;
 
                     Debug.Log(GlobalVariables.green + "Setting playspaceAnchorTransform," + GlobalVariables.endColor + GlobalVariables.yellow + " New position: " + newPosition + ", New Rotation: " + newRotation + GlobalVariables.endColor + GlobalVariables.red + " Old Position: " + oldPosition + ", Old Rotation: " + oldRotation + GlobalVariables.endColor + ", centerPlayspace() : " + this.GetType());

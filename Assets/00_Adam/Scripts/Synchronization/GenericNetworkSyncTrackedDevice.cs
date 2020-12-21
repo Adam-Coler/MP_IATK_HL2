@@ -7,8 +7,6 @@ namespace Photon_IATK
     {
         [SerializeField] public bool isUser = default;
 
-        private Camera mainCamera;
-
         private Vector3 networkLocalPosition;
         private Quaternion networkLocalRotation;
 
@@ -31,25 +29,19 @@ namespace Photon_IATK
 
         private void Start()
         {
-            mainCamera = Camera.main;
+
+            if (PlayspaceAnchor.Instance != null)
+            {
+                transform.parent = FindObjectOfType<PlayspaceAnchor>().transform;
+                Debug.Log(GlobalVariables.green + "Parenting: " + this.gameObject.name + " in " + transform.parent.name + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
+            }
+            else
+            {
+                Debug.Log(GlobalVariables.red + "No Playspace anchor exists, nothing parented" + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
+            }
 
             if (isUser)
             {
-                //parent the object to the table anchor
-                //This script is attached to the PhotonPlayer
-
-                //if there is an anchor attach the parent of the photonuser to it
-                if (PlayspaceAnchor.Instance != null)
-                {
-                    transform.parent = FindObjectOfType<PlayspaceAnchor>().transform;
-                    Debug.Log(GlobalVariables.green + "Parenting: " + this.gameObject.name + " in " + transform.parent.name + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
-                }
-                else
-                {
-                    Debug.Log(GlobalVariables.red + "No Playspace anchor exists, nothing parented" + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
-                }
-
-
                 if (photonView.IsMine)
                 {
                     Debug.Log(GlobalVariables.green + "Setting GenericNetworkManager.Instance.localUser " + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
@@ -85,17 +77,6 @@ namespace Photon_IATK
                 // the network position is the information sent from the other users local poisitons
                 trans.localPosition = networkLocalPosition;
                 trans.localRotation = networkLocalRotation;
-            }
-
-            if (photonView.IsMine && isUser)
-            {
-
-                ////if this is the local user, move them to the camera location
-                ////the camera is the playspace
-                //var trans = transform;
-                //var mainCameraTransform = mainCamera.transform;
-                //trans.position = mainCameraTransform.position;
-                //trans.rotation = mainCameraTransform.rotation;
             }
         }
     }
