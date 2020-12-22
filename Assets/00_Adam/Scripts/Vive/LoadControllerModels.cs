@@ -1,11 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
-using Microsoft.MixedReality.Toolkit.Input;
 using Microsoft.MixedReality.Toolkit.Utilities;
-using Microsoft.MixedReality.Toolkit;
-using UInput = UnityEngine.Input;
 using UnityEngine.XR;
+using Photon.Pun;
 
 
 namespace Photon_IATK
@@ -15,24 +12,12 @@ namespace Photon_IATK
         static List<InputDevice> devices = new List<InputDevice>();
 
         public bool isLeft = false;
-        public bool isAutoSetup = false;
-        public GameObject viveControllerModel;
-        public GameObject logiControllerModel;
 
         private InputDeviceRole inputDeviceRole;
         private Handedness handedness;
 
-        public InputDevice thisInputDevice;
 
-
-        private void Awake()
-        {
-            if (isAutoSetup)
-            {
-                setUp();
-            }
-        }
-
+#if VIVE
         // Start is called before the first frame update
         public void setUp()
         {
@@ -71,25 +56,28 @@ namespace Photon_IATK
             if (inputDevice.role == inputDeviceRole)
             {
                 InputDevices.deviceConnected -= registerDevice;
-
-                thisInputDevice = inputDevice;
-
                 Debug.LogFormat(GlobalVariables.purple + "InputDevice registered: {0}, {1}" + GlobalVariables.endColor + " : registerDevice(), " + this.GetType(), inputDevice.name, inputDevice.role);
-
-                this.gameObject.name = inputDevice.name;
 
                 if (inputDevice.name.Contains("VIVE"))
                 {
-                    GameObject thisModel = Instantiate(viveControllerModel, transform.position, transform.rotation);
+                    GameObject thisModel = PhotonNetwork.Instantiate("ViveController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
                     thisModel.transform.SetParent(this.transform);
-                    thisModel.transform.rotation = thisModel.transform.rotation * Quaternion.Euler(new Vector3(0, 180, 0));
+                    thisModel.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
+                    thisModel.name = inputDevice.name;
+                    TrackControllerByRefereance trackControllerByRefereance = thisModel.AddComponent<TrackControllerByRefereance>();
+                    trackControllerByRefereance.thisInputDevice = inputDevice;
+
 
                     Debug.Log(GlobalVariables.purple + "Instantiated Vive Controller" + GlobalVariables.endColor + " : registerDevice(), " + this.GetType());
 
                 } else if (inputDevice.name.Contains("logi"))
                 {
-                    GameObject thisModel = Instantiate(logiControllerModel, transform.position, transform.rotation);
+                    GameObject thisModel = PhotonNetwork.Instantiate("LogitechController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
                     thisModel.transform.SetParent(this.transform);
+                    thisModel.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
+                    thisModel.name = inputDevice.name;
+                    TrackControllerByRefereance trackControllerByRefereance = thisModel.AddComponent<TrackControllerByRefereance>();
+                    trackControllerByRefereance.thisInputDevice = inputDevice;
 
                     Debug.Log(GlobalVariables.purple + "Instantiated Logitech Controller" + GlobalVariables.endColor + " : registerDevice(), " + this.GetType());
                 }
@@ -97,24 +85,12 @@ namespace Photon_IATK
             }
         }
 
-        private void Update()
+#else
+        private void Awake()
         {
-            if (thisInputDevice != null)
-            {
-
-                Vector3 position;
-                if (thisInputDevice.TryGetFeatureValue(CommonUsages.devicePosition, out position))
-                {
-                    this.transform.position = position;
-                }
-
-
-                Quaternion rotation;
-                if (thisInputDevice.TryGetFeatureValue(CommonUsages.deviceRotation, out rotation))
-                {
-                    this.transform.rotation = rotation;
-                }
-            }
+            Debug.Log(GlobalVariables.purple + "Deestorying LoadContollerModels, Game not set tt Vive" + GlobalVariables.endColor + " : Awake(), " + this.GetType());
+            Destroy(this);
         }
+#endif
     }
 }

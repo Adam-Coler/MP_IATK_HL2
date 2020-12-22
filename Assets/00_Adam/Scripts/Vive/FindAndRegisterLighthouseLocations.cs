@@ -110,7 +110,7 @@ namespace Photon_IATK
                     return;
                 }
 
-                Debug.LogFormat(GlobalVariables.red + "Tracked node failed to give its rotation, type: {0}, ID: {1} " + GlobalVariables.endColor + " : " + "getTrackingReferances()" + " : " + this.GetType(), nodeState.nodeType, nodeState.uniqueID);
+                //Debug.LogFormat(GlobalVariables.red + "Tracked node failed to give its rotation, type: {0}, ID: {1} " + GlobalVariables.endColor + " : " + "getTrackingReferances()" + " : " + this.GetType(), nodeState.nodeType, nodeState.uniqueID);
             }
         }
 

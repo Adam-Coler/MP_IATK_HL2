@@ -17,7 +17,7 @@ namespace Photon_IATK {
 
         IEnumerator LoadMenus()
         {
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(4);
 
             GameObject Menu = GameObject.FindGameObjectWithTag("Menu");
             if (Menu == null)

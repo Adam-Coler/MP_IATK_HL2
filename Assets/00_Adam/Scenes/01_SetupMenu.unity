@@ -4305,15 +4305,15 @@ MonoBehaviour:
   smoothing: 1
   lifetime: 0
   referenceDirection: 1
-  minDistance: 0.3
-  maxDistance: 0.6
+  minDistance: 0.4
+  maxDistance: 0.8
   minViewDegrees: 0
   maxViewDegrees: 20
   aspectV: 1
   ignoreAngleClamp: 0
   ignoreDistanceClamp: 0
   useFixedVerticalPosition: 1
-  fixedVerticalPosition: -0.4
+  fixedVerticalPosition: -0.2
   orientToReferenceDirection: 0
 --- !u!114 &507688418
 MonoBehaviour:

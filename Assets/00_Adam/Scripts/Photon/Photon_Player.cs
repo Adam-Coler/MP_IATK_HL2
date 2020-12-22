@@ -158,17 +158,14 @@ namespace Photon_IATK
                 if (!isSetup)
                 {
                     isSetup = true;
-                    GameObject leftController;
-                    leftController = PhotonNetwork.Instantiate("LoadController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-                    leftController.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
-                    leftController.GetComponent<LoadControllerModels>().isLeft = true;
-                    leftController.GetComponent<LoadControllerModels>().setUp();
 
-                    GameObject rightController;
-                    rightController = PhotonNetwork.Instantiate("LoadController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-                    rightController.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
-                    rightController.GetComponent<LoadControllerModels>().isLeft = false;
-                    rightController.GetComponent<LoadControllerModels>().setUp();
+                    LoadControllerModels loadControllerModelsLeft = this.gameObject.AddComponent<LoadControllerModels>();
+                    loadControllerModelsLeft.isLeft = true;
+                    loadControllerModelsLeft.setUp();
+
+                    LoadControllerModels loadControllerModelsRight = this.gameObject.AddComponent<LoadControllerModels>();
+                    loadControllerModelsRight.isLeft = false;
+                    loadControllerModelsRight.setUp();
                 }
             }
         }
