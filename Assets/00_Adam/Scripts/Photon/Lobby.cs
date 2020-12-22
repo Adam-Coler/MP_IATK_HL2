@@ -38,6 +38,10 @@ namespace Photon_IATK
 
             setup();
 
+#if VIVE
+            isAutoConnect = true;
+#endif
+
             if (isAutoConnect) { 
                 Connect();
                 Debug.Log(GlobalVariables.green + "Lobby AutoConnect" + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());

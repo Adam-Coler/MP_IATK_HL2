@@ -66,7 +66,7 @@ namespace Photon_IATK
         // private void FixedUpdate()
         private void Update()
         {
-            if (!photonView.IsMine)
+            if (!photonView.IsMine && PhotonNetwork.IsConnected)
             {
                 // if not the local user
 

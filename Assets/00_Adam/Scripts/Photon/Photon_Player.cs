@@ -82,38 +82,6 @@ namespace Photon_IATK
             this.tag = "Player";
         }
 
-        public void synchornizeOnMe()
-        {
-            //if (!photonView.IsMine) { return; };
-
-            //Photon_Player[] players = FindObjectsOfType<Photon_Player>();
-
-            //foreach (Photon_Player player in players)
-            //{
-            //    if (!player.photonView.IsMine)
-            //    {
-
-            //        var transform = player.gameObject.transform.position;
-            //        var rotation = player.gameObject.transform.rotation;
-            //        MixedRealityPlayspace.Position = transform;
-            //        MixedRealityPlayspace.Rotation = rotation;
-
-            //        Debug.Log(GlobalVariables.purple + "Setting Transform " + GlobalVariables.endColor + GlobalVariables.green + "T: " + transform + GlobalVariables.endColor + " " + GlobalVariables.red + " R: " + rotation + GlobalVariables.endColor);
-            //    }
-            //}
-
-        }
-
-        /// <summary>
-        /// </summary>
-        //void Update()
-        //{
-        //    if (photonView.IsMine || PhotonNetwork.IsConnected == false)
-        //    {
-
-        //    }
-        //}
-
         void CalledOnLevelWasLoaded(int level)
         {
             // check if we are outside the Arena and if it's the case, spawn around the center of the arena in a safe zone
@@ -191,30 +159,23 @@ namespace Photon_IATK
                 {
                     isSetup = true;
                     GameObject leftController;
-                    leftController = PhotonNetwork.Instantiate("ViveLeftController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+                    leftController = PhotonNetwork.Instantiate("LoadController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
                     leftController.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
+                    leftController.GetComponent<LoadControllerModels>().isLeft = true;
+                    leftController.GetComponent<LoadControllerModels>().setUp();
+
+                    GameObject rightController;
+                    rightController = PhotonNetwork.Instantiate("LoadController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+                    rightController.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
+                    rightController.GetComponent<LoadControllerModels>().isLeft = false;
+                    rightController.GetComponent<LoadControllerModels>().setUp();
+
                 }
             }
-
-                        //unity has predefined tags "Player" is one
-            if (this.gameObject.GetComponent<Photon_Cammera_Manager>() != null)
-        {
-            if (photonView.IsMine)
-            {
-                _Cammera_Manager.trackedObj = this.gameObject;
-                _Cammera_Manager.OnStartFollowing();
-            }
-        }
-        else
-        {
-            Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
-        }
         }
 
         void Update()
         {
-                synchornizeOnMe();
-
             if (photonView.IsMine || PhotonNetwork.IsConnected == false)
             {
                 this.gameObject.transform.position = Camera.allCameras[0].transform.position;

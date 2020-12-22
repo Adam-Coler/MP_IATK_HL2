@@ -17,7 +17,7 @@ namespace Photon_IATK
 
         public override void OnInputChanged(InputEventData<MixedRealityPose> eventData)
         {
-            if (photonView.IsMine)
+            if (photonView.IsMine || PhotonNetwork.IsConnected == false)
             {
                 if (eventData.SourceId == Controller?.InputSource.SourceId)
                 {
@@ -28,26 +28,18 @@ namespace Photon_IATK
             }
         }
 
+
         public void Awake()
         {
-            //add code to find the controller if it wasnt found on detect
-            //var inputDevices = new List<InputDevice>();
-            //UnityEngine.XR.InputDevices.GetDevices(inputDevices);
-            //foreach (var device in inputDevices)
-            //{
-            //    Debug.Log(string.Format("Device found with name '{0}' and role '{1}'",
-            //              device.name, device.role.ToString()));
-
-            //}
 
             if (photonView == null)
             {
                 photonView = this.GetComponent<PhotonView>();
-                Debug.Log("Awake: Setting Veiw - " + GlobalVariables.green + photonView + GlobalVariables.endColor);
+                Debug.Log("Awake: Setting Veiw - " + GlobalVariables.green + photonView + GlobalVariables.endColor + " : Awake(), " + this.GetType());
             }
 
 
-            if (photonView.IsMine)
+            if (photonView.IsMine || PhotonNetwork.IsConnected == false)
             {
                 IMixedRealityInputSystem inputSystem;
                 MixedRealityServiceRegistry.TryGetService<IMixedRealityInputSystem>(out inputSystem);
@@ -58,25 +50,23 @@ namespace Photon_IATK
                     if (controller.ControllerHandedness == _handedness)
                     {
                         Controller = controller;
-                        Debug.Log("Awake: Tracking - " + GlobalVariables.green + _handedness + " controller" + GlobalVariables.endColor + " : ID=" + Controller.InputSource.SourceId + " : Name = " + Controller.InputSource.SourceName + " : Source Type = " + Controller.InputSource.SourceType);
+                        Debug.Log("Awake: Tracking - " + GlobalVariables.purple + _handedness + " controller" + GlobalVariables.endColor + " : ID=" + Controller.InputSource.SourceId + " : Name = " + Controller.InputSource.SourceName + " : Source Type = " + Controller.InputSource.SourceType + " : Awake(), " + this.GetType()) ;
                     }
-
                 }
             }
         }
 
-
         public override void OnSourceDetected(SourceStateEventData eventData)
         {
-            if (photonView.IsMine)
+            if (photonView.IsMine || PhotonNetwork.IsConnected == false)
             {
-                if (eventData.Controller.ControllerHandedness == _handedness)
+                if (eventData.Controller?.ControllerHandedness == _handedness)
                 {
                     Controller = eventData.Controller;
-                    Debug.Log("OnSourceDetected: Tracking - " + GlobalVariables.green + _handedness + " controller" + GlobalVariables.endColor + " : ID=" + Controller.InputSource.SourceId + " : Name = " + Controller.InputSource.SourceName + " : Source Type = " + Controller.InputSource.SourceType);
+                    Debug.Log("OnSourceDetected: Tracking - " + GlobalVariables.green + _handedness + " controller" + GlobalVariables.endColor + " : ID=" + Controller.InputSource.SourceId + " : Name = " + Controller.InputSource.SourceName + " : Source Type = " + Controller.InputSource.SourceType + " : OnSourceDetected(), " + this.GetType());
                 } else
                 {
-                    Debug.Log("OnSourceDetected: " + GlobalVariables.red + "No controller found" + GlobalVariables.endColor);
+                    Debug.Log("OnSourceDetected: " + GlobalVariables.red + "No controller found" + GlobalVariables.endColor + " : OnSourceDetected(), " + this.GetType());
                 }
             }
         }

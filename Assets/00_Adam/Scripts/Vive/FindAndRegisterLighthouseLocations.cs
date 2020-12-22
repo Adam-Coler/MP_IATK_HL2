@@ -37,7 +37,6 @@ namespace Photon_IATK
                 centerPlayspace();
             }
 
-            centerPlayspace();
         }
 
         private void Start()
