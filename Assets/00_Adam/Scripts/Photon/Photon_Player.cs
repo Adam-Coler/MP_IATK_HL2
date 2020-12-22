@@ -169,7 +169,6 @@ namespace Photon_IATK
                     rightController.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
                     rightController.GetComponent<LoadControllerModels>().isLeft = false;
                     rightController.GetComponent<LoadControllerModels>().setUp();
-
                 }
             }
         }

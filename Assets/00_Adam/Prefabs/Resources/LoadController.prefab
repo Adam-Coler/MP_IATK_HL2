@@ -47,7 +47,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72dcf10f0d102ee4984dbd52fd25dacc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  openVRRenderModel: {fileID: 6678316017180755687}
   isLeft: 0
   isAutoSetup: 0
   viveControllerModel: {fileID: 100000, guid: 66ef54f875fa21742b9a34f6bcd734f3, type: 3}

@@ -66,6 +66,8 @@ namespace Photon_IATK
 
         private void registerDevice(InputDevice inputDevice)
         {
+            //this will not register inputs on the HL2 need something else
+
             if (inputDevice.role == inputDeviceRole)
             {
                 InputDevices.deviceConnected -= registerDevice;
@@ -82,10 +84,14 @@ namespace Photon_IATK
                     thisModel.transform.SetParent(this.transform);
                     thisModel.transform.rotation = thisModel.transform.rotation * Quaternion.Euler(new Vector3(0, 180, 0));
 
+                    Debug.Log(GlobalVariables.purple + "Instantiated Vive Controller" + GlobalVariables.endColor + " : registerDevice(), " + this.GetType());
+
                 } else if (inputDevice.name.Contains("logi"))
                 {
                     GameObject thisModel = Instantiate(logiControllerModel, transform.position, transform.rotation);
                     thisModel.transform.SetParent(this.transform);
+
+                    Debug.Log(GlobalVariables.purple + "Instantiated Logitech Controller" + GlobalVariables.endColor + " : registerDevice(), " + this.GetType());
                 }
                 
             }
