@@ -10,10 +10,15 @@ namespace Photon_IATK
 
         private LineDrawing _lineDrawing;
 
+        private DrawingVariables drawingVariables;
+
         void Awake()
         {
 
             _lineDrawing = this.gameObject.AddComponent<LineDrawing>();
+
+            drawingVariables = DrawingVariables.Instance;
+
 
             primaryWatcher = GameObject.FindObjectOfType<PrimaryButtonWatcher>();
 
@@ -47,23 +52,21 @@ namespace Photon_IATK
         {
             Debug.LogFormat(GlobalVariables.blue + "Trigger button pressed = {0}" + GlobalVariables.endColor + " : onTriggerPress()" + this.GetType(), pressed);
 
-            
-            _lineDrawing.isRunning = pressed;
-
+            drawingVariables.isDrawing = pressed;
         }
 
         public void onTriggerPressForce(float force)
         {
             Debug.LogFormat(GlobalVariables.blue + "Trigger button force = {0}" + GlobalVariables.endColor + " : onTriggerPressForce()" + this.GetType(), force);
+
+            drawingVariables.lineWidthFromButtonForce = force;
         }
 
-        public Vector3 _position = Vector3.zero;
         public void OnTriggerPosition(Vector3 triggerPressPosition)
         {
             Debug.LogFormat(GlobalVariables.blue + "Trigger press position = {0}" + GlobalVariables.endColor + " : onPrimaryButtonEvent()" + this.GetType(), triggerPressPosition);
-            _position = triggerPressPosition;
 
-            _lineDrawing._position = _position;
+            drawingVariables.penTipPosition = triggerPressPosition;
         }
 
     }

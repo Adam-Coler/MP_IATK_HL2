@@ -4,6 +4,7 @@
     using System;
     using System.Collections.Generic;
     using UnityEngine;
+    using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 
     /// <summary>
     /// Draws lines in 3D space.
@@ -18,9 +19,9 @@
         [SerializeField]
         private Material _lineMaterial;
 
-        private float _maxLineWidth = .005f;
+        public float _maxLineWidth = .005f;
 
-        private Color _colorProvider = Color.red;
+        private DrawingVariables drawingVariables;
 
         private const float TimeInterval = 0f;
 
@@ -29,6 +30,7 @@
 
         [SerializeField]
         private Transform _drawingParent;
+        //playspace anchor for synced views
 
         private WidthCurve _currentWidthCurve;
         private Vector3 _lastPosition;
@@ -43,7 +45,13 @@
 
         private Vector3[] _lastPositionsBuffer;
 
-        public Vector3 _position = Vector3.zero;
+        private void Start()
+        {
+            drawingVariables = DrawingVariables.Instance;
+            _drawingParent = PlayspaceAnchor.Instance.transform;
+        }
+
+        
 
         /// <summary>
         /// Starts a new drawing.
@@ -63,20 +71,19 @@
 
                 Debug.LogFormat(GlobalVariables.blue + "Starting a new line" + GlobalVariables.endColor + " : OnTriggerValid()" + this.GetType());
 
-                StartNewLine(_position, _lineMaterial, _colorProvider, _maxLineWidth, autoTaper);
+                StartNewLine(drawingVariables.penTipPosition, _lineMaterial, drawingVariables.currentColor, _maxLineWidth, autoTaper);
 
                 isUpdated = true;
             }
 
         }
 
-        public bool isRunning = false;
         /// <summary>
         /// Adds points to the current line.
         /// </summary>
         public void Update()
         {
-            if (isRunning)
+            if (drawingVariables.isDrawing)
             {
                 onUpdate();
                 Debug.Assert(_currentLine != null, "If we are already drawing there should be a current line");
@@ -86,28 +93,32 @@
                     _timer = Time.time;
 
                     // Add a point to the current line
-                    // TODO: provide a way to add an offset to the position (either by Provider<Transform> or built-in Vector3)
                     float lineWidth = 1f;
 
                     if (_isSmoothingActive)
                     {
-                        AddMeanPoint(_currentLine, _currentWidthCurve, _position, lineWidth);
+                        AddMeanPoint(_currentLine, _currentWidthCurve, drawingVariables.penTipPosition, lineWidth);
                     }
                     else
                     {
-                        AddPoint(_currentLine, _currentWidthCurve, _position, lineWidth);
+                        AddPoint(_currentLine, _currentWidthCurve, drawingVariables.penTipPosition, lineWidth);
                     }
                 }
-            } else
+            } else if (isUpdated)
             {
                 isUpdated = false;
+                endLine();
+                Debug.LogFormat(GlobalVariables.blue + "Ending a new line" + GlobalVariables.endColor + " : Update()" + this.GetType());
             }
         }
 
+        GameObject go;
         private void StartNewLine(Vector3 position, Material material, Color color, float lineWidth, bool automatedTaper)
         {
-            var go = new GameObject("Drawing");
+            go = new GameObject("Annotation");
+
             go.transform.position = position;
+
             LineRenderer lineRenderer = go.AddComponent<LineRenderer>();
             lineRenderer.material = material;
             lineRenderer.material.color = color;
@@ -115,6 +126,7 @@
             lineRenderer.positionCount = 0;
             lineRenderer.useWorldSpace = false;
             lineRenderer.transform.parent = _drawingParent;
+
             _currentWidthCurve = new WidthCurve(automatedTaper);
             _lastPosition = position;
 
@@ -129,6 +141,23 @@
             }
 
             _currentLine = lineRenderer;
+        }
+
+        private void endLine()
+        {
+            LineRenderer lineRenderer = go.GetComponent<LineRenderer>();
+            MeshCollider meshCollider = go.AddComponent<MeshCollider>();
+
+            Mesh mesh = new Mesh();
+            lineRenderer.BakeMesh(mesh, true);
+            meshCollider.sharedMesh = mesh;
+
+
+            BoundsControl boundsControl = go.AddComponent<BoundsControl>();
+            boundsControl.HandleProximityEffectConfig.ProximityEffectActive = true;
+            boundsControl.BoundsControlActivation = Microsoft.MixedReality.Toolkit.UI.BoundsControlTypes.BoundsControlActivationType.ActivateByProximityAndPointer;
+            boundsControl.LinksConfig.ShowWireFrame = false;
+
         }
 
         private void AddPoint(LineRenderer line, WidthCurve curve, Vector3 newPosition, float width)
