@@ -10,6 +10,8 @@ namespace Photon_IATK
         public static string purple = "<color=#ff00ff>";
         public static string yellow = "<color=#ffff00>";
         public static string blue = "<color=#0000FF>";
+
+
         public static string endColor = "</color>";
         public static string newLine = "\n";
 

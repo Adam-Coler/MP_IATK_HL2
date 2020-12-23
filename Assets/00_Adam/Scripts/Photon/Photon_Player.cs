@@ -159,6 +159,9 @@ namespace Photon_IATK
                 {
                     isSetup = true;
 
+                    this.gameObject.AddComponent<PrimaryButtonWatcher>();
+                    this.gameObject.AddComponent<TriggerButtonWatcher>();
+
                     LoadControllerModels loadControllerModelsLeft = this.gameObject.AddComponent<LoadControllerModels>();
                     loadControllerModelsLeft.isLeft = true;
                     loadControllerModelsLeft.setUp();
@@ -166,6 +169,9 @@ namespace Photon_IATK
                     LoadControllerModels loadControllerModelsRight = this.gameObject.AddComponent<LoadControllerModels>();
                     loadControllerModelsRight.isLeft = false;
                     loadControllerModelsRight.setUp();
+
+                    this.gameObject.AddComponent<ButtonListeners>();
+
                 }
             }
         }

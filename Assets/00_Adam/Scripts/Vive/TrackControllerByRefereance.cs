@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.XR;
+using System.Collections.Generic;
 
 namespace Photon_IATK
 {
@@ -13,7 +14,7 @@ namespace Photon_IATK
             Debug.LogFormat(GlobalVariables.green + "TrackControllerByRefereance attached to {0}" + GlobalVariables.endColor + " : Awake() " + this.GetType(), this.gameObject.name);
         }
 
-        private void Update()
+        private void UpdateLocation()
         {
             if (thisInputDevice != null)
             {
@@ -29,6 +30,34 @@ namespace Photon_IATK
                 {
                     this.transform.rotation = rotation;
                 }
+            }
+        }
+
+        private void tryGetInputsStatus()
+        {
+            var inputFeatures = new List<UnityEngine.XR.InputFeatureUsage>();
+            if (thisInputDevice.TryGetFeatureUsages(inputFeatures))
+            {
+                foreach (var feature in inputFeatures)
+                {
+                    if (feature.type == typeof(bool))
+                    {
+                        bool featureValue;
+                        if (thisInputDevice.TryGetFeatureValue(feature.As<bool>(), out featureValue))
+                        {
+                            Debug.Log(string.Format("Bool feature {0}'s value is {1}", feature.name, featureValue.ToString()));
+                        }
+                    }
+                }
+            }
+        }
+
+        private void Update()
+        {
+            if (thisInputDevice != null)
+            {
+                UpdateLocation();
+                //tryGetInputsStatus();
             }
         }
     }
