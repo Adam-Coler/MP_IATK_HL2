@@ -6,17 +6,12 @@ namespace Photon_IATK
     public class ButtonListeners : MonoBehaviour
     {
         public PrimaryButtonWatcher primaryWatcher;
-        public TriggerButtonWatcher triggerWatcher;
-
-        private LineDrawing _lineDrawing;
+        //public TriggerButtonWatcher triggerWatcher;
 
         private DrawingVariables drawingVariables;
 
         void Awake()
         {
-
-            _lineDrawing = this.gameObject.AddComponent<LineDrawing>();
-
             drawingVariables = DrawingVariables.Instance;
 
 
@@ -27,17 +22,17 @@ namespace Photon_IATK
                 Debug.LogFormat(GlobalVariables.red + "No PrimaryButtonWatcher found" + GlobalVariables.endColor + " : Awake()" + this.GetType());
             }
 
-            triggerWatcher = GameObject.FindObjectOfType<TriggerButtonWatcher>();
+            //triggerWatcher = GameObject.FindObjectOfType<TriggerButtonWatcher>();
 
-            if (triggerWatcher == null)
-            {
-                Debug.LogFormat(GlobalVariables.red + "No TriggerButtonWatcher found" + GlobalVariables.endColor + " : Awake()" + this.GetType());
-            }
+            //if (triggerWatcher == null)
+            //{
+            //    Debug.LogFormat(GlobalVariables.red + "No TriggerButtonWatcher found" + GlobalVariables.endColor + " : Awake()" + this.GetType());
+            //}
 
-            triggerWatcher.TriggerButtonPress.AddListener(onTriggerPress);
-            triggerWatcher.TriggerButtonPressForce.AddListener(onTriggerPressForce);
-            triggerWatcher.triggerPressedLocation.AddListener(OnTriggerPosition);
-            primaryWatcher.primaryButtonPress.AddListener(onPrimaryButtonEvent);
+            //triggerWatcher.TriggerButtonPress.AddListener(onTriggerPress);
+            //triggerWatcher.TriggerButtonPressForce.AddListener(onTriggerPressForce);
+            //triggerWatcher.triggerPressedLocation.AddListener(OnTriggerPosition);
+            //primaryWatcher.primaryButtonPress.AddListener(onPrimaryButtonEvent);
 
 
             Debug.LogFormat(GlobalVariables.blue + "Listeners started" + GlobalVariables.endColor + " : Start()" + this.GetType());
@@ -60,23 +55,13 @@ namespace Photon_IATK
             if (pressed)
             {
                 tmp_Line_Render_Prefab = PhotonNetwork.Instantiate("LineDrawing", Vector3.zero, Quaternion.identity);
-                lineRenderer = tmp_Line_Render_Prefab.GetComponent<LineRenderer>();
 
-                lineRenderer.material = new Material(Shader.Find("Sprites/Default")); ;
-                lineRenderer.material.color = Color.red;
-                lineRenderer.widthMultiplier = .005f;
-                lineRenderer.positionCount = 0;
-                lineRenderer.useWorldSpace = false;
-                lineRenderer.transform.parent = PlayspaceAnchor.Instance.transform;
-
-                lineRenderer.startWidth = 0.005f;  // override the 2 value with 0.25
-                lineRenderer.endWidth = 0.005f;
+                PhotonLineDrawing photonLineDrawing = tmp_Line_Render_Prefab.GetComponent<PhotonLineDrawing>();
+                photonLineDrawing.isUser = true;
+                photonLineDrawing.Initalize();
             } else
             {
                 tmp_Line_Render_Prefab = null;
-
-                lineRenderer = null;
-
             }
 
 
@@ -84,7 +69,7 @@ namespace Photon_IATK
 
         public void onTriggerPressForce(float force)
         {
-            Debug.LogFormat(GlobalVariables.blue + "Trigger button force = {0}" + GlobalVariables.endColor + " : onTriggerPressForce()" + this.GetType(), force);
+            //Debug.LogFormat(GlobalVariables.blue + "Trigger button force = {0}" + GlobalVariables.endColor + " : onTriggerPressForce()" + this.GetType(), force);
 
             drawingVariables.lineWidthFromButtonForce = force;
         }

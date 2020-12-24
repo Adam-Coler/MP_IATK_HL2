@@ -45,9 +45,12 @@ namespace Photon_IATK
             if (!this.TryGetComponent<PhotonView>(out photonView))
             {
                 photonView = this.gameObject.AddComponent<PhotonView>();
+
+                isMine = photonView.IsMine;
+                return photonView.IsMine;
             }
 
-            isMine = photonView.IsMine;
+            Debug.Log(GlobalVariables.red + "Current View error" + GlobalVariables.endColor + " : " + "checkSetViewOwnership()" + " : " + this.GetType());
             return photonView.IsMine;
         }
 
@@ -80,6 +83,10 @@ namespace Photon_IATK
         {
             T component;
             GetOrAddComponent<T>(out component);
+            if (component == null)
+            {
+                Debug.Log(GlobalVariables.red + "Failed to get compenent: " + component.GetType() + GlobalVariables.endColor + " : GetOrAddComponent<T>(), " + this.GetType());
+            }
             return component;
         }
 

@@ -51,28 +51,28 @@ namespace Photon_IATK
             InputDevice device = devices[0];
         }
 
-        void Update()
-        {
-            //InputDevices.GetDevices(devices);
-            //foreach (InputDevice joystick in devices)
-            //{
-            //    Debug.LogFormat(GlobalVariables.purple + "Joystick found: {0}, {1}, {2}" + GlobalVariables.endColor + " : getJoystickNames(), " + this.GetType(), joystick.name, joystick.role, joystick.isValid);
-            //}
+        //void Update()
+        //{
+        //    InputDevices.GetDevices(devices);
+        //    foreach (InputDevice joystick in devices)
+        //    {
+        //        Debug.LogFormat(GlobalVariables.purple + "Joystick found: {0}, {1}, {2}" + GlobalVariables.endColor + " : getJoystickNames(), " + this.GetType(), joystick.name, joystick.role, joystick.isValid);
+        //    }
 
-            //InputDevices.GetDevicesWithRole(role, devices);
-            //if (devices.Count > 0)
-            //{
-            //    Debug.LogFormat(GlobalVariables.purple + "Joystick found: {0}, {1}, {2}" + GlobalVariables.endColor + " : getJoystickNames(), " + this.GetType(), devices[0].name);
-            //    InputDevice device = devices[0];
-            //    Vector3 position;
-            //    if (device.TryGetFeatureValue(CommonUsages.devicePosition, out position))
-            //        this.transform.position = position;
-            //    Quaternion rotation;
-            //    if (device.TryGetFeatureValue(CommonUsages.deviceRotation, out rotation))
-            //        this.transform.rotation = rotation;
-            //}
+        //    InputDevices.GetDevicesWithRole(role, devices);
+        //    if (devices.Count > 0)
+        //    {
+        //        Debug.LogFormat(GlobalVariables.purple + "Joystick found: {0}, {1}, {2}" + GlobalVariables.endColor + " : getJoystickNames(), " + this.GetType(), devices[0].name);
+        //        InputDevice device = devices[0];
+        //        Vector3 position;
+        //        if (device.TryGetFeatureValue(CommonUsages.devicePosition, out position))
+        //            this.transform.position = position;
+        //        Quaternion rotation;
+        //        if (device.TryGetFeatureValue(CommonUsages.deviceRotation, out rotation))
+        //            this.transform.rotation = rotation;
+        //    }
 
-        }
+        //}
     }
 }
 

@@ -22,9 +22,6 @@ namespace Photon_IATK
         private Vector3 NewPoint;
         private Vector3 oldPoint;
 
-
-
-
         [Header("Line Settings")]
         [SerializeField]
         private bool _useAnalog = true;
@@ -78,6 +75,14 @@ namespace Photon_IATK
 
         private void Awake()
         {
+            if (!photonView.IsMine)
+            {
+                Initalize();
+            }
+        }
+
+        public void Initalize()
+        {
 
             if (PlayspaceAnchor.Instance != null)
             {
@@ -89,19 +94,6 @@ namespace Photon_IATK
                 Debug.Log(GlobalVariables.red + "No Playspace anchor exists, nothing parented" + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
             }
 
-            if (isUser)
-            {
-                if (photonView.IsMine)
-                {
-                    Debug.Log(GlobalVariables.green + "Setting GenericNetworkManager.Instance.localUser " + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
-
-                    GenericNetworkManager.Instance.localUser = photonView;
-                }
-            }
-            else
-            {
-                Debug.Log(GlobalVariables.red + "isUser set to false, not setting the view or the parent on this client " + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
-            }
 
 
             var trans = transform;
@@ -115,6 +107,15 @@ namespace Photon_IATK
             _currentWidthCurve = new WidthCurve(false);
 
             _currentLine = lineRenderer;
+
+            _currentLine.material = new Material(Shader.Find("Sprites/Default")); ;
+            _currentLine.material.color = DrawingVariables.Instance.currentColor;
+            _currentLine.widthMultiplier = .005f;
+            _currentLine.positionCount = 0;
+            _currentLine.useWorldSpace = false;
+            _currentLine.startWidth = 0.005f;
+            _currentLine.endWidth = 0.005f;
+
         }
 
 
@@ -159,10 +160,6 @@ namespace Photon_IATK
                 trans.localRotation = networkLocalRotation;
             }
         }
-
-
-
-
 
         private void AddPoint(LineRenderer line, WidthCurve curve, Vector3 newPosition, float width)
         {

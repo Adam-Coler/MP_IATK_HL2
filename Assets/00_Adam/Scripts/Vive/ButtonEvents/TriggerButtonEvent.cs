@@ -4,9 +4,8 @@ using UnityEngine.Events;
 using UnityEngine.XR;
 
 
-namespace Photon_IATK
+namespace trash
 {
-    [System.Serializable]
     public class TriggerButtonEvent : UnityEvent<bool> { }
     public class TriggerButtonFoceEvent : UnityEvent<float> { }
 
@@ -25,7 +24,7 @@ namespace Photon_IATK
 
         private void Awake()
         {
-            Debug.LogFormat(GlobalVariables.blue + "Primary button event broadcaster added" + GlobalVariables.endColor + " : Awake()" + this.GetType());
+            //Debug.LogFormat(GlobalVariables.blue + "Primary button event broadcaster added" + GlobalVariables.endColor + " : Awake()" + this.GetType());
 
             if (TriggerButtonPress == null)
             {
@@ -87,40 +86,42 @@ namespace Photon_IATK
             
             foreach (var device in devicesWithTriggerButton)
             {
-                bool primaryButtonState = false;
-                tempState = device.TryGetFeatureValue(CommonUsages.triggerButton, out primaryButtonState) // did get a value
-                            && primaryButtonState // the value we got
-                            || tempState; // cumulative result from other controllers
+                tempState = false;
+                tempState = device.TryGetFeatureValue(CommonUsages.triggerButton, out tempState);
 
-                if (tempState)
+                if (tempState != lastButtonState) // Button state changed since last frame
                 {
-                    device.TryGetFeatureValue(CommonUsages.trigger, out tempPressure);
+                    TriggerButtonPress.Invoke(tempState);
+                    lastButtonState = tempState;
                 }
 
-                if (tempState)
-                {
-                    device.TryGetFeatureValue(CommonUsages.devicePosition, out tempVector3);
-                }
-            }
+                //if (tempState)
+                //{
+                //    device.TryGetFeatureValue(CommonUsages.trigger, out tempPressure);
+                //}
 
-            if (tempState != lastButtonState) // Button state changed since last frame
-            {
-                TriggerButtonPress.Invoke(tempState);
-                lastButtonState = tempState;
-            }
+                //if (tempState)
+                //{
+                //    device.TryGetFeatureValue(CommonUsages.devicePosition, out tempVector3);
+                //}
 
 
-            if (tempPressure != lastButtonPressure) // Button state changed since last frame
-            {
-                TriggerButtonPressForce.Invoke(tempPressure);
-                lastButtonPressure = tempPressure;
+
+                //if (tempState && tempPressure != lastButtonPressure) // Button state changed since last frame
+                //{
+                //    TriggerButtonPressForce.Invoke(tempPressure);
+                //    lastButtonPressure = tempPressure;
+                //}
+
+                //if (tempState && tempVector3 != lastTriggerLocation) // Button state changed since last frame
+                //{
+                //    triggerPressedLocation.Invoke(tempVector3);
+                //    lastTriggerLocation = tempVector3;
+                //}
+
             }
 
-            if (tempVector3 != lastTriggerLocation) // Button state changed since last frame
-            {
-                triggerPressedLocation.Invoke(tempVector3);
-                lastTriggerLocation = tempVector3;
-            }
+
         }
     }
 }

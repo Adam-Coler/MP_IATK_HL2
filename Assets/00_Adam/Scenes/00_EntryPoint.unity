@@ -219,6 +219,7 @@ GameObject:
   m_Component:
   - component: {fileID: 361570412}
   - component: {fileID: 361570413}
+  - component: {fileID: 361570414}
   m_Layer: 0
   m_Name: DrawingVariables
   m_TagString: Untagged
@@ -252,11 +253,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e5cd636b7c1baf4cbb0f95a15809529, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  currentColor: {r: 0, g: 0, b: 0, a: 1}
+  currentColor: {r: 1, g: 0, b: 0.12034559, a: 1}
   isDrawing: 0
   penTipPosition: {x: 0, y: 0, z: 0}
   lineWidthFromButtonForce: 0
   lineCount: 0
+--- !u!114 &361570414
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 361570411}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e0bf049f1aa9b54387ef903be2de5e7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  penSet: 0
 --- !u!4 &491875083 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5644750814153441566, guid: 90b561ce886d2bd4ea8716ea0ab54d02,
@@ -1767,7 +1781,7 @@ MonoBehaviour:
   closestTrackerPosition: {x: 0, y: 0, z: 0}
   closestTrackerRotation: {x: 0, y: 0, z: 0, w: 0}
   closestTrackerID: 0
-  positionOffset: {x: 0, y: 0.065, z: -0.01}
+  positionOffset: {x: 0, y: -0.16, z: 0}
   rotationOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &2081183725 stripped
 GameObject:

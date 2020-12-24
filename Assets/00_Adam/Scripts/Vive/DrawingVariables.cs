@@ -8,7 +8,7 @@ namespace Photon_IATK
     {
 
         public static DrawingVariables Instance;
-        public Color currentColor = Color.blue;
+        public Color currentColor = Color.red;
         public bool isDrawing = false;
         public Vector3 penTipPosition = Vector3.zero;
         public float lineWidthFromButtonForce = 0f;
