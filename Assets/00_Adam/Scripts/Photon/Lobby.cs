@@ -42,6 +42,10 @@ namespace Photon_IATK
             isAutoConnect = true;
 #endif
 
+#if DESKTOP
+            isAutoConnect = true;
+#endif
+
             if (isAutoConnect) { 
                 Connect();
                 Debug.Log(GlobalVariables.green + "Lobby AutoConnect" + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());

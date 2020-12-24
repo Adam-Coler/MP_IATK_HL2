@@ -145,10 +145,6 @@ namespace Photon_IATK
             {
                 Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
             }
-
-            this.gameObject.AddComponent<EventSystem>();
-            this.gameObject.AddComponent<StandaloneInputModule>();
-
         }
 #elif VIVE
         private void setup(){

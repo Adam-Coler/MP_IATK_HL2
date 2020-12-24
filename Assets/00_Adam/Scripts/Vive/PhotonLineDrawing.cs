@@ -42,7 +42,6 @@ namespace Photon_IATK
         private Transform _drawingParent;
         //playspace anchor for synced views
 
-        private WidthCurve _currentWidthCurve;
         private Vector3 _lastPosition = Vector3.zero;
         private const float MinimalDrawingDistance = 0.001f;
 
@@ -63,12 +62,14 @@ namespace Photon_IATK
             {
                 stream.SendNext(transform.localPosition);
                 stream.SendNext(transform.localRotation);
+                //stream.SendNext(this.gameObject.transform.InverseTransformDirection(NewPoint));
                 stream.SendNext(NewPoint);
             }
             else
             {
                 networkLocalPosition = (Vector3)stream.ReceiveNext();
                 networkLocalRotation = (Quaternion)stream.ReceiveNext();
+                //NewPoint = PlayspaceAnchor.Instance.transform.InverseTransformDirection((Vector3)stream.ReceiveNext());
                 NewPoint = (Vector3)stream.ReceiveNext();
             }
         }
@@ -104,8 +105,6 @@ namespace Photon_IATK
             networkLocalRotation = startingLocalRotation;
 
             _lastPosition = Vector3.zero;
-            _currentWidthCurve = new WidthCurve(false);
-
             _currentLine = lineRenderer;
 
             _currentLine.material = new Material(Shader.Find("Sprites/Default")); ;
@@ -123,227 +122,41 @@ namespace Photon_IATK
         {
             NewPoint = pointToAdd;
 
-            if (pointToAdd == oldPoint || NewPoint == Vector3.zero) { return; }
+            if (NewPoint == oldPoint || NewPoint == Vector3.zero) { return; }
 
-            if (_isSmoothingActive)
-            {
-                _lastPositionsBuffer = null;
-                AddMeanPoint(lineRenderer, _currentWidthCurve, pointToAdd, 1f);
-            }
-            else
-            {
-                AddPoint(lineRenderer, _currentWidthCurve, pointToAdd, 1f);
-            }
+            lineRenderer.positionCount++;
+            lineRenderer.SetPosition(lineRenderer.positionCount - 1, pointToAdd);
 
-
-            //lineRenderer.positionCount++;
-            //lineRenderer.SetPosition(lineRenderer.positionCount - 1, lineRenderer.transform.InverseTransformPoint(pointToAdd));
-      
-            oldPoint = pointToAdd;
+            oldPoint = NewPoint;
         }
 
+        public bool useTransform = false;
         // private void FixedUpdate()
         private void FixedUpdate()
         {
             if (!photonView.IsMine && PhotonNetwork.IsConnected)
             {
+                GameObject pen = GameObject.FindGameObjectWithTag("GameController");
 
                 addPoint(NewPoint);
-                // if not the local user
 
-                //get PhotonUser transform 
+                Vector3 penPoint = pen.transform.position;
+                Vector3 localTranfrom = PlayspaceAnchor.Instance.transform.InverseTransformPoint(NewPoint);
+                Vector3 worldTransform = PlayspaceAnchor.Instance.transform.TransformPoint(NewPoint);
+                Vector3 Differance = penPoint - NewPoint;
+
+                Debug.LogFormat("Pen Tip: {0}, NewPoint: {1}, Transformed to local: {2}, transformed to world: {3}, Differance: {4}", penPoint, NewPoint, localTranfrom, worldTransform, Differance);
+
                 var trans = transform;
+                if (useTransform)
+                {
+                    trans.localPosition = networkLocalPosition;
+                    trans.localRotation = networkLocalRotation;
+                }
 
-                //move the users local position to the network position
-                // the network position is the information sent from the other users local poisitons
-                trans.localPosition = networkLocalPosition;
-                trans.localRotation = networkLocalRotation;
             }
         }
 
-        private void AddPoint(LineRenderer line, WidthCurve curve, Vector3 newPosition, float width)
-        {
-            float distance = Vector3.Distance(_lastPosition, newPosition);
-            if (distance < MinimalDrawingDistance && curve.Distances.Count > 0)
-            {
-                line.widthCurve = curve.GetCurve();
-                line.SetPosition(line.positionCount - 1, line.transform.InverseTransformPoint(newPosition));
-                return;
-            }
-            _lastPosition = newPosition;
-            curve.AddPoint(width, distance);
-            line.widthCurve = curve.GetCurve();
-            line.positionCount++;
-            line.SetPosition(line.positionCount - 1, line.transform.InverseTransformPoint(newPosition));
-        }
-
-        private void AddMeanPoint(LineRenderer line, WidthCurve curve, Vector3 newPosition, float width)
-        {
-            float distance = Vector3.Distance(_lastPosition, newPosition);
-            if (distance < MinimalDrawingDistance && curve.Distances.Count > 0)
-            {
-                line.widthCurve = curve.GetCurve();
-                line.SetPosition(line.positionCount - 1, line.transform.InverseTransformPoint(newPosition));
-                return;
-            }
-            AddPointInBuffer(_lastPosition);
-            _lastPosition = newPosition;
-            curve.AddPoint(width, distance);
-            line.widthCurve = curve.GetCurve();
-            line.positionCount++;
-            line.SetPosition(line.positionCount - 1, line.transform.InverseTransformPoint(newPosition));
-            ApplyMean(line);
-        }
-
-        private void ApplyMean(LineRenderer line)
-        {
-            int meanSize = _windowSize;
-            Vector3 meanAverage = Vector3.zero;
-            foreach (Vector3 elem in _lastPositionsBuffer)
-            {
-                if (elem == Vector3.zero)
-                {
-                    meanSize--;
-                }
-                else
-                {
-                    meanAverage += elem;
-                }
-            }
-            if (meanSize > 0)
-            {
-                meanAverage = meanAverage / meanSize;
-            }
-
-            if (line.positionCount >= 2)
-            {
-                line.SetPosition(line.positionCount - 2, line.transform.InverseTransformPoint(meanAverage));
-            }
-        }
-
-        public void SetSmoothingMode(bool smoothingStatus)
-        {
-            _isSmoothingActive = smoothingStatus;
-        }
-
-
-
-
-        /// <summary>
-        /// Remember the last 10 points to be able to apply a mean average on each elements with it's neighbor. Keep
-        /// this array as a FIFO.
-        /// </summary>
-        /// <param name="newPosition">The new latest element.</param>
-        private void AddPointInBuffer(Vector3 newPosition)
-        {
-            if (_lastPositionsBuffer == null || _lastPositionsBuffer.Length != _windowSize)
-            {
-                _lastPositionsBuffer = new Vector3[_windowSize];
-                for (int i = 0; i < _lastPositionsBuffer.Length; i++)
-                {
-                    _lastPositionsBuffer[i] = Vector3.zero;
-                }
-            }
-
-            var tempArray = new Vector3[_windowSize];
-            for (int i = 0; i < _lastPositionsBuffer.Length; i++)
-            {
-                if (i == _lastPositionsBuffer.Length - 1)
-                {
-                    tempArray[i] = newPosition;
-                }
-                else
-                {
-                    tempArray[i] = _lastPositionsBuffer[i + 1];
-                }
-            }
-            _lastPositionsBuffer = tempArray;
-        }
-
-        /// <summary>
-        /// Holds information regarding the width of the line along its path.
-        /// </summary>
-        private class WidthCurve
-        {
-            public List<float> Distances;
-            private List<float> _widths;
-            private bool _simulateTaper;
-
-            public WidthCurve(bool simulateTaper)
-            {
-                _simulateTaper = simulateTaper;
-                _widths = new List<float>();
-                Distances = new List<float>();
-            }
-
-            /// <summary>
-            /// Add a point at a given distance from the last one and its corresponding width to the curve representing
-            /// the overall width of the line along its path.
-            /// </summary>
-            public void AddPoint(float width, float distance)
-            {
-                _widths.Add(width);
-                Distances.Add(distance);
-            }
-
-            /// <summary>
-            /// Use this to get the current curve that a line renderer with points corresponding to
-            /// these previously added to this data structure can understand as a width curve.
-            /// </summary>
-            public AnimationCurve GetCurve()
-            {
-                if (Distances[0] == 0)
-                {
-                    Distances[0] = 0.005f;
-                }
-
-                Debug.Assert(Distances.Count == _widths.Count, "Both lists should have the same length");
-                //Debug.Assert(Distances[0] == 0, "The first length should be zero");
-
-                if (_widths.Count == 0)
-                {
-                    Debug.LogError("Cannot get you a curve with no points.");
-                    return null;
-                }
-
-                float totalDistance = Distances.Aggregate((sum, next) => sum + next);
-
-                if (_simulateTaper)
-                {
-                    return TaperSimulation(0.05f / totalDistance);
-                }
-                else
-                {
-                    var keyframes = new Keyframe[_widths.Count];
-                    float distanceToThisPoint = 0f;
-                    for (int i = 0; i < keyframes.Length; i++)
-                    {
-                        distanceToThisPoint += Distances[i];
-                        keyframes[i] = new Keyframe(distanceToThisPoint / totalDistance, _widths[i]);
-                    }
-                    return new AnimationCurve(keyframes);
-                }
-            }
-
-            private static AnimationCurve TaperSimulation(float taperProportion)
-            {
-                if (taperProportion > 0.5f)
-                {
-                    taperProportion = 0.5f;
-                }
-
-                Keyframe[] easeIn = AnimationCurve.EaseInOut(0f, 0f, taperProportion, 1f).keys;
-                Keyframe[] constantBit = AnimationCurve.Constant(taperProportion, 1f - taperProportion, 1f).keys;
-                Keyframe[] easeOut = AnimationCurve.EaseInOut(1f - taperProportion, 1f, 1f, 0f).keys;
-
-                var keyframes = new Keyframe[easeIn.Length + constantBit.Length + easeOut.Length];
-                easeIn.CopyTo(keyframes, 0);
-                constantBit.CopyTo(keyframes, easeIn.Length);
-                easeOut.CopyTo(keyframes, easeIn.Length + constantBit.Length);
-
-                return new AnimationCurve(keyframes);
-            }
-        }
     }
 
 }

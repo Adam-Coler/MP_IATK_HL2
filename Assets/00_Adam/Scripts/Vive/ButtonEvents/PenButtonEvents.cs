@@ -89,6 +89,9 @@ namespace Photon_IATK
             {
                 if (tempPenPressedState && lastTriggerLocation != tempPenPressedLocation)
                 {
+
+                    //tempPenPressedLocation = PlayspaceAnchor.Instance.transform.InverseTransformPoint(tempPenPressedLocation);
+
                     penTriggerPressedLocation.Invoke(tempPenPressedLocation);
                     lastTriggerLocation = tempPenPressedLocation;
 
