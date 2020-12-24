@@ -1,17 +1,30 @@
-﻿namespace Photon_IATK
+﻿using System.Linq;
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
+using Photon.Pun;
+namespace Photon_IATK
 {
-    using System.Linq;
-    using System;
-    using System.Collections.Generic;
-    using UnityEngine;
-    using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
-
-    /// <summary>
-    /// Draws lines in 3D space.
-    /// </summary>
-    [Serializable]
-    public class LineDrawing : MonoBehaviour
+    public class PhotonLineDrawing : MonoBehaviourPun, IPunObservable
     {
+        public LineRenderer lineRenderer;
+        public MeshCollider meshCollider;
+    
+        [SerializeField] public bool isUser = default;
+
+        private Vector3 networkLocalPosition;
+        private Quaternion networkLocalRotation;
+
+        private Vector3 startingLocalPosition;
+        private Quaternion startingLocalRotation;
+
+        private Vector3 NewPoint;
+        private Vector3 oldPoint;
+
+
+
+
         [Header("Line Settings")]
         [SerializeField]
         private bool _useAnalog = true;
@@ -33,7 +46,7 @@
         //playspace anchor for synced views
 
         private WidthCurve _currentWidthCurve;
-        private Vector3 _lastPosition;
+        private Vector3 _lastPosition = Vector3.zero;
         private const float MinimalDrawingDistance = 0.001f;
 
         [Header("Line Smoothing")]
@@ -45,120 +58,111 @@
 
         private Vector3[] _lastPositionsBuffer;
 
-        private void Start()
+
+
+        void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
-            drawingVariables = DrawingVariables.Instance;
-            _drawingParent = PlayspaceAnchor.Instance.transform;
-        }
-
-        
-
-        /// <summary>
-        /// Starts a new drawing.
-        /// </summary>
-        bool isUpdated = false;
-        public void onUpdate()
-        {
-            if (!isUpdated)
+            if (stream.IsWriting)
             {
-                _timer = TimeInterval;
-                // Start a new line
-                bool autoTaper = !_useAnalog;
-                if (_lineMaterial == null)
-                {
-                    _lineMaterial = new Material(Shader.Find("Sprites/Default"));
-                }
-
-                Debug.LogFormat(GlobalVariables.blue + "Starting a new line" + GlobalVariables.endColor + " : OnTriggerValid()" + this.GetType());
-
-                StartNewLine(drawingVariables.penTipPosition, _lineMaterial, drawingVariables.currentColor, _maxLineWidth, autoTaper);
-
-                isUpdated = true;
-            }
-
-        }
-
-        /// <summary>
-        /// Adds points to the current line.
-        /// </summary>
-        public void Update()
-        {
-            if (false)
-            {
-                onUpdate();
-                Debug.Assert(_currentLine != null, "If we are already drawing there should be a current line");
-                if (_timer < Time.time)
-                {
-                    // Reset timer
-                    _timer = Time.time;
-
-                    // Add a point to the current line
-                    float lineWidth = 1f;
-
-                    if (_isSmoothingActive)
-                    {
-                        AddMeanPoint(_currentLine, _currentWidthCurve, drawingVariables.penTipPosition, lineWidth);
-                    }
-                    else
-                    {
-                        AddPoint(_currentLine, _currentWidthCurve, drawingVariables.penTipPosition, lineWidth);
-                    }
-                }
-            } else if (isUpdated)
-            {
-                isUpdated = false;
-                endLine();
-                Debug.LogFormat(GlobalVariables.blue + "Ending a new line" + GlobalVariables.endColor + " : Update()" + this.GetType());
-            }
-        }
-
-        GameObject go;
-        private void StartNewLine(Vector3 position, Material material, Color color, float lineWidth, bool automatedTaper)
-        {
-            go = new GameObject("Annotation");
-
-            go.transform.position = position;
-
-            LineRenderer lineRenderer = go.AddComponent<LineRenderer>();
-            lineRenderer.material = material;
-            lineRenderer.material.color = color;
-            lineRenderer.widthMultiplier = lineWidth;
-            lineRenderer.positionCount = 0;
-            lineRenderer.useWorldSpace = false;
-            lineRenderer.transform.parent = _drawingParent;
-
-            _currentWidthCurve = new WidthCurve(automatedTaper);
-            _lastPosition = position;
-
-            if (_isSmoothingActive)
-            {
-                _lastPositionsBuffer = null;
-                AddMeanPoint(lineRenderer, _currentWidthCurve, position, 0f);
+                stream.SendNext(transform.localPosition);
+                stream.SendNext(transform.localRotation);
+                stream.SendNext(NewPoint);
             }
             else
             {
-                AddPoint(lineRenderer, _currentWidthCurve, position, 0f);
+                networkLocalPosition = (Vector3)stream.ReceiveNext();
+                networkLocalRotation = (Quaternion)stream.ReceiveNext();
+                NewPoint = (Vector3)stream.ReceiveNext();
             }
+        }
+
+        private void Awake()
+        {
+
+            if (PlayspaceAnchor.Instance != null)
+            {
+                transform.parent = FindObjectOfType<PlayspaceAnchor>().transform;
+                Debug.Log(GlobalVariables.green + "Parenting: " + this.gameObject.name + " in " + transform.parent.name + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
+            }
+            else
+            {
+                Debug.Log(GlobalVariables.red + "No Playspace anchor exists, nothing parented" + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
+            }
+
+            if (isUser)
+            {
+                if (photonView.IsMine)
+                {
+                    Debug.Log(GlobalVariables.green + "Setting GenericNetworkManager.Instance.localUser " + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
+
+                    GenericNetworkManager.Instance.localUser = photonView;
+                }
+            }
+            else
+            {
+                Debug.Log(GlobalVariables.red + "isUser set to false, not setting the view or the parent on this client " + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
+            }
+
+
+            var trans = transform;
+            startingLocalPosition = trans.localPosition;
+            startingLocalRotation = trans.localRotation;
+
+            networkLocalPosition = startingLocalPosition;
+            networkLocalRotation = startingLocalRotation;
+
+            _lastPosition = Vector3.zero;
+            _currentWidthCurve = new WidthCurve(false);
 
             _currentLine = lineRenderer;
         }
 
-        private void endLine()
+
+        public void addPoint(Vector3 pointToAdd)
         {
-            LineRenderer lineRenderer = go.GetComponent<LineRenderer>();
-            MeshCollider meshCollider = go.AddComponent<MeshCollider>();
+            NewPoint = pointToAdd;
 
-            Mesh mesh = new Mesh();
-            lineRenderer.BakeMesh(mesh, true);
-            meshCollider.sharedMesh = mesh;
+            if (pointToAdd == oldPoint || NewPoint == Vector3.zero) { return; }
+
+            if (_isSmoothingActive)
+            {
+                _lastPositionsBuffer = null;
+                AddMeanPoint(lineRenderer, _currentWidthCurve, pointToAdd, 1f);
+            }
+            else
+            {
+                AddPoint(lineRenderer, _currentWidthCurve, pointToAdd, 1f);
+            }
 
 
-            BoundsControl boundsControl = go.AddComponent<BoundsControl>();
-            boundsControl.HandleProximityEffectConfig.ProximityEffectActive = true;
-            boundsControl.BoundsControlActivation = Microsoft.MixedReality.Toolkit.UI.BoundsControlTypes.BoundsControlActivationType.ActivateByProximityAndPointer;
-            boundsControl.LinksConfig.ShowWireFrame = false;
-
+            //lineRenderer.positionCount++;
+            //lineRenderer.SetPosition(lineRenderer.positionCount - 1, lineRenderer.transform.InverseTransformPoint(pointToAdd));
+      
+            oldPoint = pointToAdd;
         }
+
+        // private void FixedUpdate()
+        private void FixedUpdate()
+        {
+            if (!photonView.IsMine && PhotonNetwork.IsConnected)
+            {
+
+                addPoint(NewPoint);
+                // if not the local user
+
+                //get PhotonUser transform 
+                var trans = transform;
+
+                //move the users local position to the network position
+                // the network position is the information sent from the other users local poisitons
+                trans.localPosition = networkLocalPosition;
+                trans.localRotation = networkLocalRotation;
+            }
+        }
+
+
+
+
 
         private void AddPoint(LineRenderer line, WidthCurve curve, Vector3 newPosition, float width)
         {
@@ -225,6 +229,9 @@
             _isSmoothingActive = smoothingStatus;
         }
 
+
+
+
         /// <summary>
         /// Remember the last 10 points to be able to apply a mean average on each elements with it's neighbor. Keep
         /// this array as a FIFO.
@@ -288,8 +295,13 @@
             /// </summary>
             public AnimationCurve GetCurve()
             {
+                if (Distances[0] == 0)
+                {
+                    Distances[0] = 0.005f;
+                }
+
                 Debug.Assert(Distances.Count == _widths.Count, "Both lists should have the same length");
-                Debug.Assert(Distances[0] == 0, "The first length should be zero");
+                //Debug.Assert(Distances[0] == 0, "The first length should be zero");
 
                 if (_widths.Count == 0)
                 {
@@ -336,4 +348,5 @@
             }
         }
     }
+
 }

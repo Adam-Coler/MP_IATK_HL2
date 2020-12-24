@@ -64,7 +64,7 @@ namespace Photon_IATK
         }
 
         // private void FixedUpdate()
-        private void Update()
+        private void FixedUpdate()
         {
             if (!photonView.IsMine && PhotonNetwork.IsConnected)
             {
