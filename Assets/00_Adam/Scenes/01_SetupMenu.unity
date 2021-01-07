@@ -10868,6 +10868,7 @@ GameObject:
   - component: {fileID: 1460449748}
   - component: {fileID: 1460449755}
   - component: {fileID: 1460449754}
+  - component: {fileID: 1460449756}
   - component: {fileID: 1460449753}
   - component: {fileID: 1460449752}
   - component: {fileID: 1460449751}
@@ -11063,7 +11064,7 @@ MonoBehaviour:
   startDimensionIndex: 0
   CanSelect: 0
   CanDeselect: 0
-  VoiceCommand: Select
+  VoiceCommand: 
   voiceRequiresFocus: 1
   profiles:
   - Target: {fileID: 364718575}
@@ -11078,8 +11079,8 @@ MonoBehaviour:
   OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: ToggleRecording
+      - m_Target: {fileID: 1460449756}
+        m_MethodName: vizFinal
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11386,6 +11387,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.032, y: 0.032, z: 0.016}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1460449756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1460449747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30ee82f10fd5beb4ca06287558c9cbb3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1466635520
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,4 @@
-﻿#if UWP
-
+﻿
 using Vuforia;
 using UnityEngine;
 
@@ -7,6 +6,8 @@ namespace Photon_IATK
 {
     public class VuforiaLevelManagement : MonoBehaviour
     {
+#if HL2
+
         void Awake()
         {
             Debug.LogFormat(GlobalVariables.green + "Vuforia setup" + GlobalVariables.endColor + " Awake() : " + this.GetType());
@@ -123,13 +124,14 @@ namespace Photon_IATK
 
         public void enableDisableVuforia()
         {
+            //Debug.LogFormat(GlobalVariables.yellow + "VuforiaBehaviour Enabled = {0}" + GlobalVariables.endColor + " enableDisableVuforia() : " + this.GetType(), VuforiaBehaviour.Instance.enabled);
+
             VuforiaBehaviour.Instance.enabled = !VuforiaBehaviour.Instance.enabled;
 
-            Debug.LogFormat(GlobalVariables.yellow + "VuforiaBehaviour Enabled = {0}" + GlobalVariables.endColor + " enableDisableVuforia() : " + this.GetType(), VuforiaBehaviour.Instance.enabled);
+
         }
 
-
+#endif
     }
 }
 
-#endif

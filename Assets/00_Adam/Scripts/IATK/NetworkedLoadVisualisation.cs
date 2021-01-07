@@ -23,6 +23,9 @@ namespace Photon_IATK
 
         public void InitializeVisualisationProgramatically()
         {
+
+#if VIVE
+
             if (PhotonNetwork.IsConnected)
             {
                 GameObject vis = PhotonNetwork.Instantiate("Vis", Vector3.zero, Quaternion.identity);
@@ -37,6 +40,7 @@ namespace Photon_IATK
             {
                 Debug.Log(GlobalVariables.red + "Not connected to Photon, nothing instantiated" + GlobalVariables.endColor + " : " + "InitializeVisualisationProgramatically()" + " : " + this.GetType());
             }
+#endif
         }
 
         private void attachToPlayspace(GameObject obj)

@@ -111,8 +111,10 @@ namespace Photon_IATK
         Debug.Log(ColorStartGreen + className + " Current symbols for" + " project: " + colorEnd + ColorStartRed + buildManager.getBuildDefineSymbols() + colorEnd);
         //Debug.Log(ColorStartGreen + "XR Enabled: " + colorEnd + ColorStartRed + XRSettings.enabled + colorEnd);
         Debug.Log(ColorStartGreen + "XR Device Active: " + colorEnd + ColorStartRed + XRSettings.loadedDeviceName + colorEnd);
-        //Debug.Log(ColorStartGreen + "XR Device Name: " + colorEnd + ColorStartRed + XRSettings.isDeviceActive + colorEnd);
-        Debug.Log(ColorStartGreen + className + " End log dump " + colorEnd);
+            //Debug.Log(ColorStartGreen + "XR Device Name: " + colorEnd + ColorStartRed + XRSettings.isDeviceActive + colorEnd);
+            
+        Debug.Log(ColorStartGreen + "productName: " + colorEnd + ColorStartRed + PlayerSettings.productName + colorEnd);
+            Debug.Log(ColorStartGreen + className + " End log dump " + colorEnd);
 
     }
 
@@ -130,7 +132,7 @@ namespace Photon_IATK
         EditorUserBuildSettings.SetBuildLocation(EditorUserBuildSettings.selectedStandaloneTarget, savePath);
 
         PlayerSettings.productName = "IATK_DESKTOP";
-            PlayerSettings.vuforiaEnabled = false;
+            //PlayerSettings.vuforiaEnabled = false;
         }
 
     static void setBuildPlatformHL2()
