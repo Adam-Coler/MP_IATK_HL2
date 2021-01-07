@@ -130,7 +130,8 @@ namespace Photon_IATK
         EditorUserBuildSettings.SetBuildLocation(EditorUserBuildSettings.selectedStandaloneTarget, savePath);
 
         PlayerSettings.productName = "IATK_DESKTOP";
-    }
+            PlayerSettings.vuforiaEnabled = false;
+        }
 
     static void setBuildPlatformHL2()
     {
@@ -139,7 +140,8 @@ namespace Photon_IATK
         EditorUserBuildSettings.SetBuildLocation(EditorUserBuildSettings.selectedStandaloneTarget, savePath);
 
         PlayerSettings.productName = "IATK_HL2";
-    }
+            PlayerSettings.vuforiaEnabled = true;
+        }
     static void setBuildPlatformVive()
     {
         //Set Build Path
@@ -147,6 +149,7 @@ namespace Photon_IATK
         EditorUserBuildSettings.SetBuildLocation(EditorUserBuildSettings.selectedStandaloneTarget, savePath);
 
         PlayerSettings.productName = "IATK_VIVE";
+            PlayerSettings.vuforiaEnabled = false;
     }
 
 

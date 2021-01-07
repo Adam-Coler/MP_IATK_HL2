@@ -1932,6 +1932,7 @@ MonoBehaviour:
   _drawingParent: {fileID: 0}
   _isSmoothingActive: 1
   _windowSize: 2
+  useTransform: 0
 --- !u!120 &1058062613174048810
 LineRenderer:
   m_ObjectHideFlags: 0

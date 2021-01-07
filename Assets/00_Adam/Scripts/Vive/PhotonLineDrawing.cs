@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 using Photon.Pun;
+
 namespace Photon_IATK
 {
     public class PhotonLineDrawing : MonoBehaviourPun, IPunObservable
@@ -130,7 +131,7 @@ namespace Photon_IATK
             oldPoint = NewPoint;
         }
 
-        public bool useTransform = false;
+        public bool useTransform = true;
         // private void FixedUpdate()
         private void FixedUpdate()
         {
@@ -139,13 +140,6 @@ namespace Photon_IATK
                 GameObject pen = GameObject.FindGameObjectWithTag("GameController");
 
                 addPoint(NewPoint);
-
-                Vector3 penPoint = pen.transform.position;
-                Vector3 localTranfrom = PlayspaceAnchor.Instance.transform.InverseTransformPoint(NewPoint);
-                Vector3 worldTransform = PlayspaceAnchor.Instance.transform.TransformPoint(NewPoint);
-                Vector3 Differance = penPoint - NewPoint;
-
-                Debug.LogFormat("Pen Tip: {0}, NewPoint: {1}, Transformed to local: {2}, transformed to world: {3}, Differance: {4}", penPoint, NewPoint, localTranfrom, worldTransform, Differance);
 
                 var trans = transform;
                 if (useTransform)

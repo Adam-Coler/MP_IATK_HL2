@@ -1,4 +1,6 @@
-﻿using Vuforia;
+﻿#if UWP
+
+using Vuforia;
 using UnityEngine;
 
 namespace Photon_IATK
@@ -129,3 +131,5 @@ namespace Photon_IATK
 
     }
 }
+
+#endif

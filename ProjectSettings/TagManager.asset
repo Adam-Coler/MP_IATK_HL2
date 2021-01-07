@@ -11,6 +11,7 @@ TagManager:
   - PhotonLog
   - DebugLog
   - ImageTargets
+  - View
   layers:
   - Default
   - TransparentFX

@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿#if UWP
+
+using UnityEngine;
 using Vuforia;
 
 namespace Photon_IATK
@@ -88,3 +90,5 @@ namespace Photon_IATK
 
 //    Debug.LogFormat(GlobalVariables.yellow + "Camera Enabled = {0}" + GlobalVariables.endColor + " enableDisableVuforia() : " + this.GetType(), CameraDevice.Instance.IsActive());
 //}
+
+#endif
