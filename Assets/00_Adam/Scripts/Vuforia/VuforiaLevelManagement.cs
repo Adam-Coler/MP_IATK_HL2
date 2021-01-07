@@ -1,5 +1,7 @@
-﻿
+﻿#if HL2
 using Vuforia;
+#endif
+
 using UnityEngine;
 
 namespace Photon_IATK

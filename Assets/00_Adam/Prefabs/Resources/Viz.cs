@@ -51,13 +51,15 @@ namespace Photon_IATK
             //vizFinal();
         }
 
-        public void vizFinal() { 
-           
+        public void vizFinal() {
+            if (!PhotonNetwork.IsMasterClient) { return; }
+
             if (true)
             {
                 Debug.Log(GlobalVariables.red + "Viz: " + GlobalVariables.endColor + GlobalVariables.yellow + "Master is connected and instaciating prefab to Photon network" + GlobalVariables.endColor);
                 //PhotonNetwork.Instantiate("viz_1", new Vector3(-.1f, -.1f, .5f), Quaternion.identity, 1);
-                PhotonNetwork.InstantiateRoomObject("viz_1", new Vector3(-.1f, -.1f, .5f), Quaternion.identity);
+
+                PhotonNetwork.Instantiate("viz_1", new Vector3(-.1f, -.1f, .5f), Quaternion.identity);
             }
             else
             {
