@@ -29,21 +29,21 @@ namespace Photon_IATK
     private static void NewMenuOption3() => setPlatformVive();
 
     [MenuItem("Tools/Log Current Settings", false, 4)]
-    private static void NewMenuOption4() => logSettings();
+    private static void NewMenuOption4() => logSettingsMenu();
 
-    #endregion
+    [MenuItem("Tools/Switch Vuforia", false, 4)]
+    private static void NewMenuOption5() => SwitchVuforia();
+
+        #endregion
 
 
-    #region Private Variables
+        #region Private Variables
 
     static private string className = "Tools.cs:";
     static private string ColorStartGreen = GlobalVariables.green;
     static private string ColorStartRed = GlobalVariables.red;
     static private string colorEnd = GlobalVariables.endColor;
 
-    #endregion
-
-    #region Public Variables
     #endregion
 
     static void setPlatformDesktop()
@@ -92,47 +92,55 @@ namespace Photon_IATK
         logSettings();
     }
 
-    static void logSettings()
-    {
-        var buildTarget = EditorUserBuildSettings.selectedBuildTargetGroup;
-        var buildTargetStandalone = EditorUserBuildSettings.selectedStandaloneTarget;
-        string buildPath = EditorUserBuildSettings.GetBuildLocation(EditorUserBuildSettings.selectedStandaloneTarget);
+        static void logSettings()
+        {
+            BuildManager buildManager = new BuildManager { };
+            Debug.Log(ColorStartGreen + className + " Current symbol: " + colorEnd + ColorStartRed + buildManager.GetCurrentPlatform() + colorEnd);
+            Debug.Log(ColorStartGreen + className + " Current symbols for" + " project: " + colorEnd + ColorStartRed + buildManager.getBuildDefineSymbols() + colorEnd);
+            Debug.Log(ColorStartGreen + "XR Device Active: " + colorEnd + ColorStartRed + XRSettings.loadedDeviceName + colorEnd);
+            Debug.Log(ColorStartGreen + "productName: " + colorEnd + ColorStartRed + PlayerSettings.productName + colorEnd);
+            Debug.Log(ColorStartGreen + "Vuforia Active: " + colorEnd + ColorStartRed + PlayerSettings.vuforiaEnabled + colorEnd);
 
-        //Script - Custom Tools: Current Build Settings: Build Target Group: Standalone, Build Standalone: StandaloneWindows, Build Path: C: \Users\Adam6\Desktop\PhotonProjects\PhotonIATK\PhotonDesktop\PhotonDesktop\Builds\DESKTOP
-
-        //Script - Custom Tools: -Build Target Group: Metro, Build Standalone: StandaloneWindows, Build Path: C: \Users\Adam6\Desktop\PhotonProjects\PhotonIATK\PhotonDesktop\PhotonDesktop\Builds\HL2
-
-        //Debug.Log(ColorStartGreen + className + " start log dump " + colorEnd);
-        //Debug.Log(ColorStartGreen + "Build Target Group: " + colorEnd + ColorStartRed + buildTarget + colorEnd);
-        //Debug.Log(ColorStartGreen + "Build Target: " + colorEnd + ColorStartRed + buildTargetStandalone + colorEnd);
-        Debug.Log(ColorStartGreen + "Build Path: " + colorEnd + ColorStartRed + buildPath + colorEnd);
-        BuildManager buildManager = new BuildManager { };
-        Debug.Log(ColorStartGreen + className + " Current symbol: " + colorEnd + ColorStartRed + buildManager.GetCurrentPlatform() + colorEnd);
-        Debug.Log(ColorStartGreen + className + " Current symbols for" + " project: " + colorEnd + ColorStartRed + buildManager.getBuildDefineSymbols() + colorEnd);
-        //Debug.Log(ColorStartGreen + "XR Enabled: " + colorEnd + ColorStartRed + XRSettings.enabled + colorEnd);
-        Debug.Log(ColorStartGreen + "XR Device Active: " + colorEnd + ColorStartRed + XRSettings.loadedDeviceName + colorEnd);
+            //string buildPath = EditorUserBuildSettings.GetBuildLocation(EditorUserBuildSettings.selectedStandaloneTarget);
+            //Debug.Log(ColorStartGreen + "Build Path: " + colorEnd + ColorStartRed + buildPath + colorEnd);
+            //var buildTarget = EditorUserBuildSettings.selectedBuildTargetGroup;
+            //var buildTargetStandalone = EditorUserBuildSettings.selectedStandaloneTarget;
+            //Script - Custom Tools: Current Build Settings: Build Target Group: Standalone, Build Standalone: StandaloneWindows, Build Path: C: \Users\Adam6\Desktop\PhotonProjects\PhotonIATK\PhotonDesktop\PhotonDesktop\Builds\DESKTOP
+            //Debug.Log(ColorStartGreen + "XR Enabled: " + colorEnd + ColorStartRed + XRSettings.enabled + colorEnd);
+            //Script - Custom Tools: -Build Target Group: Metro, Build Standalone: StandaloneWindows, Build Path: C: \Users\Adam6\Desktop\PhotonProjects\PhotonIATK\PhotonDesktop\PhotonDesktop\Builds\HL2
             //Debug.Log(ColorStartGreen + "XR Device Name: " + colorEnd + ColorStartRed + XRSettings.isDeviceActive + colorEnd);
-            
-        Debug.Log(ColorStartGreen + "productName: " + colorEnd + ColorStartRed + PlayerSettings.productName + colorEnd);
-            Debug.Log(ColorStartGreen + className + " End log dump " + colorEnd);
+            //Debug.Log(ColorStartGreen + className + " start log dump " + colorEnd);
+            //Debug.Log(ColorStartGreen + "Build Target Group: " + colorEnd + ColorStartRed + buildTarget + colorEnd);
+            //Debug.Log(ColorStartGreen + "Build Target: " + colorEnd + ColorStartRed + buildTargetStandalone + colorEnd);
+        }
 
-    }
+        static void clearLog()
+        {
+            var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
+            var type = assembly.GetType("UnityEditor.LogEntries");
+            var method = type.GetMethod("Clear");
+            method.Invoke(new object(), null);
+        }
 
-    static void clearLog()
-    {
-        var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
-        var type = assembly.GetType("UnityEditor.LogEntries");
-        var method = type.GetMethod("Clear");
-        method.Invoke(new object(), null);
-    }
-    static void setBuildPlatformDesktop()
-    {
-        //Set Build Path
-        string savePath = Path.GetFullPath(Path.Combine(Application.dataPath, "../Builds/DESKTOP"));
-        EditorUserBuildSettings.SetBuildLocation(EditorUserBuildSettings.selectedStandaloneTarget, savePath);
+        static void logSettingsMenu()
+        {
+            clearLog();
+            logSettings();
+        }
 
-        PlayerSettings.productName = "IATK_DESKTOP";
-            //PlayerSettings.vuforiaEnabled = false;
+        static void SwitchVuforia()
+        {
+            PlayerSettings.vuforiaEnabled = !PlayerSettings.vuforiaEnabled;
+            clearLog();
+            logSettings();
+        }
+
+        static void setBuildPlatformDesktop()
+        {
+            //Set Build Path
+            string savePath = Path.GetFullPath(Path.Combine(Application.dataPath, "../Builds/DESKTOP"));
+            EditorUserBuildSettings.SetBuildLocation(EditorUserBuildSettings.selectedStandaloneTarget, savePath);
+            PlayerSettings.productName = "IATK_DESKTOP";
         }
 
     static void setBuildPlatformHL2()
@@ -140,18 +148,14 @@ namespace Photon_IATK
         //Set Build Path
         string savePath = Path.GetFullPath(Path.Combine(Application.dataPath, "../Builds/HL2"));
         EditorUserBuildSettings.SetBuildLocation(EditorUserBuildSettings.selectedStandaloneTarget, savePath);
-
         PlayerSettings.productName = "IATK_HL2";
-            PlayerSettings.vuforiaEnabled = true;
         }
     static void setBuildPlatformVive()
     {
         //Set Build Path
         string savePath = Path.GetFullPath(Path.Combine(Application.dataPath, "../Builds/VIVE"));
         EditorUserBuildSettings.SetBuildLocation(EditorUserBuildSettings.selectedStandaloneTarget, savePath);
-
         PlayerSettings.productName = "IATK_VIVE";
-            PlayerSettings.vuforiaEnabled = false;
     }
 
 
@@ -159,7 +163,6 @@ namespace Photon_IATK
     {
         BuildManager buildManager = new BuildManager { };
         string newSymbols = buildManager.setBuildDefineSymbols(BuildManager.allSymbols.DESKTOP);
-
     }
 
     static void setPlatformSymbolsHL2()
@@ -173,6 +176,7 @@ namespace Photon_IATK
         BuildManager buildManager = new BuildManager { };
         string newSymbols = buildManager.setBuildDefineSymbols(BuildManager.allSymbols.VIVE);
     }
+
     }
 #endif
 

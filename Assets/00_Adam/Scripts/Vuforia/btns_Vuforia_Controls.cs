@@ -1,13 +1,15 @@
-﻿#if UWP
+﻿
 
 using UnityEngine;
+#if HL2
 using Vuforia;
+#endif
 
 namespace Photon_IATK
 {
     public class btns_Vuforia_Controls : MonoBehaviour
     {
-
+#if HL2
         public void enableDisableLightHouseTarget()
         {
             GameObject ImageTarget = GameObject.FindGameObjectWithTag("ImageTargets");
@@ -52,7 +54,7 @@ namespace Photon_IATK
                
             Debug.LogFormat(GlobalVariables.yellow + "VuforiaBehaviour Enabled = {0}" + GlobalVariables.endColor + " enableDisableVuforia() : " + this.GetType(), VuforiaBehaviour.Instance.enabled);
         }
-
+#endif
     }
 }
 
@@ -91,4 +93,3 @@ namespace Photon_IATK
 //    Debug.LogFormat(GlobalVariables.yellow + "Camera Enabled = {0}" + GlobalVariables.endColor + " enableDisableVuforia() : " + this.GetType(), CameraDevice.Instance.IsActive());
 //}
 
-#endif

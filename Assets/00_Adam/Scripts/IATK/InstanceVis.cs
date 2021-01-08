@@ -1,8 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using IATK;
-using System.Linq;
 using Photon.Pun;
 
 namespace Photon_IATK
@@ -76,30 +73,6 @@ namespace Photon_IATK
             Invoke("updateProperties", 2);
         }
 
-        private void setView()
-        {
-            var csvds = myCSVDataSource;
-            ViewBuilder vb = new ViewBuilder(MeshTopology.Points, "Impaired Driving Fatalities").
-                     initialiseDataView(csvds.DataCount).
-                     setDataDimension(csvds[state].Data, ViewBuilder.VIEW_DIMENSION.X).
-                     setDataDimension(csvds[fatalitiesPerBillion].Data, ViewBuilder.VIEW_DIMENSION.Y).
-                     setDataDimension(csvds[pctSpeeding].Data, ViewBuilder.VIEW_DIMENSION.Z);
-
-            // use the IATKUtil class to get the corresponding Material mt 
-            Material mt = IATKUtil.GetMaterialFromTopology(AbstractVisualisation.GeometryType.Points);
-            mt.SetFloat("_MinSize", 0.01f);
-            mt.SetFloat("_MaxSize", 0.05f);
-
-
-            // create a view builder with the point topology
-            View view = vb.updateView().apply(gameObject, mt);
-
-            //Axis xAxis;
-            //xAxis = new Axis();
-            //xAxis.SetDirection(1);
-
-        }
-
         private void setPropertiesToUndefined(Visualisation visualisation)
         {
             //IATK does not initalized these so they cause an error when we manually load a photon instanced graph.
@@ -118,7 +91,6 @@ namespace Photon_IATK
         private void updateProperties()
         {
             Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "updateProperties::InstanceVis - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
-
             vis.updateViewProperties(AbstractVisualisation.PropertyType.GraphDimension);
         }
 

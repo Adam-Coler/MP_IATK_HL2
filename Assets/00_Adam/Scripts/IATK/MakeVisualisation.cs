@@ -21,7 +21,6 @@ namespace Photon_IATK
             {
                 stream.SendNext(transform.localPosition);
                 stream.SendNext(transform.localRotation);
-                //stream.SendNext(this.gameObject.transform.InverseTransformDirection(NewPoint));
             }
             else
             {
@@ -50,7 +49,6 @@ namespace Photon_IATK
             myCSVDataSource = createCSVDataSource(myDataSource.text);
             myCSVDataSource.data = myDataSource;
             makeView();
-            //setView();
         }
 
 
@@ -86,32 +84,6 @@ namespace Photon_IATK
             vis.xDimension = state;
             vis.yDimension = fatalitiesPerBillion;
             vis.zDimension = pctImpairedABV;
-
-            //vis.enabled = true;
-            //this.gameObject.SetActive(true);
-        }
-
-        private void setView()
-        {
-            var csvds = myCSVDataSource;
-            ViewBuilder vb = new ViewBuilder(MeshTopology.Points, "Impaired Driving Fatalities").
-                     initialiseDataView(csvds.DataCount).
-                     setDataDimension(csvds[state].Data, ViewBuilder.VIEW_DIMENSION.X).
-                     setDataDimension(csvds[fatalitiesPerBillion].Data, ViewBuilder.VIEW_DIMENSION.Y).
-                     setDataDimension(csvds[pctSpeeding].Data, ViewBuilder.VIEW_DIMENSION.Z);
-
-            // use the IATKUtil class to get the corresponding Material mt 
-            Material mt = IATKUtil.GetMaterialFromTopology(AbstractVisualisation.GeometryType.Points);
-            mt.SetFloat("_MinSize", 0.01f);
-            mt.SetFloat("_MaxSize", 0.05f);
-
-
-            // create a view builder with the point topology
-            View view = vb.updateView().apply(gameObject, mt);
-
-            //Axis xAxis;
-            //xAxis = new Axis();
-            //xAxis.SetDirection(1);
 
         }
 
