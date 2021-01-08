@@ -14,10 +14,10 @@ namespace IATK
         public override void CreateVisualisation()
         {
 
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "ScatterplotVisualisation::CreateVisualisation - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "ScatterplotVisualisation::CreateVisualisation - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
 
 
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "ScatterplotVisualisation::CreateVisualisation - {0}, viewList: {1}, visualisationReference: {2}, dataSource: {3}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, viewList != null, visualisationReference != null, visualisationReference.dataSource != null);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "ScatterplotVisualisation::CreateVisualisation - {0}, viewList: {1}, visualisationReference: {2}, dataSource: {3}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, viewList != null, visualisationReference != null, visualisationReference.dataSource != null);
 
             string savedName = name;
 
@@ -68,7 +68,7 @@ namespace IATK
                 viewList.Add(view);
             }
 
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "ScatterplotVisualisation - {0}, {1}, ColourDimension:{2}, ColourDimension == {3}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup, visualisationReference.colourDimension != "Undefined", visualisationReference.colourDimension);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "ScatterplotVisualisation - {0}, {1}, ColourDimension:{2}, ColourDimension == {3}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup, visualisationReference.colourDimension != "Undefined", visualisationReference.colourDimension);
 
             if (viewList.Count > 0 && visualisationReference.colourDimension != "Undefined")
             {

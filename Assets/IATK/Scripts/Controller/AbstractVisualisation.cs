@@ -115,7 +115,7 @@ namespace IATK
         /// <returns></returns>
         protected GameObject CreateAxis(AbstractVisualisation.PropertyType propertyType, DimensionFilter dimensionFilter, Vector3 position, Vector3 rotation, int index)
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "CreateAxis - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "CreateAxis - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
 
             GameObject AxisHolder;
             
@@ -142,7 +142,7 @@ namespace IATK
         /// <param name="dim"></param>
         protected void BindMinMaxAxisValues(Axis axis, DimensionFilter dim)
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "BindMinMaxAxisValues - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "BindMinMaxAxisValues - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
 
             object minvalue = visualisationReference.dataSource.getOriginalValue(dim.minFilter, dim.Attribute);
             object maxvalue = visualisationReference.dataSource.getOriginalValue(dim.maxFilter, dim.Attribute);
@@ -164,7 +164,7 @@ namespace IATK
         /// <returns></returns>
         public void SerializeViewConfiguration(CreationConfiguration creationConfiguration)
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "SerializeViewConfiguration - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "SerializeViewConfiguration - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
 
 
             string path = ConfigurationFileName();
@@ -177,7 +177,7 @@ namespace IATK
 
         private string ConfigurationFileName()
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "ConfigurationFileName - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "ConfigurationFileName - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
 
             string PathName = Application.streamingAssetsPath + Path.DirectorySeparatorChar + serializedObjectPath;
             return PathName + Path.DirectorySeparatorChar + visualisationReference.uid + ".json";
@@ -212,7 +212,7 @@ namespace IATK
         /// <returns></returns>
         protected View ApplyGeometryAndRendering(CreationConfiguration configuration, ref ViewBuilder builder)
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "ApplyGeometryAndRendering - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "ApplyGeometryAndRendering - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
 
             Material mt = null;
 
@@ -328,7 +328,7 @@ namespace IATK
         /// <param name="geometry">Geometry.</param>
         protected MeshTopology geometryToMeshTopology(AbstractVisualisation.GeometryType geometry)
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "geometryToMeshTopology - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "geometryToMeshTopology - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
 
             switch (geometry)
             {

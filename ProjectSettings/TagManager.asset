@@ -12,6 +12,8 @@ TagManager:
   - DebugLog
   - ImageTargets
   - View
+  - Button
+  - Vis
   layers:
   - Default
   - TransparentFX

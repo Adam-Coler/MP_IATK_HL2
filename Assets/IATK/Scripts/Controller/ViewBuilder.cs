@@ -72,7 +72,7 @@ namespace IATK
         /// <param name="viewName">View name.</param>
         public ViewBuilder(MeshTopology type, string viewName)
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "ViewBuilder - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "ViewBuilder - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
 
             myMeshTopolgy = type;
             Name = viewName;
@@ -85,7 +85,7 @@ namespace IATK
         /// <param name="parent">Parent.</param>
         public ViewBuilder initialiseDataView(int numberOfPoints)
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "initialiseDataView - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "initialiseDataView - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
 
             // Initialise
             positions = new List<Vector3>(numberOfPoints);
@@ -122,7 +122,7 @@ namespace IATK
         /// <param name="dimension">Dimension.</param>
         public ViewBuilder setDataDimension(float[] data, VIEW_DIMENSION dimension)
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "setDataDimension - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "setDataDimension - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
 
             Debug.Assert((int)dimension < 3);
             Debug.Assert(data.Length <= positions.Count);
@@ -151,7 +151,7 @@ namespace IATK
         /// <param name="linking">Linking.</param>
         public ViewBuilder updateView()
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "updateView - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "updateView - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
 
             updateMeshPositions();
             return this;
@@ -165,7 +165,7 @@ namespace IATK
 
         public ViewBuilder setSingleColor(Color color)
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "setSingleColor - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "setSingleColor - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
 
             for (int i = 0; i < numberOfDataPoints; i++)
                 colours.Add(color);
@@ -179,7 +179,7 @@ namespace IATK
         /// <param name="colors">Colors.</param>
         public ViewBuilder setColors(Color[] newColours)
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "setColors - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "setColors - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
 
 
             Debug.Assert(newColours != null && newColours.Length == numberOfDataPoints);
@@ -197,7 +197,7 @@ namespace IATK
         public ViewBuilder mapColorContinuous(float[] data, Color fromColor, Color toColor)
         {
 
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "mapColorContinuous - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "mapColorContinuous - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
 
             Color[] newColours = new Color[data.Length];
 
@@ -206,7 +206,7 @@ namespace IATK
                 newColours[i] = Color.Lerp(fromColor, toColor, data[i]);
             }
 
-            //Debug.Log("vertices count: " + myMesh.vertices.Length + " colors count: " + newColours.Length);
+            ////Debug.Log("vertices count: " + myMesh.vertices.Length + " colors count: " + newColours.Length);
             colours = newColours.ToList();
 
             return this;
@@ -220,7 +220,7 @@ namespace IATK
         public ViewBuilder mapColorCategory(float[] data, Color[] palette)
         {
 
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "mapColorCategory - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "mapColorCategory - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
 
             Color[] colorSet = new Color[data.Length];
 
@@ -254,7 +254,7 @@ namespace IATK
         public View apply(GameObject parent, Material material)
         {
 
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "apply - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "apply - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
 
             parent.name = Name;
             
@@ -301,7 +301,7 @@ namespace IATK
         private void updateMeshPositions()
         {
 
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "updateMeshPositions - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "updateMeshPositions - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
 
             switch (myMeshTopolgy)
             {
@@ -330,7 +330,7 @@ namespace IATK
         /// <param name="numberOfPoints">Number of points.</param>
         private void createIndicesScatterPlot(int numberOfPoints)
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "createIndicesScatterPlot - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "createIndicesScatterPlot - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
 
             Indices.Clear();
             Indices.Capacity = numberOfPoints;
@@ -347,7 +347,7 @@ namespace IATK
         public ViewBuilder createIndicesPointTopology()
         {
 
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "createIndicesPointTopology() - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "createIndicesPointTopology() - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
 
             for (int i = 0; i < numberOfDataPoints; i++)
             {
@@ -365,7 +365,7 @@ namespace IATK
         public ViewBuilder createIndicesPointTopology(int totalPoints)
         {
 
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "createIndicesPointTopology(int) - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "createIndicesPointTopology(int) - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
 
             for (int i = 0; i < totalPoints; i++)
             {
@@ -379,7 +379,7 @@ namespace IATK
         public ViewBuilder createIndicesPointTopology(float[] vertexIndices)
         {
 
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "createIndicesPointTopology(float[]) - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "createIndicesPointTopology(float[]) - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
 
             for (int i = 0; i < vertexIndices.Length; i++)
             {
@@ -395,7 +395,7 @@ namespace IATK
         public ViewBuilder createIndicesGraphTopology(Dictionary<int, List<int>> nodeEdges)
         {
 
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "createIndicesGraphTopology(Dic, List) - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "createIndicesGraphTopology(Dic, List) - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
 
             foreach (var nodEdg in nodeEdges)
             {
@@ -420,7 +420,7 @@ namespace IATK
         public ViewBuilder createIndicesConnectedLineTopology(float[] linkingField)
         {
 
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "createIndicesConnectedLineTopology - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "createIndicesConnectedLineTopology - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
 
             //the first member of the Tuple is the index in the index buffer, 
             // the second member is the index in the Vertex Buffer.
@@ -464,7 +464,7 @@ namespace IATK
         public ViewBuilder setSize(float[] sizeArray)
         {
 
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "setSize - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "setSize - {0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), Time.realtimeSinceStartup);
 
             Debug.Assert(sizeArray != null && sizeArray.Length == numberOfDataPoints);
             for (int i = 0; i < numberOfDataPoints; i++)

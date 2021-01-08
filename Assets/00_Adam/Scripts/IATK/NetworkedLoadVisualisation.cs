@@ -21,18 +21,17 @@ namespace Photon_IATK
         //    }
         //}
 
+        public bool isAutoLoad = false;
+
         public void InitializeVisualisationProgramatically()
         {
 
 #if VIVE
-
             if (PhotonNetwork.IsConnected)
             {
                 GameObject vis = PhotonNetwork.Instantiate("Vis", Vector3.zero, Quaternion.identity);
 
                 attachToPlayspace(vis);
-
-                Camera.main.Render();
 
                 Debug.Log(GlobalVariables.yellow + "Instantiateing IATK scatterplot" + GlobalVariables.endColor + " : " + "InitializeVisualisationProgramatically()" + " : " + this.GetType());
             }
@@ -63,6 +62,9 @@ namespace Photon_IATK
 
         private void Awake()
         {
+
+            if (!isAutoLoad) { return; }
+
             Debug.Log(GlobalVariables.yellow + "Loading Visualisation in 4 seconds" + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
 
             Invoke("InitializeVisualisationProgramatically", 4);

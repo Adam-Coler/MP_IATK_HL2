@@ -6,10 +6,6 @@ namespace Photon_IATK
 {
     public class InstanceVis : MonoBehaviourPun, IPunObservable
     {
-        private string state = "State";
-        private string fatalitiesPerBillion = "Number of drivers involved in fatal collisions per billion miles";
-        private string pctSpeeding = "Percentage Of Drivers Involved In Fatal Collisions Who Were Speeding";
-        private string pctImpairedABV = "Percentage Of Drivers Involved In Fatal Collisions Who Were Alcohol-Impaired";
 
         Visualisation vis;
 
@@ -56,19 +52,19 @@ namespace Photon_IATK
 
             vis = this.gameObject.AddComponent<IATK.Visualisation>();
 
+            vis.gameObject.tag = "Vis";
+            vis.gameObject.name = "ScatterplotVis";
+
             setPropertiesToUndefined(vis);
 
             //setView();
 
             vis.dataSource = myCSVDataSource;
-
             vis.visualisationType = AbstractVisualisation.VisualisationTypes.SCATTERPLOT;
-
             vis.geometry = AbstractVisualisation.GeometryType.Points;
-
-            vis.xDimension = state;
-            vis.yDimension = fatalitiesPerBillion;
-            vis.zDimension = pctImpairedABV;
+            vis.xDimension = myCSVDataSource[0].Identifier;
+            vis.yDimension = myCSVDataSource[1].Identifier;
+            vis.zDimension = myCSVDataSource[2].Identifier;
 
             Invoke("updateProperties", 2);
         }

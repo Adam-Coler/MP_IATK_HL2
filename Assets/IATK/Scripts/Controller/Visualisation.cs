@@ -132,7 +132,7 @@ namespace IATK
         // PUBLIC
         public void CreateVisualisation(AbstractVisualisation.VisualisationTypes visualizationType)
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "CreateVisualisation - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "CreateVisualisation - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
 
             //destroy the previous visualisations
             AbstractVisualisation[] previousVisualizations = GetComponentsInChildren<AbstractVisualisation>();
@@ -217,7 +217,7 @@ namespace IATK
 
         public void updateView(AbstractVisualisation.PropertyType propertyType)
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "updateView - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "updateView - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
 
             theVisualizationObject.CreateVisualisation();// UpdateVisualisation(propertyType);
         }
@@ -229,7 +229,7 @@ namespace IATK
         /// <param name="axies">Axies.</param>
         private string getAxis(Dictionary<CreationConfiguration.Axis, string> axies, CreationConfiguration.Axis axis)
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "getAxis - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "getAxis - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
 
             string axes = null;
             string retVal = "";
@@ -241,7 +241,7 @@ namespace IATK
         
         public void updateViewProperties(AbstractVisualisation.PropertyType propertyType)
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "updateViewProperties - {0}, {1}, Property Type: {2}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup, propertyType.ToString());
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "updateViewProperties - {0}, {1}, Property Type: {2}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup, propertyType.ToString());
 
             if (theVisualizationObject == null) CreateVisualisation(visualisationType);
             theVisualizationObject.UpdateVisualisation(propertyType);
@@ -257,7 +257,7 @@ namespace IATK
 
         public void updateProperties()
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "updateProperties - {0}, {1}, theVisualizationObject exists: {2}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup, theVisualizationObject != null);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "updateProperties - {0}, {1}, theVisualizationObject exists: {2}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup, theVisualizationObject != null);
 
             theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.AttributeFiltering);
             theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.BlendDestinationMode);
@@ -284,7 +284,7 @@ namespace IATK
         /// <returns></returns>
         public int[] setLinkingIndices(float[] LinkingIndices)
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "setLinkingIndices - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "setLinkingIndices - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
 
             List<int> indices = new List<int>();
 
@@ -304,7 +304,7 @@ namespace IATK
 
         private void updateKey()
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "updateKey - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "updateKey - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
 
             key.GetComponent<Key>().UpdateProperties(AbstractVisualisation.PropertyType.None, this);
 
@@ -321,7 +321,7 @@ namespace IATK
 
         void OnEnable()
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "OnEnable - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "OnEnable - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
 
             if (uid == null)
             {
@@ -335,7 +335,7 @@ namespace IATK
 
         void RuntimeEditorLoadAndSaveConfiguration()
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "RuntimeEditorLoadAndSaveConfiguration - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "RuntimeEditorLoadAndSaveConfiguration - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
 
             // get the pre existing views in the hierarchy
             View[] views = GetComponentsInChildren<View>();
@@ -502,7 +502,7 @@ namespace IATK
 
         private string ConfigurationFileName()
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "ConfigurationFileName - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "ConfigurationFileName - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
 
             string PathName = Application.streamingAssetsPath + Path.DirectorySeparatorChar + theVisualizationObject.serializedObjectPath;
             return PathName + Path.DirectorySeparatorChar + uid + ".json";
@@ -513,7 +513,7 @@ namespace IATK
         //</summary>
         void destroyView()
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "destroyView - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "destroyView - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
 
             string backupname = name;
             List<GameObject> children = new List<GameObject>();
@@ -536,7 +536,7 @@ namespace IATK
 
         void OnApplicationQuit()
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "OnApplicationQuit - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "OnApplicationQuit - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
 
             if (theVisualizationObject.creationConfiguration != null)
                 theVisualizationObject.SerializeViewConfiguration(theVisualizationObject.creationConfiguration);
@@ -544,7 +544,7 @@ namespace IATK
 
         void OnDestroy()
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "OnDestroy - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "OnDestroy - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
 
             destroyView();
 
