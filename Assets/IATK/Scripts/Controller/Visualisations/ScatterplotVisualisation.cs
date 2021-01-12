@@ -427,6 +427,10 @@ namespace IATK
                     break;
 
                 case AbstractVisualisation.PropertyType.DimensionFiltering:
+
+
+                    //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "X: {0}, Y: {1}, Z: {2}, Xaxis: {3}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), visualisationReference.xDimension.Attribute, visualisationReference.yDimension.Attribute, visualisationReference.zDimension.Attribute, X_AXIS != null);
+
                     if (visualisationReference.xDimension.Attribute != "Undefined")
                     {
                         BindMinMaxAxisValues(X_AXIS.GetComponent<Axis>(), visualisationReference.xDimension);

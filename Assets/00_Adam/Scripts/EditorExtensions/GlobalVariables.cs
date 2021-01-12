@@ -1,4 +1,5 @@
 ﻿
+
 namespace Photon_IATK
 {
     public class GlobalVariables
@@ -30,6 +31,8 @@ namespace Photon_IATK
         {
             ParticipantID
         };
+
+
 
     }
 }

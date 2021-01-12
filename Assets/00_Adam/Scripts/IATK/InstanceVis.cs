@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using IATK;
 using Photon.Pun;
+using System.Reflection;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Photon_IATK
 {
@@ -14,6 +17,7 @@ namespace Photon_IATK
 
         private Vector3 networkLocalPosition;
         private Quaternion networkLocalRotation;
+
         void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
             if (stream.IsWriting)
@@ -31,13 +35,15 @@ namespace Photon_IATK
 
         private void FixedUpdate()
         {
+
+            if (!PhotonNetwork.IsConnected) { return; }
+
             if (!photonView.IsMine && PhotonNetwork.IsConnected)
             {
                 var trans = transform;
 
                 trans.localPosition = networkLocalPosition;
                 trans.localRotation = networkLocalRotation;
-
             }
         }
 
@@ -62,9 +68,12 @@ namespace Photon_IATK
             vis.dataSource = myCSVDataSource;
             vis.visualisationType = AbstractVisualisation.VisualisationTypes.SCATTERPLOT;
             vis.geometry = AbstractVisualisation.GeometryType.Points;
+
             vis.xDimension = myCSVDataSource[0].Identifier;
-            vis.yDimension = myCSVDataSource[1].Identifier;
-            vis.zDimension = myCSVDataSource[2].Identifier;
+            vis.yDimension = myCSVDataSource[Mathf.CeilToInt(myCSVDataSource.DimensionCount / 3f)].Identifier;
+            vis.zDimension = myCSVDataSource[Mathf.CeilToInt(myCSVDataSource.DimensionCount / 3f * 2)].Identifier;
+
+            //Debug.LogFormat(GlobalVariables.purple + myCSVDataSource.DimensionCount  + " : " + Mathf.CeilToInt(myCSVDataSource.DimensionCount / 3f) + " : " + Mathf.CeilToInt(myCSVDataSource.DimensionCount / 3f) + " : " + Mathf.CeilToInt(myCSVDataSource.DimensionCount / 3f * 2) + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), MethodBase.GetCurrentMethod());
 
             Invoke("updateProperties", 2);
         }
@@ -86,8 +95,11 @@ namespace Photon_IATK
 
         private void updateProperties()
         {
-            Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "updateProperties::InstanceVis - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
-            vis.updateViewProperties(AbstractVisualisation.PropertyType.GraphDimension);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "updateProperties::InstanceVis - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+
+            vis.updateViewProperties(AbstractVisualisation.PropertyType.Z);
+
+            vis.gameObject.transform.localScale = new Vector3(.5f, .5f, .5f);
         }
 
         CSVDataSource createCSVDataSource(string data)

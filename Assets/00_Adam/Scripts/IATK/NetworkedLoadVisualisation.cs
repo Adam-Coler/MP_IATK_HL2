@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Photon.Pun;
 using System.Collections;
+using System.Reflection;
 
 namespace Photon_IATK
 {
@@ -33,11 +34,11 @@ namespace Photon_IATK
 
                 attachToPlayspace(vis);
 
-                Debug.Log(GlobalVariables.yellow + "Instantiateing IATK scatterplot" + GlobalVariables.endColor + " : " + "InitializeVisualisationProgramatically()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.yellow + "Instantiateing IATK scatterplot" + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), MethodBase.GetCurrentMethod());
             }
             else
             {
-                Debug.Log(GlobalVariables.red + "Not connected to Photon, nothing instantiated" + GlobalVariables.endColor + " : " + "InitializeVisualisationProgramatically()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.red + "Not connected to Photon, nothing instantiated" + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), MethodBase.GetCurrentMethod());
             }
 #endif
         }
@@ -47,7 +48,7 @@ namespace Photon_IATK
             if (PlayspaceAnchor.Instance != null)
             {
                 obj.transform.SetParent(PlayspaceAnchor.Instance.transform);
-                Debug.LogFormat(GlobalVariables.green + "Attaching {0} to the playspace anchor " + GlobalVariables.endColor + " : " + "attachToPlayspace()" + " : " + this.GetType(), obj.gameObject.name);
+                Debug.LogFormat(GlobalVariables.green + "Attaching to the playspace anchor" + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), MethodBase.GetCurrentMethod());
 
                 obj.gameObject.transform.localPosition = Vector3.zero;
                 obj.gameObject.transform.localRotation = Quaternion.identity;
@@ -56,7 +57,7 @@ namespace Photon_IATK
             }
             else
             {
-                Debug.LogFormat(GlobalVariables.red + "Can't attach {0} to the playspace anchor, No anchor found " + GlobalVariables.endColor + " : " + "attachToPlayspace()" + " : " + this.GetType(), obj.gameObject.name);
+                Debug.LogFormat(GlobalVariables.red + "Can't attach to the playspace anchor, No anchor found" + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), MethodBase.GetCurrentMethod());
             }
         }
 
@@ -65,9 +66,9 @@ namespace Photon_IATK
 
             if (!isAutoLoad) { return; }
 
-            Debug.Log(GlobalVariables.yellow + "Loading Visualisation in 4 seconds" + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
+            Debug.LogFormat(GlobalVariables.yellow + "Loading Visualisation in 3 seconds" + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), MethodBase.GetCurrentMethod());
 
-            Invoke("InitializeVisualisationProgramatically", 4);
+            Invoke("InitializeVisualisationProgramatically", 3);
 
             //https://github.com/MaximeCordeil/IATK
         }
