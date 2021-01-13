@@ -24,7 +24,7 @@ namespace Photon_IATK {
             {
                 Btn_Functions_For_In_Scene_Scripts Btns = gameObject.AddComponent<Btn_Functions_For_In_Scene_Scripts>();
 
-                Debug.Log(GlobalVariables.purple + "Loading Main Menu " + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Loading Main Menu", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 Btns.sceneManager_Load_01_SetupMenu();
                 Destroy(Btns);

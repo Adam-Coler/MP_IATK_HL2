@@ -1,12 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using Microsoft.MixedReality.Toolkit.SceneSystem;
 using Microsoft.MixedReality.Toolkit;
 using Photon.Pun;
-using Photon.Realtime;
 using UnityEngine.SceneManagement;
-using System;
 
 // loading levels is asynchoirnous so we get an error due to the interface functions being voids
 #pragma warning disable CS4014
@@ -34,11 +30,11 @@ namespace Photon_IATK
             if (NetworkManager != null)
             {
                 photonView = NetworkManager.GetPhotonView();
-                Debug.Log(GlobalVariables.red + "NetworkManager Found" + GlobalVariables.endColor + " : " + "Awake()" + " : " + _this);
+                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "NetworkManager Found", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
             else
             {
-                Debug.Log(GlobalVariables.red + "No NetworkManager Found" + GlobalVariables.endColor + " : " + "Awake()" + " : " + _this);
+                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No NetworkManager Found", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
 
             if (photonView != null)
@@ -49,7 +45,7 @@ namespace Photon_IATK
             if (PhotonNetwork.IsConnected == false)
             {
                 isMine = true;
-                Debug.Log(GlobalVariables.green + "Local View Set to True Offline" + GlobalVariables.endColor + " : " + "Awake()" + " : " + _this);
+                Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Local View Set to True Offline", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -58,36 +54,36 @@ namespace Photon_IATK
 
         public void load_01_SetupMenu()
         {
-            Debug.Log(GlobalVariables.purple + "Loading new level" + GlobalVariables.endColor + " : " + "load_01_SetupMenu()" + " : " + _this);
+            Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Loading new level", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             _load_01_SetupMenu();
         }
         public void unload_01_SetupMenu()
         {
-            Debug.Log(GlobalVariables.purple + "Unloading level" + GlobalVariables.endColor + " : " + "unload_01_SetupMenu()" + " : " + _this);
+            Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Unloading level", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             _unload_01_SetupMenu();
         }
 
 
         public void load_02_EnterPID()
         {
-            Debug.Log(GlobalVariables.purple + "Loading new level" + GlobalVariables.endColor + " : " + "load_02_EnterPID()" + " : " + _this);
+            Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Loading new level", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             _load_02_EnterPID();
         }
         public void unload_02_EnterPID()
         {
-            Debug.Log(GlobalVariables.purple + "Unloading level" + GlobalVariables.endColor + " : " + "unload_02_EnterPID()" + " : " + _this);
+            Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Unloading level", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             _unload_02_EnterPID();
         }
 
         public void load_03_Vuforia_Setup()
         {
-            Debug.Log(GlobalVariables.purple + "Loading new level" + GlobalVariables.endColor + " : " + "load_03_Vuforia_Setup()" + " : " + _this);
+            Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Loading new level", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             _load_03_Vuforia_Setup();
         }
 
         public void unload_03_Vuforia_Setup()
         {
-            Debug.Log(GlobalVariables.purple + "Unloading level" + GlobalVariables.endColor + " : " + "unload_03_Vuforia_Setup()" + " : " + _this);
+            Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Unloading level", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             _unload_03_Vuforia_Setup();
         }
 
@@ -97,10 +93,25 @@ namespace Photon_IATK
 
         #region Loaders
 
+        private bool checkIfSceneIsLoaded(string sceneName)
+        {
+            for (int i = 0; i < SceneManager.sceneCount; i++)
+            {
+                if (SceneManager.GetSceneAt(i).name == sceneName)
+                {
+                    Debug.LogFormat(GlobalVariables.cLevel + "{0} is already loaded, nothing loading." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", sceneName, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private async System.Threading.Tasks.Task _load_01_SetupMenu()
         {
-            if (isMine)
+            if (isMine && checkIfSceneIsLoaded("01_SetupMenu"))
             {
+
+                
                 await sceneSystem.LoadContent("01_SetupMenu", LoadSceneMode.Single);
             }
         }

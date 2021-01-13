@@ -104,10 +104,12 @@ namespace Photon_IATK
             Player[] players = PhotonNetwork.PlayerList;
 
             foreach (Player player in players){
-                playerLog += formatText("Player", "", false, false);
-                playerLog += formatText("NickName", player.NickName, true, false);
-                playerLog += formatText("ActorNumber", player.ActorNumber.ToString(), true, false);
-                playerLog += formatText("UserId", player.UserId, true);
+                //playerLog += formatText("Player", "", false, false);
+                //playerLog += formatText("NickName", player.NickName, true, false);
+                //playerLog += formatText("ActorNumber", player.ActorNumber.ToString(), true, false);
+                //playerLog += formatText("UserId", player.UserId, true);
+
+                playerLog += string.Format(GlobalVariables.green + "Nickname: {0}, UserID: {1}, ActorNumber: {2}, Local Player: {3}, Master Client: {4}" + GlobalVariables.endColor, player.NickName, player.UserId, player.NickName, player.IsLocal, player.IsMasterClient);
             }
 
             LogText.text += playerLog;

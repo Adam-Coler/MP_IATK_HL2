@@ -7,6 +7,8 @@ using System.IO;
 //using UnityEditor.Build.Reporting;
 using UnityEngine.XR;
 using Photon.Pun;
+using Photon.Realtime;
+using System;
 
 
 namespace Photon_IATK
@@ -34,21 +36,21 @@ namespace Photon_IATK
     [MenuItem("Tools/Switch Vuforia", false, 4)]
     private static void NewMenuOption5() => SwitchVuforia();
 
-    [MenuItem("Tools/Log all Photon Views", false, 4)]
-    private static void NewMenuOption6() => LogPhotonViews();
+    [MenuItem("Tools/Log Photon Info", false, 4)]
+    private static void NewMenuOption6() => LogPhotonInfo();
         #endregion
 
 
         #region Private Variables
 
-        static private string className = "Tools.cs:";
+    static private string className = "Tools.cs:";
     static private string ColorStartGreen = GlobalVariables.green;
     static private string ColorStartRed = GlobalVariables.red;
     static private string colorEnd = GlobalVariables.endColor;
 
     #endregion
 
-    static void LogPhotonViews()
+    static void LogPhotonInfo()
     {
         Debug.Log(ColorStartGreen + "Photon Connected: " + colorEnd + ColorStartRed + Photon.Pun.PhotonNetwork.IsConnected + colorEnd);
 
@@ -59,7 +61,17 @@ namespace Photon_IATK
                 Debug.LogFormat(GlobalVariables.green + "ID: {0}, Attached to: {1}, CreatorActorNr: {2}, ControllerActorNr: {3}, Controller: {4}" + GlobalVariables.endColor, photonView.ViewID, photonView.name, photonView.CreatorActorNr, photonView.ControllerActorNr, photonView.Controller);
             }
 
-    }
+            if (PhotonNetwork.IsConnected)
+            {
+                Debug.LogFormat(GlobalVariables.green + "Master Client: {0}, Player Count: {1}, Active Scene Name: {2}, Game Version: {3}, Ping: {4}, Cloud Region: {5}, Best Region: {6}, Cammeras In Room: {7}" + GlobalVariables.endColor, PhotonNetwork.IsMasterClient.ToString(), Convert.ToInt32(PhotonNetwork.CountOfPlayersInRooms).ToString(), SceneManagerHelper.ActiveSceneName, PhotonNetwork.GameVersion, PhotonNetwork.GetPing().ToString(), PhotonNetwork.CloudRegion, PhotonNetwork.BestRegionSummaryInPreferences, (Camera.allCameras.Length.ToString()));
+
+                Player[] players = PhotonNetwork.PlayerList;
+                foreach (Player player in players)
+                {
+                    Debug.LogFormat(GlobalVariables.green + "Nickname: {0}, UserID: {1}, ActorNumber: {2}, Local Player: {3}, Master Client: {4}" + GlobalVariables.endColor, player.NickName, player.UserId, player.NickName, player.IsLocal, player.IsMasterClient);
+                }
+            }
+        }
 
     static void setPlatformDesktop()
     {

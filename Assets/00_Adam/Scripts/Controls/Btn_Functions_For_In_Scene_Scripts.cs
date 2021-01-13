@@ -129,6 +129,19 @@ namespace Photon_IATK
 
         #region Logs
 
+        public void showVisInterface()
+        {
+            if (GameObject.FindGameObjectWithTag("VisMenu") != null)
+            {
+                GameObject menuObj = GameObject.FindGameObjectWithTag("VisMenu").transform.GetChild(0).gameObject;
+                GameObject.FindGameObjectWithTag("VisMenu").transform.GetChild(0).gameObject.SetActive(!menuObj.activeSelf);
+            }
+            else
+            {
+                Debug.Log(GlobalVariables.red + "No VisMenu in Scene " + GlobalVariables.endColor + " : " + "showPhotonLog()" + " : " + this.GetType());
+            }
+        }
+
         public void showDebugLog()
         {
             if (GameObject.FindGameObjectWithTag("DebugLog") != null)

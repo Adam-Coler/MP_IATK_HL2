@@ -27,7 +27,6 @@ namespace Photon_IATK
         public void InitializeVisualisationProgramatically()
         {
 
-#if VIVE
             if (PhotonNetwork.IsConnected)
             {
                 GameObject vis = PhotonNetwork.Instantiate("Vis", Vector3.zero, Quaternion.identity);
@@ -40,7 +39,6 @@ namespace Photon_IATK
             {
                 Debug.LogFormat(GlobalVariables.red + "Not connected to Photon, nothing instantiated" + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), MethodBase.GetCurrentMethod());
             }
-#endif
         }
 
         private void attachToPlayspace(GameObject obj)
@@ -63,14 +61,26 @@ namespace Photon_IATK
 
         private void Awake()
         {
-
             if (!isAutoLoad) { return; }
+            LoadVis();
+        }
 
-            Debug.LogFormat(GlobalVariables.yellow + "Loading Visualisation in 3 seconds" + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), MethodBase.GetCurrentMethod());
+        public void LoadVis()
+        {
 
-            Invoke("InitializeVisualisationProgramatically", 3);
 
-            //https://github.com/MaximeCordeil/IATK
+            if (FindObjectOfType<IATK.Visualisation>() == null)
+            {
+                Debug.LogFormat(GlobalVariables.yellow + "Loading Visualisation in 3 seconds" + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), MethodBase.GetCurrentMethod());
+
+                Invoke("InitializeVisualisationProgramatically", 3);
+            }
+            else
+            {
+                Debug.LogFormat(GlobalVariables.red + "A Visualisation already exists, nothing loaded" + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), MethodBase.GetCurrentMethod());
+                return;
+            }
+
         }
 
     }

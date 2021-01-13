@@ -23,7 +23,7 @@ namespace Photon_IATK
         void Awake()
         {
 
-            Debug.LogFormat(GlobalVariables.blue + "Testing Reflection" + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.orange + "Testing Reflection" + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), MethodBase.GetCurrentMethod());
 
             if (_Lobby == null)
             {
@@ -52,7 +52,7 @@ namespace Photon_IATK
 
             if (isAutoConnect) { 
                 Connect();
-                Debug.Log(GlobalVariables.green + "Lobby AutoConnect" + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
+                Debug.Log(GlobalVariables.orange + "Lobby AutoConnect" + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
             };
 
             DontDestroyOnLoad(gameObject.transform.root);
