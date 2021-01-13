@@ -6,7 +6,7 @@ using System.Reflection;
 using System.IO;
 //using UnityEditor.Build.Reporting;
 using UnityEngine.XR;
-
+using Photon.Pun;
 
 
 namespace Photon_IATK
@@ -34,17 +34,32 @@ namespace Photon_IATK
     [MenuItem("Tools/Switch Vuforia", false, 4)]
     private static void NewMenuOption5() => SwitchVuforia();
 
+    [MenuItem("Tools/Log all Photon Views", false, 4)]
+    private static void NewMenuOption6() => LogPhotonViews();
         #endregion
 
 
         #region Private Variables
 
-    static private string className = "Tools.cs:";
+        static private string className = "Tools.cs:";
     static private string ColorStartGreen = GlobalVariables.green;
     static private string ColorStartRed = GlobalVariables.red;
     static private string colorEnd = GlobalVariables.endColor;
 
     #endregion
+
+    static void LogPhotonViews()
+    {
+        Debug.Log(ColorStartGreen + "Photon Connected: " + colorEnd + ColorStartRed + Photon.Pun.PhotonNetwork.IsConnected + colorEnd);
+
+            PhotonView[] photonViews = FindObjectsOfType<PhotonView>();
+
+            foreach (PhotonView photonView in photonViews)
+            {
+                Debug.LogFormat(GlobalVariables.green + "ID: {0}, Attached to: {1}, CreatorActorNr: {2}, ControllerActorNr: {3}, Controller: {4}" + GlobalVariables.endColor, photonView.ViewID, photonView.name, photonView.CreatorActorNr, photonView.ControllerActorNr, photonView.Controller);
+            }
+
+    }
 
     static void setPlatformDesktop()
     {
@@ -100,7 +115,7 @@ namespace Photon_IATK
             Debug.Log(ColorStartGreen + "XR Device Active: " + colorEnd + ColorStartRed + XRSettings.loadedDeviceName + colorEnd);
             Debug.Log(ColorStartGreen + "productName: " + colorEnd + ColorStartRed + PlayerSettings.productName + colorEnd);
             Debug.Log(ColorStartGreen + "Vuforia Active: " + colorEnd + ColorStartRed + PlayerSettings.vuforiaEnabled + colorEnd);
-
+            Debug.Log(ColorStartGreen + "Photon Connected: " + colorEnd + ColorStartRed + Photon.Pun.PhotonNetwork.IsConnected + colorEnd);
             //string buildPath = EditorUserBuildSettings.GetBuildLocation(EditorUserBuildSettings.selectedStandaloneTarget);
             //Debug.Log(ColorStartGreen + "Build Path: " + colorEnd + ColorStartRed + buildPath + colorEnd);
             //var buildTarget = EditorUserBuildSettings.selectedBuildTargetGroup;

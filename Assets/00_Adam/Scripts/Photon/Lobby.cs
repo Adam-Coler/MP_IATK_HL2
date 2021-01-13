@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using System.Reflection;
 
 namespace Photon_IATK
 {
@@ -21,6 +22,9 @@ namespace Photon_IATK
         // MonoBehaviour method called on GameObject by Unity during early initialization phase.
         void Awake()
         {
+
+            Debug.LogFormat(GlobalVariables.blue + "Testing Reflection" + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), MethodBase.GetCurrentMethod());
+
             if (_Lobby == null)
             {
                 _Lobby = this;

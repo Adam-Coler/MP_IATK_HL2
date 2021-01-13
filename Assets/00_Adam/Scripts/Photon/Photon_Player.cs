@@ -92,6 +92,12 @@ namespace Photon_IATK
 
         }
 
+        private void OnDestroy()
+        {
+            //Debug.LogFormat(GlobalVariables.blue + "Destorying Object" + GlobalVariables.endColor + ", OnDestroy() : " + this.GetType(), this.gameObject.name);
+            //PhotonNetwork.Destroy(this.gameObject);
+        }
+
 #if UNITY_5_4_OR_NEWER
         public override void OnDisable()
         {

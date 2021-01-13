@@ -79,5 +79,11 @@ namespace Photon_IATK
                 trans.localRotation = networkLocalRotation;
             }
         }
+
+        private void OnDestroy()
+        {
+            Debug.LogFormat(GlobalVariables.blue + "Destorying Object" + GlobalVariables.endColor + ", OnDestroy() : " + this.GetType(), this.gameObject.name);
+            PhotonNetwork.Destroy(this.gameObject);
+        }
     }
 }

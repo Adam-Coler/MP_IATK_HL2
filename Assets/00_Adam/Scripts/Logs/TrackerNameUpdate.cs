@@ -31,8 +31,12 @@ public class TrackerNameUpdate : MonoBehaviour
             this.gameObject.GetComponentInChildren<TMPro.TextMeshPro>().text = newName;
 
             Debug.LogFormat(GlobalVariables.green + "Updating tracker name: {0}" + GlobalVariables.endColor + ", setTrackerName() : " + this.GetType(), this.gameObject.name);
-        } 
-
+        }
+        private void OnDestroy()
+        {
+            Debug.LogFormat(GlobalVariables.blue + "Destorying Object" + GlobalVariables.endColor + ", OnDestroy() : " + this.GetType(), this.gameObject.name);
+            Photon.Pun.PhotonNetwork.Destroy(this.gameObject);
+        }
     }
 
 }

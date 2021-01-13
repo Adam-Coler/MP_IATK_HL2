@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Reflection;
 using Photon.Pun;
 
 namespace Photon_IATK
@@ -44,10 +45,13 @@ namespace Photon_IATK
 
             if (!this.TryGetComponent<PhotonView>(out photonView))
             {
-                photonView = this.gameObject.AddComponent<PhotonView>();
+                Debug.LogFormat(GlobalVariables.red + "Adding Photon View." + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), MethodBase.GetCurrentMethod());
 
-                isMine = photonView.IsMine;
-                return photonView.IsMine;
+                //photonView = this.gameObject.AddComponent<PhotonView>();
+
+                //isMine = photonView.IsMine;
+                //return photonView.IsMine;
+                return true;
             }
 
             Debug.Log(GlobalVariables.red + "Current View error" + GlobalVariables.endColor + " : " + "checkSetViewOwnership()" + " : " + this.GetType());
@@ -82,10 +86,12 @@ namespace Photon_IATK
         private T GetOrAddComponent<T>() where T : Component
         {
             T component;
-            GetOrAddComponent<T>(out component);
-            if (component == null)
+            if (GetOrAddComponent<T>(out component))
             {
-                Debug.Log(GlobalVariables.red + "Failed to get compenent: " + component.GetType() + GlobalVariables.endColor + " : GetOrAddComponent<T>(), " + this.GetType());
+                if (component == null)
+                {
+                    Debug.Log(GlobalVariables.red + "Failed to get compenent: " + component.GetType() + GlobalVariables.endColor + " : GetOrAddComponent<T>()");
+                }
             }
             return component;
         }
