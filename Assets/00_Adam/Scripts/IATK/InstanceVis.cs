@@ -83,8 +83,6 @@ namespace Photon_IATK
             vis.yDimension = myCSVDataSource[Mathf.CeilToInt(myCSVDataSource.DimensionCount / 3f)].Identifier;
             vis.zDimension = myCSVDataSource[Mathf.CeilToInt(myCSVDataSource.DimensionCount / 3f * 2)].Identifier;
 
-            //Debug.LogFormat(GlobalVariables.purple + myCSVDataSource.DimensionCount  + " : " + Mathf.CeilToInt(myCSVDataSource.DimensionCount / 3f) + " : " + Mathf.CeilToInt(myCSVDataSource.DimensionCount / 3f) + " : " + Mathf.CeilToInt(myCSVDataSource.DimensionCount / 3f * 2) + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), MethodBase.GetCurrentMethod());
-
             Debug.LogFormat(GlobalVariables.cCommon + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Calling update properties", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             Invoke("updateProperties", 2);
@@ -111,7 +109,7 @@ namespace Photon_IATK
 
             vis.updateViewProperties(AbstractVisualisation.PropertyType.Z);
 
-            vis.gameObject.transform.localScale = new Vector3(2f, 2f, 2f);
+            vis.gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
         }
 
         CSVDataSource createCSVDataSource(string data)
