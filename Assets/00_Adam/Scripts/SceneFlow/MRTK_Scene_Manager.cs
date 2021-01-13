@@ -55,6 +55,7 @@ namespace Photon_IATK
         public void load_01_SetupMenu()
         {
             Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Loading new level", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
             _load_01_SetupMenu();
         }
         public void unload_01_SetupMenu()
@@ -100,18 +101,16 @@ namespace Photon_IATK
                 if (SceneManager.GetSceneAt(i).name == sceneName)
                 {
                     Debug.LogFormat(GlobalVariables.cLevel + "{0} is already loaded, nothing loading." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", sceneName, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-                    return true;
+                    return false;
                 }
             }
-            return false;
+            return true;
         }
 
         private async System.Threading.Tasks.Task _load_01_SetupMenu()
         {
             if (isMine && checkIfSceneIsLoaded("01_SetupMenu"))
             {
-
-                
                 await sceneSystem.LoadContent("01_SetupMenu", LoadSceneMode.Single);
             }
         }

@@ -17,6 +17,10 @@ namespace Photon_IATK
         public static string cLevel = purple;
         public static string cError = red;
         public static string cCommon = green;
+        public static string cInstance = yellow;
+        public static string cOnDestory = blue;
+        public static string cSingletonSetting = green;
+        public static string cComponentAddition = green;
 
         public static string endColor = "</color>";
         public static string newLine = "\n";

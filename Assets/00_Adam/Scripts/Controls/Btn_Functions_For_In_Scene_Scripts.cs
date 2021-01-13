@@ -21,17 +21,21 @@ namespace Photon_IATK
         {
             if (Instance == null)
             {
-                Debug.Log(GlobalVariables.green + "Setting Btn_Functions_For_In_Scene_Scripts.Instance " + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cSingletonSetting + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Setting Btn_Functions_For_In_Scene_Scripts.Instance ", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
                 Instance = this;
             }
-            else
+            else if (Instance != this && Instance != null)
             {
-                if (Instance == this) return;
-
-                Debug.Log(GlobalVariables.green + "Destroying then setting Btn_Functions_For_In_Scene_Scripts.Instance " + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cSingletonSetting + "{0}, Destroying then setting Btn_Functions_For_In_Scene_Scripts.Instance." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", Instance.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 Destroy(Instance.gameObject);
+
                 Instance = this;
+            } 
+            else
+            {
+                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Failed to make instance", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -45,7 +49,7 @@ namespace Photon_IATK
 
             if (!this.TryGetComponent<PhotonView>(out photonView))
             {
-                Debug.LogFormat(GlobalVariables.red + "Adding Photon View." + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), MethodBase.GetCurrentMethod());
+                Debug.LogFormat(GlobalVariables.cComponentAddition + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Adding Photon View. (Disabled)", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 //photonView = this.gameObject.AddComponent<PhotonView>();
 
@@ -54,7 +58,8 @@ namespace Photon_IATK
                 return true;
             }
 
-            Debug.Log(GlobalVariables.red + "Current View error" + GlobalVariables.endColor + " : " + "checkSetViewOwnership()" + " : " + this.GetType());
+            Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Current View error", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
             return photonView.IsMine;
         }
 
@@ -64,7 +69,8 @@ namespace Photon_IATK
 
             if (!checkSetViewOwnership())
             {
-                Debug.Log(GlobalVariables.red + "Current View is not mine" + GlobalVariables.endColor + " : " + "GetOrAddComponent()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Current View is not mine", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
                 return false;
             }
 
@@ -72,13 +78,15 @@ namespace Photon_IATK
 
             if (component != null)
             {
-                Debug.Log(GlobalVariables.green + "Found " + component.GetType() + " , returning it. " + GlobalVariables.endColor + " : " + "GetOrAddComponent()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cCommon + "Found {0}, returning it." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", component.GetType(), Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
                 return true;
             }
             else
             {
                 component = gameObject.AddComponent<T>() as T;
-                Debug.Log(GlobalVariables.green + "Attaching " + component.GetType() + " and returning it. " + GlobalVariables.endColor + " : " + "GetOrAddComponent()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cComponentAddition + "Attaching {0} and returning it." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", component.GetType(), Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
                 return true;
             }
         }
@@ -90,7 +98,8 @@ namespace Photon_IATK
             {
                 if (component == null)
                 {
-                    Debug.Log(GlobalVariables.red + "Failed to get compenent: " + component.GetType() + GlobalVariables.endColor + " : GetOrAddComponent<T>()");
+                    Debug.LogFormat(GlobalVariables.cError + "Failed to get compenent: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", component.GetType(), Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
                 }
             }
             return component;
@@ -135,10 +144,11 @@ namespace Photon_IATK
             {
                 GameObject menuObj = GameObject.FindGameObjectWithTag("VisMenu").transform.GetChild(0).gameObject;
                 GameObject.FindGameObjectWithTag("VisMenu").transform.GetChild(0).gameObject.SetActive(!menuObj.activeSelf);
+                Debug.LogFormat(GlobalVariables.cCommon + "Setting VisMenu Active: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", !menuObj.activeSelf, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
             else
             {
-                Debug.Log(GlobalVariables.red + "No VisMenu in Scene " + GlobalVariables.endColor + " : " + "showPhotonLog()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No VisMenu in Scene.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -148,10 +158,11 @@ namespace Photon_IATK
             {
                 GameObject menuObj = GameObject.FindGameObjectWithTag("DebugLog").transform.GetChild(0).gameObject;
                 GameObject.FindGameObjectWithTag("DebugLog").transform.GetChild(0).gameObject.SetActive(!menuObj.activeSelf);
+                Debug.LogFormat(GlobalVariables.cCommon + "Setting DebugLog Active: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", !menuObj.activeSelf, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
             else
             {
-                Debug.Log(GlobalVariables.red + "No DebugLog in Scene " + GlobalVariables.endColor + " : " + "showDebugLog()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No DebugLog in Scene", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -161,10 +172,11 @@ namespace Photon_IATK
             {
                 GameObject menuObj = GameObject.FindGameObjectWithTag("PhotonLog").transform.GetChild(0).gameObject;
                 GameObject.FindGameObjectWithTag("PhotonLog").transform.GetChild(0).gameObject.SetActive(!menuObj.activeSelf);
+                Debug.LogFormat(GlobalVariables.cCommon + "Setting PhotonLog Active: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", !menuObj.activeSelf, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
             else
             {
-                Debug.Log(GlobalVariables.red + "No PhotonLog in Scene " + GlobalVariables.endColor + " : " + "showPhotonLog()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No PhotonLog in Scene.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 

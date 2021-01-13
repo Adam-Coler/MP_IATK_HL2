@@ -27,9 +27,11 @@ namespace Photon_IATK {
                 Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Loading Main Menu", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 Btns.sceneManager_Load_01_SetupMenu();
+
                 Destroy(Btns);
             }
 
+            Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             Destroy(this);
         }
 
