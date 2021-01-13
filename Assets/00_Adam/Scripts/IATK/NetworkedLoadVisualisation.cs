@@ -31,8 +31,9 @@ namespace Photon_IATK
 
             if (PhotonNetwork.IsConnected)
             {
-                instancedVis = PhotonNetwork.Instantiate("Vis", Vector3.zero, Quaternion.identity);
                 Debug.LogFormat(GlobalVariables.cInstance + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Instantiateing IATK scatterplot", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                instancedVis = PhotonNetwork.Instantiate("Vis", Vector3.zero, Quaternion.identity);
             }
             else
             {
@@ -41,7 +42,7 @@ namespace Photon_IATK
                 instancedVis = Instantiate(Prefab, new Vector3(1.5f, 0, 0), Quaternion.identity);
             }
 
-            attachToPlayspace(instancedVis);
+            //attachToPlayspace(instancedVis);
         }
 
         private void attachToPlayspace(GameObject obj)

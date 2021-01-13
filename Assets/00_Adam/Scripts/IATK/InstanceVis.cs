@@ -20,6 +20,8 @@ namespace Photon_IATK
 
         void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
+            if (!PhotonNetwork.IsConnected) { return; }
+
             if (stream.IsWriting)
             {
                 stream.SendNext(transform.localPosition);
@@ -49,9 +51,19 @@ namespace Photon_IATK
 
         public void Awake()
         {
-            Debug.LogFormat(GlobalVariables.yellow + "Awaking {0}, {1}" + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Script Loaded", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            myDataSource = Resources.Load("CarDriving") as TextAsset;
+            if (myDataSource == null)
+            {
+                Debug.LogFormat(GlobalVariables.cCommon + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "myDataSource is null, loading datasource from resources folder", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                myDataSource = Resources.Load("CarDriving") as TextAsset;
+            }
+            else
+            {
+                Debug.LogFormat(GlobalVariables.cCommon + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "myDataSource loaded", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            }
+
             myCSVDataSource = createCSVDataSource(myDataSource.text);
             myCSVDataSource.data = myDataSource;
 
@@ -63,8 +75,6 @@ namespace Photon_IATK
 
             setPropertiesToUndefined(vis);
 
-            //setView();
-
             vis.dataSource = myCSVDataSource;
             vis.visualisationType = AbstractVisualisation.VisualisationTypes.SCATTERPLOT;
             vis.geometry = AbstractVisualisation.GeometryType.Points;
@@ -74,6 +84,8 @@ namespace Photon_IATK
             vis.zDimension = myCSVDataSource[Mathf.CeilToInt(myCSVDataSource.DimensionCount / 3f * 2)].Identifier;
 
             //Debug.LogFormat(GlobalVariables.purple + myCSVDataSource.DimensionCount  + " : " + Mathf.CeilToInt(myCSVDataSource.DimensionCount / 3f) + " : " + Mathf.CeilToInt(myCSVDataSource.DimensionCount / 3f) + " : " + Mathf.CeilToInt(myCSVDataSource.DimensionCount / 3f * 2) + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), MethodBase.GetCurrentMethod());
+
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Calling update properties", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             Invoke("updateProperties", 2);
         }
