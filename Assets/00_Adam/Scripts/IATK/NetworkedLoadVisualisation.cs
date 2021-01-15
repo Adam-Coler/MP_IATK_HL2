@@ -23,6 +23,7 @@ namespace Photon_IATK
         public bool isAutoLoad = false;
 
         private GameObject instancedVis;
+        private bool isLoadedOffline = false;
 
         public GameObject Prefab;
 
@@ -31,18 +32,37 @@ namespace Photon_IATK
 
             if (PhotonNetwork.IsConnected)
             {
-                Debug.LogFormat(GlobalVariables.cInstance + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Instantiateing IATK scatterplot", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                Debug.LogFormat(GlobalVariables.cInstance + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Instantiateing IATK scatterplot online", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 instancedVis = PhotonNetwork.Instantiate("Vis", Vector3.zero, Quaternion.identity);
+                instancedVis.gameObject.name = "ScatterplotVis_Online";
+
+                setInstanceLoadType(false);
             }
             else
             {
                 Debug.LogFormat(GlobalVariables.cError + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Not connected to Photon, loading offline", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 instancedVis = Instantiate(Prefab, new Vector3(1.5f, 0, 0), Quaternion.identity);
+                instancedVis.gameObject.name = "ScatterplotVis_Offline";
+
+                setInstanceLoadType(true);
+            }
+        }
+
+        private void setInstanceLoadType(bool _isLoadedOffline)
+        {
+            InstanceVis instanceComponenet = instancedVis.GetComponent<InstanceVis>() as InstanceVis;
+
+            if (instanceComponenet == null)
+            {
+                Debug.LogFormat(GlobalVariables.cComponentAddition + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Instanced Visualization has no InstanceVis.CS component, adding componenet now.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                instanceComponenet = instancedVis.AddComponent<InstanceVis>();
             }
 
-            //attachToPlayspace(instancedVis);
+            instanceComponenet.isLoadedOffline = _isLoadedOffline;
+            isLoadedOffline = _isLoadedOffline;
         }
 
         private void attachToPlayspace(GameObject obj)
@@ -85,13 +105,13 @@ namespace Photon_IATK
             {
                 if (instancedVis != null)
                 {
-                    if (PhotonNetwork.IsConnected)
+                    if (PhotonNetwork.IsConnected && !isLoadedOffline)
                     {
                         PhotonNetwork.Destroy(instancedVis);
 
                         Debug.LogFormat(GlobalVariables.cOnDestory + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Photon Destorying Instanced Vis", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                     }
-                    else
+                    else if (!PhotonNetwork.IsConnected || isLoadedOffline)
                     {
                         Destroy(instancedVis);
 

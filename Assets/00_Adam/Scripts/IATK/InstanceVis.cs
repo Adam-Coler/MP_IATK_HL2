@@ -1,16 +1,15 @@
 ﻿using UnityEngine;
 using IATK;
 using Photon.Pun;
-using System.Reflection;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Photon_IATK
 {
-    public class InstanceVis : MonoBehaviourPun, IPunObservable
+    public class InstanceVis : MonoBehaviourPunCallbacks, IPunObservable
     {
 
-        Visualisation vis;
+        public Visualisation vis;
+
+        public bool isLoadedOffline = false;
 
         public TextAsset myDataSource;
         CSVDataSource myCSVDataSource;
@@ -18,9 +17,10 @@ namespace Photon_IATK
         private Vector3 networkLocalPosition;
         private Quaternion networkLocalRotation;
 
+        #region PunObservable
         void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
-            if (!PhotonNetwork.IsConnected) { return; }
+            if (!PhotonNetwork.IsConnected || isLoadedOffline) { return; }
 
             if (stream.IsWriting)
             {
@@ -38,7 +38,7 @@ namespace Photon_IATK
         private void FixedUpdate()
         {
 
-            if (!PhotonNetwork.IsConnected) { return; }
+            if (!PhotonNetwork.IsConnected || isLoadedOffline) { return; }
 
             if (!photonView.IsMine && PhotonNetwork.IsConnected)
             {
@@ -48,11 +48,10 @@ namespace Photon_IATK
                 trans.localRotation = networkLocalRotation;
             }
         }
+        #endregion
 
         public void Awake()
         {
-            Debug.LogFormat(GlobalVariables.cCommon + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Script Loaded", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
             if (myDataSource == null)
             {
                 Debug.LogFormat(GlobalVariables.cCommon + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "myDataSource is null, loading datasource from resources folder", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
@@ -64,14 +63,27 @@ namespace Photon_IATK
                 Debug.LogFormat(GlobalVariables.cCommon + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "myDataSource loaded", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
 
+            if (photonView == null)
+            {
+                Debug.LogFormat(GlobalVariables.cComponentAddition + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No Photon View attached, adding one", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                this.gameObject.AddComponent<PhotonView>();
+
+                if (!photonView.IsMine)
+                {
+                    Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Added photonView is not setting ismine to true.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                }
+            }
+
             myCSVDataSource = createCSVDataSource(myDataSource.text);
             myCSVDataSource.data = myDataSource;
 
 
             vis = this.gameObject.AddComponent<IATK.Visualisation>();
-
             vis.gameObject.tag = "Vis";
-            vis.gameObject.name = "ScatterplotVis";
+
+            //named where instantiated
+            //vis.gameObject.name = "ScatterplotVis";
 
             setPropertiesToUndefined(vis);
 

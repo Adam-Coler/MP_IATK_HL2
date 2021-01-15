@@ -10,11 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 8249544463227372436}
   - component: {fileID: -2042066654088758703}
+  - component: {fileID: 2630358479789495527}
   - component: {fileID: 5858282007300487231}
   - component: {fileID: -8506356212245858933}
   - component: {fileID: 7364563067669034227}
   - component: {fileID: 8027000936905109002}
-  - component: {fileID: -7779769852684927186}
   m_Layer: 0
   m_Name: Vis
   m_TagString: Vis
@@ -59,6 +59,19 @@ MonoBehaviour:
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &2630358479789495527
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9105368823616601759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bfd248f8e0a90a47bf0e6128d1b9cc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  instanceVis: {fileID: 5858282007300487231}
 --- !u!114 &5858282007300487231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -71,6 +84,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 210fc0c4536807148b9c5e5ddcbc2e4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vis: {fileID: 0}
+  isLoadedOffline: 0
   myDataSource: {fileID: 4900000, guid: faa53d5b54a2bac44bceedbfca16224c, type: 3}
 --- !u!65 &-8506356212245858933
 BoxCollider:
@@ -139,57 +154,3 @@ MonoBehaviour:
   onHoverExited:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &-7779769852684927186
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9105368823616601759}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8200a044a5affb843ba856b902d9fd3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetObject: {fileID: 0}
-  boundsOverride: {fileID: 0}
-  boundsCalculationMethod: 0
-  activation: 0
-  flattenAxis: 0
-  boxPadding: {x: 0, y: 0, z: 0}
-  boxDisplayConfiguration: {fileID: 11400000, guid: 024baa6159a510d4092f0e8ce2b27986,
-    type: 2}
-  linksConfiguration: {fileID: 11400000, guid: afb6d0c3b23d1a94c9a8c7a305b0db23, type: 2}
-  scaleHandlesConfiguration: {fileID: 11400000, guid: e5f1948baab2ce5499240464051d4a86,
-    type: 2}
-  rotationHandlesConfiguration: {fileID: 11400000, guid: 7fca21dd20b867e40a63985c9eb39fed,
-    type: 2}
-  translationHandlesConfiguration: {fileID: 0}
-  handleProximityEffectConfiguration: {fileID: 11400000, guid: b7226a5b9e6b922469fbbf8e80842ff3,
-    type: 2}
-  hideElementsInInspector: 1
-  smoothingActive: 0
-  rotateLerpTime: 0.001
-  scaleLerpTime: 0.001
-  translateLerpTime: 0.001
-  enableConstraints: 1
-  constraintsManager: {fileID: 7364563067669034227}
-  rotateStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  rotateStopped:
-    m_PersistentCalls:
-      m_Calls: []
-  scaleStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  scaleStopped:
-    m_PersistentCalls:
-      m_Calls: []
-  translateStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  translateStopped:
-    m_PersistentCalls:
-      m_Calls: []
-  elasticsManager: {fileID: 0}

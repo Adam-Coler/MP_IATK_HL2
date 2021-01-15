@@ -34,7 +34,7 @@ public class TrackerNameUpdate : MonoBehaviour
         }
         private void OnDestroy()
         {
-            Debug.LogFormat(GlobalVariables.blue + "Destorying Object" + GlobalVariables.endColor + ", OnDestroy() : " + this.GetType(), this.gameObject.name);
+            Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", this.gameObject.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             Photon.Pun.PhotonNetwork.Destroy(this.gameObject);
         }
     }

@@ -35,19 +35,20 @@ namespace Photon_IATK
             // #Important
             if (string.IsNullOrEmpty(value))
             {
-                Debug.Log(GlobalVariables.red + "Nickname Null" + GlobalVariables.endColor + " : " + "SetPlayerName()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Nickname Null", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                 return;
             }
 
             PhotonNetwork.NickName = value;
-            Debug.Log(GlobalVariables.green + "NicknameSet: " + value + GlobalVariables.endColor + " : " + "SetPlayerName()" + " : " + this.GetType());
+            Debug.LogFormat(GlobalVariables.cCommon + "NicknameSet: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", value, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             PlayerPrefs.SetString(playerNamePrefKey, value);
 
             if (PhotonNetwork.IsConnected)
             {
-                Pun_RPC_Calls.rpc_setNickName();
-                Debug.Log(GlobalVariables.green + "Nickname PunRPC Called " + GlobalVariables.endColor + " : " + "SetPlayerName()" + " : " + this.GetType());
+                Pun_Player_RPC_Calls.rpc_setNickName();
+
+                Debug.LogFormat(GlobalVariables.cPRC + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Nickname PunRPC Called", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
     }

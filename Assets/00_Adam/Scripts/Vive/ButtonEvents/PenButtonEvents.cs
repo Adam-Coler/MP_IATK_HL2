@@ -27,7 +27,7 @@ namespace Photon_IATK
 
         private void Awake()
         {
-            Debug.LogFormat(GlobalVariables.blue + "Primary button event broadcaster added" + GlobalVariables.endColor + " : Awake()" + this.GetType());
+            Debug.LogFormat(GlobalVariables.cRegister + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Primary button event broadcaster added", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             if (penTriggerPress == null)
                 penTriggerPress = new PenTriggerButtonPressEvent();
@@ -41,7 +41,7 @@ namespace Photon_IATK
             drawingVariables = DrawingVariables.Instance;
             if (drawingVariables == null)
             {
-                Debug.LogFormat(GlobalVariables.red + "Drawing variables not found" + GlobalVariables.endColor + " : Awake()" + this.GetType());
+                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Drawing variables not found", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
 
         }
@@ -134,7 +134,7 @@ namespace Photon_IATK
             {
                 if (device.name.ToLower().Contains("logi"))
                 {
-                    Debug.Log(GlobalVariables.yellow + "VR-Pen found: " + device.name + GlobalVariables.endColor + " : InputDevices_deviceConnected()" + this.GetType());
+                    Debug.LogFormat(GlobalVariables.cLevel + "VR-Pen found: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", device.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                     penInputDevice = device;
                     penSet = true;
                     return;
@@ -147,7 +147,7 @@ namespace Photon_IATK
             if (device == penInputDevice)
             {
                 penSet = false;
-                Debug.Log(GlobalVariables.yellow + "VR-Pen disconnected: " + device.name + GlobalVariables.endColor + " : InputDevices_deviceDisconnected()" + this.GetType());
+                Debug.LogFormat(GlobalVariables.cLevel + "VR-Pen disconnected: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", device.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 

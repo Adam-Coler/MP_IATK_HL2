@@ -33,15 +33,6 @@ namespace Photon_IATK
         private bool isSetup = false;
         #endregion
 
-        #region Private Methods
-#if UNITY_5_4_OR_NEWER
-        void OnSceneLoaded(UnityEngine.SceneManagement.Scene scene, UnityEngine.SceneManagement.LoadSceneMode loadingMode)
-        {
-            this.CalledOnLevelWasLoaded(scene.buildIndex);
-        }
-#endif
-        #endregion
-
         #region MonoBehaviour CallBacks
         /// <summary>
         /// MonoBehaviour method called on GameObject by Unity during early initialization phase.
@@ -61,41 +52,17 @@ namespace Photon_IATK
             txtNickName.text = photonView.Owner.NickName;
         }
 
-        /// <summary>
-        /// MonoBehaviour method called on GameObject by Unity during initialization phase.
-        /// </summary>
-        void Start()
-        {
-
-#if UNITY_5_4_OR_NEWER
-            // Unity 5.4 has a new scene management. register a method to call CalledOnLevelWasLoaded.
-            UnityEngine.SceneManagement.SceneManager.sceneLoaded += OnSceneLoaded;
-
-#endif
-        }
-
         public override void OnEnable()
         {
             setup();
-
             //unity has predefined tags "Player" is one
             this.tag = "Player";
         }
 
-        void CalledOnLevelWasLoaded(int level)
-        {
-            // check if we are outside the Arena and if it's the case, spawn around the center of the arena in a safe zone
-            //if (!Physics.Raycast(transform.position, -Vector3.up, 5f))
-            //{
-            //    transform.position = new Vector3(0f, 0f, 0f);
-            //}
-
-        }
-
         private void OnDestroy()
         {
-            //Debug.LogFormat(GlobalVariables.blue + "Destorying Object" + GlobalVariables.endColor + ", OnDestroy() : " + this.GetType(), this.gameObject.name);
-            //PhotonNetwork.Destroy(this.gameObject);
+            Debug.LogFormat(GlobalVariables.cOnDestory + "Destroying: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            PhotonNetwork.Destroy(this.gameObject);
         }
 
 #if UNITY_5_4_OR_NEWER
@@ -103,7 +70,6 @@ namespace Photon_IATK
         {
             // Always call the base to remove callbacks
             base.OnDisable();
-            SceneManager.sceneLoaded -= OnSceneLoaded;
         }
 #endif
 
@@ -117,6 +83,10 @@ namespace Photon_IATK
             // the photonView.RPC() call is the same as without the info parameter.
             // the info.Sender is the player who called the RPC.
             Debug.LogFormat("Info: {0} {1} {2}", info.Sender, info.photonView, info.SentServerTime);
+
+
+            Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
         }
 
 
@@ -126,8 +96,7 @@ namespace Photon_IATK
         {
             Transform transform = this.transform;
 
-
-            Debug.LogFormat("Info: {0} {1} {2}", info.Sender, info.photonView, info.SentServerTime);
+            Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
 

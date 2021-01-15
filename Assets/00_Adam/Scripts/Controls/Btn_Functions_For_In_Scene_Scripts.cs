@@ -143,8 +143,10 @@ namespace Photon_IATK
             if (GameObject.FindGameObjectWithTag("VisMenu") != null)
             {
                 GameObject menuObj = GameObject.FindGameObjectWithTag("VisMenu").transform.GetChild(0).gameObject;
+
                 GameObject.FindGameObjectWithTag("VisMenu").transform.GetChild(0).gameObject.SetActive(!menuObj.activeSelf);
-                Debug.LogFormat(GlobalVariables.cCommon + "Setting VisMenu Active: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", !menuObj.activeSelf, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                Debug.LogFormat(GlobalVariables.cCommon + "Setting VisMenu Active: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", menuObj.activeSelf, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
             else
             {
