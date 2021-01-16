@@ -11,6 +11,35 @@ namespace Photon_IATK
         public delegate void OnVisualisationUpdated(AbstractVisualisation.PropertyType propertyType);
         public static OnVisualisationUpdated visualisationUpdatedDelegate;
 
+        public string[] loadedCSVHeaders;
+
+        private CSVDataSource _wrapperCSVDataSource;
+        public CSVDataSource wrapperCSVDataSource
+        {
+            get
+            {
+                return _wrapperCSVDataSource;
+            }
+
+            set
+            {
+                _wrapperCSVDataSource = value;
+                dataSource = _wrapperCSVDataSource;
+                updateHeaders();
+            }
+        }
+
+        private void updateHeaders()
+        {
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "New wrapperCSVDataSource loaded, setting headers", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            loadedCSVHeaders = new string[wrapperCSVDataSource.DimensionCount];
+            for (int i = 0; i < wrapperCSVDataSource.DimensionCount; i++)
+            {
+                loadedCSVHeaders[i] = wrapperCSVDataSource[i].Identifier;
+            }
+        }
+
         private void Awake()
         {
             Debug.LogFormat(GlobalVariables.cRegister + "VisWrapper registering OnUpdateViewAction." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
@@ -24,6 +53,7 @@ namespace Photon_IATK
 
             OnUpdateViewAction -= UpdatedView;
         }
+
 
         private void UpdatedView(AbstractVisualisation.PropertyType propertyType)
         {
@@ -48,21 +78,6 @@ namespace Photon_IATK
             }
 
             this.updateProperties();
-
-        }
-
-        private void setPropertiesToUndefined()
-        {
-            //IATK does not initalized these so they cause an error when we manually load a photon instanced graph.
-            string undefined = "Undefined";
-
-            this.colourDimension = undefined;
-            this.sizeDimension = undefined;
-            this.linkingDimension = undefined;
-            this.originDimension = undefined;
-            this.destinationDimension = undefined;
-            this.graphDimension = undefined;
-            this.colorPaletteDimension = undefined;
         }
 
     }

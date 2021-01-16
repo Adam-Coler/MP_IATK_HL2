@@ -18,27 +18,18 @@ namespace Photon_IATK
         public TMP_Dropdown sizeDimensionDropdown;
 
         private VisualizationRPC_Calls theVisualizationRPC_Calls;
-        private string RPC_UID;
+
 
         // Start is called before the first frame update
-        void Awake()
+        //void Awake()
+        //{
+        //    OnEnable();
+        //}
+
+        public void changeXAxis()
         {
-            OnEnable();
-
-            VisualizationRPC_Calls.RPCvisualisationUpdatedDelegate += UpdatedView;
-            Debug.LogFormat(GlobalVariables.cRegister + "Registering {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "UpdatedView", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
+            theVisualizationRPC_Calls.changeXAxis(xAxisDropdown.options[xAxisDropdown.value].text);
         }
-
-        private void UpdatedView(AbstractVisualisation.PropertyType propertyType)
-        {
-            Debug.LogFormat(GlobalVariables.cCommon + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
-            findAndStoreVisualizationRPC_Calls();
-
-        }
-
-
 
         private void OnEnable()
         {
@@ -49,7 +40,17 @@ namespace Photon_IATK
                 return;
             }
 
-            //Now we need to get the RPC interface assuming one VIS object
+            VisualizationRPC_Calls.RPCvisualisationUpdatedDelegate += UpdatedView;
+            Debug.LogFormat(GlobalVariables.cRegister + "Registering {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "UpdatedView", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            //Now we need to get the RPC interface assuming one VIS object and that the vis object is loaded before the menu
+            findAndStoreVisualizationRPC_Calls();
+        }
+
+        private void UpdatedView(AbstractVisualisation.PropertyType propertyType)
+        {
+            Debug.LogFormat(GlobalVariables.cCommon + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
             findAndStoreVisualizationRPC_Calls();
 
         }
@@ -95,19 +96,75 @@ namespace Photon_IATK
 
         private void setUpMenus()
         {
+            setAxisDropdowns(theVisualizationRPC_Calls.loadedCSVHeaders, true);
+
             Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Updating menu options.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
+
+        private void setAxisDropdowns(string[] dataDimensions, bool isOptionsDivdedIntoThreeAxis = false)
+        {
+            clearDropdownOptions();
+
+            List<TMP_Dropdown.OptionData> listDataDimensions = new List<TMP_Dropdown.OptionData>();
+
+            foreach (string dimension in dataDimensions)
+            {
+                listDataDimensions.Add(new TMP_Dropdown.OptionData() { text = dimension });
+            }
+
+            if (isOptionsDivdedIntoThreeAxis)
+            {
+                List<List<TMP_Dropdown.OptionData>> partititionedList = Split(listDataDimensions, 3);
+
+                xAxisDropdown.AddOptions(partititionedList[0]);
+                yAxisDropdown.AddOptions(partititionedList[1]);
+                zAxisDropdown.AddOptions(partititionedList[2]);
+
+            }
+            else
+            {
+                xAxisDropdown.AddOptions(listDataDimensions);
+                yAxisDropdown.AddOptions(listDataDimensions);
+                zAxisDropdown.AddOptions(listDataDimensions);
+            }
+
+            // add undefined as an option
+            var listDataDimensionsWithUndefined = listDataDimensions;
+            listDataDimensionsWithUndefined.Add(new TMP_Dropdown.OptionData() { text = "Undefined" });
+
+            colorDimensionDropdown.AddOptions(listDataDimensionsWithUndefined);
+            sizeDimensionDropdown.AddOptions(listDataDimensionsWithUndefined);
         }
 
         private void OnDisable()
         {
-            OnDestroy();
-        }
-
-        private void OnDestroy()
-        {
             Debug.LogFormat(GlobalVariables.cRegister + "Un-registering {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "UpdatedView", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             VisWrapperClass.visualisationUpdatedDelegate -= UpdatedView;
         }
+
+        private void clearDropdownOptions()
+        {
+            xAxisDropdown.ClearOptions();
+            yAxisDropdown.ClearOptions();
+            zAxisDropdown.ClearOptions();
+            colorDimensionDropdown.ClearOptions();
+            sizeDimensionDropdown.ClearOptions();
+        }
+
+        public static List<List<T>> Split<T>(List<T> collection, int size)
+        {
+            var chunks = new List<List<T>>();
+            var chunkCount = collection.Count() / size;
+
+            if (collection.Count % size > 0)
+                chunkCount++;
+
+            for (var i = 0; i < chunkCount; i++)
+                chunks.Add(collection.Skip(i * size).Take(size).ToList());
+
+            return chunks;
+        }
+
 
     }
 }

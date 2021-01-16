@@ -39,7 +39,7 @@ namespace Photon_IATK
             //Add the vis wrapper to the game object this is on
             VisWrapperClass theVis = this.gameObject.AddComponent<VisWrapperClass>();
 
-            theVis.dataSource = myCSVDataSource;
+            theVis.wrapperCSVDataSource = myCSVDataSource;
             theVis.gameObject.name = ("ScatterplotVis_" + PhotonNetwork.IsConnected);
 
             theVis.visualisationType = AbstractVisualisation.VisualisationTypes.SCATTERPLOT;

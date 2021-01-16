@@ -14,6 +14,8 @@ namespace Photon_IATK
 
         public PhotonView thisPhotonView;
 
+        public string[] loadedCSVHeaders { get; set; }
+
         private void Awake()
         {
             //RPC calls need a photon view
@@ -27,7 +29,6 @@ namespace Photon_IATK
             VisWrapperClass.visualisationUpdatedDelegate += visUpdatedListener;
 
         }
-
 
         private void OnDestroy()
         {
@@ -52,11 +53,23 @@ namespace Photon_IATK
                 thisVis = this.gameObject.GetComponent<VisWrapperClass>();
             }
 
+            if (thisVis != null)
+            {
+                loadedCSVHeaders = thisVis.loadedCSVHeaders;
+                return;
+            }
+
             Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No VisWrapper found.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
+
+        public void changeXAxis(string newAxisDimension)
+        {
+            photonView.RPC("_changeXAxis", RpcTarget.All, newAxisDimension);
+        }
+
         [PunRPC]
-        public void changeXAxis(string newAxisDimension, PhotonMessageInfo info)
+        private void _changeXAxis(string newAxisDimension, PhotonMessageInfo info)
         {
             thisVis.xDimension = newAxisDimension;
             thisVis.updateVisPropertiesSafe();
