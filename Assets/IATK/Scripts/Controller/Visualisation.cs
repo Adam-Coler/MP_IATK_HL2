@@ -163,7 +163,10 @@ namespace IATK
                     theVisualizationObject = gameObject.AddComponent<ScatterplotVisualisation>();// new Simple2D3DVisualisation();                    
                     theVisualizationObject.visualisationReference = this;
 
+                    //Debug.LogFormat(Photon_IATK.GlobalVariables.cRegister + "{0}." + Photon_IATK.GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "theVisObject made", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
                     theVisualizationObject.CreateVisualisation();
+
                     break;
                 case AbstractVisualisation.VisualisationTypes.SCATTERPLOT_MATRIX:
         
@@ -217,7 +220,7 @@ namespace IATK
 
         public void updateView(AbstractVisualisation.PropertyType propertyType)
         {
-            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "updateView - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup);
+            //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "updateView - {0}, {1}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType() + " : " + this.gameObject.name, propertyType, Time.realtimeSinceStartup);
 
             theVisualizationObject.CreateVisualisation();// UpdateVisualisation(propertyType);
         }
@@ -260,55 +263,39 @@ namespace IATK
             //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "updateProperties - {0}, {1}, theVisualizationObject exists: {2}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), this.gameObject.name, Time.realtimeSinceStartup, theVisualizationObject != null);
 
             //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "{0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), "AttributeFiltering");
-            //theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.AttributeFiltering);
+            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.AttributeFiltering);
             //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "{0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), "BlendDestinationMode");
-            //theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.BlendDestinationMode);
+            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.BlendDestinationMode);
             //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "{0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), "BlendSourceMode");
-            //theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.BlendSourceMode);
+            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.BlendSourceMode);
             //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "{0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), "Colour");
-            //theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.Colour);
+            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.Colour);
             //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "{0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), "DimensionChange");
-            //theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.DimensionChange);
+            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.DimensionChange);
             //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "{0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), "DimensionFiltering");
-            //theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.DimensionFiltering);
+            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.DimensionFiltering);
             //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "{0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), "GeometryType");
-            //theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.GeometryType);
+            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.GeometryType);
             //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "{0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), "LinkingDimension");
-            //theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.LinkingDimension);
+            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.LinkingDimension);
             //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "{0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), "None");
-            //theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.None);
+            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.None);
             //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "{0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), "Scaling");
-            //theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.Scaling);
+            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.Scaling);
             //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "{0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), "Size");
-            //theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.Size);
+            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.Size);
             //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "{0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), "SizeValues");
-            //theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.SizeValues);
+            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.SizeValues);
             //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "{0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), "VisualisationType");
-            //theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.VisualisationType);
+            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.VisualisationType);
             //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "{0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), "X");
-            //theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.X);
+            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.X);
             //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "{0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), "Y");
-            //theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.Y);
+            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.Y);
             //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "{0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), "Z");
-            //theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.Z);
+            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.Z);
             //Debug.LogFormat(Photon_IATK.GlobalVariables.yellow + "{0}" + Photon_IATK.GlobalVariables.endColor + " : " + this.GetType(), "END");
 
-            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.AttributeFiltering);
-            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.BlendDestinationMode);
-            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.BlendSourceMode);
-            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.Colour);
-            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.DimensionChange);
-            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.DimensionFiltering);
-            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.GeometryType);
-            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.LinkingDimension);
-            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.None);
-            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.Scaling);
-            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.Size);
-            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.SizeValues);
-            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.VisualisationType);
-            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.X);
-            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.Y);
-            theVisualizationObject.UpdateVisualisation(AbstractVisualisation.PropertyType.Z);
         }
 
         /// <summary>

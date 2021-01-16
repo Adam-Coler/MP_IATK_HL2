@@ -83,7 +83,7 @@ namespace Photon_IATK
             vis.gameObject.tag = "Vis";
 
             //named where instantiated
-            //vis.gameObject.name = "ScatterplotVis";
+            vis.gameObject.name = ("ScatterplotVis_" + isLoadedOffline);
 
             setPropertiesToUndefined(vis);
 
