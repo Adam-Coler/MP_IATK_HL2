@@ -1411,7 +1411,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1734354908}
+      - m_Target: {fileID: 0}
         m_MethodName: changeXAxis
         m_Mode: 1
         m_Arguments:
@@ -1747,7 +1747,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1734354908}
+      - m_Target: {fileID: 0}
         m_MethodName: changeYAxis
         m_Mode: 1
         m_Arguments:
@@ -1954,7 +1954,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1734354908}
+      - m_Target: {fileID: 0}
         m_MethodName: changeSizeDimension
         m_Mode: 1
         m_Arguments:
@@ -2754,7 +2754,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1734354908}
+      - m_Target: {fileID: 0}
         m_MethodName: changeColorDimension
         m_Mode: 1
         m_Arguments:
@@ -6733,7 +6733,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1734354906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6801,7 +6801,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1734354905}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d97f719c784c92641ac827c65040aca2, type: 3}
+  m_Script: {fileID: 11500000, guid: 1546018014b372141bc29c2d1f4d0c85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   xAxisDropdown: {fileID: 397330885}
@@ -6809,7 +6809,6 @@ MonoBehaviour:
   zAxisDropdown: {fileID: 2071727101}
   colorDimensionDropdown: {fileID: 933925122}
   sizeDimensionDropdown: {fileID: 545287397}
-  isOfflineVis: 0
 --- !u!4 &1734354909
 Transform:
   m_ObjectHideFlags: 0
@@ -9061,7 +9060,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1734354908}
+      - m_Target: {fileID: 0}
         m_MethodName: changeZAxis
         m_Mode: 1
         m_Arguments:

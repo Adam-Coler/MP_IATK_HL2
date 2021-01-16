@@ -56,6 +56,11 @@ namespace Photon_IATK
 
             Debug.LogFormat(GlobalVariables.cInstance + "Instanced and set up a IATK visualisation, Online: {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsConnected, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
+
+            Debug.LogFormat(GlobalVariables.cOnDestory + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Destorying this", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            Destroy(this);
+
         }
 
         CSVDataSource createCSVDataSource(string data)
