@@ -23,6 +23,7 @@ namespace Photon_IATK
         public static string cComponentAddition = green;
         public static string cPRC = yellow;
         public static string cRegister = yellow;
+        public static string cTest = orange;
 
         public static string endColor = "</color>";
         public static string newLine = "\n";

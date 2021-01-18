@@ -10,7 +10,7 @@ namespace IATK
     /// <summary>
     /// Visualisation editor. Custom editor for inspector in Visualisation component.
     /// </summary>
-    [CustomEditor(typeof(Visualisation))]
+    [CustomEditor(typeof(Photon_IATK.VisWrapperClass))]
     [CanEditMultipleObjects]
     public class AbstractVisualisationEditor : Editor
     {
@@ -435,7 +435,7 @@ namespace IATK
                 {
                     int nbPaletteCategories = dataSource.getNumberOfCategories(colorPaletteDimensionProperty.stringValue);
                     //float[] uniqueValues = dataSource[colorPaletteDimensionProperty.stringValue].MetaData.categories;
-                    
+
                     colourPaletteProperty.ClearArray();
                     colourPaletteProperty.arraySize = nbPaletteCategories;
                     colourDimensionProperty.stringValue = "Undefined";
@@ -512,7 +512,7 @@ namespace IATK
                 }
             }
 
-            
+
             if (EnumPopup("Size dimension", dimensions.ToArray(), sizeDimensionProperty))
             {
                 dirtyFlags = AbstractVisualisation.PropertyType.Size;
@@ -532,7 +532,7 @@ namespace IATK
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
             EditorGUILayout.LabelField("Connectivity", EditorStyles.boldLabel);
-            
+
             if (EnumPopup("Linking dimension", dimensions.ToArray(), linkingDimensionProperty))
             {
                 dirtyFlags = AbstractVisualisation.PropertyType.LinkingDimension;
@@ -561,7 +561,7 @@ namespace IATK
             {
                 dirtyFlags = AbstractVisualisation.PropertyType.AttributeFiltering;
             }
-           
+
 
             // Visualisation dimensions
             EditorGUI.BeginChangeCheck();
@@ -581,9 +581,9 @@ namespace IATK
                 targetVisualisation.CreateVisualisation((AbstractVisualisation.VisualisationTypes)visualisationTypeProperty.intValue);
             else
                 if (dirtyFlags != null)
-                {
-                    targetVisualisation.updateViewProperties(dirtyFlags.Value);
-                }
+            {
+                targetVisualisation.updateViewProperties(dirtyFlags.Value);
+            }
         }
 
         void ShowScatterplotMatrixMenu(ref AbstractVisualisation.PropertyType? dirtyFlags)

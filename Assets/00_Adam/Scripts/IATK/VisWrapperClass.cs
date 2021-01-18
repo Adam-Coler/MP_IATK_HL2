@@ -77,7 +77,8 @@ namespace Photon_IATK
                 return;
             }
 
-            this.updateProperties();
+            updateProperties();
+            visualisationUpdatedDelegate(AbstractVisualisation.PropertyType.VisualisationType);
         }
 
     }

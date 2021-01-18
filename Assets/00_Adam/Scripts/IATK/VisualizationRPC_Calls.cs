@@ -16,6 +16,42 @@ namespace Photon_IATK
 
         public string[] loadedCSVHeaders { get; set; }
 
+        public string xDimension {
+            get 
+            {
+                return thisVis.xDimension.Attribute;
+            }
+        }
+        public string yDimension
+        {
+            get
+            {
+                return thisVis.yDimension.Attribute;
+            }
+        }
+        public string zDimension
+        {
+            get
+            {
+                return thisVis.zDimension.Attribute;
+            }
+        }
+        public string colourDimension
+        {
+            get
+            {
+                return thisVis.colourDimension;
+            }
+        }
+        public string sizeDimension
+        {
+            get
+            {
+                return thisVis.sizeDimension;
+            }
+        }
+
+
         private void Awake()
         {
             //RPC calls need a photon view
@@ -65,7 +101,61 @@ namespace Photon_IATK
 
         public void changeXAxis(string newAxisDimension)
         {
-            photonView.RPC("_changeXAxis", RpcTarget.All, newAxisDimension);
+            if (PhotonNetwork.IsConnected)
+            {
+                photonView.RPC("_changeXAxis", RpcTarget.All, newAxisDimension);
+            } else
+            {
+                _changeXAxis(newAxisDimension, new PhotonMessageInfo());
+            }
+        }
+
+        public void changeYAxis(string newAxisDimension)
+        {
+            if (PhotonNetwork.IsConnected)
+            {
+                photonView.RPC("_changeYAxis", RpcTarget.All, newAxisDimension);
+            }
+            else
+            {
+                _changeYAxis(newAxisDimension, new PhotonMessageInfo());
+            }
+        }
+
+        public void changeZAxis(string newAxisDimension)
+        {
+            if (PhotonNetwork.IsConnected)
+            {
+                photonView.RPC("_changeZAxis", RpcTarget.All, newAxisDimension);
+            }
+            else
+            {
+                _changeZAxis(newAxisDimension, new PhotonMessageInfo());
+            }
+        }
+
+        public void changeColorDimension(string newAxisDimension)
+        {
+            if (PhotonNetwork.IsConnected)
+            {
+                photonView.RPC("_changeColorDimension", RpcTarget.All, newAxisDimension);
+            }
+            else
+            {
+                _changeColorDimension(newAxisDimension, new PhotonMessageInfo());
+            }
+        }
+
+        public void changeSizeDimension(string newAxisDimension)
+        {
+            if (PhotonNetwork.IsConnected)
+            {
+                photonView.RPC("_changeSizeDimension", RpcTarget.All, newAxisDimension);
+            }
+            else
+            {
+                _changeSizeDimension(newAxisDimension, new PhotonMessageInfo());
+            }
         }
 
         [PunRPC]
@@ -77,44 +167,46 @@ namespace Photon_IATK
             Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}," + GlobalVariables.endColor + "{4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
-        //[PunRPC]
-        //public void changeYAxis(string newAxisDimension, PhotonMessageInfo info)
-        //{
-        //    instanceVis.vis.yDimension = newAxisDimension;
-        //    updateVisPropertiesSafe();
+        [PunRPC]
+        private void _changeYAxis(string newAxisDimension, PhotonMessageInfo info)
+        {
+            thisVis.yDimension = newAxisDimension;
+            thisVis.updateVisPropertiesSafe();
 
-        //    Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}," + GlobalVariables.endColor + "{4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-        //}
+            Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}," + GlobalVariables.endColor + "{4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
 
-        //[PunRPC]
-        //public void changeZAxis(string newAxisDimension, PhotonMessageInfo info)
-        //{
-        //    instanceVis.vis.zDimension = newAxisDimension;
-        //    updateVisPropertiesSafe();
+        [PunRPC]
+        private void _changeZAxis(string newAxisDimension, PhotonMessageInfo info)
+        {
+            thisVis.zDimension = newAxisDimension;
+            thisVis.updateVisPropertiesSafe();
 
-        //    Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}," + GlobalVariables.endColor + "{4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-        //}
+            Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}," + GlobalVariables.endColor + "{4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
 
-        //[PunRPC]
-        //public void changeColorDimension(string newColorDimension, PhotonMessageInfo info)
-        //{
-        //    Color colorStart = Color.blue;
-        //    Color colorEnd = Color.red;
+        [PunRPC]
+        private void _changeColorDimension(string newColorDimension, PhotonMessageInfo info)
+        {
+            Color colorStart = Color.blue;
+            Color colorEnd = Color.red;
 
-        //    instanceVis.vis.dimensionColour = HelperFunctions.getColorGradient(colorStart, colorEnd);
-        //    instanceVis.vis.colourDimension = newColorDimension;
+            thisVis.dimensionColour = HelperFunctions.getColorGradient(colorStart, colorEnd);
+            thisVis.colourDimension = newColorDimension;
 
-        //    Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}," + GlobalVariables.endColor + "{4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-        //}
+            thisVis.updateVisPropertiesSafe();
 
-        //[PunRPC]
-        //public void changeSizeDimension(string newAxisDimension, PhotonMessageInfo info)
-        //{
-        //    instanceVis.vis.zDimension = newAxisDimension;
-        //    updateVisPropertiesSafe();
+            Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}," + GlobalVariables.endColor + "{4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
 
-        //    Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}," + GlobalVariables.endColor + "{4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-        //}
+        [PunRPC]
+        private void _changeSizeDimension(string newAxisDimension, PhotonMessageInfo info)
+        {
+            thisVis.sizeDimension = newAxisDimension;
+            thisVis.updateVisPropertiesSafe();
+
+            Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}," + GlobalVariables.endColor + "{4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
 
     }
 }

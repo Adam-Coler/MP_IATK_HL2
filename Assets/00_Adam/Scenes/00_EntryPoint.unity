@@ -1747,7 +1747,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1734354908}
         m_MethodName: changeYAxis
         m_Mode: 1
         m_Arguments:
@@ -1954,7 +1954,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1734354908}
         m_MethodName: changeSizeDimension
         m_Mode: 1
         m_Arguments:
@@ -2754,7 +2754,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1734354908}
         m_MethodName: changeColorDimension
         m_Mode: 1
         m_Arguments:
@@ -9060,7 +9060,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1734354908}
         m_MethodName: changeZAxis
         m_Mode: 1
         m_Arguments:

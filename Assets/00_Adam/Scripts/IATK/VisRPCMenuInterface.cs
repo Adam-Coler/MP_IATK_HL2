@@ -31,6 +31,26 @@ namespace Photon_IATK
             theVisualizationRPC_Calls.changeXAxis(xAxisDropdown.options[xAxisDropdown.value].text);
         }
 
+        public void changeYAxis()
+        {
+            theVisualizationRPC_Calls.changeYAxis(yAxisDropdown.options[yAxisDropdown.value].text);
+        }
+
+        public void changeZAxis()
+        {
+            theVisualizationRPC_Calls.changeZAxis(zAxisDropdown.options[zAxisDropdown.value].text);
+        }
+
+        public void changeColorDimension()
+        {
+            theVisualizationRPC_Calls.changeColorDimension(colorDimensionDropdown.options[colorDimensionDropdown.value].text);
+        }
+
+        public void changeSizeDimension()
+        {
+            theVisualizationRPC_Calls.changeSizeDimension(sizeDimensionDropdown.options[sizeDimensionDropdown.value].text);
+        }
+
         private void OnEnable()
         {
             //We need the dropdowns to be able to do anything to the RPCS
@@ -49,10 +69,48 @@ namespace Photon_IATK
 
         private void UpdatedView(AbstractVisualisation.PropertyType propertyType)
         {
-            Debug.LogFormat(GlobalVariables.cCommon + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cTest + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             findAndStoreVisualizationRPC_Calls();
 
+            updateDropDown(propertyType);
+
+        }
+
+        private void updateDropDown(AbstractVisualisation.PropertyType propertyType)
+        {
+            switch (propertyType)
+            {
+                case AbstractVisualisation.PropertyType.X:
+                    Debug.LogFormat(GlobalVariables.cCommon + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                    xAxisDropdown.value = xAxisDropdown.options.FindIndex(option => option.text == theVisualizationRPC_Calls.xDimension);
+                    xAxisDropdown.RefreshShownValue();
+                    break;
+                case AbstractVisualisation.PropertyType.Y:
+                    yAxisDropdown.value = yAxisDropdown.options.FindIndex(option => option.text == theVisualizationRPC_Calls.yDimension);
+                    yAxisDropdown.RefreshShownValue();
+                    Debug.LogFormat(GlobalVariables.cCommon + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                    break;
+                case AbstractVisualisation.PropertyType.Z:
+
+                    zAxisDropdown.value = zAxisDropdown.options.FindIndex(option => option.text == theVisualizationRPC_Calls.zDimension);
+                    zAxisDropdown.RefreshShownValue();
+                    Debug.LogFormat(GlobalVariables.cCommon + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                    break;
+                case AbstractVisualisation.PropertyType.Colour:
+                    colorDimensionDropdown.value = colorDimensionDropdown.options.FindIndex(option => option.text == theVisualizationRPC_Calls.colourDimension);
+                    colorDimensionDropdown.RefreshShownValue();
+                    Debug.LogFormat(GlobalVariables.cCommon + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                    break;
+                case AbstractVisualisation.PropertyType.Size:
+                    sizeDimensionDropdown.value = sizeDimensionDropdown.options.FindIndex(option => option.text == theVisualizationRPC_Calls.sizeDimension);
+                    sizeDimensionDropdown.RefreshShownValue();
+                    Debug.LogFormat(GlobalVariables.cCommon + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                    break;
+                default:
+                    Debug.LogFormat(GlobalVariables.cCommon + "DEFUALT: Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                    break;
+            }
         }
 
         private void findAndStoreVisualizationRPC_Calls()
