@@ -43,6 +43,7 @@ namespace Photon_IATK
             enableDisableVuforia();
 
             Debug.LogFormat(GlobalVariables.cRegister + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Registering Vuforia OnStatusChanged", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
             DeviceTrackerARController.Instance.RegisterDevicePoseStatusChangedCallback(OnStatusChanged);
 
         }
@@ -64,7 +65,7 @@ namespace Photon_IATK
 #endif
         }
 
-        public void destroyVuforiaEmptyObjects()
+        private void destroyVuforiaEmptyObjects()
         {
             if (FindObjectsOfType<ImageTargetBehaviour>() != null)
             {
@@ -80,7 +81,7 @@ namespace Photon_IATK
             }
         }
 
-        void OnStatusChanged(TrackableBehaviour.Status status, TrackableBehaviour.StatusInfo statusInfo)
+        private void OnStatusChanged(TrackableBehaviour.Status status, TrackableBehaviour.StatusInfo statusInfo)
         {
             Debug.LogFormat(GlobalVariables.cCommon + "Status is: {0}, statusInfo is: " + statusInfo + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", status, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -89,7 +90,10 @@ namespace Photon_IATK
             {
                 centerPlayspace();
 
-                Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Setting Location", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Setting Location and removing registration to tracked status change", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                Debug.LogFormat(GlobalVariables.cRegister + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Un-registering Vuforia OnStatusChanged", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                DeviceTrackerARController.Instance.UnregisterDevicePoseStatusChangedCallback(OnStatusChanged);
             }
 
 
@@ -101,26 +105,38 @@ namespace Photon_IATK
 
             if (PlayspaceAnchor.Instance != null)
             {
-                //to auto set this when playing
-                Vector3 tempPosition = new Vector3 (0f, -0.05f, -0.065f);
-                Vector3 tempRotation = new Vector3(90f, 0f, 0f);
 
-                if (positionOffset == Vector3.zero)
-                    positionOffset = tempPosition;
+                Transform trackerTransform = this.gameObject.transform;
 
-                if (rotationOffset == Vector3.zero)
-                    rotationOffset = tempRotation;
-
+                //Move playspace to the tracker
                 Transform playspaceAnchorTransform = PlayspaceAnchor.Instance.transform;
+                playspaceAnchorTransform.position = trackerTransform.position;
+                playspaceAnchorTransform.rotation = trackerTransform.rotation;
 
-                Vector3 newPosition = this.gameObject.transform.position + positionOffset;
-                Quaternion newRotation = this.gameObject.transform.rotation * Quaternion.Euler(rotationOffset);
-
+                //get location
                 Vector3 oldPosition = playspaceAnchorTransform.position;
                 Quaternion oldRotation = playspaceAnchorTransform.rotation;
 
-                playspaceAnchorTransform.position = newPosition;
-                playspaceAnchorTransform.rotation = newRotation;
+                //set up hard coded differance in position between tracker image and vive base station
+                Vector3 tempPosition = new Vector3(0f, -0.06f, 0f);  //Vector3(0f, 0f, -0.03f); (0f, -0.085f, 0f)
+                Vector3 tempRotation = new Vector3(90f, 0f, 0f);
+
+                if (positionOffset == new Vector3(0f, 0f, 0f))
+                    positionOffset = tempPosition;
+
+                if (rotationOffset == new Vector3(0f, 0f, 0f))
+                    rotationOffset = tempRotation;
+
+                //rotate the anchor by that much
+                playspaceAnchorTransform.transform.Rotate(rotationOffset, Space.Self);
+                playspaceAnchorTransform.transform.Translate(positionOffset, Space.Self);
+
+                Vector3 distanceMoved = oldPosition - playspaceAnchorTransform.transform.position;
+
+                Debug.LogFormat(GlobalVariables.cCommon + "Moving playspace anchor. Position offset: {0}, Rotation offset: {1}" + GlobalVariables.endColor + GlobalVariables.cAlert + ", Moved distance: {2}, X distance: {3}, Y distance: {4}, Z distance: {5}" + GlobalVariables.endColor + " {6}: {7} -> {8} -> {9}", positionOffset, rotationOffset, oldPosition, oldPosition.x, oldPosition.y, oldPosition.z, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                //    playspaceAnchorTransform.position += positionOffset;
+                //playspaceAnchorTransform.rotation *= Quaternion.Euler(rotationOffset);
 
                 Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Setting playspaceAnchorTransform", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
