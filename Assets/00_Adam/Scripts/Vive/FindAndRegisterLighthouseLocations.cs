@@ -142,8 +142,8 @@ namespace Photon_IATK
 #else
         private void Awake()
         {
-                            Debug.LogFormat(GlobalVariables.red + "Destorying {0} " + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType(), this.name);
-            Destroy(this);
+            Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Destroy(this.gameObject);
         }
 #endif
     }

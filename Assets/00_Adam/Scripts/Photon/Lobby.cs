@@ -23,12 +23,11 @@ namespace Photon_IATK
         void Awake()
         {
 
-            Debug.LogFormat(GlobalVariables.orange + "Testing Reflection" + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), MethodBase.GetCurrentMethod());
-
             if (_Lobby == null)
             {
                 _Lobby = this;
-                Debug.Log(GlobalVariables.green + "Lobby Set" + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
+
+                Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Lobby Set", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
             else
             {
@@ -36,7 +35,7 @@ namespace Photon_IATK
                 {
                     Destroy(_Lobby.gameObject);
                     _Lobby = this;
-                    Debug.Log(GlobalVariables.green + "Lobby Destoryed then Set" + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
+                    Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Lobby Destoryed then Set", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                 }
             }
 
@@ -52,7 +51,8 @@ namespace Photon_IATK
 
             if (isAutoConnect) { 
                 Connect();
-                Debug.Log(GlobalVariables.orange + "Lobby AutoConnect" + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cAlert + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Lobby AutoConnect", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
             };
 
             DontDestroyOnLoad(gameObject.transform.root);
@@ -74,7 +74,7 @@ namespace Photon_IATK
             // we check if we are connected or not, we join if we are , else we initiate the connection to the server.
             if (PhotonNetwork.IsConnected)
             {
-                Debug.Log(GlobalVariables.green + "Connected, Joining random room" + GlobalVariables.endColor + " : " + "Connect()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Connected, Joining random room", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                 // #Critical we need at this point to attempt joining a Random Room. If it fails, we'll get notified in OnJoinRandomFailed() and we'll create one.
                 PhotonNetwork.JoinRandomRoom();
             }
@@ -84,7 +84,7 @@ namespace Photon_IATK
                 PhotonNetwork.GameVersion = gameVersion;
                 PhotonNetwork.ConnectUsingSettings();
 
-                Debug.Log(GlobalVariables.green + "Connecting using settings" + GlobalVariables.endColor + " : " + "Connect()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Connecting using settings", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
         #endregion
@@ -105,37 +105,38 @@ namespace Photon_IATK
             {
                 PhotonNetwork.NickName = PlayerPrefs.GetString(GlobalVariables.PlayerPrefsKeys.ParticipantID.ToString());
 
-                Debug.Log(GlobalVariables.green + "Nickname found, setting nickname to " + PhotonNetwork.NickName + GlobalVariables.endColor + " : " + "OnConnectedToMaster()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cCommon + "Nickname found, setting nickname to {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.NickName, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             } else
             {
-                Debug.Log(GlobalVariables.green + "No Nickname found, setting nickname to " + PhotonNetwork.AuthValues.UserId + GlobalVariables.endColor + " : " + "OnConnectedToMaster()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cCommon + "No Nickname found, setting nickname to {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.AuthValues.UserId, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 PhotonNetwork.NickName = PhotonNetwork.AuthValues.UserId;
             }
 
             PhotonNetwork.JoinRandomRoom();
 
-            Debug.Log(GlobalVariables.green + "Join Random Room Called" + GlobalVariables.endColor + " : " + "OnConnectedToMaster()" + " : " + this.GetType());
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Join Random Room Called", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
         public override void OnDisconnected(DisconnectCause cause)
         {
-            Debug.LogWarningFormat(this.GetType() + " : OnDisconnected() was called by PUN with reason {0}", cause);
+            Debug.LogFormat(GlobalVariables.cError + "OnDisconnected() was called by PUN with reason: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", cause, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
         public override void OnJoinRandomFailed(short returnCode, string message)
         {
-            Debug.Log(GlobalVariables.green + "No random room available, Calling: PhotonNetwork.CreateRoom" + GlobalVariables.endColor + " : " + "OnJoinRandomFailed()" + " : " + this.GetType());
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No random room available, Calling: PhotonNetwork.CreateRoom", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
             var roomOptions = new RoomOptions { IsVisible = true, IsOpen = true, MaxPlayers = 10 };
             PhotonNetwork.CreateRoom("Room" + Random.Range(1, 3000), roomOptions);
         }
 
         public override void OnJoinedRoom()
         {
-            Debug.Log(GlobalVariables.green + "A player joined the room" + GlobalVariables.endColor + " : " + "OnJoinedRoom()" + " : " + this.GetType());
-            Debug.Log(GlobalVariables.green + "Current room name: " + PhotonNetwork.CurrentRoom.Name + GlobalVariables.endColor + " : " + "OnJoinedRoom()" + " : " + this.GetType());
-            Debug.Log(GlobalVariables.green + "Other players in room: " + PhotonNetwork.CountOfPlayersInRooms + GlobalVariables.endColor + " : " + "OnJoinedRoom()" + " : " + this.GetType());
-            Debug.Log(GlobalVariables.green + "Total players in room: " + (PhotonNetwork.CountOfPlayersInRooms + 1) + GlobalVariables.endColor + " : " + "OnJoinedRoom()" + " : " + this.GetType());
+            Debug.Log(GlobalVariables.cCommon + "A player joined the room" + GlobalVariables.endColor + " : " + "OnJoinedRoom()" + " : " + this.GetType());
+            Debug.Log(GlobalVariables.cCommon + "Current room name: " + PhotonNetwork.CurrentRoom.Name + GlobalVariables.endColor + " : " + "OnJoinedRoom()" + " : " + this.GetType());
+            Debug.Log(GlobalVariables.cCommon + "Other players in room: " + PhotonNetwork.CountOfPlayersInRooms + GlobalVariables.endColor + " : " + "OnJoinedRoom()" + " : " + this.GetType());
+            Debug.Log(GlobalVariables.cCommon + "Total players in room: " + (PhotonNetwork.CountOfPlayersInRooms + 1) + GlobalVariables.endColor + " : " + "OnJoinedRoom()" + " : " + this.GetType());
         }
 
         public void OnCancelButtonClicked()
@@ -172,7 +173,7 @@ namespace Photon_IATK
 #elif HL2
         void setup()
         {
-            Debug.Log(this.GetType() + ": No Setup needed");
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No setup needed", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
 #elif VIVE

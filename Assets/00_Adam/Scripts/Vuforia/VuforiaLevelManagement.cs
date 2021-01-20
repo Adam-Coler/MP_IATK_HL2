@@ -8,11 +8,33 @@ namespace Photon_IATK
 {
     public class VuforiaLevelManagement : MonoBehaviour
     {
+        private Vector3 lastPositionOffset = Vector3.zero; //With my setup it looks like (0, -0.05f, -0.065f)
+        private Vector3 lastRotationOffset = Vector3.zero; // (90, 0, 0)
+
+        public Vector3 positionOffset;
+        public Vector3 rotationOffset;
+
 #if HL2
+
+        private void Update()
+        {
+            if (lastRotationOffset != rotationOffset)
+            {
+                lastRotationOffset = rotationOffset;
+                centerPlayspace();
+            }
+
+            if (lastPositionOffset != positionOffset)
+            {
+
+                lastPositionOffset = positionOffset;
+                centerPlayspace();
+            }
+        }
 
         void Awake()
         {
-            Debug.LogFormat(GlobalVariables.green + "Vuforia setup" + GlobalVariables.endColor + " Awake() : " + this.GetType());
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Vuforia setup", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             Init_Unload_Vuforia();
 
@@ -20,20 +42,21 @@ namespace Photon_IATK
 
             enableDisableVuforia();
 
+            Debug.LogFormat(GlobalVariables.cRegister + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Registering Vuforia OnStatusChanged", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             DeviceTrackerARController.Instance.RegisterDevicePoseStatusChangedCallback(OnStatusChanged);
 
         }
 
         private void OnDestroy()
         {
-            Debug.LogFormat(GlobalVariables.red + "Vuforia takedown" + GlobalVariables.endColor + " OnDestroy() : " + this.GetType());
-
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Vuforia takedown", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             enableDisableVuforia();
 
             Init_Unload_Vuforia();
 
             destroyVuforiaEmptyObjects();
 
+            Debug.LogFormat(GlobalVariables.cRegister + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Un-registering Vuforia OnStatusChanged", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             DeviceTrackerARController.Instance.UnregisterDevicePoseStatusChangedCallback(OnStatusChanged);
 
 #if UNITY_EDITOR
@@ -49,8 +72,9 @@ namespace Photon_IATK
                 {
                     if (obj.gameObject.name.Contains("New"))
                     {
-                        Debug.LogFormat(GlobalVariables.red + "Destorying {0}" + GlobalVariables.endColor + " destroyVuforiaEmptyObjects() : " + this.GetType(), obj.gameObject.name);
+                        Debug.LogFormat(GlobalVariables.cLevel + "Destorying: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", obj.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                         Destroy(obj.gameObject);
+
                     }
                 }
             }
@@ -58,14 +82,14 @@ namespace Photon_IATK
 
         void OnStatusChanged(TrackableBehaviour.Status status, TrackableBehaviour.StatusInfo statusInfo)
         {
-            Debug.LogFormat(GlobalVariables.green + "Status is: {0}, statusInfo is: {1}" + GlobalVariables.endColor + " OnStatusChanged() : " + this.GetType(), status, statusInfo);
+            Debug.LogFormat(GlobalVariables.cCommon + "Status is: {0}, statusInfo is: " + statusInfo + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", status, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             if (status == TrackableBehaviour.Status.TRACKED && statusInfo ==
             TrackableBehaviour.StatusInfo.NORMAL)
             {
                 centerPlayspace();
 
-                Debug.Log(GlobalVariables.green + "Setting Location" + GlobalVariables.endColor + " OnStatusChanged() : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Setting Location", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
 
 
@@ -73,14 +97,24 @@ namespace Photon_IATK
 
         public void centerPlayspace()
         {
-            Debug.Log(GlobalVariables.green + "centerPlayspaceCalled" + GlobalVariables.endColor + ", centerPlayspace() : " + this.GetType());
+            Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Centering Playspace", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             if (PlayspaceAnchor.Instance != null)
             {
+                //to auto set this when playing
+                Vector3 tempPosition = new Vector3 (0f, -0.05f, -0.065f);
+                Vector3 tempRotation = new Vector3(90f, 0f, 0f);
+
+                if (positionOffset == Vector3.zero)
+                    positionOffset = tempPosition;
+
+                if (rotationOffset == Vector3.zero)
+                    rotationOffset = tempRotation;
+
                 Transform playspaceAnchorTransform = PlayspaceAnchor.Instance.transform;
 
-                Vector3 newPosition = this.gameObject.transform.position;
-                Quaternion newRotation = this.gameObject.transform.rotation;
+                Vector3 newPosition = this.gameObject.transform.position + positionOffset;
+                Quaternion newRotation = this.gameObject.transform.rotation * Quaternion.Euler(rotationOffset);
 
                 Vector3 oldPosition = playspaceAnchorTransform.position;
                 Quaternion oldRotation = playspaceAnchorTransform.rotation;
@@ -88,16 +122,16 @@ namespace Photon_IATK
                 playspaceAnchorTransform.position = newPosition;
                 playspaceAnchorTransform.rotation = newRotation;
 
-                Debug.Log(GlobalVariables.green + "Setting playspaceAnchorTransform," + GlobalVariables.endColor + GlobalVariables.yellow + " New position: " + newPosition + ", New Rotation: " + newRotation + GlobalVariables.endColor + GlobalVariables.red + " Old Position: " + oldPosition + ", Old Rotation: " + oldRotation + GlobalVariables.endColor + ", centerPlayspace() : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Setting playspaceAnchorTransform", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
 #if UNITY_EDITOR
                 //Can't press virtual button or hard to press virtual button in editor
-                if (Btn_Functions_For_In_Scene_Scripts.Instance != null)
-                {
-                    Debug.Log(GlobalVariables.purple + "In Editor loading new scene on centerplayspace" + GlobalVariables.endColor + " : " + "centerPlayspace()" + " : " + this.GetType());
+                //if (Btn_Functions_For_In_Scene_Scripts.Instance != null)
+                //{
+                //    Debug.Log(GlobalVariables.purple + "In Editor loading new scene on centerplayspace" + GlobalVariables.endColor + " : " + "centerPlayspace()" + " : " + this.GetType());
 
-                    Btn_Functions_For_In_Scene_Scripts.Instance.sceneManager_Load_01_SetupMenu();
-                }
+                //    Btn_Functions_For_In_Scene_Scripts.Instance.sceneManager_Load_01_SetupMenu();
+                //}
 #endif
             }
         }
@@ -116,12 +150,10 @@ namespace Photon_IATK
             }
             else if (VuforiaRuntime.Instance.InitializationState == VuforiaRuntime.InitState.INITIALIZING)
             {
-                Debug.LogFormat(GlobalVariables.yellow + "Vuforia {0}" + GlobalVariables.endColor + " Init_Unload_Vuforia() : " + this.GetType(), VuforiaRuntime.Instance.InitializationState);
+                //Nothing
             }
 
-
-            Debug.LogFormat(GlobalVariables.yellow + "Vuforia {0}" + GlobalVariables.endColor + " Init_Unload_Vuforia() : " + this.GetType(), VuforiaRuntime.Instance.InitializationState);
-
+            Debug.LogFormat(GlobalVariables.cInstance + "Vuforia: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", VuforiaRuntime.Instance.InitializationState, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
         public void enableDisableVuforia()

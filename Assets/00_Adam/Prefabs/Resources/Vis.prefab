@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 7364563067669034227}
   - component: {fileID: 8027000936905109002}
   - component: {fileID: 4860348563888633785}
+  - component: {fileID: 5856742457081787542}
   m_Layer: 0
   m_Name: Vis
   m_TagString: Vis
@@ -67,7 +68,8 @@ MonoBehaviour:
   observableSearch: 2
   Synchronization: 3
   OwnershipTransfer: 0
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 5856742457081787542}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -151,3 +153,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myDataSource: {fileID: 4900000, guid: faa53d5b54a2bac44bceedbfca16224c, type: 3}
+--- !u!114 &5856742457081787542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9105368823616601759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 253d4c6c80dacac48ad28f3c9108f335, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isUser: 0

@@ -33,25 +33,26 @@ namespace Photon_IATK
             if (PlayspaceAnchor.Instance != null)
             {
                 transform.parent = FindObjectOfType<PlayspaceAnchor>().transform;
-                Debug.Log(GlobalVariables.green + "Parenting: " + this.gameObject.name + " in " + transform.parent.name + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
+
+                Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Parenting in playspaceAnchor", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
             else
             {
-                Debug.Log(GlobalVariables.red + "No Playspace anchor exists, nothing parented" + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No Playspace anchor exists, nothing parented", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
 
             if (isUser)
             {
                 if (photonView.IsMine)
                 {
-                    Debug.Log(GlobalVariables.green + "Setting GenericNetworkManager.Instance.localUser " + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
+                    Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Setting GenericNetworkManager.Instance.localUser", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                     GenericNetworkManager.Instance.localUser = photonView;
                 }
             }
             else
             {
-                Debug.Log(GlobalVariables.red + "isUser set to false, not setting the view or the parent on this client " + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "isUser set to false, not setting the view or the parent on this client", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
 
 
@@ -82,8 +83,16 @@ namespace Photon_IATK
 
         private void OnDestroy()
         {
-            Debug.LogFormat(GlobalVariables.blue + "Destorying Object" + GlobalVariables.endColor + ", OnDestroy() : " + this.GetType(), this.gameObject.name);
-            PhotonNetwork.Destroy(this.gameObject);
+            if (PhotonNetwork.IsConnected)
+            {
+                PhotonNetwork.Destroy(this.gameObject);
+            }
+            else
+            {
+                Destroy(this.gameObject);
+            }
+  
+            Debug.LogFormat(GlobalVariables.cOnDestory + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Destorying Object", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
     }
 }
