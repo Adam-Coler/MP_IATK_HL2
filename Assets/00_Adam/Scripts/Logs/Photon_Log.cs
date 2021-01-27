@@ -63,6 +63,8 @@ namespace Photon_IATK
 
                 LogText.text += formatText("Cameras in Room", Camera.allCameras.Length.ToString());
 
+                LogText.text += formatText("Ping", PhotonNetwork.GetPing().ToString());
+                
 
 
                 //string CurrentRoom = PhotonNetwork.CurrentRoom.Players;

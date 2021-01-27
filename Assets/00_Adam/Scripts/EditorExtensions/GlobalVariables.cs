@@ -25,6 +25,8 @@ namespace Photon_IATK
         public static string cRegister = yellow;
         public static string cAlert = orange;
         public static string cTest = orange;
+        public static string cSerialize = orange;
+        public static string cFileOperations = orange;
 
         public static string endColor = "</color>";
         public static string newLine = "\n";

@@ -133,7 +133,7 @@ namespace Photon_IATK
 
                 Vector3 distanceMoved = oldPosition - playspaceAnchorTransform.transform.position;
 
-                Debug.LogFormat(GlobalVariables.cCommon + "Moving playspace anchor. Position offset: {0}, Rotation offset: {1}" + GlobalVariables.endColor + GlobalVariables.cAlert + ", Moved distance: {2}, X distance: {3}, Y distance: {4}, Z distance: {5}" + GlobalVariables.endColor + " {6}: {7} -> {8} -> {9}", positionOffset, rotationOffset, oldPosition, oldPosition.x, oldPosition.y, oldPosition.z, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                Debug.LogFormat(GlobalVariables.cCommon + "Moving playspace anchor. Position offset: {0}, Rotation offset: {1}" + GlobalVariables.endColor + GlobalVariables.cAlert + ", Moved distance: {2}, X distance: {3}, Y distance: {4}, Z distance: {5}" + GlobalVariables.endColor + " {6}: {7} -> {8} -> {9}", positionOffset, rotationOffset, distanceMoved, oldPosition.x, oldPosition.y, oldPosition.z, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 //    playspaceAnchorTransform.position += positionOffset;
                 //playspaceAnchorTransform.rotation *= Quaternion.Euler(rotationOffset);

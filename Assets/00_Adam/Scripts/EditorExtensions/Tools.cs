@@ -63,7 +63,7 @@ namespace Photon_IATK
 
             if (PhotonNetwork.IsConnected)
             {
-                Debug.LogFormat(GlobalVariables.green + "Master Client: {0}, Player Count: {1}, Active Scene Name: {2}, Game Version: {3}, Ping: {4}, Cloud Region: {5}, Best Region: {6}, Cammeras In Room: {7}" + GlobalVariables.endColor, PhotonNetwork.IsMasterClient.ToString(), Convert.ToInt32(PhotonNetwork.CountOfPlayersInRooms).ToString(), SceneManagerHelper.ActiveSceneName, PhotonNetwork.GameVersion, PhotonNetwork.GetPing().ToString(), PhotonNetwork.CloudRegion, PhotonNetwork.BestRegionSummaryInPreferences, (Camera.allCameras.Length.ToString()));
+                Debug.LogFormat(GlobalVariables.green + "Master Client: {0}, Player Count: {1}, Active Scene Name: {2}, Game Version: {3}, Ping: {4}, Cloud Region: {5}, Best Region: {6}, Cammeras In Room: {7}, Ping: {8}" + GlobalVariables.endColor, PhotonNetwork.IsMasterClient.ToString(), Convert.ToInt32(PhotonNetwork.CountOfPlayersInRooms).ToString(), SceneManagerHelper.ActiveSceneName, PhotonNetwork.GameVersion, PhotonNetwork.GetPing().ToString(), PhotonNetwork.CloudRegion, PhotonNetwork.BestRegionSummaryInPreferences, (Camera.allCameras.Length.ToString()), PhotonNetwork.GetPing());
 
                 Player[] players = PhotonNetwork.PlayerList;
                 foreach (Player player in players)
