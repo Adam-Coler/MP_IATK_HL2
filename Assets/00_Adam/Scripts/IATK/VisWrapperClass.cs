@@ -1,7 +1,10 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
 using IATK;
+using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace Photon_IATK
 {
@@ -27,6 +30,34 @@ namespace Photon_IATK
                 dataSource = _wrapperCSVDataSource;
                 updateHeaders();
             }
+        }
+
+        public string axisKey
+        {
+            get
+            {
+                string axisID = "";
+                string xAxis = getCleanString(this.xDimension.Attribute);
+                string yAxis = getCleanString(this.yDimension.Attribute);
+                string zAxis = getCleanString(this.zDimension.Attribute);                
+                axisID = xAxis + "_" + yAxis + "_" + zAxis;
+                return axisID;
+            }
+        }
+
+        private string getCleanString(string str)
+        {
+            str = Regex.Replace(str, "[^a-zA-Z0-9 ]", string.Empty).ToLower();
+            List<string> strList = str.Split(' ').Distinct<string>().ToList<string>();
+            string resturnStr = "";
+            foreach (string item in strList)
+            {
+                if (item.Length > 0)
+                {
+                    resturnStr += item[0].ToString();
+                }
+            }
+            return resturnStr;
         }
 
         private void updateHeaders()

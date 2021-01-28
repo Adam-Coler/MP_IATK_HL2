@@ -30,10 +30,7 @@ namespace Photon_IATK
 
             randomizeAttributes(newObj);
 
-            AbstractAnnotationClass annotation = newObj.AddComponent<AbstractAnnotationClass>();
-            annotation.axisBasedID = "Test";
-            annotation.myID = "Annotation_" + countOfAnnotations;
-
+            Annotation annotation = newObj.AddComponent<Annotation>();
         }
 
 
