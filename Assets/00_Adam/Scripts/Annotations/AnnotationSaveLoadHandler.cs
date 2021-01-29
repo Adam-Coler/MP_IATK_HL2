@@ -17,14 +17,10 @@ namespace Photon_IATK {
             List<SerializeableAnnotation> listOfAnnotations = _getAllAnnotationsAndConvertToSerializeableAnnotations(out saveWasSuccessfull);
             if (!saveWasSuccessfull) { return; };
 
-            //convert to a json string
-            string jsonSerializedAnnotationCollection = _convertListOfAnnotationsToJsonString(listOfAnnotations);
-
             //save with axis title
-            _saveAnnotations(jsonSerializedAnnotationCollection);
+            _saveAnnotations(listOfAnnotations);
 
             Debug.LogFormat(GlobalVariables.cCommon + "{0} {1} {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Annotations uccessfully saved", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
         }
 
         private List<SerializeableAnnotation> _getAllAnnotationsAndConvertToSerializeableAnnotations(out bool wasSuccessfull)
@@ -58,42 +54,61 @@ namespace Photon_IATK {
             return listOfAnnotations;
         }
 
-        private string _convertListOfAnnotationsToJsonString(List<SerializeableAnnotation> listOfAnnotations, bool prettyPrint = false)
+        private string _convertSerializableAnnotationsToJsonString(SerializeableAnnotation serializeableAnnotation, bool prettyPrint = false)
         {
-
-            SerializableAnnotationCollection serializableAnnotationCollection = new SerializableAnnotationCollection();
-
-            serializableAnnotationCollection.annotations = listOfAnnotations;
-            serializableAnnotationCollection.parentVisAxisKey = _parentVisAxisKey();
-
-
 #if UNITY_EDITOR
             prettyPrint = true;
 #endif
-            return JsonUtility.ToJson(serializableAnnotationCollection, prettyPrint);
+            return JsonUtility.ToJson(serializeableAnnotation, prettyPrint);
         }
 
-        private void _saveAnnotations(string jsonStringToSave)
+        private string _getFolderPath()
+        {
+            //Annotations are saved per VisState in a folder with the names of that vis axis
+            string mainFolderName = GlobalVariables.annotationSaveFolder;
+            string mainFolderPath = Path.Combine(Application.persistentDataPath, mainFolderName);
+            //_checkAndMakeDirectory(mainFolderPath);
+
+            string date = System.DateTime.Now.ToString("yyyyMMdd");
+            string parentVisAxisKey = _getParentVisAxisKey();
+            string subFolderName = date + "_" + parentVisAxisKey;
+            string subfolderPath = Path.Combine(mainFolderPath, subFolderName);
+            _checkAndMakeDirectory(subfolderPath);
+
+            return subfolderPath;
+        }
+
+        private void _saveAnnotations(List<SerializeableAnnotation> listOfSerializeableAnnotations)
         {
 
-            string folderName = GlobalVariables.annotationSaveFolder;
-            string fileName = _parentVisAxisKey() + ".json";
+            string subfolderPath = _getFolderPath();
 
-            string filepath = Path.Combine(Application.persistentDataPath, folderName);
-
-            if (!Directory.Exists(filepath))
+            foreach (SerializeableAnnotation serializeableAnnotation in listOfSerializeableAnnotations)
             {
-                Debug.LogFormat(GlobalVariables.cFileOperations + "Makeing new folder named {0}, full path: {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", folderName, filepath, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                string filename = serializeableAnnotation.myAnnotationNumber.ToString("D3");
+                filename += "_" + serializeableAnnotation.myAnnotationType.ToString() + ".json";
 
-                Directory.CreateDirectory(filepath);
+                string jsonFormatAnnotion = _convertSerializableAnnotationsToJsonString(serializeableAnnotation);
+
+                string fullFilePath = Path.Combine(subfolderPath, filename);
+                Debug.LogFormat(GlobalVariables.cFileOperations + "Saving {0}, full path: {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", filename, fullFilePath, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                System.IO.File.WriteAllText(fullFilePath, jsonFormatAnnotion);
             }
-            string fullSavePath = Path.Combine(filepath, fileName);
-            System.IO.File.WriteAllText(fullSavePath, jsonStringToSave);
 
-            Debug.LogFormat(GlobalVariables.cFileOperations + "Annotations saved for {0}, full path: {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", "AxisID?", fullSavePath, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cFileOperations + "Annotations saved for {0}, full path: {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", _getParentVisAxisKey(), subfolderPath, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
-        private string _parentVisAxisKey() {
+        private void _checkAndMakeDirectory(string directory)
+        {
+            if (!Directory.Exists(directory))
+            {
+                Debug.LogFormat(GlobalVariables.cFileOperations + "Makeing new folder{0}, full path: {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", "", directory, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                Directory.CreateDirectory(directory);
+            }
+        }
+
+        private string _getParentVisAxisKey() {
 
             string visAxisKey = "";
 
@@ -122,6 +137,31 @@ namespace Photon_IATK {
 
         public void loadAnnotations()
         {
+            //get file path
+            string getFolderPath = _getFolderPath();
+
+            string[] filePaths = Directory.GetFiles(getFolderPath, "*.json");
+
+            Debug.LogFormat(GlobalVariables.cFileOperations + "{0} .json annotation records found in {1}, {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", filePaths.Length, getFolderPath, "Loading annotations now.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            foreach (string jsonPath in filePaths) {
+                //Load file
+                SerializeableAnnotation serializeableAnnotation = JsonUtility.FromJson<SerializeableAnnotation>(File.ReadAllText(jsonPath));
+
+                //Don't load them if they were deleated
+                if (serializeableAnnotation.isDeleted) { continue; }
+
+                //Make the annotation holder game object
+                GameObject annotationHolder = new GameObject(serializeableAnnotation.myAnnotationNumber + "_" + serializeableAnnotation.myAnnotationType);
+
+                //add the Annotation class
+                Annotation annotation = annotationHolder.AddComponent<Annotation>();
+
+                //add the loaded info from the serialized annotation to the actual annotation
+                annotation.setUpFromSerializeableAnnotation(serializeableAnnotation);
+            } 
+
+            //loop each file
 
         }
     }

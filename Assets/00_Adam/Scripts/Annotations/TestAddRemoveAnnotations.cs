@@ -31,6 +31,9 @@ namespace Photon_IATK
             randomizeAttributes(newObj);
 
             Annotation annotation = newObj.AddComponent<Annotation>();
+
+            VisWrapperClass wrapperClass = GameObject.FindGameObjectWithTag("Vis").GetComponent<VisWrapperClass>();
+            annotation.myAnnotationNumber = wrapperClass.getCountOfAnnotationsAndIncrement();
         }
 
 

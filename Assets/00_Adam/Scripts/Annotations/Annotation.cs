@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+using Photon.Pun;
 
 namespace Photon_IATK
 {
@@ -14,6 +14,7 @@ namespace Photon_IATK
         public string myVisYAxis;
         public string myVisZAxis;
         public string myTextContent;
+        public int myAnnotationNumber;
 
         public typesOfAnnotations myAnnotationType;
 
@@ -22,6 +23,97 @@ namespace Photon_IATK
         }
 
         private bool isDeleted = false;
+
+        private GameObject myVisParent;
+        private GameObject myAnnotationCollectionParent;
+
+        private void Awake()
+        {
+            Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "New annotation loaded", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            //attach to or make parents
+            if (myVisParent == null || myAnnotationCollectionParent == null) { setupParentObjects(); }
+
+            //set axis to that parent
+            _setAxisNames();
+
+            //setup the 
+        }
+
+        private void _setTrackerObject()
+        {
+            GameObject prefabGameObject;
+            //this will add the visual representation to the annotation
+            switch (myAnnotationType)
+            {
+                case typesOfAnnotations.TEST_TRACKER:
+
+                    prefabGameObject = Resources.Load<GameObject>("Tracker");
+
+                    break;
+                default:
+                    Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Loading this annotation type is not supported or the type is null.", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                    return;
+            }
+
+            if (PhotonNetwork.IsConnectedAndReady)
+            {
+                prefabGameObject = PhotonNetwork.Instantiate(prefabGameObject.name, Vector3.zero, Quaternion.identity);
+            }
+            else
+            {
+                prefabGameObject = Instantiate(prefabGameObject, Vector3.zero, Quaternion.identity);
+            }
+
+            prefabGameObject.transform.parent = this.transform;
+            prefabGameObject.transform.localPosition = Vector3.zero;
+            prefabGameObject.transform.localRotation = Quaternion.identity;
+        }
+
+        private void _setAxisNames()
+        {
+            VisWrapperClass myParentsVisWrapperClass = myVisParent.GetComponent<VisWrapperClass>();
+            
+            if (myParentsVisWrapperClass == null)
+            {
+                myVisXAxis = "Fake X Axis Title";
+                myVisYAxis = "Fake Y Axis Title";
+                myVisZAxis = "Fake Z Axis Title";
+            }
+            else
+            {
+                myVisXAxis = myParentsVisWrapperClass.xDimension.Attribute;
+                myVisYAxis = myParentsVisWrapperClass.yDimension.Attribute;
+                myVisZAxis = myParentsVisWrapperClass.zDimension.Attribute;
+            }
+        }
+        
+        private GameObject _findGameObjectOrMakeOneWithTag(string tag)
+        {
+            GameObject[] gameObjectsFound = GameObject.FindGameObjectsWithTag(tag);
+            GameObject output;
+
+            if (gameObjectsFound.Length == 0)
+            {
+                Debug.LogFormat(GlobalVariables.cAlert + "No GameObjects found with tag: {0}. Makeing one now{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", tag, "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                output = new GameObject("EmmulatedVisObject");
+                output.tag = GlobalVariables.visTag;
+            }
+            else
+            {
+                Debug.LogFormat(GlobalVariables.cCommon + "{0} GameObejcts found with Tag: {1}. {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", gameObjectsFound.Length, tag, "returning the first found.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                output = gameObjectsFound[0];
+            }
+
+            return output;
+        }
+
+        private void setupParentObjects()
+        {
+            myVisParent = _findGameObjectOrMakeOneWithTag(GlobalVariables.visTag);
+            myAnnotationCollectionParent = _findGameObjectOrMakeOneWithTag(GlobalVariables.annotationCollectionTag);
+        }
 
         public SerializeableAnnotation getSerializeableAnnotation()
         {
@@ -46,68 +138,49 @@ namespace Photon_IATK
             serializeableAnnotation.myVisYAxis = myVisYAxis;
             serializeableAnnotation.myVisZAxis = myVisZAxis;
             serializeableAnnotation.myTextContent = myTextContent;
+            serializeableAnnotation.myAnnotationNumber = myAnnotationNumber;
 
             serializeableAnnotation.myAnnotationType = myAnnotationType.ToString();
 
             return serializeableAnnotation;
         }
          
-        public Annotation loadFromSerializeableAnnotation(SerializeableAnnotation serializeableAnnotation)
+        public Annotation setUpFromSerializeableAnnotation(SerializeableAnnotation serializeableAnnotation)
         {
-            GameObject annotationHolder = new GameObject("AnnotationHolder");
-            attachToVisObject(annotationHolder);
-            setObjectLocalTransformToZero(annotationHolder);
+            Debug.LogFormat(GlobalVariables.cFileOperations + "{0}{1}" + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", "Loading annotation from file", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            //Now we set the transform of the clean gameObject that holds the annotation
-            //Later we will add the actual visualized annotation that will pull its representation from this class
-
-            Vector3 localPosition = new Vector3(serializeableAnnotation.myLocalXPosition, serializeableAnnotation.myLocalYPosition, serializeableAnnotation.myLocalZPosition);
-            annotationHolder.transform.localPosition = localPosition;
-
-            Quaternion localRotation = new Quaternion(serializeableAnnotation.myLocalXRotation, serializeableAnnotation.myLocalYRotation, serializeableAnnotation.myLocalZRotation, serializeableAnnotation.myLocalWRotation);
-            annotationHolder.transform.localRotation = localRotation;
-
-            Vector3 localScale = new Vector3(serializeableAnnotation.myLocalScaleX, serializeableAnnotation.myLocalScaleY, serializeableAnnotation.myLocalScaleZ);
-            annotationHolder.transform.localScale = localScale;
-
-            annotationHolder.tag = GlobalVariables.annotationTag;
+            this.gameObject.tag = GlobalVariables.annotationTag;
 
             //Now we set up the annotation componenet
-            Annotation thisAnnotation = annotationHolder.AddComponent<Annotation>();
+            isDeleted = serializeableAnnotation.isDeleted;
+            myVisXAxis = serializeableAnnotation.myVisXAxis;
+            myVisYAxis = serializeableAnnotation.myVisYAxis;
+            myVisZAxis = serializeableAnnotation.myVisZAxis;
+            myTextContent = serializeableAnnotation.myTextContent;
+            myAnnotationNumber = serializeableAnnotation.myAnnotationNumber;
 
-            thisAnnotation.isDeleted = serializeableAnnotation.isDeleted;
-            thisAnnotation.myVisXAxis = serializeableAnnotation.myVisXAxis;
-            thisAnnotation.myVisYAxis = serializeableAnnotation.myVisYAxis;
-            thisAnnotation.myVisZAxis = serializeableAnnotation.myVisZAxis;
-            thisAnnotation.myTextContent = serializeableAnnotation.myTextContent;
+            myAnnotationType = (typesOfAnnotations)Enum.Parse(typeof(typesOfAnnotations), serializeableAnnotation.myAnnotationType, true);
 
-            thisAnnotation.myAnnotationType = (typesOfAnnotations)Enum.Parse(typeof(typesOfAnnotations), serializeableAnnotation.myAnnotationType, true);
+            this.gameObject.transform.parent = myAnnotationCollectionParent.transform;
 
-            return thisAnnotation;
-        }
+            _setTrackerObject();
 
-        public void attachToVisObject(GameObject annotationHolder)
-        {
-            GameObject[] visGameObjects = GameObject.FindGameObjectsWithTag("Vis");
-            GameObject visGameObject;
+            Vector3 localPosition = new Vector3(serializeableAnnotation.myLocalXPosition, serializeableAnnotation.myLocalYPosition, serializeableAnnotation.myLocalZPosition);
+            this.gameObject.transform.localPosition = localPosition;
 
-            if (visGameObjects.Length == 0)
-            {
-                Debug.LogFormat(GlobalVariables.cAlert + "{0} {1} {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "No Vis objects found, making an empty object at (0,0,0) and attaching annotation to it.", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Quaternion localRotation = new Quaternion(serializeableAnnotation.myLocalXRotation, serializeableAnnotation.myLocalYRotation, serializeableAnnotation.myLocalZRotation, serializeableAnnotation.myLocalWRotation);
+            this.gameObject.transform.localRotation = localRotation;
 
-                visGameObject = new GameObject("EmmulatedVisObject");
-            }
-            else
-            {
-                Debug.LogFormat(GlobalVariables.cCommon + "{0} {1} {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", visGameObjects.Length, " Vis objects found. Attaching the annotation to the first one found.", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-                visGameObject = visGameObjects[0];
-            }
+            Vector3 localScale = new Vector3(serializeableAnnotation.myLocalScaleX, serializeableAnnotation.myLocalScaleY, serializeableAnnotation.myLocalScaleZ);
+            this.gameObject.transform.localScale = localScale;
 
-            annotationHolder.transform.parent = visGameObject.transform;
+            return this;
         }
 
         private void setObjectLocalTransformToZero(GameObject obj)
         {
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}" + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", obj.name, " moving to local zero", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
             obj.transform.localScale = new Vector3 (1f, 1f, 1f);
             obj.transform.localPosition = Vector3.zero;
             obj.transform.localRotation = Quaternion.identity;

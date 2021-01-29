@@ -35,7 +35,9 @@ namespace Photon_IATK
         public static string Vive = "VIVE";
         public static string HL2 = "HL2";
 
+        public static string visTag = "Vis";
         public static string annotationTag = "Annotation";
+        public static string annotationCollectionTag = "AnnotationCollection";
         public static string annotationSaveFolder = "AnnotationFiles";
 
         public enum allSymbols

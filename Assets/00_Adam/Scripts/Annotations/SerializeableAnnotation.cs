@@ -6,12 +6,6 @@ using UnityEngine;
 //These classes are a seralizeable form of the annotation class
 namespace Photon_IATK
 {
-    [System.Serializable]
-    public class SerializableAnnotationCollection
-    {
-        public string parentVisAxisKey;
-        public List<SerializeableAnnotation> annotations = new List<SerializeableAnnotation>();
-    }
 
     [System.Serializable]
     public class SerializeableAnnotation
@@ -36,10 +30,12 @@ namespace Photon_IATK
         public bool isDeleted = false;
         public string myAnnotationType;
         public string myTextContent;
+        public int myAnnotationNumber;
 
         //type
         //content
         //time
+        //datasource
 
         //line points?
 
