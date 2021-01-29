@@ -26,7 +26,9 @@ namespace Photon_IATK
             tracker.transform.parent = newObj.transform;
             tracker.transform.localPosition = Vector3.zero;
             tracker.transform.localRotation = Quaternion.identity;
-            tracker.transform.localScale = new Vector3(.1f, .1f, .1f);
+
+
+            newObj.transform.localScale = new Vector3(.5f, .5f, .5f);
 
             randomizeAttributes(newObj);
 

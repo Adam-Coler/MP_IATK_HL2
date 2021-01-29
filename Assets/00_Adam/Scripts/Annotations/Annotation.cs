@@ -72,9 +72,9 @@ namespace Photon_IATK
 
         private void _setAxisNames()
         {
-            VisWrapperClass myParentsVisWrapperClass = myVisParent.GetComponent<VisWrapperClass>();
+            VisualizationRPC_Calls myParentsVisRPCClass = myVisParent.GetComponent<VisualizationRPC_Calls>();
             
-            if (myParentsVisWrapperClass == null)
+            if (myParentsVisRPCClass == null)
             {
                 myVisXAxis = "Fake X Axis Title";
                 myVisYAxis = "Fake Y Axis Title";
@@ -82,37 +82,16 @@ namespace Photon_IATK
             }
             else
             {
-                myVisXAxis = myParentsVisWrapperClass.xDimension.Attribute;
-                myVisYAxis = myParentsVisWrapperClass.yDimension.Attribute;
-                myVisZAxis = myParentsVisWrapperClass.zDimension.Attribute;
+                myVisXAxis = myParentsVisRPCClass.xDimension;
+                myVisYAxis = myParentsVisRPCClass.yDimension;
+                myVisZAxis = myParentsVisRPCClass.zDimension;
             }
         }
         
-        private GameObject _findGameObjectOrMakeOneWithTag(string tag)
-        {
-            GameObject[] gameObjectsFound = GameObject.FindGameObjectsWithTag(tag);
-            GameObject output;
-
-            if (gameObjectsFound.Length == 0)
-            {
-                Debug.LogFormat(GlobalVariables.cAlert + "No GameObjects found with tag: {0}. Makeing one now{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", tag, "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
-                output = new GameObject("EmmulatedVisObject");
-                output.tag = GlobalVariables.visTag;
-            }
-            else
-            {
-                Debug.LogFormat(GlobalVariables.cCommon + "{0} GameObejcts found with Tag: {1}. {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", gameObjectsFound.Length, tag, "returning the first found.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-                output = gameObjectsFound[0];
-            }
-
-            return output;
-        }
-
         private void setupParentObjects()
         {
-            myVisParent = _findGameObjectOrMakeOneWithTag(GlobalVariables.visTag);
-            myAnnotationCollectionParent = _findGameObjectOrMakeOneWithTag(GlobalVariables.annotationCollectionTag);
+            HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.visTag, out myVisParent, true, System.Reflection.MethodBase.GetCurrentMethod());
+            HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.annotationCollectionTag, out myAnnotationCollectionParent, true, System.Reflection.MethodBase.GetCurrentMethod());
         }
 
         public SerializeableAnnotation getSerializeableAnnotation()
@@ -176,16 +155,6 @@ namespace Photon_IATK
 
             return this;
         }
-
-        private void setObjectLocalTransformToZero(GameObject obj)
-        {
-            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}" + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", obj.name, " moving to local zero", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
-            obj.transform.localScale = new Vector3 (1f, 1f, 1f);
-            obj.transform.localPosition = Vector3.zero;
-            obj.transform.localRotation = Quaternion.identity;
-        }
-
     }
 }
 

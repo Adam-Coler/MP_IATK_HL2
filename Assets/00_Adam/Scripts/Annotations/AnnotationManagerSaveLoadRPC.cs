@@ -7,7 +7,7 @@ using System.IO;
 
 //Saving is handled by saving a Json for each annotation
 namespace Photon_IATK { 
-    public class AnnotationSaveLoadHandler : MonoBehaviour
+    public class AnnotationManagerSaveLoadRPC : MonoBehaviour
     {
         public void saveAnnotations()
         {
@@ -110,29 +110,13 @@ namespace Photon_IATK {
 
         private string _getParentVisAxisKey() {
 
-            string visAxisKey = "";
+            GameObject visGameObject;
+            if (!HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.visTag, out visGameObject, false, System.Reflection.MethodBase.GetCurrentMethod())) { return "EmmulatedVisObject"; }
 
-            GameObject[] visGameObjects = GameObject.FindGameObjectsWithTag("Vis");
+            VisualizationRPC_Calls visualizationRPC_Calls;
+            if (!HelperFunctions.GetComponent<VisualizationRPC_Calls>(out visualizationRPC_Calls, System.Reflection.MethodBase.GetCurrentMethod())) { return "EmmulatedVisObject"; }
 
-            if (visGameObjects.Length == 0)
-            {
-                Debug.LogFormat(GlobalVariables.cAlert + "{0} {1} {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "No Vis objects found, Using EmmulatedVisKey.", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
-                visAxisKey = "EmmulatedVisObject";
-            }
-            else
-            {
-                var visGameObject = visGameObjects[0].GetComponent<VisWrapperClass>();
-                if (visGameObject == null) {
-                    visAxisKey = "EmmulatedVisObject";
-                }
-                else
-                {
-                    visAxisKey = visGameObject.axisKey;
-                }
-            }
-
-            return visAxisKey;
+            return visualizationRPC_Calls.axisKey;
         }
 
         public void loadAnnotations()

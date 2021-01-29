@@ -11,8 +11,7 @@ namespace Photon_IATK
         public static OnRPCVisualisationUpdated RPCvisualisationUpdatedDelegate;
 
         private VisWrapperClass thisVis;
-
-        public PhotonView thisPhotonView;
+        private PhotonView thisPhotonView;
 
         public string[] loadedCSVHeaders { get; set; }
 
@@ -48,6 +47,14 @@ namespace Photon_IATK
             get
             {
                 return thisVis.sizeDimension;
+            }
+        }
+
+        public string axisKey
+        {
+            get
+            {
+                return thisVis.axisKey;
             }
         }
 

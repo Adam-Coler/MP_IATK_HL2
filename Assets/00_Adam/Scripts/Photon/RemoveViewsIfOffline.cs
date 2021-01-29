@@ -13,21 +13,11 @@ namespace Photon_IATK
             if (PhotonNetwork.IsConnected) { return; }
             //removes photon views if not connected
 
-            removeComponent<PhotonView>();
-            removeComponent<PhotonAnimatorView>();
-            removeComponent<PhotonTransformView>();
-            removeComponent<RandomizePhotonViewID>();
+            HelperFunctions.RemoveComponent<PhotonView>(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
+            HelperFunctions.RemoveComponent<PhotonAnimatorView>(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
+            HelperFunctions.RemoveComponent<PhotonTransformView>(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
+            HelperFunctions.RemoveComponent<RandomizePhotonViewID>(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
         }
-
-        private void removeComponent<T>() where T : Component
-        {
-            T component = this.gameObject.GetComponent<T>();
-            if (component == null) { return; }
-
-            Debug.LogFormat(GlobalVariables.cOnDestory + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Destorying ", component, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
-            Destroy(component);
-
-        }
+        
     }
 }
