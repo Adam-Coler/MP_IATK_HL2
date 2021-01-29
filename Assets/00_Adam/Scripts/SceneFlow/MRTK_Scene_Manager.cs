@@ -51,7 +51,12 @@ namespace Photon_IATK
 
 
         #region button interface
+        public void load_00_EntryPoint()
+        {
+            Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Loading new level", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
+            _load_00_MainLevel();
+        }
         public void load_01_SetupMenu()
         {
             Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Loading new level", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
@@ -112,6 +117,14 @@ namespace Photon_IATK
             if (isMine && checkIfSceneIsLoaded("01_SetupMenu"))
             {
                 await sceneSystem.LoadContent("01_SetupMenu", LoadSceneMode.Single);
+            }
+        }
+
+        private async System.Threading.Tasks.Task _load_00_MainLevel()
+        {
+            if (isMine)
+            {
+                await sceneSystem.LoadContent("00_EntryPoint", LoadSceneMode.Single);
             }
         }
 

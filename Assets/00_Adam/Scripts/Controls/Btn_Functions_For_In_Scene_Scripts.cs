@@ -11,7 +11,7 @@ namespace Photon_IATK
 
         private PhotonView photonView;
         private bool isMine;
-        public static Btn_Functions_For_In_Scene_Scripts Instance;
+        //public static Btn_Functions_For_In_Scene_Scripts Instance;
 
         #endregion
 
@@ -19,24 +19,24 @@ namespace Photon_IATK
 
         private void Awake()
         {
-            if (Instance == null)
-            {
-                Debug.LogFormat(GlobalVariables.cSingletonSetting + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Setting Btn_Functions_For_In_Scene_Scripts.Instance ", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            //if (Instance == null)
+            //{
+            //    Debug.LogFormat(GlobalVariables.cSingletonSetting + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Setting Btn_Functions_For_In_Scene_Scripts.Instance ", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-                Instance = this;
-            }
-            else if (Instance != this && Instance != null)
-            {
-                Debug.LogFormat(GlobalVariables.cSingletonSetting + "{0}, Destroying then setting Btn_Functions_For_In_Scene_Scripts.Instance." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", Instance.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            //    Instance = this;
+            //}
+            //else if (Instance != this && Instance != null)
+            //{
+            //    Debug.LogFormat(GlobalVariables.cSingletonSetting + "{0}, Destroying then setting Btn_Functions_For_In_Scene_Scripts.Instance." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", Instance.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-                Destroy(Instance.gameObject);
+            //    Destroy(Instance.gameObject);
 
-                Instance = this;
-            } 
-            else
-            {
-                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Failed to make instance", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-            }
+            //    Instance = this;
+            //} 
+            //else
+            //{
+            //    Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Failed to make instance", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            //}
         }
 
         private bool checkSetViewOwnership()
@@ -110,6 +110,10 @@ namespace Photon_IATK
         #region Btn_Calls
 
         #region sceneManager
+        public void sceneManager_Load_Main()
+        {
+            GetOrAddComponent<MRTK_Scene_Manager>().load_00_EntryPoint();
+        }
         public void sceneManager_Load_01_SetupMenu()
         {
             GetOrAddComponent<MRTK_Scene_Manager>().load_01_SetupMenu();
@@ -181,7 +185,25 @@ namespace Photon_IATK
                 Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No PhotonLog in Scene.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
+        #endregion
 
+        #region VisIATK
+        public void LoadRemoveVis()
+        {
+            GetOrAddComponent<NetworkedLoadVisualisation>().LoadVis();
+        }
+        #endregion
+
+        #region Annotations
+        public void SaveAnnotations()
+        {
+            GetOrAddComponent<AnnotationManagerSaveLoadRPC>().saveAnnotations();
+        }
+
+        public void LoadAnnotations()
+        {
+            GetOrAddComponent<AnnotationManagerSaveLoadRPC>().loadAnnotations();
+        }
         #endregion
 
         #endregion

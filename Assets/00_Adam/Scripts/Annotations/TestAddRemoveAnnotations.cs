@@ -10,6 +10,14 @@ namespace Photon_IATK
         public int countOfAnnotations = 0;
         public GameObject trackerPrefab;
 
+        private void Awake()
+        {
+            if (trackerPrefab == null)
+            {
+                trackerPrefab = Resources.Load<GameObject>("Tracker");
+            }
+        }
+
         public void makeAnnotationDummy()
         {
             countOfAnnotations += 1;

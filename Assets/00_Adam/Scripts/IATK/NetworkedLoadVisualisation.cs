@@ -49,6 +49,10 @@ namespace Photon_IATK
 
         private void Awake()
         {
+            if (Prefab == null)
+            {
+                Prefab = Resources.Load<GameObject>("Vis");
+            }
             if (!isAutoLoad) { return; }
             LoadVis();
         }
