@@ -35,6 +35,8 @@ namespace Photon_IATK
         public static string Vive = "VIVE";
         public static string HL2 = "HL2";
 
+        public static string debugLogTag = "DebugLog";
+        public static string photonLogTag = "PhotonLog";
         public static string visTag = "Vis";
         public static string annotationTag = "Annotation";
         public static string annotationCollectionTag = "AnnotationCollection";

@@ -160,29 +160,33 @@ namespace Photon_IATK
 
         public void showDebugLog()
         {
-            if (GameObject.FindGameObjectWithTag("DebugLog") != null)
+            GameObject debugLog;
+            if (HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.debugLogTag, out debugLog, false, System.Reflection.MethodBase.GetCurrentMethod()))
             {
-                GameObject menuObj = GameObject.FindGameObjectWithTag("DebugLog").transform.GetChild(0).gameObject;
-                GameObject.FindGameObjectWithTag("DebugLog").transform.GetChild(0).gameObject.SetActive(!menuObj.activeSelf);
-                Debug.LogFormat(GlobalVariables.cCommon + "Setting DebugLog Active: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", !menuObj.activeSelf, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                Destroy(debugLog);
             }
             else
             {
-                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No DebugLog in Scene", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                debugLog = Resources.Load<GameObject>("Log");
+                debugLog = Instantiate(debugLog);
+                debugLog.AddComponent<Debug_Log>();
+                debugLog.tag = GlobalVariables.debugLogTag;
             }
         }
 
         public void showPhotonLog()
         {
-            if (GameObject.FindGameObjectWithTag("PhotonLog") != null)
+            GameObject photonLog;
+            if (HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.photonLogTag, out photonLog, false, System.Reflection.MethodBase.GetCurrentMethod()))
             {
-                GameObject menuObj = GameObject.FindGameObjectWithTag("PhotonLog").transform.GetChild(0).gameObject;
-                GameObject.FindGameObjectWithTag("PhotonLog").transform.GetChild(0).gameObject.SetActive(!menuObj.activeSelf);
-                Debug.LogFormat(GlobalVariables.cCommon + "Setting PhotonLog Active: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", !menuObj.activeSelf, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-            }
+                Destroy(photonLog);
+            } 
             else
             {
-                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No PhotonLog in Scene.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                photonLog = Resources.Load<GameObject>("Log");
+                photonLog = Instantiate(photonLog);
+                photonLog.AddComponent<Photon_Log>();
+                photonLog.tag = GlobalVariables.photonLogTag;
             }
         }
         #endregion

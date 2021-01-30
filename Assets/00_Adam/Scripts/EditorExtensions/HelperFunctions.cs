@@ -44,7 +44,26 @@ namespace Photon_IATK
             return chunks;
         }
 
-        private static void SetObjectLocalTransformToZero(GameObject obj, MethodBase fromMethodBase)
+        public static bool GetComponentInChild<T>(out T component, GameObject parentObject, MethodBase fromMethodBase) where T : Component
+        {
+            
+            T[] componenets =  parentObject.GetComponentsInChildren<T>();
+            if (componenets == null)
+            {
+                component = null;
+                Debug.LogFormat(GlobalVariables.cError + "{0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", component.GetType(), " not found, returning null", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+                return false;
+            }
+            else
+            {
+                Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", componenets.Length, " components found, returning the first", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+                component = componenets[0];
+                return true;
+
+            }
+        }
+
+        public static void SetObjectLocalTransformToZero(GameObject obj, MethodBase fromMethodBase)
         {
             Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", obj.name, " moving to local zero", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
 
@@ -52,6 +71,23 @@ namespace Photon_IATK
             obj.transform.localPosition = Vector3.zero;
             obj.transform.localRotation = Quaternion.identity;
         }
+
+
+        public static bool GetComponent<T>(out T component, MethodBase fromMethodBase) where T : Component
+        {
+            component = Object.FindObjectOfType(typeof(T)) as T;
+            if (component != null)
+            {
+                Debug.LogFormat(GlobalVariables.cCommon + "Found {0}: On {1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", component.GetType(), component.gameObject.name, "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+                return true;
+            }
+            else
+            {
+                Debug.LogFormat(GlobalVariables.cError + "No component found {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", component.GetType(), component.gameObject.name, "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+                return false;
+            }
+        }
+
 
         public static bool FindGameObjectOrMakeOneWithTag(string tag, out GameObject returnedGameObject, bool makeOneIfNotFound, MethodBase fromMethodBase)
         {
@@ -82,21 +118,6 @@ namespace Photon_IATK
             }
 
             return true;
-        }
-
-        public static bool GetComponent<T>(out T component, MethodBase fromMethodBase) where T : Component
-        {
-            component = Object.FindObjectOfType(typeof(T)) as T;
-            if (component != null)
-            {
-                Debug.LogFormat(GlobalVariables.cCommon + "Found {0}: On {1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", component.GetType(), component.gameObject.name, "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
-                return true;
-            }
-            else
-            {
-                Debug.LogFormat(GlobalVariables.cError + "No component found {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", component.GetType(), component.gameObject.name, "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
-                return false;
-            }
         }
 
         public static bool RemoveComponent<T>(GameObject self, MethodBase fromMethodBase) where T : Component
