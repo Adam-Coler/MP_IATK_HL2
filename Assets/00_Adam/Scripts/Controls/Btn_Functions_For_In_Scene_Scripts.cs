@@ -144,18 +144,22 @@ namespace Photon_IATK
 
         public void showVisInterface()
         {
-            if (GameObject.FindGameObjectWithTag("VisMenu") != null)
+            GameObject visMenu;
+            if (HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.visInterfaceMenuTag, out visMenu, false, System.Reflection.MethodBase.GetCurrentMethod()))
             {
-                GameObject menuObj = GameObject.FindGameObjectWithTag("VisMenu").transform.GetChild(0).gameObject;
+                Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying VisMenu{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-                GameObject.FindGameObjectWithTag("VisMenu").transform.GetChild(0).gameObject.SetActive(!menuObj.activeSelf);
-
-                Debug.LogFormat(GlobalVariables.cCommon + "Setting VisMenu Active: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", menuObj.activeSelf, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                Destroy(visMenu);
             }
             else
             {
-                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No VisMenu in Scene.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                visMenu = Resources.Load<GameObject>("VisInterfaceMenu");
+                visMenu = Instantiate(visMenu);
+                visMenu.tag = GlobalVariables.visInterfaceMenuTag;
             }
+
+            Debug.LogFormat(GlobalVariables.cCommon + "Loading VisMenu{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+  
         }
 
         public void showDebugLog()
@@ -163,6 +167,8 @@ namespace Photon_IATK
             GameObject debugLog;
             if (HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.debugLogTag, out debugLog, false, System.Reflection.MethodBase.GetCurrentMethod()))
             {
+                Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying Debug Log{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
                 Destroy(debugLog);
             }
             else
@@ -171,6 +177,8 @@ namespace Photon_IATK
                 debugLog = Instantiate(debugLog);
                 debugLog.AddComponent<Debug_Log>();
                 debugLog.tag = GlobalVariables.debugLogTag;
+
+                Debug.LogFormat(GlobalVariables.cCommon + "Loading Debug Log{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -179,6 +187,8 @@ namespace Photon_IATK
             GameObject photonLog;
             if (HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.photonLogTag, out photonLog, false, System.Reflection.MethodBase.GetCurrentMethod()))
             {
+                Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying Photon Log{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
                 Destroy(photonLog);
             } 
             else
@@ -187,6 +197,8 @@ namespace Photon_IATK
                 photonLog = Instantiate(photonLog);
                 photonLog.AddComponent<Photon_Log>();
                 photonLog.tag = GlobalVariables.photonLogTag;
+
+                Debug.LogFormat(GlobalVariables.cCommon + "Loading Photon Log{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
         #endregion

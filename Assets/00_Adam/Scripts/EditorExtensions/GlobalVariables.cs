@@ -41,6 +41,7 @@ namespace Photon_IATK
         public static string annotationTag = "Annotation";
         public static string annotationCollectionTag = "AnnotationCollection";
         public static string annotationSaveFolder = "AnnotationFiles";
+        public static string visInterfaceMenuTag = "VisMenu";
 
         public enum allSymbols
         {
