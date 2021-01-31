@@ -14,6 +14,8 @@ namespace Photon_IATK
         public ulong closestTrackerID;
         public InputDevice trackingReferanceDevice;
 
+        public bool isUseClosestTrackingReferance = true;
+
         public Vector3 positionOffset;
         public Vector3 rotationOffset;
 
@@ -100,15 +102,32 @@ namespace Photon_IATK
                 }
 
                 float tmpDistanceToTrackingReferance = Vector3.Distance(Camera.main.transform.position, closestTrackerPosition);
-                if (tmpDistanceToTrackingReferance < distanceToClosestTrackingReferance)
-                {
-                    distanceToClosestTrackingReferance = tmpDistanceToTrackingReferance;
-                    setPosition();
-                    centerPlayspace();
 
-                    Debug.LogFormat(GlobalVariables.yellow + "Moving to closest trackingReferance: {0}, Position: {1}, Rotation: {2} " + GlobalVariables.endColor + " : " + "getTrackingReferances()" + " : " + this.GetType(), distanceToClosestTrackingReferance, closestTrackerPosition, closestTrackerRotation);
-                    return;
+                if (isUseClosestTrackingReferance)
+                {
+                    if (tmpDistanceToTrackingReferance < distanceToClosestTrackingReferance)
+                    {
+                        distanceToClosestTrackingReferance = tmpDistanceToTrackingReferance;
+                        setPosition();
+                        centerPlayspace();
+
+                        Debug.LogFormat(GlobalVariables.yellow + "Moving to closest trackingReferance: {0}, Position: {1}, Rotation: {2} " + GlobalVariables.endColor + " : " + "getTrackingReferances()" + " : " + this.GetType(), distanceToClosestTrackingReferance, closestTrackerPosition, closestTrackerRotation);
+                        return;
+                    }
                 }
+                else
+                {
+                    if (tmpDistanceToTrackingReferance > distanceToClosestTrackingReferance)
+                    {
+                        distanceToClosestTrackingReferance = tmpDistanceToTrackingReferance;
+                        setPosition();
+                        centerPlayspace();
+
+                        Debug.LogFormat(GlobalVariables.yellow + "Moving to farthest trackingReferance: {0}, Position: {1}, Rotation: {2} " + GlobalVariables.endColor + " : " + "getTrackingReferances()" + " : " + this.GetType(), distanceToClosestTrackingReferance, closestTrackerPosition, closestTrackerRotation);
+                        return;
+                    }
+                }
+
 
                 //Debug.LogFormat(GlobalVariables.red + "Tracked node failed to give its rotation, type: {0}, ID: {1} " + GlobalVariables.endColor + " : " + "getTrackingReferances()" + " : " + this.GetType(), nodeState.nodeType, nodeState.uniqueID);
             }

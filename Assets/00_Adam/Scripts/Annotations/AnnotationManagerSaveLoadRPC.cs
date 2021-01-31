@@ -2,13 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-
+using IATK;
 
 
 //Saving is handled by saving a Json for each annotation
 namespace Photon_IATK { 
     public class AnnotationManagerSaveLoadRPC : MonoBehaviour
     {
+
+        private void OnEnable()
+        {
+            VisualizationRPC_Calls.RPCvisualisationUpdatedDelegate += UpdatedView;
+            Debug.LogFormat(GlobalVariables.cRegister + "Registering {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "UpdatedView", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            VisualizationRPC_Calls.RPCvisualisationUpdateRequestDelegate += UpdatedViewRequested;
+            Debug.LogFormat(GlobalVariables.cRegister + "Registering {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "UpdatedView", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
+
+        private void UpdatedView(AbstractVisualisation.PropertyType propertyType)
+        {
+            Debug.LogFormat(GlobalVariables.cTest + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            loadAnnotations();
+        }
+
+        private void UpdatedViewRequested(AbstractVisualisation.PropertyType propertyType)
+        {
+            Debug.LogFormat(GlobalVariables.cTest + "Vis view {0} update requested." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            saveAnnotations();
+            _removeAnnotations();
+        }
+
         public void saveAnnotations()
         {
             bool saveWasSuccessfull = false;
@@ -23,7 +48,23 @@ namespace Photon_IATK {
             Debug.LogFormat(GlobalVariables.cCommon + "{0} {1} {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Annotations uccessfully saved", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
-        private List<SerializeableAnnotation> _getAllAnnotationsAndConvertToSerializeableAnnotations(out bool wasSuccessfull)
+        private void _removeAnnotations()
+        {
+            var annotations = GameObject.FindGameObjectsWithTag("Annotation");
+
+            Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying {0} annotations" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", annotations.Length, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            foreach (GameObject annotation in annotations)
+            {
+
+                Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", annotation.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                Destroy(annotation);
+            }
+        }
+
+
+            private List<SerializeableAnnotation> _getAllAnnotationsAndConvertToSerializeableAnnotations(out bool wasSuccessfull)
             {
             int countOfAnnotationsFound = 0;
 

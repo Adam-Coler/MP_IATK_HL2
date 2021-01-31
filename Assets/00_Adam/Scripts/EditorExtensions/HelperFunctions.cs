@@ -46,7 +46,7 @@ namespace Photon_IATK
 
         public static void hideShowChildrenOfTag(string tag)
         {
-            GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag("tag");
+            GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag(tag);
             foreach (GameObject obj in objectsWithTag)
             {
                 Renderer[] renderes = obj.GetComponentsInChildren<Renderer>();

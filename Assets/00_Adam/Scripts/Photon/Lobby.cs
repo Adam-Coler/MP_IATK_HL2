@@ -9,7 +9,7 @@ namespace Photon_IATK
     {
         #region Fields
         // This client's version number. Users are separated from each other by gameVersion (which allows you to make breaking changes).
-        private string gameVersion = "3.1";
+        private string gameVersion = "3";
 
         public bool isAutoConnect = false;
 
@@ -49,7 +49,8 @@ namespace Photon_IATK
             isAutoConnect = true;
 #endif
 
-            if (isAutoConnect) { 
+            if (isAutoConnect)
+            {
                 Connect();
                 Debug.LogFormat(GlobalVariables.cAlert + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Lobby AutoConnect", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -85,17 +86,11 @@ namespace Photon_IATK
                 PhotonNetwork.ConnectUsingSettings();
 
                 Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Connecting using settings", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
-                //PhotonNetwork.JoinRandomRoom();
             }
         }
         #endregion
 
         #region MonoBehaviourPunCallbacks Callbacks
-        public void OnConnectedToServer()
-        {
-            Debug.LogFormat(GlobalVariables.cAlert + "Connected to Server {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.NickName, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-        }
 
         public override void OnConnectedToMaster()
         {
@@ -112,7 +107,8 @@ namespace Photon_IATK
                 PhotonNetwork.NickName = PlayerPrefs.GetString(GlobalVariables.PlayerPrefsKeys.ParticipantID.ToString());
 
                 Debug.LogFormat(GlobalVariables.cCommon + "Nickname found, setting nickname to {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.NickName, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-            } else
+            }
+            else
             {
                 Debug.LogFormat(GlobalVariables.cCommon + "No Nickname found, setting nickname to {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.AuthValues.UserId, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -164,7 +160,15 @@ namespace Photon_IATK
             UnityEngine.XR.XRSettings.LoadDeviceByName("None");
         }
 
+        void OnConnectionFail(DisconnectCause cause)
+        {
+            Debug.LogFormat(GlobalVariables.cError + "OnConnectionFail {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", cause.ToString(), Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
 
+        void OnFailedToConnectToPhoton(DisconnectCause cause)
+        {
+            Debug.LogFormat(GlobalVariables.cError + "OnFailedToConnectToPhoton {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", cause.ToString(), Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
 
         #region CUSTOM
 
@@ -195,8 +199,8 @@ namespace Photon_IATK
         }
 
 #endif
-    #endregion
+        #endregion
 
 
-}
+    }
 }
