@@ -15,14 +15,8 @@ namespace Photon_IATK
         [Tooltip("The local player instance. Use this to know if the local player is represented in the Scene")]
         public bool isMine = false;
 
-        [SerializeField]
         public Photon_Cammera_Manager _Cammera_Manager;
-
-        [SerializeField]
         public TMPro.TextMeshPro txtNickName;
-
-        [SerializeField]
-        public GameObject VivePrefab;
 
         public Vector3 CurrentTransform;
         public Vector3 NewTransform;
@@ -89,7 +83,20 @@ namespace Photon_IATK
 
         }
 
+        public void showHideControllerModels()
+        {
+            HelperFunctions.hideShowChildrenOfTag(GlobalVariables.gameControllerModelTag);
 
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}{3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", "Hiding Controller Models","","","", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
+
+        [PunRPC]
+        void showHideControllerModels(PhotonMessageInfo info)
+        {
+            showHideControllerModels();
+
+            Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
 
         [PunRPC]
         void setOrgin(PhotonMessageInfo info)

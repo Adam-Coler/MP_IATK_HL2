@@ -10,10 +10,29 @@ namespace Photon_IATK
         public static void rpc_setNickName()
         {
             getLocalPlayerPhotonView glppv = new getLocalPlayerPhotonView();
-            PhotonView localView = glppv.getLocalPlayer();
-            if (localView != null)
+            PhotonView localView;
+            if (glppv.getLocalPlayer(out localView))
             {
-                glppv.getLocalPlayer().RPC("setNickname", RpcTarget.All);
+                localView.RPC("setNickname", RpcTarget.All);
+            }
+        }
+
+        public static void rpc_showHideControllerModels()
+        {
+            getLocalPlayerPhotonView glppv = new getLocalPlayerPhotonView();
+            PhotonView localView;
+            if (glppv.getLocalPlayer(out localView))
+            {
+                localView.RPC("showHideControllerModels", RpcTarget.All);
+            }
+
+            if (!PhotonNetwork.IsConnectedAndReady)
+            {
+                Photon_Player photon_Player;
+                if (HelperFunctions.GetComponent<Photon_Player>(out photon_Player, System.Reflection.MethodBase.GetCurrentMethod()))
+                {
+                    photon_Player.showHideControllerModels();
+                }
             }
         }
 
@@ -32,7 +51,7 @@ namespace Photon_IATK
 
     class getLocalPlayerPhotonView
     {
-        public PhotonView getLocalPlayer()
+        public bool getLocalPlayer(out PhotonView photonView)
         {
             // Start is called before the first frame update
             var tmp = (GameObject.FindGameObjectsWithTag("Player"));
@@ -45,15 +64,16 @@ namespace Photon_IATK
                 {
                     if (photon.IsMine)
                     {
-                        return photon;
+                        photonView = photon;
+                        return true;
                     }
                 }
 
             }
 
             Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "NO LOCAL PHOTON VIEW FOUND", Time.realtimeSinceStartup, "Static: Pun_Player_RPC_Calls", this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
-            return null;
+            photonView = null;
+            return false;
         }
 
 

@@ -11,7 +11,7 @@ namespace Photon_IATK {
     [SerializeField] private GameObject photonUserPrefab = default;
 
     private Player[] photonPlayers;
-    private int playersInRoom;
+    public int playersInRoom;
     private int myNumberInRoom;
     
     public override void OnPlayerEnteredRoom(Player newPlayer)

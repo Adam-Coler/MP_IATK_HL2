@@ -133,10 +133,7 @@ namespace Photon_IATK
         #region Photon
         public void Lobby_Connect()
         {
-            if (!PhotonNetwork.IsConnected)
-            {
-                GetOrAddComponent<Lobby>().Connect();
-            }
+            GetOrAddComponent<Lobby>().Connect();
         }
         #endregion
 
@@ -221,6 +218,16 @@ namespace Photon_IATK
             GetOrAddComponent<AnnotationManagerSaveLoadRPC>().loadAnnotations();
         }
         #endregion
+
+        #region RPCS
+        public void ShowHideControllerModels()
+        {
+            Pun_Player_RPC_Calls.rpc_showHideControllerModels();
+        }
+
+
+        #endregion
+
 
         #endregion
 

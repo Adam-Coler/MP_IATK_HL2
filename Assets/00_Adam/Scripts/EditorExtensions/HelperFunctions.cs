@@ -44,6 +44,19 @@ namespace Photon_IATK
             return chunks;
         }
 
+        public static void hideShowChildrenOfTag(string tag)
+        {
+            GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag("tag");
+            foreach (GameObject obj in objectsWithTag)
+            {
+                Renderer[] renderes = obj.GetComponentsInChildren<Renderer>();
+                foreach (Renderer renderer in renderes)
+                {
+                    renderer.enabled = !renderer.enabled;
+                }
+            }
+        }
+
         public static bool GetComponentInChild<T>(out T component, GameObject parentObject, MethodBase fromMethodBase) where T : Component
         {
             
@@ -83,7 +96,7 @@ namespace Photon_IATK
             }
             else
             {
-                Debug.LogFormat(GlobalVariables.cError + "No component found {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", component.GetType(), component.gameObject.name, "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+                Debug.LogFormat(GlobalVariables.cError + "No component found {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", "", "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
                 return false;
             }
         }
