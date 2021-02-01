@@ -36,7 +36,7 @@ namespace Photon_IATK
             tracker.transform.localRotation = Quaternion.identity;
 
 
-            newObj.transform.localScale = new Vector3(1f, 1f, 1f);
+            newObj.transform.localScale = new Vector3(1.6f, 1.6f, 1.6f);
 
             randomizeAttributes(newObj);
 
@@ -50,7 +50,7 @@ namespace Photon_IATK
         private void randomizeAttributes(GameObject obj)
         {
             float min = 0f;
-            float max = 1.5f;
+            float max = .75f;
 
             obj.transform.Translate(new Vector3(Random.Range(min, max), Random.Range(min, max), Random.Range(min, max)));
             obj.transform.Rotate(new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)));
