@@ -182,6 +182,9 @@ namespace Photon_IATK {
                 //add the Annotation class
                 Annotation annotation = annotationHolder.AddComponent<Annotation>();
 
+
+                Debug.LogFormat(GlobalVariables.cFileOperations + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", jsonPath, getFolderPath, "Loading annotations now.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
                 //add the loaded info from the serialized annotation to the actual annotation
                 annotation.setUpFromSerializeableAnnotation(serializeableAnnotation);
             } 

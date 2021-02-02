@@ -135,6 +135,8 @@ namespace Photon_IATK
 
              private void centerPlayspace()
             {
+                    getTrackingReferances();
+
                     Debug.Log(GlobalVariables.green + "centerPlayspaceCalled" + GlobalVariables.endColor + ", centerPlayspace() : " + this.GetType());
 
                     if (PlayspaceAnchor.Instance != null)
