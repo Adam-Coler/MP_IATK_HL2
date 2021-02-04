@@ -154,15 +154,7 @@ namespace Photon_IATK
             Quaternion newLocalRotation = (Quaternion)data[3];
             Vector3 newLocalScale = (Vector3)data[4];
 
-            Transform myTransform = this.gameObject.transform;
-            myTransform.localPosition = newLocalPosition;
-            myTransform.localRotation = newLocalRotation;
-            myTransform.localScale = newLocalScale;
-
-            lastLocalLocation = newLocalPosition;
-            lastLocalRotation = newLocalRotation;
-            lastLocalScale = newLocalScale;
-
+            SetLocalTransformAndLastTransform(newLocalPosition, newLocalRotation, newLocalScale);
             isWaitingForPhotonRequestTransformEvent = false;
         }
 
@@ -199,6 +191,11 @@ namespace Photon_IATK
             Quaternion newLocalRotation = (Quaternion)data[2];
             Vector3 newLocalScale = (Vector3)data[3];
 
+            SetLocalTransformAndLastTransform(newLocalPosition, newLocalRotation, newLocalScale);
+        }
+
+        private void SetLocalTransformAndLastTransform(Vector3 newLocalPosition, Quaternion newLocalRotation, Vector3 newLocalScale)
+        {
             Transform myTransform = this.gameObject.transform;
             myTransform.localPosition = newLocalPosition;
             myTransform.localRotation = newLocalRotation;
