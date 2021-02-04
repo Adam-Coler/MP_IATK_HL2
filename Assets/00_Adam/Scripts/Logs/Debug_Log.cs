@@ -11,29 +11,34 @@ namespace Photon_IATK
 
         public TMPro.TextMeshProUGUI DebugLog;
 
-        void Start()
-        {
-            Debug.Log(GlobalVariables.red + "GUI LOG WORKING" + GlobalVariables.endColor + " : " + this.GetType());
-        }
-
-        private void Update()
+        void Awake()
         {
 
-        }
+            if (DebugLog == null)
+            {
+                if (!HelperFunctions.GetComponentInChild<TMPro.TextMeshProUGUI>(out DebugLog, this.gameObject, System.Reflection.MethodBase.GetCurrentMethod()))
+                {
 
-        void OnEnable()
-        {
+                    Debug.LogFormat(GlobalVariables.cOnDestory + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No input found, destorying self", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                    Destroy(this.gameObject);
+                }
+            }
+
+            TMPro.TextMeshPro component;
+            if (HelperFunctions.GetComponentInChild<TMPro.TextMeshPro>(out component, this.gameObject, System.Reflection.MethodBase.GetCurrentMethod()))
+            {
+                component.text = "Debug Log Window";
+            }
+
+                Debug.Log(GlobalVariables.red + "GUI LOG WORKING" + GlobalVariables.endColor + " : " + this.GetType());
+
             Application.logMessageReceived += Log;
-        }
-
-        void OnDisable()
-        {
-            Application.logMessageReceived -= Log;
         }
 
         private void OnDestroy()
         {
-            OnDisable();
+            Application.logMessageReceived -= Log;
         }
 
         public void Log(string logString, string stackTrace, LogType type)

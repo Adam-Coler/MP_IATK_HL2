@@ -10,11 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 119596177080552484}
   - component: {fileID: 1631543491}
-  - component: {fileID: 1631543490}
-  - component: {fileID: 1631543489}
+  - component: {fileID: -4925350892819504660}
   m_Layer: 0
   m_Name: ViveController
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -53,12 +52,11 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 1631543490}
-  - {fileID: 1631543489}
+  - {fileID: -4925350892819504660}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &1631543490
+--- !u!114 &-4925350892819504660
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -67,26 +65,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 2211915310237687739}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Script: {fileID: 11500000, guid: e9b564b887399ea43b673af3cf9f3eca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
---- !u!114 &1631543489
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2211915310237687739}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 253d4c6c80dacac48ad28f3c9108f335, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isUser: 0
+  isUpdateTransform: 1
+  isUpdateRotation: 1
+  isUpdateScale: 0
 --- !u!1001 &7872398717590265878
 PrefabInstance:
   m_ObjectHideFlags: 0

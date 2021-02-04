@@ -10,6 +10,14 @@ namespace Photon_IATK
         public int countOfAnnotations = 0;
         public GameObject trackerPrefab;
 
+        private void Awake()
+        {
+            if (trackerPrefab == null)
+            {
+                trackerPrefab = Resources.Load<GameObject>("Tracker");
+            }
+        }
+
         public void makeAnnotationDummy()
         {
             countOfAnnotations += 1;
@@ -26,21 +34,23 @@ namespace Photon_IATK
             tracker.transform.parent = newObj.transform;
             tracker.transform.localPosition = Vector3.zero;
             tracker.transform.localRotation = Quaternion.identity;
-            tracker.transform.localScale = new Vector3(.1f, .1f, .1f);
+
+
+            newObj.transform.localScale = new Vector3(1.6f, 1.6f, 1.6f);
 
             randomizeAttributes(newObj);
 
-            AbstractAnnotationClass annotation = newObj.AddComponent<AbstractAnnotationClass>();
-            annotation.axisBasedID = "Test";
-            annotation.myID = "Annotation_" + countOfAnnotations;
+            Annotation annotation = newObj.AddComponent<Annotation>();
 
+            VisWrapperClass wrapperClass = GameObject.FindGameObjectWithTag("Vis").GetComponent<VisWrapperClass>();
+            annotation.myAnnotationNumber = wrapperClass.getCountOfAnnotationsAndIncrement();
         }
 
 
         private void randomizeAttributes(GameObject obj)
         {
-            float min = -.15f;
-            float max = .15f;
+            float min = 0f;
+            float max = .75f;
 
             obj.transform.Translate(new Vector3(Random.Range(min, max), Random.Range(min, max), Random.Range(min, max)));
             obj.transform.Rotate(new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)));
@@ -57,10 +67,10 @@ namespace Photon_IATK
 
             foreach (GameObject annotation in annotations)
             {
+                HelperFunctions.SafeDestory(annotation.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
 
                 Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", annotation.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-                Destroy(annotation);
             }
         }
     }

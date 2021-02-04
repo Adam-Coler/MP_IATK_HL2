@@ -11,7 +11,7 @@ namespace Photon_IATK
 
         private PhotonView photonView;
         private bool isMine;
-        public static Btn_Functions_For_In_Scene_Scripts Instance;
+        //public static Btn_Functions_For_In_Scene_Scripts Instance;
 
         #endregion
 
@@ -19,24 +19,24 @@ namespace Photon_IATK
 
         private void Awake()
         {
-            if (Instance == null)
-            {
-                Debug.LogFormat(GlobalVariables.cSingletonSetting + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Setting Btn_Functions_For_In_Scene_Scripts.Instance ", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            //if (Instance == null)
+            //{
+            //    Debug.LogFormat(GlobalVariables.cSingletonSetting + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Setting Btn_Functions_For_In_Scene_Scripts.Instance ", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-                Instance = this;
-            }
-            else if (Instance != this && Instance != null)
-            {
-                Debug.LogFormat(GlobalVariables.cSingletonSetting + "{0}, Destroying then setting Btn_Functions_For_In_Scene_Scripts.Instance." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", Instance.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            //    Instance = this;
+            //}
+            //else if (Instance != this && Instance != null)
+            //{
+            //    Debug.LogFormat(GlobalVariables.cSingletonSetting + "{0}, Destroying then setting Btn_Functions_For_In_Scene_Scripts.Instance." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", Instance.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-                Destroy(Instance.gameObject);
+            //    Destroy(Instance.gameObject);
 
-                Instance = this;
-            } 
-            else
-            {
-                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Failed to make instance", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-            }
+            //    Instance = this;
+            //} 
+            //else
+            //{
+            //    Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Failed to make instance", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            //}
         }
 
         private bool checkSetViewOwnership()
@@ -110,6 +110,10 @@ namespace Photon_IATK
         #region Btn_Calls
 
         #region sceneManager
+        public void sceneManager_Load_Main()
+        {
+            GetOrAddComponent<MRTK_Scene_Manager>().load_00_EntryPoint();
+        }
         public void sceneManager_Load_01_SetupMenu()
         {
             GetOrAddComponent<MRTK_Scene_Manager>().load_01_SetupMenu();
@@ -129,10 +133,7 @@ namespace Photon_IATK
         #region Photon
         public void Lobby_Connect()
         {
-            if (!PhotonNetwork.IsConnected)
-            {
-                GetOrAddComponent<Lobby>().Connect();
-            }
+            GetOrAddComponent<Lobby>().Connect();
         }
         #endregion
 
@@ -140,49 +141,93 @@ namespace Photon_IATK
 
         public void showVisInterface()
         {
-            if (GameObject.FindGameObjectWithTag("VisMenu") != null)
+            GameObject visMenu;
+            if (HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.visInterfaceMenuTag, out visMenu, false, System.Reflection.MethodBase.GetCurrentMethod()))
             {
-                GameObject menuObj = GameObject.FindGameObjectWithTag("VisMenu").transform.GetChild(0).gameObject;
+                Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying VisMenu{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-                GameObject.FindGameObjectWithTag("VisMenu").transform.GetChild(0).gameObject.SetActive(!menuObj.activeSelf);
-
-                Debug.LogFormat(GlobalVariables.cCommon + "Setting VisMenu Active: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", menuObj.activeSelf, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                Destroy(visMenu);
             }
             else
             {
-                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No VisMenu in Scene.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                visMenu = Resources.Load<GameObject>("VisInterfaceMenu");
+                visMenu = Instantiate(visMenu);
+                visMenu.tag = GlobalVariables.visInterfaceMenuTag;
             }
+
+            Debug.LogFormat(GlobalVariables.cCommon + "Loading VisMenu{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+  
         }
 
         public void showDebugLog()
         {
-            if (GameObject.FindGameObjectWithTag("DebugLog") != null)
+            GameObject debugLog;
+            if (HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.debugLogTag, out debugLog, false, System.Reflection.MethodBase.GetCurrentMethod()))
             {
-                GameObject menuObj = GameObject.FindGameObjectWithTag("DebugLog").transform.GetChild(0).gameObject;
-                GameObject.FindGameObjectWithTag("DebugLog").transform.GetChild(0).gameObject.SetActive(!menuObj.activeSelf);
-                Debug.LogFormat(GlobalVariables.cCommon + "Setting DebugLog Active: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", !menuObj.activeSelf, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying Debug Log{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                Destroy(debugLog);
             }
             else
             {
-                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No DebugLog in Scene", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                debugLog = Resources.Load<GameObject>("Log");
+                debugLog = Instantiate(debugLog);
+                debugLog.AddComponent<Debug_Log>();
+                debugLog.tag = GlobalVariables.debugLogTag;
+
+                Debug.LogFormat(GlobalVariables.cCommon + "Loading Debug Log{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
         public void showPhotonLog()
         {
-            if (GameObject.FindGameObjectWithTag("PhotonLog") != null)
+            GameObject photonLog;
+            if (HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.photonLogTag, out photonLog, false, System.Reflection.MethodBase.GetCurrentMethod()))
             {
-                GameObject menuObj = GameObject.FindGameObjectWithTag("PhotonLog").transform.GetChild(0).gameObject;
-                GameObject.FindGameObjectWithTag("PhotonLog").transform.GetChild(0).gameObject.SetActive(!menuObj.activeSelf);
-                Debug.LogFormat(GlobalVariables.cCommon + "Setting PhotonLog Active: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", !menuObj.activeSelf, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-            }
+                Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying Photon Log{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                Destroy(photonLog);
+            } 
             else
             {
-                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No PhotonLog in Scene.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                photonLog = Resources.Load<GameObject>("Log");
+                photonLog = Instantiate(photonLog);
+                photonLog.AddComponent<Photon_Log>();
+                photonLog.tag = GlobalVariables.photonLogTag;
+
+                Debug.LogFormat(GlobalVariables.cCommon + "Loading Photon Log{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
+        #endregion
+
+        #region VisIATK
+        public void LoadRemoveVis()
+        {
+            GetOrAddComponent<NetworkedLoadVisualisation>().LoadVis();
+        }
+        #endregion
+
+        #region Annotations
+        public void SaveAnnotations()
+        {
+            GetOrAddComponent<AnnotationManagerSaveLoadRPC>().saveAnnotations();
+        }
+
+        public void LoadAnnotations()
+        {
+            GetOrAddComponent<AnnotationManagerSaveLoadRPC>().loadAnnotations();
+        }
+        #endregion
+
+        #region RPCS
+        public void ShowHideControllerModels()
+        {
+            Pun_Player_RPC_Calls.rpc_showHideControllerModels();
+        }
+
 
         #endregion
+
 
         #endregion
 

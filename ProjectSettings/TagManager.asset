@@ -16,6 +16,7 @@ TagManager:
   - Vis
   - VisMenu
   - Annotation
+  - AnnotationCollection
   layers:
   - Default
   - TransparentFX

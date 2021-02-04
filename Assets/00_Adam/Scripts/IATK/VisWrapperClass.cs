@@ -1,7 +1,11 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.Events;
 using UnityEngine;
 using IATK;
+using System.Text.RegularExpressions;
+using System.Linq;
+using System.IO;
 
 namespace Photon_IATK
 {
@@ -12,6 +16,8 @@ namespace Photon_IATK
         public static OnVisualisationUpdated visualisationUpdatedDelegate;
 
         public string[] loadedCSVHeaders;
+
+        private int annotationCount = 0;
 
         private CSVDataSource _wrapperCSVDataSource;
         public CSVDataSource wrapperCSVDataSource
@@ -27,6 +33,40 @@ namespace Photon_IATK
                 dataSource = _wrapperCSVDataSource;
                 updateHeaders();
             }
+        }
+
+        public string axisKey
+        {
+            get
+            {
+                string axisID = "";
+                string xAxis = getCleanString(this.xDimension.Attribute);
+                string yAxis = getCleanString(this.yDimension.Attribute);
+                string zAxis = getCleanString(this.zDimension.Attribute);                
+                axisID = xAxis + "_" + yAxis + "_" + zAxis;
+                return axisID;
+            }
+        }
+
+        public int getCountOfAnnotationsAndIncrement()
+        {
+            annotationCount++;
+            return annotationCount;
+        }
+
+        private string getCleanString(string str)
+        {
+            str = Regex.Replace(str, "[^a-zA-Z0-9 ]", string.Empty).ToLower();
+            List<string> strList = str.Split(' ').Distinct<string>().ToList<string>();
+            string resturnStr = "";
+            foreach (string item in strList)
+            {
+                if (item.Length > 0)
+                {
+                    resturnStr += item[0].ToString();
+                }
+            }
+            return resturnStr;
         }
 
         private void updateHeaders()
@@ -49,11 +89,22 @@ namespace Photon_IATK
 
         private void OnDestroy()
         {
-            Debug.LogFormat(GlobalVariables.cRegister + "Un-registering {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "UpdatedView", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cRegister + "Un-registering {0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "UpdatedView", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             OnUpdateViewAction -= UpdatedView;
+
+            _deleteVisJsonFile();
         }
 
+        private void _deleteVisJsonFile()
+        {
+            Debug.LogFormat(GlobalVariables.cOnDestory + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Removing .json file for: ", this.uid, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            string pathName = Application.streamingAssetsPath + Path.DirectorySeparatorChar + "SerializedFields";
+            pathName += Path.DirectorySeparatorChar + this.uid + ".json";
+
+            File.Delete(pathName);
+        }
 
         private void UpdatedView(AbstractVisualisation.PropertyType propertyType)
         {

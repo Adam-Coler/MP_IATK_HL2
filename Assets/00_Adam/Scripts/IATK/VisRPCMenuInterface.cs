@@ -172,7 +172,7 @@ namespace Photon_IATK
 
             if (isOptionsDivdedIntoThreeAxis)
             {
-                List<List<TMP_Dropdown.OptionData>> partititionedList = Split(listDataDimensions, 3);
+                List<List<TMP_Dropdown.OptionData>> partititionedList = HelperFunctions.Split(listDataDimensions, 3);
 
                 xAxisDropdown.AddOptions(partititionedList[0]);
                 yAxisDropdown.AddOptions(partititionedList[1]);
@@ -208,21 +208,6 @@ namespace Photon_IATK
             colorDimensionDropdown.ClearOptions();
             sizeDimensionDropdown.ClearOptions();
         }
-
-        public static List<List<T>> Split<T>(List<T> collection, int size)
-        {
-            var chunks = new List<List<T>>();
-            var chunkCount = collection.Count() / size;
-
-            if (collection.Count % size > 0)
-                chunkCount++;
-
-            for (var i = 0; i < chunkCount; i++)
-                chunks.Add(collection.Skip(i * size).Take(size).ToList());
-
-            return chunks;
-        }
-
 
     }
 }

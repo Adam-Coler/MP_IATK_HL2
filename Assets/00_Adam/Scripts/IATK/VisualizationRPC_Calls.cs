@@ -10,9 +10,11 @@ namespace Photon_IATK
         public delegate void OnRPCVisualisationUpdated(AbstractVisualisation.PropertyType propertyType);
         public static OnRPCVisualisationUpdated RPCvisualisationUpdatedDelegate;
 
-        private VisWrapperClass thisVis;
+        public delegate void OnRPCVisualisationUpdateRequest(AbstractVisualisation.PropertyType propertyType);
+        public static OnRPCVisualisationUpdateRequest RPCvisualisationUpdateRequestDelegate;
 
-        public PhotonView thisPhotonView;
+        private VisWrapperClass thisVis;
+        private PhotonView thisPhotonView;
 
         public string[] loadedCSVHeaders { get; set; }
 
@@ -48,6 +50,14 @@ namespace Photon_IATK
             get
             {
                 return thisVis.sizeDimension;
+            }
+        }
+
+        public string axisKey
+        {
+            get
+            {
+                return thisVis.axisKey;
             }
         }
 
@@ -101,6 +111,10 @@ namespace Photon_IATK
 
         public void changeXAxis(string newAxisDimension)
         {
+            if (RPCvisualisationUpdateRequestDelegate != null)
+                RPCvisualisationUpdateRequestDelegate(AbstractVisualisation.PropertyType.DimensionChange);
+
+
             if (PhotonNetwork.IsConnected)
             {
                 photonView.RPC("_changeXAxis", RpcTarget.All, newAxisDimension);
@@ -112,6 +126,10 @@ namespace Photon_IATK
 
         public void changeYAxis(string newAxisDimension)
         {
+
+            if (RPCvisualisationUpdateRequestDelegate != null)
+                RPCvisualisationUpdateRequestDelegate(AbstractVisualisation.PropertyType.DimensionChange);
+
             if (PhotonNetwork.IsConnected)
             {
                 photonView.RPC("_changeYAxis", RpcTarget.All, newAxisDimension);
@@ -124,6 +142,10 @@ namespace Photon_IATK
 
         public void changeZAxis(string newAxisDimension)
         {
+
+            if (RPCvisualisationUpdateRequestDelegate != null)
+                RPCvisualisationUpdateRequestDelegate(AbstractVisualisation.PropertyType.DimensionChange);
+
             if (PhotonNetwork.IsConnected)
             {
                 photonView.RPC("_changeZAxis", RpcTarget.All, newAxisDimension);
@@ -136,6 +158,10 @@ namespace Photon_IATK
 
         public void changeColorDimension(string newAxisDimension)
         {
+
+            if (RPCvisualisationUpdateRequestDelegate != null)
+                RPCvisualisationUpdateRequestDelegate(AbstractVisualisation.PropertyType.DimensionChange);
+
             if (PhotonNetwork.IsConnected)
             {
                 photonView.RPC("_changeColorDimension", RpcTarget.All, newAxisDimension);
@@ -148,6 +174,10 @@ namespace Photon_IATK
 
         public void changeSizeDimension(string newAxisDimension)
         {
+
+            if (RPCvisualisationUpdateRequestDelegate != null)
+                RPCvisualisationUpdateRequestDelegate(AbstractVisualisation.PropertyType.DimensionChange);
+
             if (PhotonNetwork.IsConnected)
             {
                 photonView.RPC("_changeSizeDimension", RpcTarget.All, newAxisDimension);

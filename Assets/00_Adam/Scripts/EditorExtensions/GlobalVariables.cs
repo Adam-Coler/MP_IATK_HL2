@@ -27,6 +27,7 @@ namespace Photon_IATK
         public static string cTest = orange;
         public static string cSerialize = orange;
         public static string cFileOperations = orange;
+        public static string cEvent = yellow;
 
         public static string endColor = "</color>";
         public static string newLine = "\n";
@@ -35,6 +36,14 @@ namespace Photon_IATK
         public static string Vive = "VIVE";
         public static string HL2 = "HL2";
 
+        public static string debugLogTag = "DebugLog";
+        public static string photonLogTag = "PhotonLog";
+        public static string visTag = "Vis";
+        public static string annotationTag = "Annotation";
+        public static string annotationCollectionTag = "AnnotationCollection";
+        public static string annotationSaveFolder = "AnnotationFiles";
+        public static string visInterfaceMenuTag = "VisMenu";
+        public static string gameControllerModelTag = "GameController";
 
         public enum allSymbols
         {
@@ -48,7 +57,18 @@ namespace Photon_IATK
             ParticipantID
         };
 
+
+        public const byte PhotonMoveEvent = 1;
+        public const byte PhotonRequestTransformEvent = 2;
+        public const byte PhotonRespondToRequestTransformEvent = 3;
+        public const byte PhotonVisSceneInstantiateEvent = 4;
+        public const byte PhotonDeleteAllObjectsWithComponentEvent = 5;
+
+
+
         //Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+        //Debug.LogFormat(GlobalVariables.cRegister + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
 
         //Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, "Static: Pun_Player_RPC_Calls", this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());

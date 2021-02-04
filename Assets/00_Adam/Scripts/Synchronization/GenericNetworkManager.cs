@@ -16,14 +16,15 @@ namespace Photon_IATK
         {
             if (Instance == null)
             {
-                Debug.Log(GlobalVariables.green + "Setting GenericNetworkManager.Instance " + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
+                Debug.LogFormat(GlobalVariables.cCommon + "Setting GenericNetworkManager.Instance{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
                 Instance = this;
             }
             else
             {
                 if (Instance != this)
                 {
-                    Debug.Log(GlobalVariables.green + "Destroying then setting GenericNetworkManager.Instance " + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
+                    Debug.LogFormat(GlobalVariables.cCommon + "Destroying then setting GenericNetworkManager.Instance{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                     Destroy(Instance.gameObject);
 

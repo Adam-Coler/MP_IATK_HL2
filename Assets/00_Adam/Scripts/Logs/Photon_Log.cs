@@ -12,9 +12,27 @@ namespace Photon_IATK
         public TMPro.TextMeshProUGUI LogText;
         private int nextUpdate = 1;
 
-        void Start()
+        public void Awake()
         {
+
+            if (LogText == null)
+            {
+                if (!HelperFunctions.GetComponentInChild<TMPro.TextMeshProUGUI>(out LogText, this.gameObject, System.Reflection.MethodBase.GetCurrentMethod())){
+
+                    Debug.LogFormat(GlobalVariables.cOnDestory + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No input found, destorying self", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                    Destroy(this.gameObject);
+                }
+            }
+
+            TMPro.TextMeshPro component;
+            if (HelperFunctions.GetComponentInChild<TMPro.TextMeshPro>(out component, this.gameObject, System.Reflection.MethodBase.GetCurrentMethod()))
+            {
+                component.text = "Photon Log Window";
+            }
+
             LogText.text = "<color=#FF0000>DESKTOP_Photon_Log.cs:</color> Photon Log";
+
         }
 
         private void Update()

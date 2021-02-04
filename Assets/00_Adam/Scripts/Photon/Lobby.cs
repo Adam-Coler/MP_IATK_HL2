@@ -15,7 +15,11 @@ namespace Photon_IATK
 
         public static Lobby _Lobby;
 
+
+        public bool isConnecting = false;
         #endregion
+
+
 
         #region MonoBehaviour CallBacks
 
@@ -39,8 +43,6 @@ namespace Photon_IATK
                 }
             }
 
-            setup();
-
 #if VIVE
             isAutoConnect = true;
 #endif
@@ -49,7 +51,8 @@ namespace Photon_IATK
             isAutoConnect = true;
 #endif
 
-            if (isAutoConnect) { 
+            if (isAutoConnect)
+            {
                 Connect();
                 Debug.LogFormat(GlobalVariables.cAlert + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Lobby AutoConnect", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -63,29 +66,30 @@ namespace Photon_IATK
         #endregion
 
         #region Public Methods
+        public void Disconnect()
+        {
+            PhotonNetwork.Disconnect();
+            Debug.LogFormat(GlobalVariables.cAlert + "Disconnecting from Photon{0}{1}{3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", "","","", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
 
         /// <summary>
         /// Start the connection process.
-        /// - If already connected, we attempt joining a random room
         /// - if not yet connected, Connect this application instance to Photon Cloud Network
         /// </summary>
         public void Connect()
         {
+
             // we check if we are connected or not, we join if we are , else we initiate the connection to the server.
-            if (PhotonNetwork.IsConnected)
+            if (!PhotonNetwork.IsConnected)
             {
-                Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Connected, Joining random room", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-                // #Critical we need at this point to attempt joining a Random Room. If it fails, we'll get notified in OnJoinRandomFailed() and we'll create one.
-                PhotonNetwork.JoinRandomRoom();
-            }
-            else
-            {
+                Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Connecting using settings", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                isConnecting = true;
                 // #Critical, we must first and foremost connect to Photon Online Server.
                 PhotonNetwork.GameVersion = gameVersion;
                 PhotonNetwork.ConnectUsingSettings();
-
-                Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Connecting using settings", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
+            Debug.LogFormat(GlobalVariables.cAlert + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Already connected doing nothing...", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
         #endregion
 
@@ -93,6 +97,9 @@ namespace Photon_IATK
 
         public override void OnConnectedToMaster()
         {
+
+            isConnecting = false;
+
             // #Critical: The first we try to do is to join a potential existing room. If there is, good, else, we'll be called back with OnJoinRandomFailed()
             var randomUserId = Random.Range(0, 999999);
             PhotonNetwork.AutomaticallySyncScene = true;
@@ -106,7 +113,8 @@ namespace Photon_IATK
                 PhotonNetwork.NickName = PlayerPrefs.GetString(GlobalVariables.PlayerPrefsKeys.ParticipantID.ToString());
 
                 Debug.LogFormat(GlobalVariables.cCommon + "Nickname found, setting nickname to {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.NickName, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-            } else
+            }
+            else
             {
                 Debug.LogFormat(GlobalVariables.cCommon + "No Nickname found, setting nickname to {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.AuthValues.UserId, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -127,7 +135,7 @@ namespace Photon_IATK
         {
             Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No random room available, Calling: PhotonNetwork.CreateRoom", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            var roomOptions = new RoomOptions { IsVisible = true, IsOpen = true, MaxPlayers = 10 };
+            var roomOptions = new RoomOptions { IsVisible = true, IsOpen = true, MaxPlayers = 10 , CleanupCacheOnLeave = true};
             PhotonNetwork.CreateRoom("Room" + Random.Range(1, 3000), roomOptions);
         }
 
@@ -146,51 +154,22 @@ namespace Photon_IATK
 
         #endregion
 
-        static void enableVR()
+        void OnConnectionFail(DisconnectCause cause)
         {
-            UnityEngine.XR.XRSettings.enabled = true;
-            UnityEngine.XR.XRSettings.LoadDeviceByName("OpenVR");
+            Debug.LogFormat(GlobalVariables.cError + "OnConnectionFail {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", cause.ToString(), Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
-        static void disableVR()
+        public override void OnJoinedLobby()
         {
-            UnityEngine.XR.XRSettings.enabled = false;
-            UnityEngine.XR.XRSettings.LoadDeviceByName("None");
+            isConnecting = false;
+            Debug.LogFormat(GlobalVariables.cCommon + "OnJoinedLobby{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", " Success", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
 
-
-        #region CUSTOM
-
-
-
-#if DESKTOP
-        void setup()
+        void OnFailedToConnectToPhoton(DisconnectCause cause)
         {
-            disableVR();
+            Debug.LogFormat(GlobalVariables.cError + "OnFailedToConnectToPhoton {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", cause.ToString(), Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
-#elif HL2
-        void setup()
-        {
-            Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No setup needed", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-        }
-
-#elif VIVE
-        void setup()
-        {
-            enableVR();
-        }
-#else
-
-        void setup()
-        {
-            Debug.Log(this.GetType() + ": ERROR! No directive set");
-        }
-
-#endif
-    #endregion
-
-
-}
+    }
 }

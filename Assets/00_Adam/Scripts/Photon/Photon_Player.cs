@@ -15,14 +15,8 @@ namespace Photon_IATK
         [Tooltip("The local player instance. Use this to know if the local player is represented in the Scene")]
         public bool isMine = false;
 
-        [SerializeField]
         public Photon_Cammera_Manager _Cammera_Manager;
-
-        [SerializeField]
         public TMPro.TextMeshPro txtNickName;
-
-        [SerializeField]
-        public GameObject VivePrefab;
 
         public Vector3 CurrentTransform;
         public Vector3 NewTransform;
@@ -61,8 +55,7 @@ namespace Photon_IATK
 
         private void OnDestroy()
         {
-            Debug.LogFormat(GlobalVariables.cOnDestory + "Destroying: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-            PhotonNetwork.Destroy(this.gameObject);
+            HelperFunctions.SafeDestory(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
         }
 
 #if UNITY_5_4_OR_NEWER
@@ -89,12 +82,33 @@ namespace Photon_IATK
 
         }
 
+        public void showHideControllerModels()
+        {
+            HelperFunctions.hideShowChildrenOfTag(GlobalVariables.gameControllerModelTag);
 
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}{3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", "Hiding Controller Models","","","", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
+
+        [PunRPC]
+        void showHideControllerModels(PhotonMessageInfo info)
+        {
+            showHideControllerModels();
+
+            Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
 
         [PunRPC]
         void setOrgin(PhotonMessageInfo info)
         {
             Transform transform = this.transform;
+
+            Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
+
+        [PunRPC]
+        void masterClientInstantiate(string prefabName, PhotonMessageInfo info)
+        {
+            PhotonNetwork.InstantiateRoomObject(prefabName, Vector3.zero, Quaternion.identity);
 
             Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
@@ -105,21 +119,24 @@ namespace Photon_IATK
 #if DESKTOP
         private void setup()
         {
-            if (!photonView.IsMine)
-            {
-                return;
-            }
-            this.gameObject.AddComponent<DESKTOP_Movement>();
+            //if (!photonView.IsMine)
+            //{
+            //    return;
+            //}
+
+            //Debug.LogFormat(GlobalVariables.cComponentAddition + "{0}{1}{3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", "Adding Desktop Controls", "", "", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            //this.gameObject.AddComponent<DESKTOP_Movement>();
                         //unity has predefined tags "Player" is one
-            if (this.gameObject.GetComponent<Photon_Cammera_Manager>() != null)
-            {
-                _Cammera_Manager.trackedObj = this.gameObject;
-                _Cammera_Manager.OnStartFollowing();
-            }
-            else
-            {
-                Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
-            }
+            //if (this.gameObject.GetComponent<Photon_Cammera_Manager>() != null)
+            //{
+            //    _Cammera_Manager.trackedObj = this.gameObject;
+            //    _Cammera_Manager.OnStartFollowing();
+            //}
+            //else
+            //{
+            //    Debug.LogError("<Color=Red><a>Missing</a></Color> CameraWork Component on playerPrefab.", this);
+            //}
         }
 #elif VIVE
         private void setup(){

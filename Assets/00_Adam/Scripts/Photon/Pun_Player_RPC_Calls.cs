@@ -9,11 +9,28 @@ namespace Photon_IATK
     {
         public static void rpc_setNickName()
         {
-            getLocalPlayerPhotonView glppv = new getLocalPlayerPhotonView();
-            PhotonView localView = glppv.getLocalPlayer();
-            if (localView != null)
+            PhotonView localView;
+            if (HelperFunctions.getLocalPlayer(out localView, System.Reflection.MethodBase.GetCurrentMethod()))
             {
-                glppv.getLocalPlayer().RPC("setNickname", RpcTarget.All);
+                localView.RPC("setNickname", RpcTarget.All);
+            }
+        }
+
+        public static void rpc_showHideControllerModels()
+        {
+            PhotonView localView;
+            if (HelperFunctions.getLocalPlayer(out localView, System.Reflection.MethodBase.GetCurrentMethod()))
+            {
+                localView.RPC("showHideControllerModels", RpcTarget.All);
+            }
+
+            if (!PhotonNetwork.IsConnectedAndReady)
+            {
+                Photon_Player photon_Player;
+                if (HelperFunctions.GetComponent<Photon_Player>(out photon_Player, System.Reflection.MethodBase.GetCurrentMethod()))
+                {
+                    photon_Player.showHideControllerModels();
+                }
             }
         }
 
@@ -27,36 +44,6 @@ namespace Photon_IATK
 
             return isLocal;
         }
-    }
-
-
-    class getLocalPlayerPhotonView
-    {
-        public PhotonView getLocalPlayer()
-        {
-            // Start is called before the first frame update
-            var tmp = (GameObject.FindGameObjectsWithTag("Player"));
-            foreach (GameObject obj in tmp)
-            {
-                PhotonView photon = obj.GetComponent<PhotonView>();
-                Photon_Player photonPlayer = obj.GetComponent<Photon_Player>();
-                Debug.Log(photon.name);
-                if (photon != null & photonPlayer != null)
-                {
-                    if (photon.IsMine)
-                    {
-                        return photon;
-                    }
-                }
-
-            }
-
-            Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "NO LOCAL PHOTON VIEW FOUND", Time.realtimeSinceStartup, "Static: Pun_Player_RPC_Calls", this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
-            return null;
-        }
-
-
     }
 
 }

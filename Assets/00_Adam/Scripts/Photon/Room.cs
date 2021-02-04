@@ -3,90 +3,82 @@ using Photon.Realtime;
 using UnityEngine;
 
 
-namespace Photon_IATK { 
+namespace Photon_IATK
+{
     public class Room : MonoBehaviourPunCallbacks, IInRoomCallbacks
 
-    { 
-    public static Room _Room;
-    [SerializeField] private GameObject photonUserPrefab = default;
-
-    private Player[] photonPlayers;
-    private int playersInRoom;
-    private int myNumberInRoom;
-    
-    public override void OnPlayerEnteredRoom(Player newPlayer)
     {
-        base.OnPlayerEnteredRoom(newPlayer);
-        photonPlayers = PhotonNetwork.PlayerList;
-        playersInRoom++;
+        public static Room _Room;
+        [SerializeField] private GameObject photonUserPrefab = default;
+
+        private Player[] photonPlayers;
+        private int playersInRoom;
+        private int myNumberInRoom;
+
+        public override void OnPlayerEnteredRoom(Player newPlayer)
+        {
+            base.OnPlayerEnteredRoom(newPlayer);
+            photonPlayers = PhotonNetwork.PlayerList;
+            playersInRoom++;
         }
 
-    private void Awake()
-    {
-        if (_Room == null)
+        private void Awake()
         {
-            _Room = this;
-        }
-        else
-        {
-            if (_Room != this)
+            if (_Room == null)
             {
-                Destroy(_Room.gameObject);
                 _Room = this;
             }
+            else
+            {
+                if (_Room != this)
+                {
+                    Destroy(_Room.gameObject);
+                    _Room = this;
+                }
+            }
         }
-    }
 
-    public override void OnEnable()
-    {
-        base.OnEnable();
-        PhotonNetwork.AddCallbackTarget(this);
-    }
-
-    public override void OnDisable()
-    {
-        base.OnDisable();
-        PhotonNetwork.RemoveCallbackTarget(this);
-    }
-
-    private void Start()
-    {
-        // Allow prefabs not in a Resources folder
-        if (PhotonNetwork.PrefabPool is DefaultPool pool)
+        public override void OnEnable()
         {
-            if (photonUserPrefab != null) pool.ResourceCache.Add(photonUserPrefab.name, photonUserPrefab);
+            base.OnEnable();
+
+            PhotonNetwork.AddCallbackTarget(this);
         }
-    }
 
-    public override void OnJoinedRoom()
-    {
-        base.OnJoinedRoom();
+        public override void OnDisable()
+        {
+            base.OnDisable();
+            PhotonNetwork.RemoveCallbackTarget(this);
+        }
 
-        photonPlayers = PhotonNetwork.PlayerList;
-        playersInRoom = photonPlayers.Length;
-        myNumberInRoom = playersInRoom;
-        StartGame();
-    }
+        private void Start()
+        {
+            // Allow prefabs not in a Resources folder
+            if (PhotonNetwork.PrefabPool is DefaultPool pool)
+            {
+                if (photonUserPrefab != null) pool.ResourceCache.Add(photonUserPrefab.name, photonUserPrefab);
+            }
+        }
 
-    private void StartGame()
-    {
-        CreatePlayer();
-        if (!PhotonNetwork.IsMasterClient) return;
-    }
+        public override void OnJoinedRoom()
+        {
+            base.OnJoinedRoom();
 
-    private void CreatePlayer()
-    {
+            photonPlayers = PhotonNetwork.PlayerList;
+            playersInRoom = photonPlayers.Length;
+            myNumberInRoom = playersInRoom;
+            CreatePlayer();
+        }
+
+        private void updateSavedObjects()
+        {
+
+        }
+
+        private void CreatePlayer()
+        {
             var player = PhotonNetwork.Instantiate(photonUserPrefab.name, Vector3.zero, Quaternion.identity);
             Debug.Log(GlobalVariables.green + "Photon Instantisateing the player" + GlobalVariables.endColor + " : " + "CreatePlayer()" + " : " + this.GetType());
-
-            //Debug.Log(GlobalVariables.green + "Photon Instantisateing the Room Orgin Tracker" + GlobalVariables.endColor + " : " + "CreatePlayer()" + " : " + this.GetType());
-
-            //var tracker = PhotonNetwork.Instantiate("Tracker", Vector3.zero, Quaternion.identity);
-            //tracker.name = "Room Orgin";
-
-            //Debug.Log(GlobalVariables.green + "Photon Instantisateing the Finger Tracker" + GlobalVariables.endColor + " : " + "CreatePlayer()" + " : " + this.GetType());
-            //this.gameObject.AddComponent<TrackerToFinger>();
-
         }
 
         #region CUSTOM

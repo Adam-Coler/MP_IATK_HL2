@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &735551308804919067
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3794405149568503245}
+  m_Layer: 0
+  m_Name: Annotations
+  m_TagString: AnnotationCollection
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3794405149568503245
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 735551308804919067}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8249544463227372436}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9105368823616601759
 GameObject:
   m_ObjectHideFlags: 0
@@ -15,7 +45,7 @@ GameObject:
   - component: {fileID: 7364563067669034227}
   - component: {fileID: 8027000936905109002}
   - component: {fileID: 4860348563888633785}
-  - component: {fileID: 5856742457081787542}
+  - component: {fileID: 4500439297307763228}
   m_Layer: 0
   m_Name: Vis
   m_TagString: Vis
@@ -33,7 +63,8 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.7754922, y: -3.8713837, z: 12.47366}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 3794405149568503245}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -49,7 +80,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bfd248f8e0a90a47bf0e6128d1b9cc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisPhotonView: {fileID: -2042066654088758703}
 --- !u!114 &-2042066654088758703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -68,8 +98,7 @@ MonoBehaviour:
   observableSearch: 2
   Synchronization: 3
   OwnershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 5856742457081787542}
+  ObservedComponents: []
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -153,7 +182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myDataSource: {fileID: 4900000, guid: faa53d5b54a2bac44bceedbfca16224c, type: 3}
---- !u!114 &5856742457081787542
+--- !u!114 &4500439297307763228
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,7 +191,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 9105368823616601759}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 253d4c6c80dacac48ad28f3c9108f335, type: 3}
+  m_Script: {fileID: 11500000, guid: e9b564b887399ea43b673af3cf9f3eca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isUser: 0
+  isWaitingForPhotonRequestTransformEvent: 1
