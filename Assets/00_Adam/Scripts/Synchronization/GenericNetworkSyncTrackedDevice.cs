@@ -83,16 +83,7 @@ namespace Photon_IATK
 
         private void OnDestroy()
         {
-            if (PhotonNetwork.IsConnected)
-            {
-                PhotonNetwork.Destroy(this.gameObject);
-            }
-            else
-            {
-                Destroy(this.gameObject);
-            }
-  
-            Debug.LogFormat(GlobalVariables.cOnDestory + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Destorying Object", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            HelperFunctions.SafeDestory(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
         }
     }
 }

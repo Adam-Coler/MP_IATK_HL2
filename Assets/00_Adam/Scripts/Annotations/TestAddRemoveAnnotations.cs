@@ -67,10 +67,10 @@ namespace Photon_IATK
 
             foreach (GameObject annotation in annotations)
             {
+                HelperFunctions.SafeDestory(annotation.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
 
                 Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", annotation.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-                Destroy(annotation);
             }
         }
     }

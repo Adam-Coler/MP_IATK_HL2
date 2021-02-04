@@ -62,7 +62,7 @@ namespace Photon_IATK
                 {
                     GameObject thisModel = PhotonNetwork.Instantiate("ViveController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
                     thisModel.transform.SetParent(this.transform);
-                    thisModel.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
+                    //thisModel.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
                     thisModel.name = inputDevice.name;
                     TrackControllerByRefereance trackControllerByRefereance = thisModel.AddComponent<TrackControllerByRefereance>();
                     trackControllerByRefereance.thisInputDevice = inputDevice;
@@ -74,7 +74,7 @@ namespace Photon_IATK
                 {
                     GameObject thisModel = PhotonNetwork.Instantiate("LogitechController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
                     thisModel.transform.SetParent(this.transform);
-                    thisModel.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
+                    //thisModel.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
                     thisModel.name = inputDevice.name;
                     TrackControllerByRefereance trackControllerByRefereance = thisModel.AddComponent<TrackControllerByRefereance>();
                     trackControllerByRefereance.thisInputDevice = inputDevice;

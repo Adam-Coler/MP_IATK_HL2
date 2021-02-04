@@ -17,15 +17,20 @@ namespace Photon_IATK
             {
                 Debug.LogFormat(GlobalVariables.cInstance + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Instantiateing IATK scatterplot online", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-                 vis = PhotonNetwork.Instantiate("Vis", Vector3.zero, Quaternion.identity);
+
+                vis = PhotonNetwork.InstantiateRoomObject("Vis", Vector3.zero, Quaternion.identity);
+                //vis = Instantiate(Prefab, new Vector3(1.5f, 0, 0), Quaternion.identity);
             }
             else
             {
                 Debug.LogFormat(GlobalVariables.cError + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Not connected to Photon, loading offline", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 vis = Instantiate(Prefab, new Vector3(1.5f, 0, 0), Quaternion.identity);
+                vis.transform.localScale = Vector3.one;
             }
-            attachToPlayspace(vis);
+
+
+            //attachToPlayspace(vis);
         }
 
         private void attachToPlayspace(GameObject obj)
@@ -73,18 +78,9 @@ namespace Photon_IATK
             foreach (VisWrapperClass loadedVis in visWrappers)
             {
 
-                if (PhotonNetwork.IsConnectedAndReady)
-                {
-                    PhotonNetwork.Destroy(loadedVis.gameObject.GetComponent<PhotonView>());
+                HelperFunctions.SafeDestory(loadedVis.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
 
-                    Debug.LogFormat(GlobalVariables.cOnDestory + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Photon Destorying Instanced Vis, THERE CAN BE ONLY ONE!", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-                }
-                else
-                {
-                    Destroy(loadedVis.gameObject);
-
-                    Debug.LogFormat(GlobalVariables.cOnDestory + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Unity Destorying Instanced Vis, THERE CAN BE ONLY ONE!", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-                }
+                Debug.LogFormat(GlobalVariables.cOnDestory + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Unity Destorying Instanced Vis, THERE CAN BE ONLY ONE!", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
 
         }

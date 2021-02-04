@@ -158,5 +158,132 @@ namespace Photon_IATK
             return true;
         }
 
+        public static bool ParentInSharedPlayspaceAnchor(GameObject objToParent, MethodBase fromMethodBase)
+        {
+            bool wasSucsessfull;
+            PlayspaceAnchor playspaceAnchor = PlayspaceAnchor.Instance;
+
+            if (playspaceAnchor != null)
+            {
+                objToParent.transform.parent = PlayspaceAnchor.Instance.transform;
+                wasSucsessfull = true;
+            }
+            else
+            {
+                playspaceAnchor = GameObject.FindObjectOfType<PlayspaceAnchor>();
+                if (playspaceAnchor != null)
+                {
+                    objToParent.transform.parent = playspaceAnchor.transform;
+                    wasSucsessfull = true;
+                } else
+                {
+                    wasSucsessfull = false;
+                    Debug.LogFormat(GlobalVariables.cError + "No playspace anchor found. {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", objToParent.name, "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+                }
+            }
+
+            if (wasSucsessfull)
+                Debug.LogFormat(GlobalVariables.cCommon + "Parenting {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", objToParent.name, " in ", playspaceAnchor.name, Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+
+            return wasSucsessfull;
+        }
+
+        public static bool SafeDestory(GameObject objToDestory, MethodBase fromMethodBase)
+        {
+            bool wasSucessfull = false;
+
+            //find photon view
+
+            Photon.Pun.PhotonView photonView = objToDestory.GetComponent<Photon.Pun.PhotonView>();
+
+            if (photonView != null && Photon.Pun.PhotonNetwork.IsConnected)
+            {
+                if (photonView.IsMine)
+                {
+                    try
+                    {
+                        Photon.Pun.PhotonNetwork.Destroy(objToDestory);
+                        wasSucessfull = true;
+                    }
+                    catch (System.Exception e)
+                    {
+                        Debug.LogFormat(GlobalVariables.cError + "Error Network Destorying {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", objToDestory.name, " E: ", e.Message, Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+                    }
+                } else { Debug.LogFormat(GlobalVariables.cError + "Error Network Destorying {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", objToDestory.name, ": is not mine to destory ", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name); }
+
+            }
+            else if (photonView == null || !Photon.Pun.PhotonNetwork.IsConnected)
+            {
+                try
+                {
+                    Object.Destroy(objToDestory);
+                    wasSucessfull = true;
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogFormat(GlobalVariables.cError + "Error Destorying {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", objToDestory.name, " E: ", e.Message, Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+                }
+            }
+
+            if(wasSucessfull)
+                Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", objToDestory.name, "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+
+            return wasSucessfull;
+        }
+
+
+        public static bool getLocalPlayer(out Photon.Pun.PhotonView photonView, MethodBase fromMethodBase)
+        {
+            // Start is called before the first frame update
+            var tmp = (GameObject.FindGameObjectsWithTag("Player"));
+            foreach (GameObject obj in tmp)
+            {
+                Photon.Pun.PhotonView photon = obj.GetComponent<Photon.Pun.PhotonView>();
+                Photon_Player photonPlayer = obj.GetComponent<Photon_Player>();
+                Debug.Log(photon.name);
+                if (photon != null & photonPlayer != null)
+                {
+                    if (photon.IsMine)
+                    {
+                        photonView = photon;
+
+                        Debug.LogFormat(GlobalVariables.cCommon + "PlayerView found. Name:{0}, Owner:{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", photonView.name, photonView.Owner, "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+
+                        return true;
+                    }
+                }
+
+            }
+
+            Debug.LogFormat(GlobalVariables.cError + "No playerView found. {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", "", "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+
+            photonView = null;
+            return false;
+        }
+
+        public static void networkLoadObject(string nameOfPrefab, MethodBase fromMethodBase)
+        {
+            if (Photon.Pun.PhotonNetwork.IsConnected) {
+
+                Photon.Pun.PhotonView photonView;
+                if (HelperFunctions.getLocalPlayer(out photonView, System.Reflection.MethodBase.GetCurrentMethod()))
+                    photonView.RPC("masterClientInstantiate", Photon.Pun.RpcTarget.MasterClient, nameOfPrefab);
+            }
+            else
+            {
+                try
+                {
+                    GameObject prefab = Resources.Load(nameOfPrefab) as GameObject;
+                    Object.Instantiate(prefab, new Vector3(1.5f, 0, 0), Quaternion.identity);
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogFormat(GlobalVariables.cError + "No prefab found with name: {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", nameOfPrefab, " E: ", e.Message, Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+                }
+            }
+
+            //PhotonNetwork.SetMasterClient(photonPlayer);
+        }
+
     }
 }

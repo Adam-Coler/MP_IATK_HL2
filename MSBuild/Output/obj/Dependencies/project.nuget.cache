@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "iSVompwQGbn7nQoeX6yFWU22utmAmX8AMAwUEmOwNBJFLDxmBCH24nC/4zsM0gxhnGWy/f67BjCA/lKQ1AUUDw==",
+  "dgSpecHash": "3pC4lK0UpJlKo3Rn2JA+6M+QPDwrkBtHK/z6ZcDSKuF2ixRdvvHnGR8ROXzsYCrq6i9T+dkV30Eo+ARulR5/rg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj",
+  "projectFilePath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Assets\\IATK_DESKTOP.Dependencies.msb4u.csproj",
   "expectedPackageFiles": [
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",

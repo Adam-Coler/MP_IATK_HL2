@@ -41,6 +41,7 @@ namespace Photon_IATK
         public override void OnEnable()
         {
             base.OnEnable();
+
             PhotonNetwork.AddCallbackTarget(this);
         }
 
@@ -66,28 +67,18 @@ namespace Photon_IATK
             photonPlayers = PhotonNetwork.PlayerList;
             playersInRoom = photonPlayers.Length;
             myNumberInRoom = playersInRoom;
-            StartGame();
+            CreatePlayer();
         }
 
-        private void StartGame()
+        private void updateSavedObjects()
         {
-            CreatePlayer();
-            if (!PhotonNetwork.IsMasterClient) return;
+
         }
 
         private void CreatePlayer()
         {
             var player = PhotonNetwork.Instantiate(photonUserPrefab.name, Vector3.zero, Quaternion.identity);
             Debug.Log(GlobalVariables.green + "Photon Instantisateing the player" + GlobalVariables.endColor + " : " + "CreatePlayer()" + " : " + this.GetType());
-
-            //Debug.Log(GlobalVariables.green + "Photon Instantisateing the Room Orgin Tracker" + GlobalVariables.endColor + " : " + "CreatePlayer()" + " : " + this.GetType());
-
-            //var tracker = PhotonNetwork.Instantiate("Tracker", Vector3.zero, Quaternion.identity);
-            //tracker.name = "Room Orgin";
-
-            //Debug.Log(GlobalVariables.green + "Photon Instantisateing the Finger Tracker" + GlobalVariables.endColor + " : " + "CreatePlayer()" + " : " + this.GetType());
-            //this.gameObject.AddComponent<TrackerToFinger>();
-
         }
 
         #region CUSTOM
