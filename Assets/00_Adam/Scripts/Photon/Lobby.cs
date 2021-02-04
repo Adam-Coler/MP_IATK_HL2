@@ -74,20 +74,13 @@ namespace Photon_IATK
 
         /// <summary>
         /// Start the connection process.
-        /// - If already connected, we attempt joining a random room
         /// - if not yet connected, Connect this application instance to Photon Cloud Network
         /// </summary>
         public void Connect()
         {
 
             // we check if we are connected or not, we join if we are , else we initiate the connection to the server.
-            if (PhotonNetwork.IsConnected && !isConnecting)
-            {
-                Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Connected, Joining random room", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-                // #Critical we need at this point to attempt joining a Random Room. If it fails, we'll get notified in OnJoinRandomFailed() and we'll create one.
-                PhotonNetwork.JoinRandomRoom();
-            }
-            else
+            if (!PhotonNetwork.IsConnected)
             {
                 Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Connecting using settings", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -95,8 +88,8 @@ namespace Photon_IATK
                 // #Critical, we must first and foremost connect to Photon Online Server.
                 PhotonNetwork.GameVersion = gameVersion;
                 PhotonNetwork.ConnectUsingSettings();
-
             }
+            Debug.LogFormat(GlobalVariables.cAlert + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Already connected doing nothing...", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
         #endregion
 

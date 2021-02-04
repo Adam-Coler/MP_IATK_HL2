@@ -89,7 +89,7 @@ namespace Photon_IATK
 
         private void OnDestroy()
         {
-            Debug.LogFormat(GlobalVariables.cRegister + "Un-registering {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "UpdatedView", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cRegister + "Un-registering {0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "UpdatedView", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             OnUpdateViewAction -= UpdatedView;
 

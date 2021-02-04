@@ -43,6 +43,7 @@ namespace Photon_IATK
             Debug.LogFormat(GlobalVariables.cRegister + "GenericTransformSync registering OnEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
 
+            HelperFunctions.ParentInSharedPlayspaceAnchor(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
             Debug.LogFormat(GlobalVariables.cEvent + "GenericTransformSync calling PhotonRequestTransformEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             //this will call the master client to send the current transform data
 

@@ -260,30 +260,5 @@ namespace Photon_IATK
             photonView = null;
             return false;
         }
-
-        public static void networkLoadObject(string nameOfPrefab, MethodBase fromMethodBase)
-        {
-            if (Photon.Pun.PhotonNetwork.IsConnected) {
-
-                Photon.Pun.PhotonView photonView;
-                if (HelperFunctions.getLocalPlayer(out photonView, System.Reflection.MethodBase.GetCurrentMethod()))
-                    photonView.RPC("masterClientInstantiate", Photon.Pun.RpcTarget.MasterClient, nameOfPrefab);
-            }
-            else
-            {
-                try
-                {
-                    GameObject prefab = Resources.Load(nameOfPrefab) as GameObject;
-                    Object.Instantiate(prefab, new Vector3(1.5f, 0, 0), Quaternion.identity);
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogFormat(GlobalVariables.cError + "No prefab found with name: {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", nameOfPrefab, " E: ", e.Message, Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
-                }
-            }
-
-            //PhotonNetwork.SetMasterClient(photonPlayer);
-        }
-
     }
 }

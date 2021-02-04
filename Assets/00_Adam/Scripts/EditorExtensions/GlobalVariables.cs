@@ -61,6 +61,10 @@ namespace Photon_IATK
         public const byte PhotonMoveEvent = 1;
         public const byte PhotonRequestTransformEvent = 2;
         public const byte PhotonRespondToRequestTransformEvent = 3;
+        public const byte PhotonVisSceneInstantiateEvent = 4;
+        public const byte PhotonDeleteAllObjectsWithComponentEvent = 5;
+
+
 
         //Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
