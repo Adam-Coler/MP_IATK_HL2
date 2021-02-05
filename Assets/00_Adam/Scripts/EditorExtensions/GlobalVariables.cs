@@ -57,17 +57,19 @@ namespace Photon_IATK
             ParticipantID
         };
 
-        //Movement
+        public static ExitGames.Client.Photon.SendOptions sendOptions = ExitGames.Client.Photon.SendOptions.SendUnreliable;
+
+        //Movement 1-9
         public const byte PhotonMoveEvent = 1;
         public const byte PhotonRequestTransformEvent = 2;
         public const byte PhotonRespondToRequestTransformEvent = 3;
 
-        //Instancing
-        public const byte PhotonVisSceneInstantiateEvent = 4;
-        public const byte PhotonDeleteAllObjectsWithComponentEvent = 5;
-        public const byte PhotonDeleteSingleObjectsWithViewIDEvent = 6;
+        //Instancing 10 - 19
+        public const byte PhotonVisSceneInstantiateEvent = 10;
+        public const byte PhotonDeleteAllObjectsWithComponentEvent = 11;
+        public const byte PhotonDeleteSingleObjectsWithViewIDEvent = 12;
 
-        //VisUpdates
+        //VisUpdates 20 - 39
         public const byte PhotonChangeX_AxisEvent = 20;
         public const byte PhotonChangeY_AxisEvent = 21;
         public const byte PhotonChangeZ_AxisEvent = 22;
@@ -76,7 +78,13 @@ namespace Photon_IATK
         public const byte PhotonRequestStateEvent = 25;
         public const byte PhotonRequestStateEventResponse = 26;
 
+        //Player 40 - 49
+        public const byte PhotonRequestHideControllerModelsEvent = 40;
+        public const byte PhotonRequestNicknameUpdateEvent = 26;
+
         //Annotations
+
+
         //public const byte PhotonEvent = 6;
 
 

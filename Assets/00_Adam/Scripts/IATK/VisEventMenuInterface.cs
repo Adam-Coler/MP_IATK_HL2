@@ -7,7 +7,7 @@ using Photon.Pun;
 
 namespace Photon_IATK
 {
-    public class VisRPCMenuInterface : MonoBehaviour
+    public class VisEventMenuInterface : MonoBehaviour
     {
 
         public TMP_Dropdown xAxisDropdown;

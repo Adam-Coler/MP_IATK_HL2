@@ -102,7 +102,7 @@ namespace Photon_IATK
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient }; //Will not recived own message
 
-                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonVisSceneInstantiateEvent, content, raiseEventOptions, SendOptions.SendReliable);
+                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonVisSceneInstantiateEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
             }
         }
 
@@ -118,7 +118,7 @@ namespace Photon_IATK
             {                
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient }; //Will not recived own message
 
-                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonDeleteAllObjectsWithComponentEvent, data, raiseEventOptions, SendOptions.SendReliable);
+                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonDeleteAllObjectsWithComponentEvent, data, raiseEventOptions, GlobalVariables.sendOptions);
             }
         }
 
@@ -133,7 +133,7 @@ namespace Photon_IATK
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
 
-                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonDeleteSingleObjectsWithViewIDEvent, data, raiseEventOptions, SendOptions.SendReliable);
+                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonDeleteSingleObjectsWithViewIDEvent, data, raiseEventOptions, GlobalVariables.sendOptions);
             }
             else
             {

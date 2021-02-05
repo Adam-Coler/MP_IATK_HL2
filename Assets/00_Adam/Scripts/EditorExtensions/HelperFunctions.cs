@@ -188,7 +188,9 @@ namespace Photon_IATK
             return wasSucsessfull;
         }
 
-        public static bool getLocalPlayer(out Photon.Pun.PhotonView photonView, MethodBase fromMethodBase)
+
+
+        public static bool getLocalPlayer(out Photon.Pun.PhotonView photonView, out Photon_Player photon_Player, MethodBase fromMethodBase)
         {
             // Start is called before the first frame update
             var tmp = (GameObject.FindGameObjectsWithTag("Player"));
@@ -202,7 +204,7 @@ namespace Photon_IATK
                     if (photon.IsMine)
                     {
                         photonView = photon;
-
+                        photon_Player = photonPlayer;
                         Debug.LogFormat(GlobalVariables.cCommon + "PlayerView found. Name:{0}, Owner:{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", photonView.name, photonView.Owner, "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
 
                         return true;
@@ -214,7 +216,16 @@ namespace Photon_IATK
             Debug.LogFormat(GlobalVariables.cError + "No playerView found. {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", "", "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
 
             photonView = null;
+            photon_Player = null;
             return false;
+        }
+
+
+
+            public static bool getLocalPlayer(out Photon.Pun.PhotonView photonView, MethodBase fromMethodBase)
+        {
+            Photon_Player photon_Player;
+            return getLocalPlayer(out photonView, out photon_Player, fromMethodBase);
         }
     }
 }

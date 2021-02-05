@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Reflection;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Photon.Pun;
@@ -109,7 +108,7 @@ namespace Photon_IATK
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others }; //Will not recived own message
 
-            PhotonNetwork.RaiseEvent(GlobalVariables.PhotonMoveEvent, content, raiseEventOptions, SendOptions.SendReliable);
+            PhotonNetwork.RaiseEvent(GlobalVariables.PhotonMoveEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
         }
 
         /// <summary>
@@ -127,7 +126,7 @@ namespace Photon_IATK
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient }; //Will not recived own message
 
-            PhotonNetwork.RaiseEvent(GlobalVariables.PhotonRequestTransformEvent, content, raiseEventOptions, SendOptions.SendReliable);
+            PhotonNetwork.RaiseEvent(GlobalVariables.PhotonRequestTransformEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
         }
 
         /// <summary>
@@ -172,7 +171,7 @@ namespace Photon_IATK
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; //Will not recived own message
 
-            PhotonNetwork.RaiseEvent(GlobalVariables.PhotonRespondToRequestTransformEvent, content, raiseEventOptions, SendOptions.SendReliable);
+            PhotonNetwork.RaiseEvent(GlobalVariables.PhotonRespondToRequestTransformEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
         }
 
         /// <summary>

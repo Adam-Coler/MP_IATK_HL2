@@ -89,7 +89,7 @@ namespace Photon_IATK
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
 
-                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonRequestStateEvent, content, raiseEventOptions, SendOptions.SendReliable);
+                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonRequestStateEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
 
                 isWaitingForPhotonRequestStateEvent = true;
             }
@@ -191,7 +191,7 @@ System.Reflection.MethodBase.GetCurrentMethod());
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
-            PhotonNetwork.RaiseEvent(GlobalVariables.PhotonRequestStateEventResponse, content, raiseEventOptions, SendOptions.SendReliable);
+            PhotonNetwork.RaiseEvent(GlobalVariables.PhotonRequestStateEventResponse, content, raiseEventOptions, GlobalVariables.sendOptions);
         }
 
         public void _processRequestStateEventResponse(object[] data)
@@ -231,7 +231,7 @@ System.Reflection.MethodBase.GetCurrentMethod());
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
-                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonChangeX_AxisEvent, content, raiseEventOptions, SendOptions.SendReliable);
+                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonChangeX_AxisEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
             } else
             {
                 _changeXAxis(newAxisDimension);
@@ -252,7 +252,7 @@ System.Reflection.MethodBase.GetCurrentMethod());
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
-                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonChangeY_AxisEvent, content, raiseEventOptions, SendOptions.SendReliable);
+                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonChangeY_AxisEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
             }
             else
             {
@@ -274,7 +274,7 @@ System.Reflection.MethodBase.GetCurrentMethod());
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
-                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonChangeZ_AxisEvent, content, raiseEventOptions, SendOptions.SendReliable);
+                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonChangeZ_AxisEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
             }
             else
             {
@@ -296,7 +296,7 @@ System.Reflection.MethodBase.GetCurrentMethod());
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
-                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonChangeColorDimensionEvent, content, raiseEventOptions, SendOptions.SendReliable);
+                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonChangeColorDimensionEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
             }
             else
             {
@@ -319,7 +319,7 @@ System.Reflection.MethodBase.GetCurrentMethod());
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
-                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonChangeSizeDimensionEvent, content, raiseEventOptions, SendOptions.SendReliable);
+                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonChangeSizeDimensionEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
             }
             else
             {
