@@ -12,10 +12,10 @@ namespace Photon_IATK {
 
         private void OnEnable()
         {
-            VisualizationRPC_Calls.RPCvisualisationUpdatedDelegate += UpdatedView;
+            VisualizationEvent_Calls.RPCvisualisationUpdatedDelegate += UpdatedView;
             Debug.LogFormat(GlobalVariables.cRegister + "Registering {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "UpdatedView", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            VisualizationRPC_Calls.RPCvisualisationUpdateRequestDelegate += UpdatedViewRequested;
+            VisualizationEvent_Calls.RPCvisualisationUpdateRequestDelegate += UpdatedViewRequested;
             Debug.LogFormat(GlobalVariables.cRegister + "Registering {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "UpdatedViewRequested", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
@@ -154,8 +154,8 @@ namespace Photon_IATK {
             GameObject visGameObject;
             if (!HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.visTag, out visGameObject, false, System.Reflection.MethodBase.GetCurrentMethod())) { return "EmmulatedVisObject"; }
 
-            VisualizationRPC_Calls visualizationRPC_Calls;
-            if (!HelperFunctions.GetComponent<VisualizationRPC_Calls>(out visualizationRPC_Calls, System.Reflection.MethodBase.GetCurrentMethod())) { return "EmmulatedVisObject"; }
+            VisualizationEvent_Calls visualizationRPC_Calls;
+            if (!HelperFunctions.GetComponent<VisualizationEvent_Calls>(out visualizationRPC_Calls, System.Reflection.MethodBase.GetCurrentMethod())) { return "EmmulatedVisObject"; }
 
             return visualizationRPC_Calls.axisKey;
         }
@@ -187,7 +187,7 @@ namespace Photon_IATK {
 
                 //add the loaded info from the serialized annotation to the actual annotation
                 annotation.setUpFromSerializeableAnnotation(serializeableAnnotation);
-            } 
+            }
 
             //loop each file
 

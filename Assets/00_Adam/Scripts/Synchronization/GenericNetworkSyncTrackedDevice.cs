@@ -83,7 +83,7 @@ namespace Photon_IATK
 
         private void OnDestroy()
         {
-            HelperFunctions.SafeDestory(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
+            GeneralEventManager.instance.SendDeleteSingleObjectRequest(this.gameObject);
         }
     }
 }

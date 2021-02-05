@@ -188,50 +188,6 @@ namespace Photon_IATK
             return wasSucsessfull;
         }
 
-        public static bool SafeDestory(GameObject objToDestory, MethodBase fromMethodBase)
-        {
-            bool wasSucessfull = false;
-
-            //find photon view
-
-            Photon.Pun.PhotonView photonView = objToDestory.GetComponent<Photon.Pun.PhotonView>();
-
-            if (photonView != null && Photon.Pun.PhotonNetwork.IsConnected)
-            {
-                if (photonView.IsMine)
-                {
-                    try
-                    {
-                        Photon.Pun.PhotonNetwork.Destroy(objToDestory);
-                        wasSucessfull = true;
-                    }
-                    catch (System.Exception e)
-                    {
-                        Debug.LogFormat(GlobalVariables.cError + "Error Network Destorying {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", objToDestory.name, " E: ", e.Message, Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
-                    }
-                } else { Debug.LogFormat(GlobalVariables.cError + "Error Network Destorying {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", objToDestory.name, ": is not mine to destory ", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name); }
-
-            }
-            else if (photonView == null || !Photon.Pun.PhotonNetwork.IsConnected)
-            {
-                try
-                {
-                    Object.Destroy(objToDestory);
-                    wasSucessfull = true;
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogFormat(GlobalVariables.cError + "Error Destorying {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", objToDestory.name, " E: ", e.Message, Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
-                }
-            }
-
-            if(wasSucessfull)
-                Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", objToDestory.name, "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
-
-            return wasSucessfull;
-        }
-
-
         public static bool getLocalPlayer(out Photon.Pun.PhotonView photonView, MethodBase fromMethodBase)
         {
             // Start is called before the first frame update

@@ -55,7 +55,7 @@ namespace Photon_IATK
 
         private void OnDestroy()
         {
-            HelperFunctions.SafeDestory(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
+
         }
 
 #if UNITY_5_4_OR_NEWER

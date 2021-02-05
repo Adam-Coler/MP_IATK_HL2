@@ -28,8 +28,6 @@ namespace Photon_IATK
 
             if (isPositionDifferent || isRotationDifferent || isScaleDifferent)
             {
-                Debug.LogFormat(GlobalVariables.cRegister + "GenericTransformSync Sending SendMovementEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
                 lastLocalLocation = myTransform.localPosition;
                 lastLocalRotation = myTransform.localRotation;
                 lastLocalScale = myTransform.localScale;
@@ -106,9 +104,6 @@ namespace Photon_IATK
         /// </summary>
         private void SendMovementEvent()
         {
-
-            Debug.LogFormat(GlobalVariables.cEvent + "SendMovementEvent() triggered raising PhotonMoveEvent{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "","","", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
             Transform myTransform = this.gameObject.transform;
             object[] content = new object[] { photonView.ViewID, myTransform.localPosition, myTransform.localRotation, myTransform.localScale };
 

@@ -61,17 +61,10 @@ namespace Photon_IATK
         public void removeAnnotationsDummy()
         {
             countOfAnnotations = 0;
-            var annotations = GameObject.FindGameObjectsWithTag("Annotation");
 
-            Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying {0} annotations" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", annotations.Length, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying annotations, using EventManager" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            foreach (GameObject annotation in annotations)
-            {
-                HelperFunctions.SafeDestory(annotation.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
-
-                Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", annotation.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
-            }
+            GeneralEventManager.instance.SendDeleteAllObjectsWithComponentRequest("Annotation");
         }
     }
 }

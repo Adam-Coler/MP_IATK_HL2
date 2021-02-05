@@ -17,7 +17,7 @@ namespace Photon_IATK
         public TMP_Dropdown colorDimensionDropdown;
         public TMP_Dropdown sizeDimensionDropdown;
 
-        private VisualizationRPC_Calls theVisualizationRPC_Calls;
+        private VisualizationEvent_Calls theVisualizationEvent_Calls;
 
 
         // Start is called before the first frame update
@@ -28,27 +28,27 @@ namespace Photon_IATK
 
         public void changeXAxis()
         {
-            theVisualizationRPC_Calls.changeXAxis(xAxisDropdown.options[xAxisDropdown.value].text);
+            theVisualizationEvent_Calls.RequestChangeXAxisEvent(xAxisDropdown.options[xAxisDropdown.value].text);
         }
 
         public void changeYAxis()
         {
-            theVisualizationRPC_Calls.changeYAxis(yAxisDropdown.options[yAxisDropdown.value].text);
+            theVisualizationEvent_Calls.RequestChangeYAxisEvent(yAxisDropdown.options[yAxisDropdown.value].text);
         }
 
         public void changeZAxis()
         {
-            theVisualizationRPC_Calls.changeZAxis(zAxisDropdown.options[zAxisDropdown.value].text);
+            theVisualizationEvent_Calls.RequestChangeZAxisEvent(zAxisDropdown.options[zAxisDropdown.value].text);
         }
 
         public void changeColorDimension()
         {
-            theVisualizationRPC_Calls.changeColorDimension(colorDimensionDropdown.options[colorDimensionDropdown.value].text);
+            theVisualizationEvent_Calls.RequestChangeColorDimensionEvent(colorDimensionDropdown.options[colorDimensionDropdown.value].text);
         }
 
         public void changeSizeDimension()
         {
-            theVisualizationRPC_Calls.changeSizeDimension(sizeDimensionDropdown.options[sizeDimensionDropdown.value].text);
+            theVisualizationEvent_Calls.RequestChangeSizeDimensionEvent(sizeDimensionDropdown.options[sizeDimensionDropdown.value].text);
         }
 
         private void OnEnable()
@@ -60,7 +60,7 @@ namespace Photon_IATK
                 return;
             }
 
-            VisualizationRPC_Calls.RPCvisualisationUpdatedDelegate += UpdatedView;
+            VisualizationEvent_Calls.RPCvisualisationUpdatedDelegate += UpdatedView;
             Debug.LogFormat(GlobalVariables.cRegister + "Registering {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "UpdatedView", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             //Now we need to get the RPC interface assuming one VIS object and that the vis object is loaded before the menu
@@ -83,27 +83,27 @@ namespace Photon_IATK
             {
                 case AbstractVisualisation.PropertyType.X:
                     Debug.LogFormat(GlobalVariables.cCommon + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-                    xAxisDropdown.value = xAxisDropdown.options.FindIndex(option => option.text == theVisualizationRPC_Calls.xDimension);
+                    xAxisDropdown.value = xAxisDropdown.options.FindIndex(option => option.text == theVisualizationEvent_Calls.xDimension);
                     xAxisDropdown.RefreshShownValue();
                     break;
                 case AbstractVisualisation.PropertyType.Y:
-                    yAxisDropdown.value = yAxisDropdown.options.FindIndex(option => option.text == theVisualizationRPC_Calls.yDimension);
+                    yAxisDropdown.value = yAxisDropdown.options.FindIndex(option => option.text == theVisualizationEvent_Calls.yDimension);
                     yAxisDropdown.RefreshShownValue();
                     Debug.LogFormat(GlobalVariables.cCommon + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                     break;
                 case AbstractVisualisation.PropertyType.Z:
 
-                    zAxisDropdown.value = zAxisDropdown.options.FindIndex(option => option.text == theVisualizationRPC_Calls.zDimension);
+                    zAxisDropdown.value = zAxisDropdown.options.FindIndex(option => option.text == theVisualizationEvent_Calls.zDimension);
                     zAxisDropdown.RefreshShownValue();
                     Debug.LogFormat(GlobalVariables.cCommon + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                     break;
                 case AbstractVisualisation.PropertyType.Colour:
-                    colorDimensionDropdown.value = colorDimensionDropdown.options.FindIndex(option => option.text == theVisualizationRPC_Calls.colourDimension);
+                    colorDimensionDropdown.value = colorDimensionDropdown.options.FindIndex(option => option.text == theVisualizationEvent_Calls.colourDimension);
                     colorDimensionDropdown.RefreshShownValue();
                     Debug.LogFormat(GlobalVariables.cCommon + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                     break;
                 case AbstractVisualisation.PropertyType.Size:
-                    sizeDimensionDropdown.value = sizeDimensionDropdown.options.FindIndex(option => option.text == theVisualizationRPC_Calls.sizeDimension);
+                    sizeDimensionDropdown.value = sizeDimensionDropdown.options.FindIndex(option => option.text == theVisualizationEvent_Calls.sizeDimension);
                     sizeDimensionDropdown.RefreshShownValue();
                     Debug.LogFormat(GlobalVariables.cCommon + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                     break;
@@ -116,7 +116,7 @@ namespace Photon_IATK
         private void findAndStoreVisualizationRPC_Calls()
         {
             //get all VisualizationRPC_Calls
-            VisualizationRPC_Calls[] visualizationRPC_CallsCollection = GameObject.FindObjectsOfType<VisualizationRPC_Calls>();
+            VisualizationEvent_Calls[] visualizationRPC_CallsCollection = GameObject.FindObjectsOfType<VisualizationEvent_Calls>();
 
             //If there are none or more than one we have a problem
             if (visualizationRPC_CallsCollection.Length == 0)
@@ -126,9 +126,9 @@ namespace Photon_IATK
             }
 
             //Nothing has been setup
-            if (theVisualizationRPC_Calls == null)
+            if (theVisualizationEvent_Calls == null)
             {
-                theVisualizationRPC_Calls = visualizationRPC_CallsCollection[0];
+                theVisualizationEvent_Calls = visualizationRPC_CallsCollection[0];
 
                 Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "New VisPRC referance set.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -137,11 +137,11 @@ namespace Photon_IATK
             }
 
             //Check if a New vis is loaded
-            if (theVisualizationRPC_Calls != null)
+            if (theVisualizationEvent_Calls != null)
             {
-                if (theVisualizationRPC_Calls != visualizationRPC_CallsCollection[0])
+                if (theVisualizationEvent_Calls != visualizationRPC_CallsCollection[0])
                 {
-                    theVisualizationRPC_Calls = visualizationRPC_CallsCollection[0];
+                    theVisualizationEvent_Calls = visualizationRPC_CallsCollection[0];
 
                     Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "New VisRPC found, VisPRC referance updated.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -154,7 +154,7 @@ namespace Photon_IATK
 
         private void setUpMenus()
         {
-            setAxisDropdowns(theVisualizationRPC_Calls.loadedCSVHeaders, true);
+            setAxisDropdowns(theVisualizationEvent_Calls.loadedCSVHeaders, true);
 
             Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Updating menu options.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }

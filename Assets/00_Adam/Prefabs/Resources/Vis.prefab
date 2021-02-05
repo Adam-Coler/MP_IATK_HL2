@@ -80,6 +80,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bfd248f8e0a90a47bf0e6128d1b9cc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isWaitingForPhotonRequestStateEvent: 0
 --- !u!114 &-2042066654088758703
 MonoBehaviour:
   m_ObjectHideFlags: 0

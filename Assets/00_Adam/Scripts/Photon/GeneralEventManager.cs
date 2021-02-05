@@ -12,9 +12,9 @@ namespace Photon_IATK
     /// This class is incharge of photon scene instantiation and destruction
     /// </summary>
     [RequireComponent(typeof(Photon.Pun.PhotonView))]
-    public class EventManager : MonoBehaviourPun
+    public class GeneralEventManager : MonoBehaviourPun
     {
-        public static EventManager instance;
+        public static GeneralEventManager instance;
 
         #region Setup
 
@@ -71,6 +71,11 @@ namespace Photon_IATK
                     break;
                 case GlobalVariables.PhotonDeleteAllObjectsWithComponentEvent:
                     PhotonProcessDeleteAllObjectsWithComponentEvent(data);
+                    Debug.Log("PhotonDeleteAllObjectsWithComponentEvent");
+                    break;
+                case GlobalVariables.PhotonDeleteSingleObjectsWithViewIDEvent:
+                    PhotonProcessDeleteSingleObjectsWithViewEvent(data);
+                    Debug.Log("PhotonDeleteSingleObjectsWithViewIDEvent");
                     break;
                 default:
                     break;
@@ -117,6 +122,25 @@ namespace Photon_IATK
             }
         }
 
+        public void SendDeleteSingleObjectRequest(GameObject obj)
+        {
+
+
+            //is connect and has veiw
+            if (PhotonNetwork.IsConnected && obj.GetComponent<PhotonView>() != null)
+            {
+                object[] data = new object[] { photonView.ViewID, obj.GetComponent<PhotonView>().ViewID };
+
+                RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
+
+                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonDeleteSingleObjectsWithViewIDEvent, data, raiseEventOptions, SendOptions.SendReliable);
+            }
+            else
+            {
+                SafeDestory(obj);
+            }
+        }
+
         #endregion
 
         #region Receive Events
@@ -147,6 +171,12 @@ namespace Photon_IATK
             }
         }
 
+        private void PhotonProcessDeleteSingleObjectsWithViewEvent(object[] data)
+        {
+            int photonViewID = (int)data[1];
+            PhotonNetwork.Destroy(PhotonView.Find(photonViewID).gameObject);
+        }
+
         //instantiate annotation
 
         //delete annotation
@@ -163,8 +193,6 @@ namespace Photon_IATK
         {
             //check if photonconnected
             //check is has view
-
-
             if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient && obj.GetComponent<PhotonView>() != null)
             {
                 try
@@ -184,7 +212,31 @@ namespace Photon_IATK
 
                 Destroy(obj.gameObject);
             }
+        }
 
+        private void SafeDestory(GameObject obj)
+        {
+            //check if photonconnected
+            //check is has view
+            if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient && obj.GetComponent<PhotonView>() != null)
+            {
+                try
+                {
+                    Photon.Pun.PhotonNetwork.Destroy(obj);
+
+                    Debug.LogFormat(GlobalVariables.cOnDestory + "Photon Destorying: {0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", obj.gameObject.name, "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                }
+                catch (System.Exception e)
+                {
+                    Debug.LogFormat(GlobalVariables.cError + "Error Photon Destorying: {0}, E: {1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", obj.gameObject.name, e.Message, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                }
+            }
+            else
+            {
+                Debug.LogFormat(GlobalVariables.cOnDestory + "Offline Destorying: {0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", obj.gameObject.name, "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                Destroy(obj);
+            }
         }
 
 

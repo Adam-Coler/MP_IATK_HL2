@@ -72,7 +72,7 @@ namespace Photon_IATK
 
         private void _setAxisNames()
         {
-            VisualizationRPC_Calls myParentsVisRPCClass = myVisParent.GetComponent<VisualizationRPC_Calls>();
+            VisualizationEvent_Calls myParentsVisRPCClass = myVisParent.GetComponent<VisualizationEvent_Calls>();
             
             if (myParentsVisRPCClass == null)
             {

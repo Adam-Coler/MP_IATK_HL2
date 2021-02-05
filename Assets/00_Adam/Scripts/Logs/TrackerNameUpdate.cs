@@ -34,7 +34,7 @@ public class TrackerNameUpdate : MonoBehaviour
         }
         private void OnDestroy()
         {
-            HelperFunctions.SafeDestory(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
+
         }
     }
 

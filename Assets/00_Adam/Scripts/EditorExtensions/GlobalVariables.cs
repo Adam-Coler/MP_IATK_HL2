@@ -57,13 +57,27 @@ namespace Photon_IATK
             ParticipantID
         };
 
-
+        //Movement
         public const byte PhotonMoveEvent = 1;
         public const byte PhotonRequestTransformEvent = 2;
         public const byte PhotonRespondToRequestTransformEvent = 3;
+
+        //Instancing
         public const byte PhotonVisSceneInstantiateEvent = 4;
         public const byte PhotonDeleteAllObjectsWithComponentEvent = 5;
+        public const byte PhotonDeleteSingleObjectsWithViewIDEvent = 6;
 
+        //VisUpdates
+        public const byte PhotonChangeX_AxisEvent = 20;
+        public const byte PhotonChangeY_AxisEvent = 21;
+        public const byte PhotonChangeZ_AxisEvent = 22;
+        public const byte PhotonChangeSizeDimensionEvent = 23;
+        public const byte PhotonChangeColorDimensionEvent = 24;
+        public const byte PhotonRequestStateEvent = 25;
+        public const byte PhotonRequestStateEventResponse = 26;
+
+        //Annotations
+        //public const byte PhotonEvent = 6;
 
 
         //Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
