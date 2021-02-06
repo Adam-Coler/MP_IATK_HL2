@@ -14,7 +14,7 @@ namespace Photon_IATK
         {
             if (trackerPrefab == null)
             {
-                trackerPrefab = Resources.Load<GameObject>("Tracker");
+                trackerPrefab = Resources.Load<GameObject>("Photon_Tracker");
             }
         }
 
@@ -43,7 +43,7 @@ namespace Photon_IATK
             Annotation annotation = newObj.AddComponent<Annotation>();
 
             VisWrapperClass wrapperClass = GameObject.FindGameObjectWithTag("Vis").GetComponent<VisWrapperClass>();
-            annotation.myAnnotationNumber = wrapperClass.getCountOfAnnotationsAndIncrement();
+            annotation.myUniqueAnnotationNumber = wrapperClass.getCountOfAnnotationsAndIncrement();
         }
 
 

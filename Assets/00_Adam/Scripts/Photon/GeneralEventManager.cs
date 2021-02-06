@@ -23,26 +23,26 @@ namespace Photon_IATK
             if (instance == null)
             {
                 instance = this;
-                Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "EventManager Set", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "GeneralEventManager Set", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
             else if(instance != this)
             {
                 Destroy(instance.gameObject);
                 instance = this;
-                Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "EventManager Destoryed then Set", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "GeneralEventManager Destoryed then Set", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
         private void OnEnable()
         {
-            Debug.LogFormat(GlobalVariables.cRegister + "EventManager registering OnEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cRegister + "GeneralEventManager registering OnEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
         }
 
         private void OnDisable()
         {
-            Debug.LogFormat(GlobalVariables.cRegister + "EventManager unregistering OnEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cRegister + "GeneralEventManager unregistering OnEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
         }
@@ -96,7 +96,7 @@ namespace Photon_IATK
             } 
             else
             {
-                Debug.LogFormat(GlobalVariables.cEvent + "SendVisSceneInstantiateEvent() triggered raising PhotonVisSceneInstantiateEvent{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                Debug.LogFormat(GlobalVariables.cEvent + "{0}Any ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", "", "Requesting Vis Instantiate", "MasterClient", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonVisSceneInstantiateEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 object[] content = new object[] { photonView.ViewID };
 
@@ -146,9 +146,9 @@ namespace Photon_IATK
         #region Receive Events
         private void PhotonProcessVisSceneInstantiateEvent(object[] data)
         {
-            GameObject obj;
-            Debug.LogFormat(GlobalVariables.cEvent + "PhotonProcessVisSceneInstantiateEvent() triggered, procssing the request{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: Client ~ {1}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}{6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", GlobalVariables.PhotonVisSceneInstantiateEvent, "InstantiateRoomObject Vis", "", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, "", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
+            GameObject obj;
             obj = PhotonNetwork.InstantiateRoomObject("Vis", Vector3.zero, Quaternion.identity);
         }
 

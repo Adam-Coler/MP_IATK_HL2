@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Photon_IATK
 {
@@ -13,6 +11,9 @@ namespace Photon_IATK
         {
             btn_functions = FindObjectOfType<Btn_Functions_For_In_Scene_Scripts>();
             setup();
+
+            Photon.Pun.PhotonNetwork.SerializationRate = GlobalVariables.iPunObservableUpdateRate;
+            Photon.Pun.PhotonNetwork.SendRate = GlobalVariables.iPunObservableUpdateRate;
         }
 
 

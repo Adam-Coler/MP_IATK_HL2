@@ -6,6 +6,8 @@ namespace Photon_IATK
     {
         public static byte maxPlayers = 5;
 
+        public static bool JSONPrettyPrint = true;
+
         public static string red = "<color=#ff0000>";
         public static string green = "<color=#00ff00>";
         public static string purple = "<color=#ff00ff>";
@@ -57,6 +59,8 @@ namespace Photon_IATK
             ParticipantID
         };
 
+
+        public static int iPunObservableUpdateRate = 45;
         public static ExitGames.Client.Photon.SendOptions sendOptions = ExitGames.Client.Photon.SendOptions.SendUnreliable;
 
         //Movement 1-9
@@ -80,10 +84,19 @@ namespace Photon_IATK
 
         //Player 40 - 49
         public const byte PhotonRequestHideControllerModelsEvent = 40;
-        public const byte PhotonRequestNicknameUpdateEvent = 26;
+        public const byte PhotonRequestNicknameUpdateEvent = 41;
 
-        //Annotations
+        //Annotations 50 - 69
+        public const byte PhotonRequestAnnotationsSaveAllEvent = 50;
+        public const byte PhotonRequestAnnotationsDeleteAllEvent = 51;
+        public const byte PhotonRequestAnnotationsDeleteOneEvent = 52;
+        public const byte PhotonRequestAnnotationsLoadAllEvent = 53;
 
+        public const byte PhotonRequestAnnotationsListOfIDsEvent = 54;
+        public const byte PhotonResponseRequestAnnotationsListOfIDsEventNONE_FOUNDEvent = 55;
+        public const byte PhotonResponseToRequestAnnotationsListOfIDsEvent = 56;
+        public const byte PhotonRequestAnnotationsByListOfIDsEvent = 57;
+        public const byte PhotonResponseToRequestAnnotationsByListOfIDsEvent = 58;
 
         //public const byte PhotonEvent = 6;
 

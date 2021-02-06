@@ -69,6 +69,29 @@ namespace Photon_IATK
             return resturnStr;
         }
 
+        private bool _isisTriggeringEvents;
+        public bool isTriggeringEvents {
+        get
+            {
+                return _isisTriggeringEvents;
+            }
+        set
+            {
+                _isisTriggeringEvents = value;
+                if (value)
+                {
+                    UpdatedView(AbstractVisualisation.PropertyType.DimensionChange);
+
+                    Debug.LogFormat(GlobalVariables.cEvent + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Vis is now sending events", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                }
+                else
+                {
+                    Debug.LogFormat(GlobalVariables.cEvent + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Vis is not sending events", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                }
+            }
+        }
+
+
         private void updateHeaders()
         {
             Debug.LogFormat(GlobalVariables.cCommon + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "New wrapperCSVDataSource loaded, setting headers", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
@@ -108,8 +131,12 @@ namespace Photon_IATK
 
         private void UpdatedView(AbstractVisualisation.PropertyType propertyType)
         {
-            if (visualisationUpdatedDelegate != null)
-                visualisationUpdatedDelegate(propertyType);
+            if (_isisTriggeringEvents) 
+            {
+                if (visualisationUpdatedDelegate != null)
+                    visualisationUpdatedDelegate(propertyType);
+            }
+            Debug.LogFormat(GlobalVariables.cEvent + "Vis updating but not sending events." + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
         public void updateVisPropertiesSafe()
@@ -129,7 +156,8 @@ namespace Photon_IATK
             }
 
             updateProperties();
-            visualisationUpdatedDelegate(AbstractVisualisation.PropertyType.VisualisationType);
+            UpdatedView(AbstractVisualisation.PropertyType.VisualisationType);
+
         }
 
     }

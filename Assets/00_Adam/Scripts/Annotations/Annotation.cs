@@ -14,18 +14,25 @@ namespace Photon_IATK
         public string myVisYAxis;
         public string myVisZAxis;
         public string myTextContent;
-        public int myAnnotationNumber;
+        public int myUniqueAnnotationNumber;
+
 
         public typesOfAnnotations myAnnotationType;
 
         public enum typesOfAnnotations {
-            TEST_TRACKER
+            TEST_TRACKER,
+            LINERENDER
         }
 
         private bool isDeleted = false;
 
         private GameObject myVisParent;
         private GameObject myAnnotationCollectionParent;
+
+        public Annotation(SerializeableAnnotation serializeableAnnotation){
+            setUpFromSerializeableAnnotation(serializeableAnnotation);
+        }
+
 
         private void Awake()
         {
@@ -94,6 +101,11 @@ namespace Photon_IATK
             HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.annotationCollectionTag, out myAnnotationCollectionParent, true, System.Reflection.MethodBase.GetCurrentMethod());
         }
 
+        public string getJSONSerializedAnnotationString()
+        {
+            return JsonUtility.ToJson(getSerializeableAnnotation(), GlobalVariables.JSONPrettyPrint);
+        }
+
         public SerializeableAnnotation getSerializeableAnnotation()
         {
             SerializeableAnnotation serializeableAnnotation = new SerializeableAnnotation();
@@ -117,7 +129,7 @@ namespace Photon_IATK
             serializeableAnnotation.myVisYAxis = myVisYAxis;
             serializeableAnnotation.myVisZAxis = myVisZAxis;
             serializeableAnnotation.myTextContent = myTextContent;
-            serializeableAnnotation.myAnnotationNumber = myAnnotationNumber;
+            serializeableAnnotation.myAnnotationNumber = myUniqueAnnotationNumber;
 
             serializeableAnnotation.myAnnotationType = myAnnotationType.ToString();
 
@@ -136,7 +148,7 @@ namespace Photon_IATK
             myVisYAxis = serializeableAnnotation.myVisYAxis;
             myVisZAxis = serializeableAnnotation.myVisZAxis;
             myTextContent = serializeableAnnotation.myTextContent;
-            myAnnotationNumber = serializeableAnnotation.myAnnotationNumber;
+            myUniqueAnnotationNumber = serializeableAnnotation.myAnnotationNumber;
 
             myAnnotationType = (typesOfAnnotations)Enum.Parse(typeof(typesOfAnnotations), serializeableAnnotation.myAnnotationType, true);
 

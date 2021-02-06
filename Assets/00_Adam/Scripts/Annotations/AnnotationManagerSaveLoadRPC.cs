@@ -13,24 +13,32 @@ namespace Photon_IATK {
         private void OnEnable()
         {
             VisualizationEvent_Calls.RPCvisualisationUpdatedDelegate += UpdatedView;
-            Debug.LogFormat(GlobalVariables.cRegister + "Registering {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "UpdatedView", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
             VisualizationEvent_Calls.RPCvisualisationUpdateRequestDelegate += UpdatedViewRequested;
-            Debug.LogFormat(GlobalVariables.cRegister + "Registering {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "UpdatedViewRequested", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            Debug.LogFormat(GlobalVariables.cRegister + "Registering {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "UpdatedView, UpdatedViewRequested", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+        }
+
+        private void OnDisable()
+        {
+            VisualizationEvent_Calls.RPCvisualisationUpdatedDelegate -= UpdatedView;
+            VisualizationEvent_Calls.RPCvisualisationUpdateRequestDelegate -= UpdatedViewRequested;
+
+            Debug.LogFormat(GlobalVariables.cRegister + "Unregistering {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "UpdatedView, UpdatedViewRequested", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
         private void UpdatedView(AbstractVisualisation.PropertyType propertyType)
         {
             Debug.LogFormat(GlobalVariables.cTest + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            loadAnnotations();
+            //loadAnnotations();
         }
 
         private void UpdatedViewRequested(AbstractVisualisation.PropertyType propertyType)
         {
             Debug.LogFormat(GlobalVariables.cTest + "Vis view {0} update requested." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            saveAnnotations();
+            //saveAnnotations();
             _removeAnnotations();
         }
 

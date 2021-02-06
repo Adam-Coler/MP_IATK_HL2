@@ -210,11 +210,13 @@ System.Reflection.MethodBase.GetCurrentMethod());
             Debug.LogFormat(GlobalVariables.cEvent + "_processRequestStateEventResponse: Processed, recived data = View:{0}, X Axis: {1}, Y Axis: {2}, Z Axis: {3}, Colur: {4}, Size: {5}." + GlobalVariables.endColor + " {6}: {7} -> {8} -> {9}", photonView.ViewID, xAxis, yAxis, zAxis, colorDimension, sizeDimension, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(),
 System.Reflection.MethodBase.GetCurrentMethod());
 
+            thisVis.isTriggeringEvents = false;
             _changeXAxis(xAxis);
             _changeYAxis(yAxis);
             _changeZAxis(zAxis);
             _changeColorDimension(colorDimension);
             _changeSizeDimension(sizeDimension);
+            thisVis.isTriggeringEvents = true;
         }
 
         public void RequestChangeXAxisEvent(string newAxisDimension)
