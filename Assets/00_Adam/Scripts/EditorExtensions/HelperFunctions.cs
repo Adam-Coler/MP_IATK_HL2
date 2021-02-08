@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Reflection;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Photon_IATK
 {
@@ -229,10 +232,13 @@ namespace Photon_IATK
             return getLocalPlayer(out photonView, out photon_Player, fromMethodBase);
         }
 
-        public static bool doListsMatch<T>(List<T> myList, List<T> comparedList, out List<T> outList)
+        public static bool doListsMatch<T>(List<T> myList, List<T> comparedList, out List<T> outList, MethodBase fromMethodBase)
         {
             var firstNotSecond = myList.Except(comparedList).ToList();
             outList = comparedList.Except(myList).ToList();
+
+            Debug.LogFormat(GlobalVariables.cCommon + "doListsMatch, !firstNotSecond.Any() :{0}, !outList.Any(): {1}, (!firstNotSecond.Any() && !outList.Any()): {2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", !firstNotSecond.Any(), !outList.Any(), !firstNotSecond.Any() && !outList.Any(), Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+
             return !firstNotSecond.Any() && !outList.Any();
         }
 
@@ -270,6 +276,42 @@ namespace Photon_IATK
             {
                 output.Add(int.Parse(intAsString));
             }
+
+            return output;
+        }
+
+
+        public static byte[] SerializeToByteArray<T>(T serializableObject, System.Reflection.MethodBase fromMethodBase)
+        {
+            byte[] bytes;
+            IFormatter formatter = new BinaryFormatter();
+            MemoryStream stream = new MemoryStream();
+
+            formatter.Serialize(stream, serializableObject);
+            bytes = stream.ToArray();
+
+            Debug.LogFormat(GlobalVariables.cCommon + "Successful Serizalization. Input Type: {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", serializableObject.GetType(), "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+
+            return bytes;
+        }
+
+
+        public static T DeserializeFromByteArray<T>(byte[] bytes, System.Reflection.MethodBase fromMethodBase)
+        {
+            IFormatter formatter = new BinaryFormatter();
+            MemoryStream stream = new MemoryStream(bytes);
+            T output = default(T);
+
+            try
+            {
+                output = (T)formatter.Deserialize(stream);
+            } 
+            catch (System.Exception e)
+            {
+                Debug.LogFormat(GlobalVariables.cError + "Error with deserialization. {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", e.Message, "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+            }
+
+            Debug.LogFormat(GlobalVariables.cCommon + "Successful Deserizalization. Type: {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", output.GetType(), "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
 
             return output;
         }

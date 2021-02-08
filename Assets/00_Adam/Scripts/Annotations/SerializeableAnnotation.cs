@@ -36,6 +36,5 @@ namespace Photon_IATK
         public int myTimesMoved;
 
         public string myTextContent;
-        public List<Vector3> myPoints;
     }
 }

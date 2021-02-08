@@ -83,7 +83,7 @@ namespace Photon_IATK
 
             if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
             {
-                Debug.LogFormat(GlobalVariables.cEvent + "New client calling PhotonRequestStateEvent. View ID: {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", photonView.ViewID, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                Debug.LogFormat(GlobalVariables.cEvent + "{0}Client ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", "", "Requesting Vis State", "MasterClient", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRequestStateEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 object[] content = new object[] { photonView.ViewID };
 
@@ -182,19 +182,18 @@ namespace Photon_IATK
         /// Sends the Vis state from the master client
         /// Data = Object[] { photonView.ViewID, xDimension, yDimension, zDimension, colourDimension, sizeDimension };
         /// </summary>
-        public void _sendStateEvent()
+        private void _sendStateEvent()
         {
             object[] content = new object[] { photonView.ViewID, xDimension, yDimension, zDimension, colourDimension, sizeDimension };
 
-            Debug.LogFormat(GlobalVariables.cEvent + "_sendStateEvent from master, sent data = View:{0}, X Axis: {1}, Y Axis: {2}, Z Axis: {3}, Colur: {4}, Size: {5}." + GlobalVariables.endColor + " {6}: {7} -> {8} -> {9}", photonView.ViewID, xDimension, yDimension, zDimension, colourDimension, sizeDimension, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(),
-System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: Masterclient ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6} Sending Data =  X Axis: {7}, Y Axis: {8}, Z Axis: {9}, Color: {10}, Size: {11}." + GlobalVariables.endColor + " {12}: {13} -> {14} -> {15}", GlobalVariables.PhotonRespondToRequestTransformEvent, "Requesting transform from master", "Others", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRequestStateEventResponse, xDimension, yDimension, zDimension, colourDimension, sizeDimension, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
 
             PhotonNetwork.RaiseEvent(GlobalVariables.PhotonRequestStateEventResponse, content, raiseEventOptions, GlobalVariables.sendOptions);
         }
 
-        public void _processRequestStateEventResponse(object[] data)
+        private void _processRequestStateEventResponse(object[] data)
         {
             string xAxis = (string)data[1];
             string yAxis = (string)data[2];
@@ -202,13 +201,9 @@ System.Reflection.MethodBase.GetCurrentMethod());
             string colorDimension = (string)data[4];
             string sizeDimension = (string)data[5];
 
-            Debug.LogFormat(GlobalVariables.cEvent + "_processRequestStateEventResponse from master, recived data = View:{0}, X Axis: {1}, Y Axis: {2}, Z Axis: {3}, Colur: {4}, Size: {5}." + GlobalVariables.endColor + " {6}: {7} -> {8} -> {9}", photonView.ViewID, xAxis, yAxis, zAxis, colorDimension, sizeDimension, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(),
-System.Reflection.MethodBase.GetCurrentMethod());
-
             if (!isWaitingForPhotonRequestStateEvent) { return; }
 
-            Debug.LogFormat(GlobalVariables.cEvent + "_processRequestStateEventResponse: Processed, recived data = View:{0}, X Axis: {1}, Y Axis: {2}, Z Axis: {3}, Colur: {4}, Size: {5}." + GlobalVariables.endColor + " {6}: {7} -> {8} -> {9}", photonView.ViewID, xAxis, yAxis, zAxis, colorDimension, sizeDimension, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(),
-System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: Client ~ {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Recived Data =  X Axis: {5}, Y Axis: {6}, Z Axis: {7}, Color: {8}, Size: {9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", GlobalVariables.PhotonRequestStateEventResponse, " procssing the request", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, xAxis, yAxis, zAxis, colorDimension, sizeDimension, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             thisVis.isTriggeringEvents = false;
             _changeXAxis(xAxis);
@@ -221,6 +216,8 @@ System.Reflection.MethodBase.GetCurrentMethod());
 
         public void RequestChangeXAxisEvent(string newAxisDimension)
         {
+            //Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: Masterclient ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", GlobalVariables.PhotonRequestTransformEvent, "Requesting transform from master", "Others", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRespondToRequestTransformEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
             Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "RequestChangeXAxisEvent, New dimension: ", newAxisDimension, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(),
 System.Reflection.MethodBase.GetCurrentMethod());
 

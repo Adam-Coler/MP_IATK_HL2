@@ -1,11 +1,16 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using IATK;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Photon.Pun;
+using Photon.Compression;
+using Photon.Utilities;
+
+using System.Runtime.Serialization.Formatters.Binary;
+using System;
+
 
 namespace Photon_IATK
 {
@@ -90,10 +95,10 @@ namespace Photon_IATK
                     ProcessResponseToRequestAnnotationsListOfIDs(data);
                     break;
                 case GlobalVariables.PhotonRequestAnnotationsByListOfIDsEvent:
-                    ResponseToRequestAnnotationsListOfIDsEvent(data);
+                    ResponseToRequestAnnotationsByListOfIDsEvent(data);
                     break;
                 case GlobalVariables.PhotonResponseToRequestAnnotationsByListOfIDsEvent:
-                    ProcessResponseToRequestAnnotationsListOfIDsEvent(data);
+                    ProcessResponseToRequestAnnotationsByListOfIDsEvent(data);
                     break;
                 default:
                     break;
@@ -129,9 +134,11 @@ namespace Photon_IATK
         /// <summary>
         ///Master client respone to request for annotaion IDs.
         /// Path 1, no annotations found
-        /// Data sent = 
+        /// Data sent = None
         /// Raises = GlobalVariables.PhotonResponseRequestAnnotationsListOfIDsEventNONE_FOUNDEvent
         /// Reciver = ReceiverGroup.Others
+        /// Path 2, Annotations Found
+        /// Data sent = { photonView.ViewID, HelperFunctions.SerializeToByteArray(myListOfAnnotationIDs) };
         /// </summary>
         private void RespondToRequestAnnotationsListOfIDs(object[] data)
         {
@@ -148,11 +155,11 @@ namespace Photon_IATK
             }
             else
             {
-                Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: Masterclient ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", GlobalVariables.PhotonRequestAnnotationsListOfIDsEvent, "Annotations found", "Others", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonResponseToRequestAnnotationsByListOfIDsEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: Masterclient ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", GlobalVariables.PhotonRequestAnnotationsListOfIDsEvent, "Annotations found, sending their ID's", "Others", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonResponseToRequestAnnotationsListOfIDsEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-                content = new object[] { photonView.ViewID, HelperFunctions.IntListToString(myListOfAnnotationIDs, System.Reflection.MethodBase.GetCurrentMethod()) };
+                content = new object[] { photonView.ViewID, HelperFunctions.SerializeToByteArray(myListOfAnnotationIDs, System.Reflection.MethodBase.GetCurrentMethod()) };
 
-                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonResponseToRequestAnnotationsByListOfIDsEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
+                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonResponseToRequestAnnotationsListOfIDsEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
             }
 
 
@@ -168,10 +175,10 @@ namespace Photon_IATK
 
                 return;
             }
-
-            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}, Client ~ {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}{5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.PhotonResponseRequestAnnotationsListOfIDsEventNONE_FOUNDEvent, "I am not waiting for any IDs", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, "", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
-            isWaitingForListOfAnnotationIDs = false;
+            else
+            {
+                Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}, Client ~ {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}{5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.PhotonResponseRequestAnnotationsListOfIDsEventNONE_FOUNDEvent, "I am not waiting for any IDs", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, "", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            }
         }
 
 
@@ -179,10 +186,38 @@ namespace Photon_IATK
         ///Processes the Master client respone to request for annotaion IDs.
         /// Expected Data = { photonView.ViewID, List of string listOfIDs};
         /// If the lists don't match we will request the missing annotaitons as serializable annotations
-        /// Reqeust Data = Data = { photonView.ViewID, List of int missingListOfIDs};
+        /// Reqeust Data = Data = { photonView.ViewID, List<int> serialized to Byte[] missingListOfIDs};
         /// </summary>
         private void ProcessResponseToRequestAnnotationsListOfIDs(object[] data)
         {
+            Debug.LogFormat(GlobalVariables.cEvent + "I am waiting: " + isWaitingForListOfAnnotationIDs + ", Recived Code {0}: Client ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", GlobalVariables.PhotonResponseToRequestAnnotationsListOfIDsEvent, "Annotations are missing", "MasterClient", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRequestAnnotationsByListOfIDsEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            if (!isWaitingForListOfAnnotationIDs) { return; }
+
+            byte[] serializedData = (byte[])data[1];
+            var deserializedData = HelperFunctions.DeserializeFromByteArray<List<int>>(serializedData, System.Reflection.MethodBase.GetCurrentMethod());
+
+            List<int> myMissingIDs;
+
+            if (!HelperFunctions.doListsMatch(deserializedData, myListOfAnnotationIDs, out myMissingIDs, System.Reflection.MethodBase.GetCurrentMethod()))
+            {
+                Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: Client ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", GlobalVariables.PhotonResponseToRequestAnnotationsListOfIDsEvent, "Annotations are missing", "MasterClient", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRequestAnnotationsByListOfIDsEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                object[] content = new object[] { photonView.ViewID, HelperFunctions.SerializeToByteArray(myMissingIDs, System.Reflection.MethodBase.GetCurrentMethod()) };
+
+                RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
+
+                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonRequestAnnotationsByListOfIDsEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
+
+                //Lists don't Match
+                return;
+            }
+
+            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}, Client ~ {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}{5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.PhotonResponseToRequestAnnotationsListOfIDsEvent, "All annotations matched, nothing further needed", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, "", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            //Lists Match, moving on
+            isWaitingForListOfAnnotationIDs = false;
+
 
         }
 
@@ -191,8 +226,23 @@ namespace Photon_IATK
         /// Expected Data = { photonView.ViewID, List of int listOfIDs};
         /// Sent Data = { photonView.ViewID, List of string serializeableAnnotations as JSONs};
         /// </summary>
-        private void ResponseToRequestAnnotationsListOfIDsEvent(object[] data)
+        private void ResponseToRequestAnnotationsByListOfIDsEvent(object[] data)
         {
+            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: MasterClient ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", GlobalVariables.PhotonRequestAnnotationsByListOfIDsEvent, "Sending seriaized, serialized annotaions", "Others", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonResponseToRequestAnnotationsByListOfIDsEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            Annotation[] annotations = FindObjectsOfType<Annotation>();
+            List<string> JsonsOfSerializedAnnotations = new List<string> { };
+
+            foreach (Annotation annotation in annotations)
+            {
+                JsonsOfSerializedAnnotations.Add(annotation.getJSONSerializedAnnotationString());
+            }
+
+            object[] content = new object[] { photonView.ViewID, HelperFunctions.SerializeToByteArray(JsonsOfSerializedAnnotations, System.Reflection.MethodBase.GetCurrentMethod()) };
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+
+            PhotonNetwork.RaiseEvent(GlobalVariables.PhotonResponseToRequestAnnotationsByListOfIDsEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
 
 
         }
@@ -201,13 +251,36 @@ namespace Photon_IATK
         ///Processes the Master client respone to request for annotaion json's by IDs.
         /// Expected Data = { photonView.ViewID, List of string serializeableAnnotations as JSONs};
         /// </summary>
-        private void ProcessResponseToRequestAnnotationsListOfIDsEvent(object[] data)
+        private void ProcessResponseToRequestAnnotationsByListOfIDsEvent(object[] data)
         {
+            if (!isWaitingForListOfAnnotationIDs) { return; }
 
+            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}, Client ~ {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}{5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.PhotonResponseToRequestAnnotationsByListOfIDsEvent, "Annotations recived", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, "", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            List<string> deserializedByteArrayOfSerializedAnnotations =HelperFunctions.DeserializeFromByteArray<List<string>>((byte[])data[1], System.Reflection.MethodBase.GetCurrentMethod());
+
+            foreach (string JsonSerializedAnnotationString in deserializedByteArrayOfSerializedAnnotations)
+            {
+                makeAnnotation(JsonSerializedAnnotationString);
+            }
+            isWaitingForListOfAnnotationIDs = false;
         }
 
         private void makeAnnotation(string JsonOfSerializedAnnotation)
         {
+            Debug.LogFormat(GlobalVariables.cCommon + "Json String Recived {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", JsonOfSerializedAnnotation, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            SerializeableAnnotation serializeableAnnotation = JsonUtility.FromJson<SerializeableAnnotation>(JsonOfSerializedAnnotation);
+
+            //May have to adjust this logic
+            if (serializeableAnnotation.isDeleted) { return; }
+
+            //Make the annotation holder game object
+            GameObject annotationHolder = new GameObject(serializeableAnnotation.myAnnotationNumber + "_" + serializeableAnnotation.myAnnotationType);
+
+            Annotation annotation = annotationHolder.AddComponent<Annotation>();
+
+            annotation.setUpFromSerializeableAnnotation(serializeableAnnotation);
 
         }
     }

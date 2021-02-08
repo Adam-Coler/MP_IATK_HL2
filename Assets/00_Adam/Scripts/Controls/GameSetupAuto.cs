@@ -14,6 +14,7 @@ namespace Photon_IATK
 
             Photon.Pun.PhotonNetwork.SerializationRate = GlobalVariables.iPunObservableUpdateRate;
             Photon.Pun.PhotonNetwork.SendRate = GlobalVariables.iPunObservableUpdateRate;
+            Photon.Pun.PhotonNetwork.SendRate = GlobalVariables.photonSendRate;
         }
 
 
