@@ -316,5 +316,21 @@ namespace Photon_IATK
             return output;
         }
 
+        public static void randomizeAttributes(GameObject obj)
+        {
+            float min = 0f;
+            float max = .75f;
+
+            obj.transform.Translate(new Vector3(Random.Range(min, max), Random.Range(min, max), Random.Range(min, max)));
+            obj.transform.Rotate(new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)));
+        }
+
+
+
+
+
+
+
+
     }
 }

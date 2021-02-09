@@ -2497,12 +2497,6 @@ Transform:
   m_Father: {fileID: 1653832725}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &305374464 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8531602260434799945, guid: c1e504c4233d326468b87d19eb464d5b,
-    type: 3}
-  m_PrefabInstance: {fileID: 1215483409}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &311746476
 GameObject:
   m_ObjectHideFlags: 0
@@ -5119,8 +5113,8 @@ MonoBehaviour:
   OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1980925315}
-        m_MethodName: removeAnnotationsDummy
+      - m_Target: {fileID: 1980925317}
+        m_MethodName: RequestAnnotationRemoval
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9667,7 +9661,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.25, y: 0.25, z: 0.25}
   m_Children:
-  - {fileID: 305374464}
+  - {fileID: 1215483410}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -11154,6 +11148,12 @@ PrefabInstance:
     - {fileID: 3748790828493462928, guid: c1e504c4233d326468b87d19eb464d5b, type: 3}
     - {fileID: 5046495339104914356, guid: c1e504c4233d326468b87d19eb464d5b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c1e504c4233d326468b87d19eb464d5b, type: 3}
+--- !u!4 &1215483410 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2785116988715428988, guid: c1e504c4233d326468b87d19eb464d5b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1215483409}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1223143136
 GameObject:
   m_ObjectHideFlags: 0
@@ -11388,12 +11388,6 @@ Transform:
   m_Father: {fileID: 553963688}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &1239418396 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8531602260434799945, guid: c1e504c4233d326468b87d19eb464d5b,
-    type: 3}
-  m_PrefabInstance: {fileID: 2043726053}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1249411987
 GameObject:
   m_ObjectHideFlags: 0
@@ -12225,7 +12219,7 @@ Transform:
   m_Children:
   - {fileID: 1719854969}
   - {fileID: 361570412}
-  - {fileID: 1239418396}
+  - {fileID: 2043726054}
   - {fileID: 1115409071}
   - {fileID: 1980925314}
   - {fileID: 658140779}
@@ -14875,8 +14869,8 @@ MonoBehaviour:
   OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1980925315}
-        m_MethodName: makeAnnotationDummy
+      - m_Target: {fileID: 1980925317}
+        m_MethodName: RequestAnnotationCreationTestTracker
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -18551,7 +18545,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   countOfAnnotations: 0
-  trackerPrefab: {fileID: 0}
+  annotationPrefab: {fileID: 0}
 --- !u!114 &1980925316
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19322,6 +19316,12 @@ PrefabInstance:
     - {fileID: 3548277556322239652, guid: c1e504c4233d326468b87d19eb464d5b, type: 3}
     - {fileID: 5046495339104914356, guid: c1e504c4233d326468b87d19eb464d5b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c1e504c4233d326468b87d19eb464d5b, type: 3}
+--- !u!4 &2043726054 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2785116988715428988, guid: c1e504c4233d326468b87d19eb464d5b,
+    type: 3}
+  m_PrefabInstance: {fileID: 2043726053}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2045335621
 GameObject:
   m_ObjectHideFlags: 0

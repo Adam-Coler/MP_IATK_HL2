@@ -31,14 +31,14 @@ namespace Photon_IATK {
         {
             Debug.LogFormat(GlobalVariables.cTest + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            //loadAnnotations();
+            loadAnnotations();
         }
 
         private void UpdatedViewRequested(AbstractVisualisation.PropertyType propertyType)
         {
             Debug.LogFormat(GlobalVariables.cTest + "Vis view {0} update requested." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            //saveAnnotations();
+            saveAnnotations();
             _removeAnnotations();
         }
 

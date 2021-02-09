@@ -98,7 +98,13 @@ namespace Photon_IATK
         public const byte PhotonRequestAnnotationsByListOfIDsEvent = 57;
         public const byte PhotonResponseToRequestAnnotationsByListOfIDsEvent = 58;
 
+        //Annotations 2 70 - 79
+        public const byte RequestEventAnnotationCreation = 70;
+        public const byte RequestEventAnnotationContent = 71;
+        public const byte RespondEventWithContent = 72;
 
+        public const byte RequestEventAnnotationRemoval = 80;
+        //public const byte RespondToRequestAnnotationDeletionAll = 81;
 
         //Other 100-109
         public const byte PhotonRequestLatencyCheckEvent = 100;

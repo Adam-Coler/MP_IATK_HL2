@@ -72,5 +72,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tracker
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7538103377732961680, guid: afe1c5e2250603e4eaf9150203a33902, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: afe1c5e2250603e4eaf9150203a33902, type: 3}

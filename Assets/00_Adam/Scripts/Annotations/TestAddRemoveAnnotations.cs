@@ -1,6 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+using IATK;
+using ExitGames.Client.Photon;
+using Photon.Realtime;
+using Photon.Pun;
+using Photon.Compression;
+using Photon.Utilities;
+using System.Runtime.Serialization.Formatters.Binary;
+
 
 namespace Photon_IATK
 {
@@ -8,13 +16,13 @@ namespace Photon_IATK
     {
 
         public int countOfAnnotations = 0;
-        public GameObject trackerPrefab;
+        public GameObject annotationPrefab;
 
         private void Awake()
         {
-            if (trackerPrefab == null)
+            if (annotationPrefab == null)
             {
-                trackerPrefab = Resources.Load<GameObject>("Photon_Tracker");
+                annotationPrefab = Resources.Load<GameObject>("GenericAnnotation");
             }
         }
 
@@ -30,15 +38,12 @@ namespace Photon_IATK
             newObj.transform.localPosition = Vector3.zero;
             newObj.transform.localRotation = Quaternion.identity;
 
-            GameObject tracker = Instantiate(trackerPrefab, Vector3.zero, Quaternion.identity);
+            GameObject tracker = PhotonNetwork.InstantiateRoomObject(annotationPrefab.name, Vector3.zero, Quaternion.identity);
             tracker.transform.parent = newObj.transform;
             tracker.transform.localPosition = Vector3.zero;
             tracker.transform.localRotation = Quaternion.identity;
 
-
-            newObj.transform.localScale = new Vector3(1.6f, 1.6f, 1.6f);
-
-            randomizeAttributes(newObj);
+            newObj.transform.localScale = new Vector3(1f, 1f, 1f);
 
             Annotation annotation = newObj.AddComponent<Annotation>();
 
@@ -47,14 +52,7 @@ namespace Photon_IATK
         }
 
 
-        private void randomizeAttributes(GameObject obj)
-        {
-            float min = 0f;
-            float max = .75f;
 
-            obj.transform.Translate(new Vector3(Random.Range(min, max), Random.Range(min, max), Random.Range(min, max)));
-            obj.transform.Rotate(new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)));
-        }
 
         
 
