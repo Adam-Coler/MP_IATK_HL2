@@ -2,6 +2,7 @@
 using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Photon.Pun;
+using System.Collections;
 
 
 namespace Photon_IATK
@@ -15,25 +16,26 @@ namespace Photon_IATK
         private Vector3 lastLocalScale;
 
         public bool isWaitingForPhotonRequestTransformEvent = true;
+        private bool isCoroutineRunning = false;
 
-        private void Update()
+        /// <summary>
+        /// The time that the movement event reciver takes to update its transform
+        /// </summary>
+        public float time = .8f;
+
+        /// <summary>
+        /// The distance required to be moved or rotated before the move event will be called
+        /// </summary>
+        public float meaningfulDist = .3f;
+
+
+        private void LateUpdate()
         {
             if (!PhotonNetwork.IsConnected) { return; }
             if (isWaitingForPhotonRequestTransformEvent) { return; }
+            if (isCoroutineRunning) { return; }
 
-            Transform myTransform = this.gameObject.transform;
-            bool isPositionDifferent = myTransform.localPosition != lastLocalLocation;
-            bool isRotationDifferent = myTransform.localRotation != lastLocalRotation;
-            bool isScaleDifferent = myTransform.localScale != lastLocalScale;
-
-            if (isPositionDifferent || isRotationDifferent || isScaleDifferent)
-            {
-                lastLocalLocation = myTransform.localPosition;
-                lastLocalRotation = myTransform.localRotation;
-                lastLocalScale = myTransform.localScale;
-
-                SendMovementEvent();
-            }
+            CheckIfPositionWasUpdated();
         }
 
         private void OnEnable()
@@ -99,6 +101,26 @@ namespace Photon_IATK
 
         }
 
+        private void CheckIfPositionWasUpdated()
+        {
+            if (isCoroutineRunning) { return; }
+
+            Transform myTransform = this.gameObject.transform;
+
+            float distPosition = Vector3.Distance(myTransform.localPosition, lastLocalLocation);
+            float angle = Quaternion.Angle(myTransform.localRotation, lastLocalRotation);
+            float distScale = Vector3.Distance(myTransform.localScale, lastLocalScale);
+
+            bool isDistanceMeaningful = distPosition > meaningfulDist;
+            bool isAngleMeaningful = angle > meaningfulDist;
+            bool isScaleMeaningful = distScale > meaningfulDist;
+
+            if (isDistanceMeaningful || isAngleMeaningful || isScaleMeaningful)
+            {
+                SendMovementEvent();
+            }
+        }
+
         /// <summary>
         /// Sends request to update the objects local position.
         /// Data = (photonView.ViewID, myTransform.localPosition, myTransform.localRotation, myTransform.localScale);
@@ -108,11 +130,16 @@ namespace Photon_IATK
             Debug.LogFormat(GlobalVariables.cEvent + "{0}Any ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", "", "Sending movement event", "Others", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonMoveEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             Transform myTransform = this.gameObject.transform;
+
             object[] content = new object[] { photonView.ViewID, myTransform.localPosition, myTransform.localRotation, myTransform.localScale };
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others }; //Will not recived own message
 
             PhotonNetwork.RaiseEvent(GlobalVariables.PhotonMoveEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
+
+            lastLocalLocation = myTransform.localPosition;
+            lastLocalRotation = myTransform.localRotation;
+            lastLocalScale = myTransform.localScale;
         }
 
         /// <summary>
@@ -178,6 +205,8 @@ namespace Photon_IATK
             PhotonNetwork.RaiseEvent(GlobalVariables.PhotonRespondToRequestTransformEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
         }
 
+        public Vector3 movingToPosition;
+
         /// <summary>
         /// Updates the objects movement to match the sent transform information.
         /// Expected Data = (photonView.ViewID, myTransform.localPosition, myTransform.localRotation, myTransform.localScale);
@@ -191,7 +220,13 @@ namespace Photon_IATK
             Quaternion newLocalRotation = (Quaternion)data[2];
             Vector3 newLocalScale = (Vector3)data[3];
 
-            SetLocalTransformAndLastTransform(newLocalPosition, newLocalRotation, newLocalScale);
+            //SetLocalTransformAndLastTransform(newLocalPosition, newLocalRotation, newLocalScale);
+            lastLocalLocation = newLocalPosition;
+            lastLocalRotation = newLocalRotation;
+            lastLocalScale = newLocalScale;
+
+            StopAllCoroutines();
+            StartCoroutine("LerpToNewLocation");
         }
 
         private void SetLocalTransformAndLastTransform(Vector3 newLocalPosition, Quaternion newLocalRotation, Vector3 newLocalScale)
@@ -204,7 +239,40 @@ namespace Photon_IATK
             lastLocalLocation = newLocalPosition;
             lastLocalRotation = newLocalRotation;
             lastLocalScale = newLocalScale;
+
         }
+
+        IEnumerator LerpToNewLocation()
+        {
+            isCoroutineRunning = true;
+
+            Transform myTransform = this.gameObject.transform;
+            float elapsedTime = 0;
+
+            Vector3 startingPos = myTransform.localPosition;
+            Quaternion startingRot = myTransform.localRotation ;
+            Vector3 startingScale = myTransform.localScale;
+
+            while (elapsedTime < time)
+            {
+                if (transform.localPosition != lastLocalLocation)
+                    transform.localPosition = Vector3.Lerp(startingPos, lastLocalLocation, (elapsedTime / time));
+
+                if (transform.localRotation != lastLocalRotation)
+                    transform.localRotation = Quaternion.Lerp(startingRot, lastLocalRotation, (elapsedTime / time));
+
+                if (transform.localScale != lastLocalScale)
+                    transform.localScale = Vector3.Lerp(startingScale, lastLocalScale, (elapsedTime / time));
+
+                elapsedTime += Time.deltaTime;
+
+
+
+            }
+            yield return null;
+            isCoroutineRunning = false;
+        }
+
 
     }
 }

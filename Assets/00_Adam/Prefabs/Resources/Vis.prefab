@@ -196,3 +196,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isWaitingForPhotonRequestTransformEvent: 1
+  time: 0.8
+  meaningfulDist: 0.3
+  movingToPosition: {x: 0, y: 0, z: 0}

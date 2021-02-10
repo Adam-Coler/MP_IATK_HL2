@@ -40,11 +40,6 @@ namespace Photon_IATK
             set
             {
                 _myAnnotationType = value;
-                if (!wasObjectSetup)
-                {
-                    _setAnnotationObject();
-                }
-
             }
         }
 
@@ -68,12 +63,6 @@ namespace Photon_IATK
             PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
 
             Debug.LogFormat(GlobalVariables.cRegister + "Annotation registering OnEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
-            if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
-            {
-                Debug.LogFormat(GlobalVariables.cRegister + "Annotation Requesting content from master.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-                RequestContentFromMaster();
-            }
         }
 
         private void OnDisable()
@@ -92,6 +81,8 @@ namespace Photon_IATK
 
             //set axis to that parent
             _setAxisNames();
+
+            RequestContentFromMaster();
         }
 
         #region Events
@@ -111,7 +102,7 @@ namespace Photon_IATK
             switch (eventCode)
             {
                 case GlobalVariables.RequestEventAnnotationContent:
-                    SendContentFromMaster(data);
+                    SendContentFromMaster();
                     break;
                 case GlobalVariables.RespondEventWithContent:
                     ProcessRecivedContent(data);
@@ -125,7 +116,7 @@ namespace Photon_IATK
         #region Content Updates
         private void RequestContentFromMaster()
         {
-
+            isWaitingForContentFromMaster = true;
             //request content
             if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
             {
@@ -145,9 +136,9 @@ namespace Photon_IATK
         /// Raises = GlobalVariables.RequestEventAnnotationCreation
         /// Reciver = ReceiverGroup.MasterClient
         /// </summary>
-        public void SendContentFromMaster(object[] data)
+        public void SendContentFromMaster()
         {
-            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}, MasterClient ~ {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.RequestEventAnnotationCreation, "", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RespondEventWithContent, "Others", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}, MasterClient ~ Sending Content{1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.RequestEventAnnotationCreation, "", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RespondEventWithContent, "Others", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             object[] content = new object[] { photonView.ViewID, this.getJSONSerializedAnnotationString() };
 
@@ -158,16 +149,26 @@ namespace Photon_IATK
 
         private void ProcessRecivedContent(object[] data)
         {
-            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}, Client ~ {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}{5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.RequestEventAnnotationCreation, "Loading content", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, "", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            if (!isWaitingForContentFromMaster) { return; }
 
+            isWaitingForContentFromMaster = false;
             String jsonSerializedAnnotation = (string)data[1];
+
+            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}, Client ~ {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}{5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.RequestEventAnnotationCreation, "Loading content", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, "", ", Content: ", jsonSerializedAnnotation, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+
+            if (jsonSerializedAnnotation.Length < 2) { return; }
             setUpFromSerializeableAnnotation(jsonSerializedAnnotation);
+
+
         }
 
         #endregion #Content Updates
         #endregion Events
-        private void _setAnnotationObject()
+        public void _setAnnotationObject()
         {
+            if (wasObjectSetup) { return; }
+
             wasObjectSetup = true;
 
             GameObject prefabGameObject;
@@ -179,6 +180,7 @@ namespace Photon_IATK
                     break;
                 default:
                     Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Loading this annotation type is not supported or the type is null.", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                    wasObjectSetup = false;
                     return;
             }
 
@@ -189,7 +191,7 @@ namespace Photon_IATK
             prefabGameObject.transform.localRotation = Quaternion.identity;
 
 
-            if (myAnnotationType == typesOfAnnotations.TEST_TRACKER)
+            if (myAnnotationType == typesOfAnnotations.TEST_TRACKER && this.gameObject.transform.localPosition == Vector3.zero)
             {
                 HelperFunctions.randomizeAttributes(this.gameObject);
             }
@@ -271,7 +273,7 @@ namespace Photon_IATK
         }
         public Annotation setUpFromSerializeableAnnotation(SerializeableAnnotation serializeableAnnotation)
         {
-            Debug.LogFormat(GlobalVariables.cFileOperations + "{0}{1}" + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", "Loading annotation from file", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cFileOperations + "{0}{1}" + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", "Loading annotation", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             this.gameObject.tag = GlobalVariables.annotationTag;
 
@@ -287,8 +289,6 @@ namespace Photon_IATK
 
             this.gameObject.transform.parent = myAnnotationCollectionParent.transform;
 
-            _setAnnotationObject();
-
             Vector3 localPosition = new Vector3(serializeableAnnotation.myLocalXPosition, serializeableAnnotation.myLocalYPosition, serializeableAnnotation.myLocalZPosition);
             this.gameObject.transform.localPosition = localPosition;
 
@@ -298,6 +298,7 @@ namespace Photon_IATK
             Vector3 localScale = new Vector3(serializeableAnnotation.myLocalScaleX, serializeableAnnotation.myLocalScaleY, serializeableAnnotation.myLocalScaleZ);
             this.gameObject.transform.localScale = localScale;
 
+            _setAnnotationObject();
             return this;
         }
     }
