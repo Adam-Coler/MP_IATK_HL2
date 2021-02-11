@@ -167,6 +167,7 @@ namespace Photon_IATK
             {
                 annotationsCreated++;
                 genericAnnotationObj = PhotonNetwork.InstantiateRoomObject("GenericAnnotation", Vector3.zero, Quaternion.identity);
+                HelperFunctions.SetObjectLocalTransformToZero(genericAnnotationObj, System.Reflection.MethodBase.GetCurrentMethod());
                 genericAnnotationObj.name = "NewAnnotation";
             } else
             {
@@ -193,6 +194,7 @@ namespace Photon_IATK
             {
                 annotationsCreated++;
                 genericAnnotationObj = PhotonNetwork.InstantiateRoomObject("GenericAnnotation", Vector3.zero, Quaternion.identity);
+                HelperFunctions.SetObjectLocalTransformToZero(genericAnnotationObj, System.Reflection.MethodBase.GetCurrentMethod());
                 genericAnnotationObj.name = "LoadedAnnotation";
             }
             else
@@ -272,8 +274,7 @@ namespace Photon_IATK
 
             string mainFolderName = GlobalVariables.annotationSaveFolder;
             string mainFolderPath = Path.Combine(Application.persistentDataPath, mainFolderName);
-            UnityEditor.FileUtil.DeleteFileOrDirectory(mainFolderPath);
-
+            System.IO.Directory.Delete(mainFolderPath, true);
         }
 
         #endregion AnnotaitonRemoval

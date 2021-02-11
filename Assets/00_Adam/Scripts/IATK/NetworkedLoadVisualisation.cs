@@ -31,6 +31,12 @@ namespace Photon_IATK
                 return;
             }
 
+            AnnotationManagerSaveLoadEvents annotationManager;
+            if (HelperFunctions.GetComponent<AnnotationManagerSaveLoadEvents>(out annotationManager, System.Reflection.MethodBase.GetCurrentMethod()))
+            {
+                annotationManager.saveAnnotations();
+            }
+
             GeneralEventManager.instance.SendDeleteAllObjectsWithComponentRequest(typeof(VisWrapperClass).AssemblyQualifiedName);
 
         }

@@ -190,7 +190,6 @@ namespace Photon_IATK
             prefabGameObject.transform.localPosition = Vector3.zero;
             prefabGameObject.transform.localRotation = Quaternion.identity;
 
-
             if (myAnnotationType == typesOfAnnotations.TEST_TRACKER && this.gameObject.transform.localPosition == Vector3.zero)
             {
                 HelperFunctions.randomizeAttributes(this.gameObject);
