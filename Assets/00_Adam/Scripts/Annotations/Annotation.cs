@@ -29,6 +29,35 @@ namespace Photon_IATK
         private typesOfAnnotations _myAnnotationType;
         private bool wasObjectSetup = false;
 
+        private Vector3 recivedRealtiveScale;
+        private Vector3 myRelativeScale { 
+            get
+            {
+                Transform transform = this.transform;
+                GameObject vis;
+                if (!HelperFunctions.FindGameObjectOrMakeOneWithTag("Vis", out vis, false, System.Reflection.MethodBase.GetCurrentMethod())){ return Vector3.one; }
+
+
+                float outputX = vis.transform.localScale.x / transform.localScale.x;
+                float outputY = vis.transform.localScale.y / transform.localScale.y;
+                float outputZ = vis.transform.localScale.z / transform.localScale.z;
+
+                return (new Vector3 (outputX, outputY, outputZ ));
+            }
+            set
+            {
+                Transform transform = this.transform;
+                GameObject vis;
+                if (!HelperFunctions.FindGameObjectOrMakeOneWithTag("Vis", out vis, false, System.Reflection.MethodBase.GetCurrentMethod())) { return; }
+
+                float XScale = vis.transform.localScale.x * value.x;
+                float YScale = vis.transform.localScale.y * value.y;
+                float ZScale = vis.transform.localScale.z * value.z;
+
+                transform.localScale = new Vector3 (XScale, YScale, ZScale);
+            }
+        }
+
         /// <summary>
         /// Setting this will force an update and a call to the master client for all content
         /// </summary>
@@ -236,18 +265,10 @@ namespace Photon_IATK
         {
             SerializeableAnnotation serializeableAnnotation = new SerializeableAnnotation();
 
-            serializeableAnnotation.myLocalXPosition = this.transform.localPosition.x;
-            serializeableAnnotation.myLocalYPosition = this.transform.localPosition.y;
-            serializeableAnnotation.myLocalZPosition = this.transform.localPosition.z;
-
-            serializeableAnnotation.myLocalXRotation = this.transform.localRotation.x;
-            serializeableAnnotation.myLocalYRotation = this.transform.localRotation.y;
-            serializeableAnnotation.myLocalZRotation = this.transform.localRotation.z;
-            serializeableAnnotation.myLocalWRotation = this.transform.localRotation.w;
-
-            serializeableAnnotation.myLocalScaleX = this.transform.localScale.x;
-            serializeableAnnotation.myLocalScaleY = this.transform.localScale.y;
-            serializeableAnnotation.myLocalScaleZ = this.transform.localScale.z;
+            serializeableAnnotation.myLocalRotation = this.transform.localRotation;
+            serializeableAnnotation.myLocalPosition = this.transform.localPosition;
+            serializeableAnnotation.myRelativeScale = this.myRelativeScale;
+            serializeableAnnotation.myRelativeScale = this.myRelativeScale;
 
             serializeableAnnotation.isDeleted = isDeleted;
 
@@ -278,24 +299,16 @@ namespace Photon_IATK
 
             //Now we set up the annotation componenet
             isDeleted = serializeableAnnotation.isDeleted;
-            myVisXAxis = serializeableAnnotation.myVisXAxis;
-            myVisYAxis = serializeableAnnotation.myVisYAxis;
-            myVisZAxis = serializeableAnnotation.myVisZAxis;
             myTextContent = serializeableAnnotation.myTextContent;
             myUniqueAnnotationNumber = serializeableAnnotation.myAnnotationNumber;
 
             myAnnotationType = (typesOfAnnotations)Enum.Parse(typeof(typesOfAnnotations), serializeableAnnotation.myAnnotationType, true);
 
             this.gameObject.transform.parent = myAnnotationCollectionParent.transform;
-
-            Vector3 localPosition = new Vector3(serializeableAnnotation.myLocalXPosition, serializeableAnnotation.myLocalYPosition, serializeableAnnotation.myLocalZPosition);
-            this.gameObject.transform.localPosition = localPosition;
-
-            Quaternion localRotation = new Quaternion(serializeableAnnotation.myLocalXRotation, serializeableAnnotation.myLocalYRotation, serializeableAnnotation.myLocalZRotation, serializeableAnnotation.myLocalWRotation);
-            this.gameObject.transform.localRotation = localRotation;
-
-            Vector3 localScale = new Vector3(serializeableAnnotation.myLocalScaleX, serializeableAnnotation.myLocalScaleY, serializeableAnnotation.myLocalScaleZ);
-            this.gameObject.transform.localScale = localScale;
+            this.gameObject.transform.localPosition = serializeableAnnotation.myLocalPosition;
+            this.gameObject.transform.localRotation = serializeableAnnotation.myLocalRotation;
+            this.gameObject.transform.localScale = serializeableAnnotation.myLocalScale;
+            this.myRelativeScale = serializeableAnnotation.myRelativeScale;
 
             _setAnnotationObject();
             return this;

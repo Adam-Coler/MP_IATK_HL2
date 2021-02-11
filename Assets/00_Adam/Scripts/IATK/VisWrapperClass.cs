@@ -17,7 +17,7 @@ namespace Photon_IATK
 
         public string[] loadedCSVHeaders;
 
-        private int annotationCount = 0;
+        private Vector3 lastLocalScale;
 
         private CSVDataSource _wrapperCSVDataSource;
         public CSVDataSource wrapperCSVDataSource
@@ -48,10 +48,13 @@ namespace Photon_IATK
             }
         }
 
-        public int getCountOfAnnotationsAndIncrement()
+        private void Update()
         {
-            annotationCount++;
-            return annotationCount;
+            if (lastLocalScale != this.transform.localScale)
+            {
+                lastLocalScale = this.transform.localScale;
+                updateVisPropertiesSafe(AbstractVisualisation.PropertyType.Scaling);
+            }
         }
 
         private string getCleanString(string str)
@@ -108,6 +111,8 @@ namespace Photon_IATK
             Debug.LogFormat(GlobalVariables.cRegister + "VisWrapper registering OnUpdateViewAction." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             OnUpdateViewAction += UpdatedView;
+
+            lastLocalScale = this.transform.localScale;
         }
 
         private void OnDestroy()
@@ -139,7 +144,7 @@ namespace Photon_IATK
             Debug.LogFormat(GlobalVariables.cEvent + "Vis updating but not sending events." + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
-        public void updateVisPropertiesSafe()
+        public void updateVisPropertiesSafe(AbstractVisualisation.PropertyType propertyType = AbstractVisualisation.PropertyType.VisualisationType)
         {
             AbstractVisualisation theVisObject = this.theVisualizationObject;
 
@@ -156,7 +161,7 @@ namespace Photon_IATK
             }
 
             updateProperties();
-            UpdatedView(AbstractVisualisation.PropertyType.VisualisationType);
+            UpdatedView(propertyType);
 
         }
 

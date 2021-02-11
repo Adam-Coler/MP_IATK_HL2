@@ -14,18 +14,15 @@ namespace Photon_IATK
         public string myVisYAxis;
         public string myVisZAxis;
 
-        public float myLocalXPosition;
-        public float myLocalYPosition;
-        public float myLocalZPosition;
-
         public float myLocalXRotation;
         public float myLocalYRotation;
         public float myLocalZRotation;
         public float myLocalWRotation;
 
-        public float myLocalScaleX;
-        public float myLocalScaleY;
-        public float myLocalScaleZ;
+        public Vector3 myLocalPosition;
+        public Quaternion myLocalRotation;
+        public Vector3 myLocalScale;
+        public Vector3 myRelativeScale;
 
         public bool isDeleted = false;
         public string myAnnotationType;

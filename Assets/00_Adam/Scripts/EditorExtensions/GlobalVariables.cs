@@ -59,8 +59,8 @@ namespace Photon_IATK
             ParticipantID
         };
 
-        public static int photonSendRate = 45;
-        public static int iPunObservableUpdateRate = 45;
+        public static int photonSendRate = 60;
+        public static int iPunObservableUpdateRate = photonSendRate;
         public static ExitGames.Client.Photon.SendOptions sendOptions = ExitGames.Client.Photon.SendOptions.SendUnreliable;
 
         //Movement 1-9

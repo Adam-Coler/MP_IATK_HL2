@@ -54,7 +54,7 @@ namespace Photon_IATK
 
                 Debug.Log(GlobalVariables.green + "Destroying then setting FindAndRegisterLighthouseLocations.Instance " + GlobalVariables.endColor + " : " + "Awake()" + " : " + this.GetType());
 
-                Destroy(Instance.gameObject);
+                Destroy(Instance);
                 Instance = this;
             }
 
@@ -176,7 +176,7 @@ namespace Photon_IATK
         private void Awake()
         {
             Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-            Destroy(this.gameObject);
+            Destroy(this);
         }
 #endif
     }

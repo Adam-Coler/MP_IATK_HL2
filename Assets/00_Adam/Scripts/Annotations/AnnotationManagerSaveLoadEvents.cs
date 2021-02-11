@@ -63,8 +63,7 @@ namespace Photon_IATK
         {
             Debug.LogFormat(GlobalVariables.cTest + "Vis view {0} updated. Name: " + PhotonNetwork.NickName + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-
-            loadAnnotations();
+            if (propertyType == AbstractVisualisation.PropertyType.DimensionChange || propertyType == AbstractVisualisation.PropertyType.VisualisationType) { loadAnnotations(); }
 
         }
 
@@ -73,7 +72,8 @@ namespace Photon_IATK
             Debug.LogFormat(GlobalVariables.cTest + "Vis view {0} update requested." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             //Save annotations handled by other class
-            saveAnnotations();
+
+            if (propertyType == AbstractVisualisation.PropertyType.DimensionChange) { saveAnnotations(); }
 
             //Delete annotations without marking delete but as safe
             if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
@@ -274,7 +274,7 @@ namespace Photon_IATK
 
             string mainFolderName = GlobalVariables.annotationSaveFolder;
             string mainFolderPath = Path.Combine(Application.persistentDataPath, mainFolderName);
-            System.IO.Directory.Delete(mainFolderPath, true);
+            if (Directory.Exists(mainFolderPath)) { Directory.Delete(mainFolderPath, true); }
         }
 
         #endregion AnnotaitonRemoval

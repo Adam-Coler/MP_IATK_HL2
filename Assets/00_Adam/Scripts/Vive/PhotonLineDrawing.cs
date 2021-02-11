@@ -80,18 +80,6 @@ namespace Photon_IATK
         public void Initalize()
         {
 
-            if (PlayspaceAnchor.Instance != null)
-            {
-                transform.parent = FindObjectOfType<PlayspaceAnchor>().transform;
-                Debug.Log(GlobalVariables.green + "Parenting: " + this.gameObject.name + " in " + transform.parent.name + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
-            }
-            else
-            {
-                Debug.Log(GlobalVariables.red + "No Playspace anchor exists, nothing parented" + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
-            }
-
-
-
             var trans = transform;
             startingLocalPosition = trans.localPosition;
             startingLocalRotation = trans.localRotation;

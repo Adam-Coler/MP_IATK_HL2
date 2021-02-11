@@ -19,6 +19,8 @@ namespace Photon_IATK
         {
             if (stream.IsWriting)
             {
+                if (networkLocalPosition == transform.localPosition || networkLocalRotation == transform.localRotation) { return; };
+
                 stream.SendNext(transform.localPosition);
                 stream.SendNext(transform.localRotation);
             }
