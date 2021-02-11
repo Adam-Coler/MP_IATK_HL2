@@ -44,12 +44,9 @@ namespace Photon_IATK
 
             PlayerPrefs.SetString(playerNamePrefKey, value);
 
-            if (PhotonNetwork.IsConnected)
-            {
-                Pun_Player_RPC_Calls.rpc_setNickName();
-
-                Debug.LogFormat(GlobalVariables.cPRC + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Nickname PunRPC Called", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-            }
+            PhotonView photonView;
+            Photon_Player photon_Player;
+            if (HelperFunctions.getLocalPlayer(out photonView, out photon_Player, System.Reflection.MethodBase.GetCurrentMethod())) { photon_Player.RequestNicknameChangeEvent(); }
         }
     }
 }

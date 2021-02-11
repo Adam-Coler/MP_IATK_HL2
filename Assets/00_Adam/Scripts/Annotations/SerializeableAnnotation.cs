@@ -29,16 +29,12 @@ namespace Photon_IATK
 
         public bool isDeleted = false;
         public string myAnnotationType;
-        public string myTextContent;
+
         public int myAnnotationNumber;
+        public float myCreationTime;
+        public string myDataSource;
+        public int myTimesMoved;
 
-        //type
-        //content
-        //time
-        //datasource
-
-        //line points?
-
-        //moved?
+        public string myTextContent;
     }
 }

@@ -219,10 +219,15 @@ namespace Photon_IATK
         }
         #endregion
 
-        #region RPCS
+        #region Events
         public void ShowHideControllerModels()
         {
-            Pun_Player_RPC_Calls.rpc_showHideControllerModels();
+            Pun_Player_Event_Calls.Event_showHideControllerModels();
+        }
+
+        public void SetNickname()
+        {
+            Pun_Player_Event_Calls.Event_setNickName();
         }
 
 

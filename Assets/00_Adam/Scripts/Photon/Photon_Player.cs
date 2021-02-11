@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
+using ExitGames.Client.Photon;
+using Photon.Realtime;
 using Photon.Pun;
-using UnityEngine.SceneManagement;
+
 namespace Photon_IATK
 {
-    public class Photon_Player : MonoBehaviourPunCallbacks
+    public class Photon_Player : MonoBehaviourPun
     {
 
 
@@ -46,8 +48,11 @@ namespace Photon_IATK
             txtNickName.text = photonView.Owner.NickName;
         }
 
-        public override void OnEnable()
+        public void OnEnable()
         {
+            Debug.LogFormat(GlobalVariables.cRegister + "Photon_Player registering OnEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+
             setup();
             //unity has predefined tags "Player" is one
             this.tag = "Player";
@@ -55,30 +60,81 @@ namespace Photon_IATK
 
         private void OnDestroy()
         {
-            HelperFunctions.SafeDestory(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
+
         }
 
 #if UNITY_5_4_OR_NEWER
-        public override void OnDisable()
+        public void OnDisable()
         {
-            // Always call the base to remove callbacks
-            base.OnDisable();
+            Debug.LogFormat(GlobalVariables.cRegister + "Photon_Player unregistering OnEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
         }
 #endif
 
         #endregion
 
-        #region PunRPC
-        [PunRPC]
-        void setNickname(PhotonMessageInfo info)
+        #region Events
+        private void OnEvent(EventData photonEventData)
+        {
+            byte eventCode = photonEventData.Code;
+
+            //Check that the event was one we made, photon reserves 0, 200+
+            if (eventCode == 0 || eventCode > 199) { return; }
+
+            object[] data = (object[])photonEventData.CustomData;
+
+            //route the event
+            switch (eventCode)
+            {
+                case GlobalVariables.PhotonRequestHideControllerModelsEvent:
+                    showHideControllerModels();
+                    Debug.Log("PhotonRequestHideControllerModelsEvent");
+                    break;
+                case GlobalVariables.PhotonRequestNicknameUpdateEvent:
+                    setNickname();
+                    Debug.Log("PhotonRequestNicknameUpdateEvent");
+                    break;
+                default:
+                    break;
+            }
+        }
+        public void RequestNicknameChangeEvent()
+        {
+            if (PhotonNetwork.IsConnected)
+            {
+                RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; //Will not recived own message
+
+                object[] content = new object[] { photonView.ViewID };
+
+                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonRequestNicknameUpdateEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
+            }
+            else
+            {
+                setNickname();
+            }
+        }
+
+        public void RequestHideControllerModelsEvent()
+        {
+            if (PhotonNetwork.IsConnected)
+            {
+                RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; //Will not recived own message
+
+                object[] content = new object[] { photonView.ViewID };
+
+                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonRequestHideControllerModelsEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
+            }
+            else
+            {
+                showHideControllerModels();
+            }
+        }
+
+
+        void setNickname()
         {
             txtNickName.text = photonView.Owner.NickName;
-            // the photonView.RPC() call is the same as without the info parameter.
-            // the info.Sender is the player who called the RPC.
-            Debug.LogFormat("Info: {0} {1} {2}", info.Sender, info.photonView, info.SentServerTime);
-
-
-            Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
         }
 
@@ -88,31 +144,6 @@ namespace Photon_IATK
 
             Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}{3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", "Hiding Controller Models","","","", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
-
-        [PunRPC]
-        void showHideControllerModels(PhotonMessageInfo info)
-        {
-            showHideControllerModels();
-
-            Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-        }
-
-        [PunRPC]
-        void setOrgin(PhotonMessageInfo info)
-        {
-            Transform transform = this.transform;
-
-            Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-        }
-
-        [PunRPC]
-        void masterClientInstantiate(string prefabName, PhotonMessageInfo info)
-        {
-            PhotonNetwork.InstantiateRoomObject(prefabName, Vector3.zero, Quaternion.identity);
-
-            Debug.LogFormat(GlobalVariables.cPRC + "PUN RPC call, Sender:{0}, View: {1}, SentServerTime: {3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", info.Sender, info.photonView, info.SentServerTime, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-        }
-
 
         #endregion
         #region Custom

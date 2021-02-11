@@ -61,16 +61,10 @@ namespace Photon_IATK
         {
             if (stream.IsWriting)
             {
-                stream.SendNext(transform.localPosition);
-                stream.SendNext(transform.localRotation);
-                //stream.SendNext(this.gameObject.transform.InverseTransformDirection(NewPoint));
                 stream.SendNext(NewPoint);
             }
             else
             {
-                networkLocalPosition = (Vector3)stream.ReceiveNext();
-                networkLocalRotation = (Quaternion)stream.ReceiveNext();
-                //NewPoint = PlayspaceAnchor.Instance.transform.InverseTransformDirection((Vector3)stream.ReceiveNext());
                 NewPoint = (Vector3)stream.ReceiveNext();
             }
         }
@@ -131,7 +125,6 @@ namespace Photon_IATK
             oldPoint = NewPoint;
         }
 
-        public bool useTransform = true;
         // private void FixedUpdate()
         private void FixedUpdate()
         {
@@ -140,14 +133,6 @@ namespace Photon_IATK
                 GameObject pen = GameObject.FindGameObjectWithTag("GameController");
 
                 addPoint(NewPoint);
-
-                var trans = transform;
-                if (useTransform)
-                {
-                    trans.localPosition = networkLocalPosition;
-                    trans.localRotation = networkLocalRotation;
-                }
-
             }
         }
 

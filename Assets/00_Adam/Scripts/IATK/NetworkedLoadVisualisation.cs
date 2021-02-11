@@ -27,11 +27,17 @@ namespace Photon_IATK
             {
                 Debug.LogFormat(GlobalVariables.cInstance + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Loading Visualisation", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-                EventManager.instance.SendVisSceneInstantiateEvent();
+                GeneralEventManager.instance.SendVisSceneInstantiateEvent();
                 return;
             }
 
-            EventManager.instance.SendDeleteAllObjectsWithComponentRequest(typeof(VisWrapperClass).AssemblyQualifiedName);
+            AnnotationManagerSaveLoadEvents annotationManager;
+            if (HelperFunctions.GetComponent<AnnotationManagerSaveLoadEvents>(out annotationManager, System.Reflection.MethodBase.GetCurrentMethod()))
+            {
+                annotationManager.saveAnnotations();
+            }
+
+            GeneralEventManager.instance.SendDeleteAllObjectsWithComponentRequest(typeof(VisWrapperClass).AssemblyQualifiedName);
 
         }
 

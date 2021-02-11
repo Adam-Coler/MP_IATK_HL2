@@ -1,7 +1,11 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Reflection;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace Photon_IATK
 {
@@ -188,51 +192,9 @@ namespace Photon_IATK
             return wasSucsessfull;
         }
 
-        public static bool SafeDestory(GameObject objToDestory, MethodBase fromMethodBase)
-        {
-            bool wasSucessfull = false;
-
-            //find photon view
-
-            Photon.Pun.PhotonView photonView = objToDestory.GetComponent<Photon.Pun.PhotonView>();
-
-            if (photonView != null && Photon.Pun.PhotonNetwork.IsConnected)
-            {
-                if (photonView.IsMine)
-                {
-                    try
-                    {
-                        Photon.Pun.PhotonNetwork.Destroy(objToDestory);
-                        wasSucessfull = true;
-                    }
-                    catch (System.Exception e)
-                    {
-                        Debug.LogFormat(GlobalVariables.cError + "Error Network Destorying {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", objToDestory.name, " E: ", e.Message, Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
-                    }
-                } else { Debug.LogFormat(GlobalVariables.cError + "Error Network Destorying {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", objToDestory.name, ": is not mine to destory ", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name); }
-
-            }
-            else if (photonView == null || !Photon.Pun.PhotonNetwork.IsConnected)
-            {
-                try
-                {
-                    Object.Destroy(objToDestory);
-                    wasSucessfull = true;
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogFormat(GlobalVariables.cError + "Error Destorying {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", objToDestory.name, " E: ", e.Message, Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
-                }
-            }
-
-            if(wasSucessfull)
-                Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", objToDestory.name, "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
-
-            return wasSucessfull;
-        }
 
 
-        public static bool getLocalPlayer(out Photon.Pun.PhotonView photonView, MethodBase fromMethodBase)
+        public static bool getLocalPlayer(out Photon.Pun.PhotonView photonView, out Photon_Player photon_Player, MethodBase fromMethodBase)
         {
             // Start is called before the first frame update
             var tmp = (GameObject.FindGameObjectsWithTag("Player"));
@@ -246,7 +208,7 @@ namespace Photon_IATK
                     if (photon.IsMine)
                     {
                         photonView = photon;
-
+                        photon_Player = photonPlayer;
                         Debug.LogFormat(GlobalVariables.cCommon + "PlayerView found. Name:{0}, Owner:{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", photonView.name, photonView.Owner, "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
 
                         return true;
@@ -258,7 +220,117 @@ namespace Photon_IATK
             Debug.LogFormat(GlobalVariables.cError + "No playerView found. {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", "", "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
 
             photonView = null;
+            photon_Player = null;
             return false;
         }
+
+
+
+            public static bool getLocalPlayer(out Photon.Pun.PhotonView photonView, MethodBase fromMethodBase)
+        {
+            Photon_Player photon_Player;
+            return getLocalPlayer(out photonView, out photon_Player, fromMethodBase);
+        }
+
+        public static bool doListsMatch<T>(List<T> myList, List<T> comparedList, out List<T> outList, MethodBase fromMethodBase)
+        {
+            var firstNotSecond = myList.Except(comparedList).ToList();
+            outList = comparedList.Except(myList).ToList();
+
+            Debug.LogFormat(GlobalVariables.cCommon + "doListsMatch, !firstNotSecond.Any() :{0}, !outList.Any(): {1}, (!firstNotSecond.Any() && !outList.Any()): {2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", !firstNotSecond.Any(), !outList.Any(), !firstNotSecond.Any() && !outList.Any(), Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+
+            return !firstNotSecond.Any() && !outList.Any();
+        }
+
+        private const char delim = ' ';
+        public static string IntListToString(List<int> intList, System.Reflection.MethodBase fromMethodBase)
+        {
+            if (intList == null || intList.Count == 0) 
+            {
+                Debug.LogFormat(GlobalVariables.cError + "List cannot be zero length. {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", "", "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+                return "";
+            }
+
+            StringBuilder builder = new StringBuilder("");
+            foreach (int oneInt in intList)
+            {
+                builder.Append(oneInt.ToString());
+                builder.Append(delim);
+            }
+            // remove the last delimeter;
+            builder.Remove(builder.Length - 1, 1);
+            return builder.ToString();
+        }
+
+        public static List<int> StringWithDelimToListInt(string stringOfInts, System.Reflection.MethodBase fromMethodBase)
+        {
+            if (stringOfInts == null || stringOfInts.Length == 0) 
+            {
+                Debug.LogFormat(GlobalVariables.cError + "List cannot be zero length. {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", "", "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+                return new List<int> { }; 
+            }
+
+            string[] intsAsString = stringOfInts.Split(delim);
+            List<int> output = new List<int> { };
+            foreach (string intAsString in intsAsString)
+            {
+                output.Add(int.Parse(intAsString));
+            }
+
+            return output;
+        }
+
+
+        public static byte[] SerializeToByteArray<T>(T serializableObject, System.Reflection.MethodBase fromMethodBase)
+        {
+            byte[] bytes;
+            IFormatter formatter = new BinaryFormatter();
+            MemoryStream stream = new MemoryStream();
+
+            formatter.Serialize(stream, serializableObject);
+            bytes = stream.ToArray();
+
+            Debug.LogFormat(GlobalVariables.cCommon + "Successful Serizalization. Input Type: {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", serializableObject.GetType(), "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+
+            return bytes;
+        }
+
+
+        public static T DeserializeFromByteArray<T>(byte[] bytes, System.Reflection.MethodBase fromMethodBase)
+        {
+            IFormatter formatter = new BinaryFormatter();
+            MemoryStream stream = new MemoryStream(bytes);
+            T output = default(T);
+
+            try
+            {
+                output = (T)formatter.Deserialize(stream);
+            } 
+            catch (System.Exception e)
+            {
+                Debug.LogFormat(GlobalVariables.cError + "Error with deserialization. {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", e.Message, "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+            }
+
+            Debug.LogFormat(GlobalVariables.cCommon + "Successful Deserizalization. Type: {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", output.GetType(), "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+
+            return output;
+        }
+
+        public static void randomizeAttributes(GameObject obj)
+        {
+            float min = 0f;
+            float max = .75f;
+
+            obj.transform.Translate(new Vector3(Random.Range(min, max), Random.Range(min, max), Random.Range(min, max)));
+            obj.transform.Rotate(new Vector3(Random.Range(0, 360), Random.Range(0, 360), Random.Range(0, 360)));
+        }
+
+
+
+
+
+
+
+
     }
 }

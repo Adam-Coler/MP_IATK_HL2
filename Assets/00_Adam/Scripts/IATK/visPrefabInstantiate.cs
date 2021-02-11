@@ -10,9 +10,15 @@ namespace Photon_IATK
     {
         public TextAsset myDataSource;
 
+        public delegate void OnStartAndEndLoadingVis(bool isLoading);
+        public static OnStartAndEndLoadingVis visualisationLoadingDelegate;
+
         //this will not be used after instantiating the prefab
         private void Awake()
         {
+            if (visualisationLoadingDelegate != null)
+                visualisationLoadingDelegate(true);
+
             //label for later (not used as of now)
             this.gameObject.tag = "Vis";
 
@@ -39,6 +45,8 @@ namespace Photon_IATK
             //Add the vis wrapper to the game object this is on
             VisWrapperClass theVis = this.gameObject.AddComponent<VisWrapperClass>();
 
+            theVis.isTriggeringEvents = false;
+
             theVis.wrapperCSVDataSource = myCSVDataSource;
             theVis.gameObject.name = ("ScatterplotVis_" + PhotonNetwork.IsConnected);
 
@@ -59,6 +67,10 @@ namespace Photon_IATK
 
             Debug.LogFormat(GlobalVariables.cOnDestory + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Destorying this script, it is no longer needed", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
+            if (visualisationLoadingDelegate != null)
+                visualisationLoadingDelegate(false);
+
+            theVis.isTriggeringEvents = true;
 
             Destroy(this);
 

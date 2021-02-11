@@ -1888,10 +1888,11 @@ GameObject:
   - component: {fileID: 1058062613174048810}
   - component: {fileID: 8454925233817578247}
   - component: {fileID: 1999129629727214084}
-  - component: {fileID: 5566167697514370121}
+  - component: {fileID: 862074748855345882}
+  - component: {fileID: 3404242196657133980}
   m_Layer: 0
   m_Name: LineDrawing
-  m_TagString: Untagged
+  m_TagString: Annotation
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1932,7 +1933,6 @@ MonoBehaviour:
   _drawingParent: {fileID: 0}
   _isSmoothingActive: 1
   _windowSize: 2
-  useTransform: 0
 --- !u!120 &1058062613174048810
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -2058,15 +2058,14 @@ MonoBehaviour:
   Group: 0
   prefixField: -1
   observableSearch: 2
-  Synchronization: 3
+  Synchronization: 1
   OwnershipTransfer: 0
   ObservedComponents:
   - {fileID: 8131391992978207911}
-  - {fileID: 5566167697514370121}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &5566167697514370121
+--- !u!114 &862074748855345882
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2075,13 +2074,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 3934190893047059235}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
+  m_Script: {fileID: 11500000, guid: e9b564b887399ea43b673af3cf9f3eca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
+  isWaitingForPhotonRequestTransformEvent: 1
+--- !u!114 &3404242196657133980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3934190893047059235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a87c82ce16fce01478184bfa7a503902, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myVisXAxis: 
+  myVisYAxis: 
+  myVisZAxis: 
+  myTextContent: 
+  myUniqueAnnotationNumber: 0
+  myAnnotationType: 1
 --- !u!1 &3985181946276722627
 GameObject:
   m_ObjectHideFlags: 0
