@@ -26,6 +26,8 @@ namespace Photon_IATK
         public string myTextContent;
         public int myUniqueAnnotationNumber;
 
+        public GameObject myObjectRepresentation;
+
         private typesOfAnnotations _myAnnotationType;
         private bool wasObjectSetup = false;
 
@@ -185,7 +187,6 @@ namespace Photon_IATK
 
             Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}, Client ~ {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}{5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.RequestEventAnnotationCreation, "Loading content", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, "", ", Content: ", jsonSerializedAnnotation, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-
             if (jsonSerializedAnnotation.Length < 2) { return; }
             setUpFromSerializeableAnnotation(jsonSerializedAnnotation);
 
@@ -207,6 +208,9 @@ namespace Photon_IATK
                 case typesOfAnnotations.TEST_TRACKER:
                     prefabGameObject = Resources.Load<GameObject>("Tracker");
                     break;
+                case typesOfAnnotations.LINERENDER:
+                    prefabGameObject = Resources.Load<GameObject>("LineDrawing");
+                    break;
                 default:
                     Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Loading this annotation type is not supported or the type is null.", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                     wasObjectSetup = false;
@@ -223,6 +227,8 @@ namespace Photon_IATK
             {
                 HelperFunctions.randomizeAttributes(this.gameObject);
             }
+
+            myObjectRepresentation = prefabGameObject;
         }
 
         private void _setAxisNames()

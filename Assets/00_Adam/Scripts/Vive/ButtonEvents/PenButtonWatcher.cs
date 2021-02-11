@@ -30,10 +30,12 @@ namespace Photon_IATK
 
             if (pressed)
             {
+                
+
+
                 tmp_Line_Render_Prefab = PhotonNetwork.InstantiateRoomObject("LineDrawing", Vector3.zero, Quaternion.identity);
 
                 PhotonLineDrawing photonLineDrawing = tmp_Line_Render_Prefab.GetComponent<PhotonLineDrawing>();
-                photonLineDrawing.isUser = true;
                 photonLineDrawing.Initalize();
             }
             else

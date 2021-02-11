@@ -1,8 +1,4 @@
-﻿using System.Linq;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
+﻿using UnityEngine;
 using Photon.Pun;
 
 namespace Photon_IATK
@@ -11,14 +7,6 @@ namespace Photon_IATK
     {
         public LineRenderer lineRenderer;
         public MeshCollider meshCollider;
-    
-        [SerializeField] public bool isUser = default;
-
-        private Vector3 networkLocalPosition;
-        private Quaternion networkLocalRotation;
-
-        private Vector3 startingLocalPosition;
-        private Quaternion startingLocalRotation;
 
         private Vector3 NewPoint;
         private Vector3 oldPoint;
@@ -31,31 +19,7 @@ namespace Photon_IATK
         private Material _lineMaterial;
 
         public float _maxLineWidth = .005f;
-
-        private DrawingVariables drawingVariables;
-
-        private const float TimeInterval = 0f;
-
-        private float _timer = 0f;
         private LineRenderer _currentLine = null;
-
-        [SerializeField]
-        private Transform _drawingParent;
-        //playspace anchor for synced views
-
-        private Vector3 _lastPosition = Vector3.zero;
-        private const float MinimalDrawingDistance = 0.001f;
-
-        [Header("Line Smoothing")]
-        [SerializeField]
-        private bool _isSmoothingActive = true;
-
-        [SerializeField, Range(0, 11)]
-        private int _windowSize = 2;
-
-        private Vector3[] _lastPositionsBuffer;
-
-
 
         void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
@@ -79,15 +43,6 @@ namespace Photon_IATK
 
         public void Initalize()
         {
-
-            var trans = transform;
-            startingLocalPosition = trans.localPosition;
-            startingLocalRotation = trans.localRotation;
-
-            networkLocalPosition = startingLocalPosition;
-            networkLocalRotation = startingLocalRotation;
-
-            _lastPosition = Vector3.zero;
             _currentLine = lineRenderer;
 
             _currentLine.material = new Material(Shader.Find("Sprites/Default")); ;
@@ -118,8 +73,6 @@ namespace Photon_IATK
         {
             if (!photonView.IsMine && PhotonNetwork.IsConnected)
             {
-                GameObject pen = GameObject.FindGameObjectWithTag("GameController");
-
                 addPoint(NewPoint);
             }
         }

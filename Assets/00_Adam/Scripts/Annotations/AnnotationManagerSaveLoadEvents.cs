@@ -20,20 +20,6 @@ namespace Photon_IATK
         public bool isWaitingForListOfAnnotationIDs = false;
         public int annotationsCreated = 0;
 
-        private List<int> myListOfAnnotationIDs
-        {
-            get
-            {
-                Annotation[] annotations = FindObjectsOfType<Annotation>();
-                List<int> listOfIDs = new List<int> { };
-                foreach (Annotation annotation in annotations)
-                {
-                    listOfIDs.Add(annotation.myUniqueAnnotationNumber);
-                }
-
-                return listOfIDs;
-            }
-        }
 
         private void OnEnable()
         {
@@ -184,6 +170,8 @@ namespace Photon_IATK
                 annotation.SendContentFromMaster();
                 annotation._setAnnotationObject();
             }
+
+            annotation.photonView.GetInstanceID();
         }
 
         private void CreateAnnotation(SerializeableAnnotation serializeableAnnotation)
