@@ -364,5 +364,15 @@ namespace Photon_IATK
             return Quaternion.Inverse(PlayspaceAnchor.Instance.transform.rotation) * obj.transform.rotation;
         }
 
+        /// <summary>
+        /// Scale Relative to Anchor
+        /// </summary>
+        public static Vector3 SRA(GameObject obj)
+        {
+
+            return obj.transform.lossyScale;
+            //return obj.transform.localScale;
+        }
+
     }
 }

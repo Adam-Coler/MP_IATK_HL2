@@ -65,12 +65,12 @@ namespace Photon_IATK
                     //HelperFunctions.ParentInSharedPlayspaceAnchor(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
 
                     //thisModel.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
+                    thisModel.transform.SetParent(this.transform);
                     thisModel.name = inputDevice.name;
                     TrackControllerByRefereance trackControllerByRefereance = thisModel.AddComponent<TrackControllerByRefereance>();
                     trackControllerByRefereance.thisInputDevice = inputDevice;
 
-
-                    Debug.Log(GlobalVariables.purple + "Instantiated Vive Controller" + GlobalVariables.endColor + " : registerDevice(), " + this.GetType());
+                    Debug.LogFormat(GlobalVariables.cInstance + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Instantiated Vive Controller", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 } else if (inputDevice.name.Contains("logi"))
                 {
@@ -81,7 +81,7 @@ namespace Photon_IATK
                     TrackControllerByRefereance trackControllerByRefereance = thisModel.AddComponent<TrackControllerByRefereance>();
                     trackControllerByRefereance.thisInputDevice = inputDevice;
 
-                    Debug.Log(GlobalVariables.purple + "Instantiated Logitech Controller" + GlobalVariables.endColor + " : registerDevice(), " + this.GetType());
+                    Debug.LogFormat(GlobalVariables.cInstance + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Instantiated Logitech Controller", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                 }
                 
             }
