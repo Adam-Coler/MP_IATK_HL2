@@ -91,12 +91,13 @@ namespace Photon_IATK
         public const byte PhotonRequestAnnotationsDeleteAllEvent = 51;
         public const byte PhotonRequestAnnotationsDeleteOneEvent = 52;
         public const byte PhotonRequestAnnotationsLoadAllEvent = 53;
+        public const byte SendEventNewAnnotationID = 54;
 
-        public const byte PhotonRequestAnnotationsListOfIDsEvent = 54;
-        public const byte PhotonResponseRequestAnnotationsListOfIDsEventNONE_FOUNDEvent = 55;
-        public const byte PhotonResponseToRequestAnnotationsListOfIDsEvent = 56;
-        public const byte PhotonRequestAnnotationsByListOfIDsEvent = 57;
-        public const byte PhotonResponseToRequestAnnotationsByListOfIDsEvent = 58;
+        public const byte PhotonRequestAnnotationsListOfIDsEvent = 55;
+        //public const byte PhotonResponseRequestAnnotationsListOfIDsEventNONE_FOUNDEvent = 55;
+        //public const byte PhotonResponseToRequestAnnotationsListOfIDsEvent = 56;
+        //public const byte PhotonRequestAnnotationsByListOfIDsEvent = 57;
+        //public const byte PhotonResponseToRequestAnnotationsByListOfIDsEvent = 58;
 
         //Annotations 2 70 - 79
         public const byte RequestEventAnnotationCreation = 70;
@@ -107,6 +108,9 @@ namespace Photon_IATK
         public const byte RequestEventAnnotationFileSystemDeletion = 81;
         //public const byte RespondToRequestAnnotationDeletionAll = 81;
 
+        //Pen 90-99
+        public const byte RequestAddPointEvent = 90;
+
         //Other 100-109
         public const byte PhotonRequestLatencyCheckEvent = 100;
         public const byte PhotonRequestLatencyCheckResponseEvent = 101;
@@ -114,7 +118,6 @@ namespace Photon_IATK
         //public const byte PhotonEvent = 6;
 
 
-        //Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
         //Debug.LogFormat(GlobalVariables.cRegister + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 

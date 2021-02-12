@@ -2,6 +2,7 @@
 
 namespace Photon_IATK
 {
+    [DisallowMultipleComponent]
     public class GameSetupAuto : MonoBehaviour
     {
 
@@ -10,13 +11,14 @@ namespace Photon_IATK
         void Start()
         {
             btn_functions = FindObjectOfType<Btn_Functions_For_In_Scene_Scripts>();
+
             setup();
+
 
             Photon.Pun.PhotonNetwork.SerializationRate = GlobalVariables.iPunObservableUpdateRate;
             Photon.Pun.PhotonNetwork.SendRate = GlobalVariables.iPunObservableUpdateRate;
             Photon.Pun.PhotonNetwork.SendRate = GlobalVariables.photonSendRate;
         }
-
 
         static void enableVR()
         {
@@ -55,9 +57,20 @@ namespace Photon_IATK
 
         private void setup()
         {
-         enableVR();
+     
+         Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Seting up VIVE Environement", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+        enableVR();
+
+        Invoke("loadVis", 4f);
 
         }
+        private void loadVis()
+        {
+            btn_functions.LoadRemoveVis();
+        }
+
+        
 
 #else
 

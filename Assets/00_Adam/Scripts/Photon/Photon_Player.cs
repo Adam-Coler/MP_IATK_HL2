@@ -189,7 +189,7 @@ namespace Photon_IATK
                     loadControllerModelsRight.isLeft = false;
                     loadControllerModelsRight.setUp();
 
-                    this.gameObject.AddComponent<ButtonListeners>();
+                    //this.gameObject.AddComponent<ButtonListeners>();
 
                 }
             }

@@ -88,3 +88,7 @@ MonoBehaviour:
   myVisZAxis: 
   myTextContent: 
   myUniqueAnnotationNumber: 0
+  myObjectRepresentation: {fileID: 0}
+  myObjectComponenet: {fileID: 0}
+  isFirstUpdate: 0
+  isListeningForPenEvents: 0

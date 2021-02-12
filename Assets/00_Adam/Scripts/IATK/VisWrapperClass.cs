@@ -113,6 +113,8 @@ namespace Photon_IATK
             OnUpdateViewAction += UpdatedView;
 
             lastLocalScale = this.transform.localScale;
+
+            HelperFunctions.ParentInSharedPlayspaceAnchor(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
         }
 
         private void OnDestroy()

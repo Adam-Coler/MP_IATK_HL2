@@ -3,7 +3,8 @@ using Photon.Pun;
 
 namespace Photon_IATK
 {
-    public class PhotonLineDrawing : MonoBehaviourPun, IPunObservable
+    [DisallowMultipleComponent]
+    public class PhotonLineDrawing : MonoBehaviour
     {
         public LineRenderer lineRenderer;
         public MeshCollider meshCollider;
@@ -21,30 +22,14 @@ namespace Photon_IATK
         public float _maxLineWidth = .005f;
         private LineRenderer _currentLine = null;
 
-        void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-        {
-            if (stream.IsWriting)
-            {
-                stream.SendNext(NewPoint);
-            }
-            else
-            {
-                NewPoint = (Vector3)stream.ReceiveNext();
-            }
-        }
-
         private void Awake()
         {
-            if (!photonView.IsMine)
-            {
-                Initalize();
-            }
+            Initalize();
         }
 
         public void Initalize()
         {
             _currentLine = lineRenderer;
-
             _currentLine.material = new Material(Shader.Find("Sprites/Default")); ;
             _currentLine.material.color = DrawingVariables.Instance.currentColor;
             _currentLine.widthMultiplier = .005f;
@@ -66,15 +51,6 @@ namespace Photon_IATK
             lineRenderer.SetPosition(lineRenderer.positionCount - 1, pointToAdd);
 
             oldPoint = NewPoint;
-        }
-
-        // private void FixedUpdate()
-        private void FixedUpdate()
-        {
-            if (!photonView.IsMine && PhotonNetwork.IsConnected)
-            {
-                addPoint(NewPoint);
-            }
         }
 
     }

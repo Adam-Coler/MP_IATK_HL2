@@ -7,7 +7,7 @@ namespace Photon_IATK
     {
         public PrimaryButtonWatcher primaryWatcher;
         //public TriggerButtonWatcher triggerWatcher;
-
+        AnnotationManagerSaveLoadEvents annotationManager;
         private DrawingVariables drawingVariables;
 
         void Awake()
@@ -19,7 +19,12 @@ namespace Photon_IATK
 
             if (primaryWatcher == null)
             {
-                Debug.LogFormat(GlobalVariables.red + "No PrimaryButtonWatcher found" + GlobalVariables.endColor + " : Awake()" + this.GetType());
+                Debug.LogFormat(GlobalVariables.cError + "No PrimaryButtonWatcher found" + GlobalVariables.endColor + " : Awake()" + this.GetType());
+            }
+
+                       
+            if (!HelperFunctions.GetComponent(out annotationManager, System.Reflection.MethodBase.GetCurrentMethod())) {
+                Debug.LogFormat(GlobalVariables.cError + "No AnnotationManagerSaveLoadEvents found" + GlobalVariables.endColor + " : Awake()" + this.GetType());
             }
 
             //triggerWatcher = GameObject.FindObjectOfType<TriggerButtonWatcher>();
@@ -45,24 +50,21 @@ namespace Photon_IATK
 
 
         GameObject tmp_Line_Render_Prefab;
-        LineRenderer lineRenderer;
         public void onTriggerPress(bool pressed)
         {
-            Debug.LogFormat(GlobalVariables.blue + "Trigger button pressed = {0}" + GlobalVariables.endColor + " : onTriggerPress()" + this.GetType(), pressed);
+            Debug.LogFormat(GlobalVariables.cFileOperations + "Trigger button pressed = {0}" + GlobalVariables.endColor + " : onTriggerPress()" + this.GetType(), pressed);
 
             drawingVariables.isDrawing = pressed;
 
             if (pressed)
             {
-                tmp_Line_Render_Prefab = PhotonNetwork.InstantiateRoomObject("LineDrawing", Vector3.zero, Quaternion.identity);
+                annotationManager.RequestAnnotationCreation(Annotation.typesOfAnnotations.LINERENDER);
 
-                PhotonLineDrawing photonLineDrawing = tmp_Line_Render_Prefab.GetComponent<PhotonLineDrawing>();
-                photonLineDrawing.Initalize();
-            } else
-            {
-                tmp_Line_Render_Prefab = null;
+                //tmp_Line_Render_Prefab = PhotonNetwork.InstantiateRoomObject("LineDrawing", Vector3.zero, Quaternion.identity);
+
+                //PhotonLineDrawing photonLineDrawing = tmp_Line_Render_Prefab.GetComponent<PhotonLineDrawing>();
+                //photonLineDrawing.Initalize();
             }
-
 
         }
 
@@ -75,16 +77,19 @@ namespace Photon_IATK
 
         public void OnTriggerPosition(Vector3 triggerPressPosition)
         {
-            Debug.LogFormat(GlobalVariables.blue + "Trigger press position = {0}" + GlobalVariables.endColor + " : onPrimaryButtonEvent()" + this.GetType(), triggerPressPosition);
 
             drawingVariables.penTipPosition = triggerPressPosition;
 
-            if (tmp_Line_Render_Prefab != null)
+            if (drawingVariables.isDrawing)
             {
-                tmp_Line_Render_Prefab.GetComponent<PhotonLineDrawing>().addPoint(triggerPressPosition);
+                Annotation newAnnotation = PhotonView.Find(annotationManager.lastMadeAnnotationPhotonViewID).gameObject.GetComponent<Annotation>();
+
+                Debug.LogFormat(GlobalVariables.blue + "Trigger press position = {0}" + GlobalVariables.endColor + " : onPrimaryButtonEvent()" + this.GetType(), triggerPressPosition);
+
+                newAnnotation.addPoint(triggerPressPosition);
+
+                //tmp_Line_Render_Prefab.GetComponent<PhotonLineDrawing>().addPoint(triggerPressPosition);
             }
-
-
         }
 
 

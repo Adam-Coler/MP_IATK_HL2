@@ -16,10 +16,12 @@ namespace Photon_IATK
 {
     // This class will store the information relvevent to annotations in this sytem
     //as well as handing converting itself to and from the annotation serizliation class
-
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Photon.Pun.PhotonView))]
     public class Annotation : MonoBehaviourPun
     {
+        #region Variables
+
         public string myVisXAxis;
         public string myVisYAxis;
         public string myVisZAxis;
@@ -27,9 +29,12 @@ namespace Photon_IATK
         public int myUniqueAnnotationNumber;
 
         public GameObject myObjectRepresentation;
+        public Component myObjectComponenet;
 
         private typesOfAnnotations _myAnnotationType;
         private bool wasObjectSetup = false;
+        public bool isFirstUpdate = true;
+
 
         private Vector3 recivedRealtiveScale;
         private Vector3 myRelativeScale { 
@@ -60,9 +65,6 @@ namespace Photon_IATK
             }
         }
 
-        /// <summary>
-        /// Setting this will force an update and a call to the master client for all content
-        /// </summary>
         public typesOfAnnotations myAnnotationType { 
             get
             {
@@ -85,12 +87,16 @@ namespace Photon_IATK
         private GameObject myVisParent;
         private GameObject myAnnotationCollectionParent;
 
+        #endregion Varbiales
+
+        #region Setup
         public Annotation(SerializeableAnnotation serializeableAnnotation){
             setUpFromSerializeableAnnotation(serializeableAnnotation);
         }
 
         private void OnEnable()
         {
+
             PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
 
             Debug.LogFormat(GlobalVariables.cRegister + "Annotation registering OnEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
@@ -114,7 +120,79 @@ namespace Photon_IATK
             _setAxisNames();
 
             RequestContentFromMaster();
+
+            isFirstUpdate = true;
         }
+
+        private void _setAxisNames()
+        {
+            VisualizationEvent_Calls myParentsVisRPCClass = myVisParent.GetComponent<VisualizationEvent_Calls>();
+
+            if (myParentsVisRPCClass == null)
+            {
+                myVisXAxis = "Fake X Axis Title";
+                myVisYAxis = "Fake Y Axis Title";
+                myVisZAxis = "Fake Z Axis Title";
+            }
+            else
+            {
+                myVisXAxis = myParentsVisRPCClass.xDimension;
+                myVisYAxis = myParentsVisRPCClass.yDimension;
+                myVisZAxis = myParentsVisRPCClass.zDimension;
+            }
+        }
+
+        private void setupParentObjects()
+        {
+            HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.visTag, out myVisParent, true, System.Reflection.MethodBase.GetCurrentMethod());
+            if (HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.annotationCollectionTag, out myAnnotationCollectionParent, true, System.Reflection.MethodBase.GetCurrentMethod()))
+            {
+                this.transform.parent = myAnnotationCollectionParent.transform;
+            }
+            else
+            {
+                //destroy it over hte network
+            }
+        }
+
+        public void _setAnnotationObject()
+        {
+            if (wasObjectSetup) { return; }
+
+            wasObjectSetup = true;
+
+            GameObject prefabGameObject;
+            //this will add the visual representation to the annotation
+            switch (myAnnotationType)
+            {
+                case typesOfAnnotations.TEST_TRACKER:
+                    prefabGameObject = Resources.Load<GameObject>("Tracker");
+                    break;
+                case typesOfAnnotations.LINERENDER:
+                    prefabGameObject = Resources.Load<GameObject>("LineDrawing");
+                    break;
+                default:
+                    Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Loading this annotation type is not supported or the type is null.", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                    wasObjectSetup = false;
+                    return;
+            }
+
+            prefabGameObject = Instantiate(prefabGameObject, Vector3.zero, Quaternion.identity);
+
+            prefabGameObject.transform.parent = this.transform;
+            prefabGameObject.transform.localPosition = Vector3.zero;
+            prefabGameObject.transform.localRotation = Quaternion.identity;
+
+            if (myAnnotationType == typesOfAnnotations.TEST_TRACKER && this.gameObject.transform.localPosition == Vector3.zero)
+            {
+                HelperFunctions.randomizeAttributes(this.gameObject);
+            }
+
+            myObjectRepresentation = prefabGameObject;
+
+            setupLineRenderListeners();
+        }
+        #endregion Setup
 
         #region Events
         private void OnEvent(EventData photonEventData)
@@ -137,6 +215,9 @@ namespace Photon_IATK
                     break;
                 case GlobalVariables.RespondEventWithContent:
                     ProcessRecivedContent(data);
+                    break;
+                case GlobalVariables.RequestAddPointEvent:
+                    addPoint(data);
                     break;
                 default:
                     break;
@@ -194,73 +275,110 @@ namespace Photon_IATK
         }
 
         #endregion #Content Updates
+
+
+
         #endregion Events
-        public void _setAnnotationObject()
+
+        #region LineRender
+
+        public bool isListeningForPenEvents = false;
+        private void setupLineRenderListeners()
         {
-            if (wasObjectSetup) { return; }
 
-            wasObjectSetup = true;
+            if(myAnnotationType != typesOfAnnotations.LINERENDER) { return; }
 
-            GameObject prefabGameObject;
-            //this will add the visual representation to the annotation
-            switch (myAnnotationType)
-            {
-                case typesOfAnnotations.TEST_TRACKER:
-                    prefabGameObject = Resources.Load<GameObject>("Tracker");
-                    break;
-                case typesOfAnnotations.LINERENDER:
-                    prefabGameObject = Resources.Load<GameObject>("LineDrawing");
-                    break;
-                default:
-                    Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Loading this annotation type is not supported or the type is null.", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-                    wasObjectSetup = false;
-                    return;
-            }
+            myObjectComponenet = myObjectRepresentation.GetComponent<PhotonLineDrawing>();
 
-            prefabGameObject = Instantiate(prefabGameObject, Vector3.zero, Quaternion.identity);
+#if VIVE
+            PenButtonEvents penButtonEvents;
+            if (!HelperFunctions.GetComponent<PenButtonEvents>(out penButtonEvents, System.Reflection.MethodBase.GetCurrentMethod())) { return; }
 
-            prefabGameObject.transform.parent = this.transform;
-            prefabGameObject.transform.localPosition = Vector3.zero;
-            prefabGameObject.transform.localRotation = Quaternion.identity;
+            penButtonEvents.penTriggerPress.AddListener(onPenTriggerPress);
+            penButtonEvents.penTriggerPressedLocation.AddListener(sendAddPointEvent);
 
-            if (myAnnotationType == typesOfAnnotations.TEST_TRACKER && this.gameObject.transform.localPosition == Vector3.zero)
-            {
-                HelperFunctions.randomizeAttributes(this.gameObject);
-            }
+            Debug.LogFormat(GlobalVariables.cRegister + "PenEvent listeners registered, Pen Events Name: {0}, Component attached to {1} parented in {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", penButtonEvents.name, myObjectComponenet.name, myObjectComponenet.transform.parent.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            myObjectRepresentation = prefabGameObject;
+        isListeningForPenEvents = true;
+#endif
         }
 
-        private void _setAxisNames()
+    private void onPenTriggerPress(bool pressed)
         {
-            VisualizationEvent_Calls myParentsVisRPCClass = myVisParent.GetComponent<VisualizationEvent_Calls>();
-            
-            if (myParentsVisRPCClass == null)
+            if (!pressed)
             {
-                myVisXAxis = "Fake X Axis Title";
-                myVisYAxis = "Fake Y Axis Title";
-                myVisZAxis = "Fake Z Axis Title";
-            }
-            else
-            {
-                myVisXAxis = myParentsVisRPCClass.xDimension;
-                myVisYAxis = myParentsVisRPCClass.yDimension;
-                myVisZAxis = myParentsVisRPCClass.zDimension;
+                PenButtonEvents penButtonEvents;
+                if (!HelperFunctions.GetComponent<PenButtonEvents>(out penButtonEvents, System.Reflection.MethodBase.GetCurrentMethod())) { return; }
+
+                penButtonEvents.penTriggerPress.RemoveListener(onPenTriggerPress);
+                penButtonEvents.penTriggerPressedLocation.RemoveListener(sendAddPointEvent);
+
+                Debug.LogFormat(GlobalVariables.cRegister + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "PenEvent listeners removed", " Pen Events Name:", penButtonEvents.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                isListeningForPenEvents = false;
             }
         }
-        
-        private void setupParentObjects()
+
+
+        Vector3 lastPoint;
+        public void sendAddPointEvent(Vector3 point)
         {
-            HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.visTag, out myVisParent, true, System.Reflection.MethodBase.GetCurrentMethod());
-            if (HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.annotationCollectionTag, out myAnnotationCollectionParent, true, System.Reflection.MethodBase.GetCurrentMethod()))
+            float distPosition = Vector3.Distance(point, lastPoint);
+
+            bool isDistanceMeaningful = distPosition > .01f;
+
+
+            if (!isDistanceMeaningful)
             {
-                this.transform.parent = myAnnotationCollectionParent.transform;
+                return;
             }
-            else
-            {
-                //destroy it over hte network
-            }
+
+            lastPoint = point;
+
+            //point = this.transform.InverseTransformPoint(point);
+
+            string pointString = JsonUtility.ToJson(point);
+
+            Debug.LogFormat(GlobalVariables.cEvent + "{0}, Any ~ Sending point, MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", " ViewID: ", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RespondEventWithContent, "all", " Point: ", pointString, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            object[] content = new object[] { photonView.ViewID, pointString};
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+
+            PhotonNetwork.RaiseEvent(GlobalVariables.RequestAddPointEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
+
+            PhotonNetwork.SendAllOutgoingCommands();
         }
+
+        public void addPoint(object[] data)
+        {
+
+            string pointstring = (string)data[1];
+            Vector3 point = JsonUtility.FromJson<Vector3>(pointstring);
+
+            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}, Any ~ Adding point, MyView ID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.RequestEventAnnotationCreation, photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RespondEventWithContent, "all", " Point: ", pointstring, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            addPoint(point);
+        }
+        public void addPoint(Vector3 newPoint)
+        {
+
+            if (isFirstUpdate)
+            {
+                this.transform.localPosition = newPoint;
+                isFirstUpdate = false;
+                
+            }
+
+            newPoint = this.transform.InverseTransformPoint(newPoint);
+            var tmpComponenet = (PhotonLineDrawing)myObjectComponenet;
+            tmpComponenet.addPoint(newPoint);
+        }
+
+#endregion LineRender
+
+
+        #region serialization
 
         public string getJSONSerializedAnnotationString()
         {
@@ -273,7 +391,6 @@ namespace Photon_IATK
 
             serializeableAnnotation.myLocalRotation = this.transform.localRotation;
             serializeableAnnotation.myLocalPosition = this.transform.localPosition;
-            serializeableAnnotation.myRelativeScale = this.myRelativeScale;
             serializeableAnnotation.myRelativeScale = this.myRelativeScale;
 
             serializeableAnnotation.isDeleted = isDeleted;
@@ -319,6 +436,9 @@ namespace Photon_IATK
             _setAnnotationObject();
             return this;
         }
+
+        #endregion serialization
+
     }
 }
 

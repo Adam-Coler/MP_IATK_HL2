@@ -283,6 +283,7 @@ namespace Photon_IATK
 
         public static byte[] SerializeToByteArray<T>(T serializableObject, System.Reflection.MethodBase fromMethodBase)
         {
+
             byte[] bytes;
             IFormatter formatter = new BinaryFormatter();
             MemoryStream stream = new MemoryStream();
@@ -293,6 +294,26 @@ namespace Photon_IATK
             Debug.LogFormat(GlobalVariables.cCommon + "Successful Serizalization. Input Type: {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", serializableObject.GetType(), "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
 
             return bytes;
+        }
+
+        public static Vector3 StringToVector3(string sVector)
+        {
+            // Remove the parentheses
+            if (sVector.StartsWith("(") && sVector.EndsWith(")"))
+            {
+                sVector = sVector.Substring(1, sVector.Length - 2);
+            }
+
+            // split the items
+            string[] sArray = sVector.Split(',');
+
+            // store as a Vector3
+            Vector3 result = new Vector3(
+                float.Parse(sArray[0]),
+                float.Parse(sArray[1]),
+                float.Parse(sArray[2]));
+
+            return result;
         }
 
 
@@ -327,10 +348,21 @@ namespace Photon_IATK
 
 
 
+        /// <summary>
+        /// Position Relative to Anchor
+        /// </summary>
+        public static Vector3 PRA(GameObject obj)
+        {            
+            return PlayspaceAnchor.Instance.transform.InverseTransformPoint(obj.transform.position);
+        }
 
-
-
-
+        /// <summary>
+        /// Rotation Relative to Anchor
+        /// </summary>
+        public static Quaternion RRA(GameObject obj)
+        {
+            return Quaternion.Inverse(PlayspaceAnchor.Instance.transform.rotation) * obj.transform.rotation;
+        }
 
     }
 }

@@ -14,12 +14,15 @@ using System;
 
 namespace Photon_IATK
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Photon.Pun.PhotonView))]
     public class AnnotationManagerSaveLoadEvents : MonoBehaviourPun
     {
         public bool isWaitingForListOfAnnotationIDs = false;
         public int annotationsCreated = 0;
+        public int lastMadeAnnotationPhotonViewID;
 
+        #region Setup and Teardown
 
         private void OnEnable()
         {
@@ -45,6 +48,10 @@ namespace Photon_IATK
 
         }
 
+        #endregion Setup and Teardown
+
+        #region Delegates
+
         private void UpdatedView(AbstractVisualisation.PropertyType propertyType)
         {
             Debug.LogFormat(GlobalVariables.cTest + "Vis view {0} updated. Name: " + PhotonNetwork.NickName + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
@@ -67,6 +74,8 @@ namespace Photon_IATK
                 RespondToRequestAnnotationRemoval();
             }
         }
+
+        #endregion Delegates
 
         #region Events
 
@@ -95,7 +104,9 @@ namespace Photon_IATK
                 case GlobalVariables.RequestEventAnnotationFileSystemDeletion:
                     DeleteAnnotaitonFileSystem();
                     break;
-
+                case GlobalVariables.SendEventNewAnnotationID:
+                    setAnnotationIDEvent(data);
+                    break;
                 default:
                     break;
             }
@@ -154,7 +165,7 @@ namespace Photon_IATK
                 annotationsCreated++;
                 genericAnnotationObj = PhotonNetwork.InstantiateRoomObject("GenericAnnotation", Vector3.zero, Quaternion.identity);
                 HelperFunctions.SetObjectLocalTransformToZero(genericAnnotationObj, System.Reflection.MethodBase.GetCurrentMethod());
-                genericAnnotationObj.name = "NewAnnotation";
+                genericAnnotationObj.name = "NewAnnotation_" + annotationsCreated;
             } else
             {
                 Debug.LogFormat(GlobalVariables.cError + "Offline annotations are disabled.{0} {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
@@ -169,9 +180,10 @@ namespace Photon_IATK
                 annotation.myUniqueAnnotationNumber = annotationsCreated;
                 annotation.SendContentFromMaster();
                 annotation._setAnnotationObject();
+                annotationsCreated++;
             }
-
-            annotation.photonView.GetInstanceID();
+            lastMadeAnnotationPhotonViewID = annotation.photonView.ViewID;
+            sendAnnotationIDEvent();
         }
 
         private void CreateAnnotation(SerializeableAnnotation serializeableAnnotation)
@@ -183,7 +195,8 @@ namespace Photon_IATK
                 annotationsCreated++;
                 genericAnnotationObj = PhotonNetwork.InstantiateRoomObject("GenericAnnotation", Vector3.zero, Quaternion.identity);
                 HelperFunctions.SetObjectLocalTransformToZero(genericAnnotationObj, System.Reflection.MethodBase.GetCurrentMethod());
-                genericAnnotationObj.name = "LoadedAnnotation";
+                genericAnnotationObj.name = "LoadedAnnotation_" + annotationsCreated;
+                annotationsCreated++;
             }
             else
             {
@@ -198,7 +211,36 @@ namespace Photon_IATK
                 annotation.SendContentFromMaster();
                 annotation._setAnnotationObject();
             }
+            lastMadeAnnotationPhotonViewID = annotation.photonView.ViewID;
+            sendAnnotationIDEvent();
         }
+
+        /// <summary>
+        /// Sends new annotation ID from master client to all clients
+        /// Data Sent = object[] { photonView.ViewID, new annotation photonView.ViewID };
+        /// Raises = GlobalVariables.SendEventNewAnnotationID
+        /// Reciver = ReceiverGroup.Others
+        /// </summary>
+        private void sendAnnotationIDEvent()
+        {
+            Debug.LogFormat(GlobalVariables.cEvent + "MasterClient ~ Calling: {0}, Receivers: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Sending Event Code: {5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "sendAnnotationIDEvent()", "Others", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.SendEventNewAnnotationID, "", ", annotation ID: ", lastMadeAnnotationPhotonViewID, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            object[] content = new object[] { photonView.ViewID, lastMadeAnnotationPhotonViewID };
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+
+            PhotonNetwork.RaiseEvent(GlobalVariables.SendEventNewAnnotationID, content, raiseEventOptions, GlobalVariables.sendOptions);
+        }
+
+
+        private void setAnnotationIDEvent(object[] data)
+        {
+            lastMadeAnnotationPhotonViewID = (int)data[1];
+
+            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}, Client ~ {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}{5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.SendEventNewAnnotationID, "Updating latest Annotation ID.", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, "", "", "Annotation View ID: ", lastMadeAnnotationPhotonViewID, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+        }
+
         #endregion Annotation Creation
 
         #region AnnotaitonRemoval

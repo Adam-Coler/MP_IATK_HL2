@@ -210,12 +210,12 @@ namespace Photon_IATK
         #region Annotations
         public void SaveAnnotations()
         {
-            GetOrAddComponent<AnnotationManagerSaveLoadRPC>().saveAnnotations();
+            GetOrAddComponent<AnnotationManagerSaveLoadEvents>().saveAnnotations();
         }
 
         public void LoadAnnotations()
         {
-            GetOrAddComponent<AnnotationManagerSaveLoadRPC>().loadAnnotations();
+            GetOrAddComponent<AnnotationManagerSaveLoadEvents>().loadAnnotations();
         }
         #endregion
 
