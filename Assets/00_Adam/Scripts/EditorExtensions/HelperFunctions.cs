@@ -357,6 +357,14 @@ namespace Photon_IATK
         }
 
         /// <summary>
+        /// Position Relative to Anchor
+        /// </summary>
+        public static Vector3 PRA(Vector3 point)
+        {
+            return PlayspaceAnchor.Instance.transform.InverseTransformPoint(point);
+        }
+
+        /// <summary>
         /// Rotation Relative to Anchor
         /// </summary>
         public static Quaternion RRA(GameObject obj)

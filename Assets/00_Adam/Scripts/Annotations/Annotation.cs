@@ -116,6 +116,8 @@ namespace Photon_IATK
             //attach to or make parents
             if (myVisParent == null || myAnnotationCollectionParent == null) { setupParentObjects(); }
 
+            HelperFunctions.SetObjectLocalTransformToZero(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
+
             //set axis to that parent
             _setAxisNames();
 
@@ -182,6 +184,7 @@ namespace Photon_IATK
             prefabGameObject.transform.parent = this.transform;
             prefabGameObject.transform.localPosition = Vector3.zero;
             prefabGameObject.transform.localRotation = Quaternion.identity;
+            prefabGameObject.transform.localScale = Vector3.one;
 
             if (myAnnotationType == typesOfAnnotations.TEST_TRACKER && this.gameObject.transform.localPosition == Vector3.zero)
             {
@@ -335,7 +338,8 @@ namespace Photon_IATK
 
             lastPoint = point;
 
-            //point = this.transform.InverseTransformPoint(point);
+            point = this.transform.InverseTransformPoint(point);
+            //point = HelperFunctions.PRA(point);
 
             string pointString = JsonUtility.ToJson(point);
 
@@ -365,12 +369,14 @@ namespace Photon_IATK
 
             if (isFirstUpdate)
             {
+                //Vector3 pointToAdd = this.transform.InverseTransformPoint(newPoint);
                 this.transform.localPosition = newPoint;
                 isFirstUpdate = false;
                 
             }
 
-            newPoint = this.transform.InverseTransformPoint(newPoint);
+            //newPoint = this.transform.InverseTransformPoint(newPoint);
+            //newPoint = HelperFunctions.PRA(this.gameObject);
             var tmpComponenet = (PhotonLineDrawing)myObjectComponenet;
             tmpComponenet.addPoint(newPoint);
         }

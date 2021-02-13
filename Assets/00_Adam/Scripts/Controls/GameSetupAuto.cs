@@ -67,7 +67,12 @@ namespace Photon_IATK
         }
         private void loadVis()
         {
-            btn_functions.LoadRemoveVis();
+            GameObject vis;
+            if(!HelperFunctions.FindGameObjectOrMakeOneWithTag("Vis", out vis, false, System.Reflection.MethodBase.GetCurrentMethod()))
+            {
+                btn_functions.LoadRemoveVis();
+            }
+
         }
 
         
