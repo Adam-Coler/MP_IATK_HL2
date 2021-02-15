@@ -33,5 +33,6 @@ namespace Photon_IATK
         public int myTimesMoved;
 
         public string myTextContent;
+        public Vector3[] myLineRenderPoints;
     }
 }

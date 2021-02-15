@@ -114,10 +114,12 @@ namespace Photon_IATK
             {
                 if (makeOneIfNotFound)
                 {
-                    Debug.LogFormat(GlobalVariables.cError + "No GameObjects found with tag: {0}. None will be made{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", tag, "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+                    Debug.LogFormat(GlobalVariables.cError + "No GameObjects found with tag: {0}. One will be made but has been disabled{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", tag, "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
 
-                    returnedGameObject = new GameObject("EmmulatedVisObject");
-                    returnedGameObject.tag = GlobalVariables.visTag;
+                    //returnedGameObject = new GameObject("EmmulatedVisObject");
+                    //returnedGameObject.tag = GlobalVariables.visTag;
+                    returnedGameObject = null;
+                    return false;
                 } 
                 else
                 {

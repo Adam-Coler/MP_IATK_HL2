@@ -34,7 +34,7 @@ namespace Photon_IATK
         private typesOfAnnotations _myAnnotationType;
         private bool wasObjectSetup = false;
         public bool isFirstUpdate = true;
-
+        public Vector3[] lineRenderPoints;
 
         private Vector3 recivedRealtiveScale;
         private Vector3 myRelativeScale { 
@@ -157,8 +157,10 @@ namespace Photon_IATK
             }
         }
 
-        public void _setAnnotationObject()
+        public void SetAnnotationObject(bool wasFromSerializedAnnotation = false)
         {
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Setting up new annotaiton, ", "From File: ", wasFromSerializedAnnotation, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
             if (wasObjectSetup) { return; }
 
             wasObjectSetup = true;
@@ -192,8 +194,9 @@ namespace Photon_IATK
             }
 
             myObjectRepresentation = prefabGameObject;
+            setupLineRender(wasFromSerializedAnnotation);
 
-            setupLineRenderListeners();
+
         }
         #endregion Setup
 
@@ -286,24 +289,36 @@ namespace Photon_IATK
         #region LineRender
 
         public bool isListeningForPenEvents = false;
-        private void setupLineRenderListeners()
+        private void setupLineRender(bool isLoadedAnnotation)
         {
 
             if(myAnnotationType != typesOfAnnotations.LINERENDER) { return; }
 
             myObjectComponenet = myObjectRepresentation.GetComponent<PhotonLineDrawing>();
 
+            if (isLoadedAnnotation)
+            {
+                Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Adding points to loaded line annotation", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                var tmpComponenet = (PhotonLineDrawing)myObjectComponenet;
+                tmpComponenet.AddPoints(lineRenderPoints);
+            }
+            else
+            {
 #if VIVE
-            PenButtonEvents penButtonEvents;
-            if (!HelperFunctions.GetComponent<PenButtonEvents>(out penButtonEvents, System.Reflection.MethodBase.GetCurrentMethod())) { return; }
 
-            penButtonEvents.penTriggerPress.AddListener(onPenTriggerPress);
-            penButtonEvents.penTriggerPressedLocation.AddListener(sendAddPointEvent);
+                PenButtonEvents penButtonEvents;
+                if (!HelperFunctions.GetComponent<PenButtonEvents>(out penButtonEvents, System.Reflection.MethodBase.GetCurrentMethod())) { return; }
 
-            Debug.LogFormat(GlobalVariables.cRegister + "PenEvent listeners registered, Pen Events Name: {0}, Component attached to {1} parented in {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", penButtonEvents.name, myObjectComponenet.name, myObjectComponenet.transform.parent.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                penButtonEvents.penTriggerPress.AddListener(onPenTriggerPress);
+                penButtonEvents.penTriggerPressedLocation.AddListener(sendAddPointEvent);
 
-        isListeningForPenEvents = true;
+                Debug.LogFormat(GlobalVariables.cRegister + "PenEvent listeners registered, Pen Events Name: {0}, Component attached to {1} parented in {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", penButtonEvents.name, myObjectComponenet.name, myObjectComponenet.transform.parent.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                isListeningForPenEvents = true;
 #endif
+            }
+
         }
 
     private void onPenTriggerPress(bool pressed)
@@ -319,6 +334,11 @@ namespace Photon_IATK
                 Debug.LogFormat(GlobalVariables.cRegister + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "PenEvent listeners removed", " Pen Events Name:", penButtonEvents.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 isListeningForPenEvents = false;
+
+                var tmpComponenet = (PhotonLineDrawing)myObjectComponenet;
+                tmpComponenet.Simplify();
+
+                lineRenderPoints = tmpComponenet.GetPoints();
             }
         }
 
@@ -338,7 +358,10 @@ namespace Photon_IATK
 
             lastPoint = point;
 
-            point = this.transform.InverseTransformPoint(point);
+            if (!isFirstUpdate) {
+                point = this.transform.InverseTransformPoint(point);
+            }
+
             //point = HelperFunctions.PRA(point);
 
             string pointString = JsonUtility.ToJson(point);
@@ -372,7 +395,7 @@ namespace Photon_IATK
                 //Vector3 pointToAdd = this.transform.InverseTransformPoint(newPoint);
                 this.transform.localPosition = newPoint;
                 isFirstUpdate = false;
-                
+                return;
             }
 
             //newPoint = this.transform.InverseTransformPoint(newPoint);
@@ -408,6 +431,7 @@ namespace Photon_IATK
             serializeableAnnotation.myAnnotationNumber = myUniqueAnnotationNumber;
 
             serializeableAnnotation.myAnnotationType = myAnnotationType.ToString();
+            serializeableAnnotation.myLineRenderPoints = lineRenderPoints;
 
             return serializeableAnnotation;
         }
@@ -438,8 +462,7 @@ namespace Photon_IATK
             this.gameObject.transform.localRotation = serializeableAnnotation.myLocalRotation;
             this.gameObject.transform.localScale = serializeableAnnotation.myLocalScale;
             this.myRelativeScale = serializeableAnnotation.myRelativeScale;
-
-            _setAnnotationObject();
+            this.lineRenderPoints = serializeableAnnotation.myLineRenderPoints;
             return this;
         }
 

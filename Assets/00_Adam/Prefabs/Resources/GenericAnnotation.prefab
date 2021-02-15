@@ -91,4 +91,5 @@ MonoBehaviour:
   myObjectRepresentation: {fileID: 0}
   myObjectComponenet: {fileID: 0}
   isFirstUpdate: 0
+  lineRenderPoints: []
   isListeningForPenEvents: 0

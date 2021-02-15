@@ -53,6 +53,27 @@ namespace Photon_IATK
             oldPoint = NewPoint;
         }
 
+        public void Simplify(float tolerance = 0.005f)
+        {
+            lineRenderer.Simplify(tolerance);
+
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "LineAnnotation Set, Simplifying to tolerance: ", tolerance, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
+
+        public Vector3[] GetPoints()
+        {
+            Vector3[] newPos = new Vector3[lineRenderer.positionCount];
+            lineRenderer.GetPositions(newPos);
+            return newPos;
+        }
+
+        public void AddPoints(Vector3[] points)
+        {
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "LineAnnotation adding ", points.Length, " points.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            lineRenderer.positionCount = points.Length - 1;
+            lineRenderer.SetPositions(points);
+        }
+
     }
 
 }

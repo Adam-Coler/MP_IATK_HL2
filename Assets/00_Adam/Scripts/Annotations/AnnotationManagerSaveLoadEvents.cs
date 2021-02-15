@@ -179,7 +179,7 @@ namespace Photon_IATK
                 annotation.myAnnotationType = annotationType;
                 annotation.myUniqueAnnotationNumber = annotationsCreated;
                 annotation.SendContentFromMaster();
-                annotation._setAnnotationObject();
+                annotation.SetAnnotationObject();
                 annotationsCreated++;
             }
             lastMadeAnnotationPhotonViewID = annotation.photonView.ViewID;
@@ -192,7 +192,6 @@ namespace Photon_IATK
 
             if (PhotonNetwork.IsConnected)
             {
-                annotationsCreated++;
                 genericAnnotationObj = PhotonNetwork.InstantiateRoomObject("GenericAnnotation", Vector3.zero, Quaternion.identity);
                 HelperFunctions.SetObjectLocalTransformToZero(genericAnnotationObj, System.Reflection.MethodBase.GetCurrentMethod());
                 genericAnnotationObj.name = "LoadedAnnotation_" + annotationsCreated;
@@ -209,7 +208,7 @@ namespace Photon_IATK
             {
                 annotation.setUpFromSerializeableAnnotation(serializeableAnnotation);
                 annotation.SendContentFromMaster();
-                annotation._setAnnotationObject();
+                annotation.SetAnnotationObject(true);
             }
             lastMadeAnnotationPhotonViewID = annotation.photonView.ViewID;
             sendAnnotationIDEvent();
@@ -383,7 +382,7 @@ namespace Photon_IATK
         private string _getParentVisAxisKey()
         {
             VisualizationEvent_Calls visualisationEvent_Calls;
-            if (!HelperFunctions.GetComponent<VisualizationEvent_Calls>(out visualisationEvent_Calls, System.Reflection.MethodBase.GetCurrentMethod())) { return "EmmulatedVisObject"; }
+            if (!HelperFunctions.GetComponent<VisualizationEvent_Calls>(out visualisationEvent_Calls, System.Reflection.MethodBase.GetCurrentMethod())) { return "NoVisEventCallsFound"; }
 
             return visualisationEvent_Calls.axisKey;
         }
