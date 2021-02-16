@@ -35,6 +35,7 @@ namespace Photon_IATK
         private bool wasObjectSetup = false;
         public bool isFirstUpdate = true;
         public Vector3[] lineRenderPoints;
+        public bool wasLoaded;
 
         private Vector3 recivedRealtiveScale;
         private Vector3 myRelativeScale { 
@@ -156,9 +157,9 @@ namespace Photon_IATK
             }
         }
 
-        public void SetAnnotationObject(bool wasFromSerializedAnnotation = false)
+        public void SetAnnotationObject()
         {
-            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Setting up new annotaiton, ", "From File: ", wasFromSerializedAnnotation, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Setting up new annotaiton, ", "From File: ", wasLoaded, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             if (wasObjectSetup) { return; }
 
@@ -193,7 +194,7 @@ namespace Photon_IATK
             }
 
             myObjectRepresentation = prefabGameObject;
-            _setupLineRender(wasFromSerializedAnnotation);
+            _setupLineRender();
 
 
         }
@@ -291,19 +292,21 @@ namespace Photon_IATK
         #region LineRender
 
         public bool isListeningForPenEvents = false;
-        private void _setupLineRender(bool isLoadedAnnotation)
+        private void _setupLineRender()
         {
 
             if(myAnnotationType != typesOfAnnotations.LINERENDER) { return; }
 
             myObjectComponenet = myObjectRepresentation.GetComponent<PhotonLineDrawing>();
 
-            if (isLoadedAnnotation)
+            if (wasLoaded)
             {
                 Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Adding points to loaded line annotation", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 var tmpComponenet = (PhotonLineDrawing)myObjectComponenet;
                 tmpComponenet.AddPoints(lineRenderPoints);
+
+                return;
             }
             else
             {
@@ -318,12 +321,17 @@ namespace Photon_IATK
                 Debug.LogFormat(GlobalVariables.cRegister + "PenEvent listeners registered, Pen Events Name: {0}, Component attached to {1} parented in {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", penButtonEvents.name, myObjectComponenet.name, myObjectComponenet.transform.parent.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 isListeningForPenEvents = true;
+
+                return;
 #endif
             }
 
+            Debug.LogFormat(GlobalVariables.cError + "_setupLineRender failed, Is loaded: {0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", wasLoaded, "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+
         }
 
-    private void _onPenTriggerPress(bool pressed)
+        private void _onPenTriggerPress(bool pressed)
         {
             if (!pressed)
             {
@@ -359,9 +367,9 @@ namespace Photon_IATK
 
             lastPoint = point;
 
-            if (!isFirstUpdate) {
-                point = this.transform.InverseTransformPoint(point);
-            }
+
+            //point = this.transform.InverseTransformPoint(point);
+
 
             //point = HelperFunctions.PRA(point);
 
@@ -388,20 +396,50 @@ namespace Photon_IATK
 
             AddPoint(point);
         }
+
+        public Vector3 firstPoint = Vector3.one;
         public void AddPoint(Vector3 newPoint)
         {
+            var tmpComponenet = (PhotonLineDrawing)myObjectComponenet;
 
-            if (isFirstUpdate)
-            {
-                //Vector3 pointToAdd = this.transform.InverseTransformPoint(newPoint);
-                this.transform.localPosition = newPoint;
-                isFirstUpdate = false;
-                return;
-            }
+            //if (isFirstUpdate)
+            //{
+            //    this.transform.localPosition = newPoint;
+
+            //    Vector3[] points = tmpComponenet.GetPoints();
+
+            //    Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "First Update Updating Points Now", points.Length, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+
+            //    //for (var i = 0; i < points.Length; i++)
+            //    //{
+            //    //    Vector3 point = points[i];
+            //    //    Vector3 translatedPoint = this.gameObject.transform.InverseTransformPoint(point);
+            //    //    tmpComponenet.lineRenderer.SetPosition(i, newPoint);
+            //    //    Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Updating Points Now", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            //    //}
+
+
+            //    //Vector3 pointToAdd = this.transform.InverseTransformPoint(newPoint);
+
+
+            //    isFirstUpdate = false;
+                
+            //    return;
+            //}
 
             //newPoint = this.transform.InverseTransformPoint(newPoint);
             //newPoint = HelperFunctions.PRA(this.gameObject);
-            var tmpComponenet = (PhotonLineDrawing)myObjectComponenet;
+
+            if(firstPoint == Vector3.one || firstPoint == Vector3.zero)
+            {
+                Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "FirstPoint: ", newPoint, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                firstPoint = newPoint;
+                this.transform.localPosition = newPoint;
+                //newPoint = this.transform.InverseTransformPoint(newPoint);
+                isFirstUpdate = false;
+            }
+            newPoint = this.transform.InverseTransformPoint(newPoint);
             tmpComponenet.addPoint(newPoint);
         }
 

@@ -3791,9 +3791,9 @@ MonoBehaviour:
       axisType: 2
       inputType: 25
       inputAction:
-        id: 1
-        description: Select
-        axisConstraint: 2
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 344
       axisCodeX: 
       axisCodeY: 
@@ -3827,12 +3827,12 @@ MonoBehaviour:
       invertYAxis: 0
     - id: 5
       description: Trackpad-Thumbstick Position
-      axisType: 4
+      axisType: 2
       inputType: 21
       inputAction:
-        id: 5
-        description: Teleport Direction
-        axisConstraint: 4
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 0
       axisCodeX: AXIS_1
       axisCodeY: AXIS_2
@@ -3856,9 +3856,9 @@ MonoBehaviour:
       axisType: 2
       inputType: 24
       inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
+        id: 1
+        description: Select
+        axisConstraint: 2
       keyCode: 338
       axisCodeX: 
       axisCodeY: 
@@ -4411,9 +4411,9 @@ MonoBehaviour:
       axisType: 2
       inputType: 25
       inputAction:
-        id: 1
-        description: Select
-        axisConstraint: 2
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 345
       axisCodeX: 
       axisCodeY: 
@@ -4447,12 +4447,12 @@ MonoBehaviour:
       invertYAxis: 0
     - id: 5
       description: Trackpad-Thumbstick Position
-      axisType: 4
+      axisType: 2
       inputType: 21
       inputAction:
-        id: 5
-        description: Teleport Direction
-        axisConstraint: 4
+        id: 0
+        description: None
+        axisConstraint: 0
       keyCode: 0
       axisCodeX: AXIS_4
       axisCodeY: AXIS_5
@@ -4476,9 +4476,9 @@ MonoBehaviour:
       axisType: 2
       inputType: 24
       inputAction:
-        id: 0
-        description: None
-        axisConstraint: 0
+        id: 1
+        description: Select
+        axisConstraint: 2
       keyCode: 339
       axisCodeX: 
       axisCodeY: 

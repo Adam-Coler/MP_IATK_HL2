@@ -13,25 +13,7 @@ MonoBehaviour:
   m_Name: IATK MixedRealityInputActionRulesProfile
   m_EditorClassIdentifier: 
   isCustomProfile: 1
-  inputActionRulesDigital:
-  - baseAction:
-      id: 1
-      description: Select
-      axisConstraint: 2
-    ruleAction:
-      id: 2
-      description: Menu
-      axisConstraint: 2
-    criteria: 0
-  - baseAction:
-      id: 2
-      description: Menu
-      axisConstraint: 2
-    ruleAction:
-      id: 1
-      description: Select
-      axisConstraint: 2
-    criteria: 0
+  inputActionRulesDigital: []
   inputActionRulesSingleAxis: []
   inputActionRulesDualAxis: []
   inputActionRulesVectorAxis: []

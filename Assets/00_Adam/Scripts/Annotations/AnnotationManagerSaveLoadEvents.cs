@@ -179,6 +179,7 @@ namespace Photon_IATK
                 annotation.myAnnotationType = annotationType;
                 annotation.myUniqueAnnotationNumber = annotationsCreated;
                 annotation.SendContentFromMaster();
+                annotation.wasLoaded = false;
                 annotation.SetAnnotationObject();
                 annotationsCreated++;
             }
@@ -208,7 +209,9 @@ namespace Photon_IATK
             {
                 annotation.SetUpFromSerializeableAnnotation(serializeableAnnotation);
                 annotation.SendContentFromMaster();
-                annotation.SetAnnotationObject(true);
+                annotation.wasLoaded = true;
+                annotation.SetAnnotationObject();
+
             }
             lastMadeAnnotationPhotonViewID = annotation.photonView.ViewID;
             sendAnnotationIDEvent();

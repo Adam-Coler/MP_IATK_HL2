@@ -92,4 +92,6 @@ MonoBehaviour:
   myObjectComponenet: {fileID: 0}
   isFirstUpdate: 0
   lineRenderPoints: []
+  wasLoaded: 0
   isListeningForPenEvents: 0
+  firstPoint: {x: 0, y: 0, z: 0}
