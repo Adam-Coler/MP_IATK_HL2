@@ -86,7 +86,7 @@ namespace Photon_IATK
 
                 Debug.LogFormat(GlobalVariables.blue + "Trigger press position = {0}" + GlobalVariables.endColor + " : onPrimaryButtonEvent()" + this.GetType(), triggerPressPosition);
 
-                newAnnotation.addPoint(triggerPressPosition);
+                newAnnotation.AddPoint(triggerPressPosition);
 
                 //tmp_Line_Render_Prefab.GetComponent<PhotonLineDrawing>().addPoint(triggerPressPosition);
             }

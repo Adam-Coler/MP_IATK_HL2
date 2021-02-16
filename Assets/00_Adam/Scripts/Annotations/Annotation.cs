@@ -91,12 +91,11 @@ namespace Photon_IATK
 
         #region Setup
         public Annotation(SerializeableAnnotation serializeableAnnotation){
-            setUpFromSerializeableAnnotation(serializeableAnnotation);
+            SetUpFromSerializeableAnnotation(serializeableAnnotation);
         }
 
         private void OnEnable()
         {
-
             PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
 
             Debug.LogFormat(GlobalVariables.cRegister + "Annotation registering OnEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
@@ -114,7 +113,7 @@ namespace Photon_IATK
             Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "New annotation loaded", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             //attach to or make parents
-            if (myVisParent == null || myAnnotationCollectionParent == null) { setupParentObjects(); }
+            if (myVisParent == null || myAnnotationCollectionParent == null) { _setupParentObjects(); }
 
             HelperFunctions.SetObjectLocalTransformToZero(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -144,7 +143,7 @@ namespace Photon_IATK
             }
         }
 
-        private void setupParentObjects()
+        private void _setupParentObjects()
         {
             HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.visTag, out myVisParent, true, System.Reflection.MethodBase.GetCurrentMethod());
             if (HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.annotationCollectionTag, out myAnnotationCollectionParent, true, System.Reflection.MethodBase.GetCurrentMethod()))
@@ -194,7 +193,7 @@ namespace Photon_IATK
             }
 
             myObjectRepresentation = prefabGameObject;
-            setupLineRender(wasFromSerializedAnnotation);
+            _setupLineRender(wasFromSerializedAnnotation);
 
 
         }
@@ -223,7 +222,7 @@ namespace Photon_IATK
                     ProcessRecivedContent(data);
                     break;
                 case GlobalVariables.RequestAddPointEvent:
-                    addPoint(data);
+                    AddPoint(data);
                     break;
                 default:
                     break;
@@ -245,6 +244,8 @@ namespace Photon_IATK
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
 
                 PhotonNetwork.RaiseEvent(GlobalVariables.RequestEventAnnotationContent, content, raiseEventOptions, GlobalVariables.sendOptions);
+
+                PhotonNetwork.SendAllOutgoingCommands();
             }
         }
 
@@ -258,11 +259,13 @@ namespace Photon_IATK
         {
             Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}, MasterClient ~ Sending Content{1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.RequestEventAnnotationCreation, "", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RespondEventWithContent, "Others", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            object[] content = new object[] { photonView.ViewID, this.getJSONSerializedAnnotationString() };
+            object[] content = new object[] { photonView.ViewID, this.GetJSONSerializedAnnotationString() };
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
 
                 PhotonNetwork.RaiseEvent(GlobalVariables.RespondEventWithContent, content, raiseEventOptions, GlobalVariables.sendOptions);
+
+            PhotonNetwork.SendAllOutgoingCommands();
         }
 
         private void ProcessRecivedContent(object[] data)
@@ -270,26 +273,25 @@ namespace Photon_IATK
             if (!isWaitingForContentFromMaster) { return; }
 
             isWaitingForContentFromMaster = false;
+
             String jsonSerializedAnnotation = (string)data[1];
 
             Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}, Client ~ {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}{5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.RequestEventAnnotationCreation, "Loading content", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, "", ", Content: ", jsonSerializedAnnotation, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             if (jsonSerializedAnnotation.Length < 2) { return; }
-            setUpFromSerializeableAnnotation(jsonSerializedAnnotation);
+            SetUpFromSerializeableAnnotation(jsonSerializedAnnotation);
 
 
         }
 
         #endregion #Content Updates
 
-
-
         #endregion Events
 
         #region LineRender
 
         public bool isListeningForPenEvents = false;
-        private void setupLineRender(bool isLoadedAnnotation)
+        private void _setupLineRender(bool isLoadedAnnotation)
         {
 
             if(myAnnotationType != typesOfAnnotations.LINERENDER) { return; }
@@ -310,8 +312,8 @@ namespace Photon_IATK
                 PenButtonEvents penButtonEvents;
                 if (!HelperFunctions.GetComponent<PenButtonEvents>(out penButtonEvents, System.Reflection.MethodBase.GetCurrentMethod())) { return; }
 
-                penButtonEvents.penTriggerPress.AddListener(onPenTriggerPress);
-                penButtonEvents.penTriggerPressedLocation.AddListener(sendAddPointEvent);
+                penButtonEvents.penTriggerPress.AddListener(_onPenTriggerPress);
+                penButtonEvents.penTriggerPressedLocation.AddListener(SendAddPointEvent);
 
                 Debug.LogFormat(GlobalVariables.cRegister + "PenEvent listeners registered, Pen Events Name: {0}, Component attached to {1} parented in {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", penButtonEvents.name, myObjectComponenet.name, myObjectComponenet.transform.parent.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -321,15 +323,15 @@ namespace Photon_IATK
 
         }
 
-    private void onPenTriggerPress(bool pressed)
+    private void _onPenTriggerPress(bool pressed)
         {
             if (!pressed)
             {
                 PenButtonEvents penButtonEvents;
                 if (!HelperFunctions.GetComponent<PenButtonEvents>(out penButtonEvents, System.Reflection.MethodBase.GetCurrentMethod())) { return; }
 
-                penButtonEvents.penTriggerPress.RemoveListener(onPenTriggerPress);
-                penButtonEvents.penTriggerPressedLocation.RemoveListener(sendAddPointEvent);
+                penButtonEvents.penTriggerPress.RemoveListener(_onPenTriggerPress);
+                penButtonEvents.penTriggerPressedLocation.RemoveListener(SendAddPointEvent);
 
                 Debug.LogFormat(GlobalVariables.cRegister + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "PenEvent listeners removed", " Pen Events Name:", penButtonEvents.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -344,12 +346,11 @@ namespace Photon_IATK
 
 
         Vector3 lastPoint;
-        public void sendAddPointEvent(Vector3 point)
+        public void SendAddPointEvent(Vector3 point)
         {
             float distPosition = Vector3.Distance(point, lastPoint);
 
             bool isDistanceMeaningful = distPosition > .01f;
-
 
             if (!isDistanceMeaningful)
             {
@@ -377,7 +378,7 @@ namespace Photon_IATK
             PhotonNetwork.SendAllOutgoingCommands();
         }
 
-        public void addPoint(object[] data)
+        public void AddPoint(object[] data)
         {
 
             string pointstring = (string)data[1];
@@ -385,9 +386,9 @@ namespace Photon_IATK
 
             Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}, Any ~ Adding point, MyView ID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.RequestEventAnnotationCreation, photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RespondEventWithContent, "all", " Point: ", pointstring, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            addPoint(point);
+            AddPoint(point);
         }
-        public void addPoint(Vector3 newPoint)
+        public void AddPoint(Vector3 newPoint)
         {
 
             if (isFirstUpdate)
@@ -409,12 +410,12 @@ namespace Photon_IATK
 
         #region serialization
 
-        public string getJSONSerializedAnnotationString()
+        public string GetJSONSerializedAnnotationString()
         {
-            return JsonUtility.ToJson(getSerializeableAnnotation(), GlobalVariables.JSONPrettyPrint);
+            return JsonUtility.ToJson(GetSerializeableAnnotation(), GlobalVariables.JSONPrettyPrint);
         }
 
-        public SerializeableAnnotation getSerializeableAnnotation()
+        public SerializeableAnnotation GetSerializeableAnnotation()
         {
             SerializeableAnnotation serializeableAnnotation = new SerializeableAnnotation();
 
@@ -436,15 +437,15 @@ namespace Photon_IATK
             return serializeableAnnotation;
         }
 
-        public Annotation setUpFromSerializeableAnnotation(string JSONSerializedAnnotation)
+        public Annotation SetUpFromSerializeableAnnotation(string JSONSerializedAnnotation)
         {
             SerializeableAnnotation serializeableAnnotation = JsonUtility.FromJson<SerializeableAnnotation>(JSONSerializedAnnotation);
 
-            setUpFromSerializeableAnnotation(serializeableAnnotation);
+            SetUpFromSerializeableAnnotation(serializeableAnnotation);
 
             return this;
         }
-        public Annotation setUpFromSerializeableAnnotation(SerializeableAnnotation serializeableAnnotation)
+        public Annotation SetUpFromSerializeableAnnotation(SerializeableAnnotation serializeableAnnotation)
         {
             Debug.LogFormat(GlobalVariables.cFileOperations + "{0}{1}" + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", "Loading annotation", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 

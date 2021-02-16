@@ -206,7 +206,7 @@ namespace Photon_IATK
             Annotation annotation;
             if (HelperFunctions.GetComponentInChild<Annotation>(out annotation, genericAnnotationObj, System.Reflection.MethodBase.GetCurrentMethod()))
             {
-                annotation.setUpFromSerializeableAnnotation(serializeableAnnotation);
+                annotation.SetUpFromSerializeableAnnotation(serializeableAnnotation);
                 annotation.SendContentFromMaster();
                 annotation.SetAnnotationObject(true);
             }
@@ -347,7 +347,7 @@ namespace Photon_IATK
                     Annotation annotation = annotationHolder.GetComponent<Annotation>();
                     if (annotation != null)
                     {
-                        listOfAnnotations.Add(annotation.getSerializeableAnnotation());
+                        listOfAnnotations.Add(annotation.GetSerializeableAnnotation());
                         countOfAnnotationsFound++;
                     }
                 }
