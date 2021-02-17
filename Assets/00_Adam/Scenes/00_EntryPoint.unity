@@ -4139,6 +4139,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 458279509}
+  - component: {fileID: 458279510}
   m_Layer: 0
   m_Name: Annotations
   m_TagString: AnnotationCollection
@@ -4160,6 +4161,18 @@ Transform:
   m_Father: {fileID: 1087056102}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &458279510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 458279508}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f4784183536c7c41bc7fe57d1c698a8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &488361176
 GameObject:
   m_ObjectHideFlags: 0
@@ -9457,8 +9470,6 @@ MonoBehaviour:
   m_Script: {fileID: -1826476478, guid: 4bc5fd733b147194692297d23f623541, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mWorldCenterMode: 2
-  mWorldCenter: {fileID: 0}
 --- !u!81 &1060508720
 AudioListener:
   m_ObjectHideFlags: 0

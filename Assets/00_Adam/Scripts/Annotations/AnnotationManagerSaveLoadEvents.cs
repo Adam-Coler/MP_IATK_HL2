@@ -66,7 +66,7 @@ namespace Photon_IATK
 
             //Save annotations handled by other class
 
-            if (propertyType == AbstractVisualisation.PropertyType.DimensionChange) { saveAnnotations(); }
+            if (propertyType == AbstractVisualisation.PropertyType.DimensionChange || propertyType == AbstractVisualisation.PropertyType.VisualisationType) { saveAnnotations(); }
 
             //Delete annotations without marking delete but as safe
             if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
@@ -195,8 +195,7 @@ namespace Photon_IATK
             {
                 genericAnnotationObj = PhotonNetwork.InstantiateRoomObject("GenericAnnotation", Vector3.zero, Quaternion.identity);
                 HelperFunctions.SetObjectLocalTransformToZero(genericAnnotationObj, System.Reflection.MethodBase.GetCurrentMethod());
-                genericAnnotationObj.name = "LoadedAnnotation_" + annotationsCreated;
-                annotationsCreated++;
+                genericAnnotationObj.name = "LoadedAnnotation_" + serializeableAnnotation.myAnnotationNumber;
             }
             else
             {
@@ -208,8 +207,8 @@ namespace Photon_IATK
             if (HelperFunctions.GetComponentInChild<Annotation>(out annotation, genericAnnotationObj, System.Reflection.MethodBase.GetCurrentMethod()))
             {
                 annotation.SetUpFromSerializeableAnnotation(serializeableAnnotation);
-                annotation.SendContentFromMaster();
                 annotation.wasLoaded = true;
+                annotation.SendContentFromMaster();
                 annotation.SetAnnotationObject();
 
             }
@@ -369,12 +368,15 @@ namespace Photon_IATK
 
             foreach (SerializeableAnnotation serializeableAnnotation in listOfSerializeableAnnotations)
             {
+                serializeableAnnotation.wasLoaded = true;
+
                 string filename = serializeableAnnotation.myAnnotationNumber.ToString("D3");
                 filename += "_" + serializeableAnnotation.myAnnotationType.ToString() + ".json";
 
                 string jsonFormatAnnotion = JsonUtility.ToJson(serializeableAnnotation, true);
 
                 string fullFilePath = Path.Combine(subfolderPath, filename);
+
                 Debug.LogFormat(GlobalVariables.cFileOperations + "Saving {0}, full path: {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", filename, fullFilePath, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                 System.IO.File.WriteAllText(fullFilePath, jsonFormatAnnotion);
             }
@@ -395,6 +397,14 @@ namespace Photon_IATK
             //Annotations are saved per VisState in a folder with the names of that vis axis
             string mainFolderName = GlobalVariables.annotationSaveFolder;
             string mainFolderPath = Path.Combine(Application.persistentDataPath, mainFolderName);
+
+#if UWP
+            Windows.Storage.StorageFolder installedLocation = Windows.ApplicationModel.Package.Current.InstalledLocation;
+
+            mainFolderPath = Path.Combine(installedLocation, mainFolderName);
+#endif
+
+
             //_checkAndMakeDirectory(mainFolderPath);
 
             string date = System.DateTime.Now.ToString("yyyyMMdd");
@@ -416,9 +426,9 @@ namespace Photon_IATK
             }
         }
 
-        #endregion AnnotationSaveing
+#endregion AnnotationSaveing
 
-        #region AnnotationLoading
+#region AnnotationLoading
 
         public void loadAnnotations()
         {
@@ -443,9 +453,9 @@ namespace Photon_IATK
         }
 
 
-        #endregion AnnotationLoading
+#endregion AnnotationLoading
 
-        #endregion Events
+#endregion Events
     }
 }
 

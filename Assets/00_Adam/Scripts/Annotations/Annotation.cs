@@ -290,20 +290,24 @@ namespace Photon_IATK
         private void _setupLineRender()
         {
 
-            if(myAnnotationType != typesOfAnnotations.LINERENDER) { return; }
+            Debug.LogFormat(GlobalVariables.cAlert + "_setupLineRender(): wasloaded: {0}, Type: {1}, Islistening for Pen events: {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", wasLoaded, myAnnotationType, isListeningForPenEvents, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            if (myAnnotationType != typesOfAnnotations.LINERENDER) { return; }
 
             myObjectComponenet = myObjectRepresentation.GetComponent<PhotonLineDrawing>();
 
-            //if (wasLoaded)
-            //{
-            //    Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Adding points to loaded line annotation", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            if (wasLoaded)
+            {
+                Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Adding points to loaded line annotation", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            //    var tmpComponenet = (PhotonLineDrawing)myObjectComponenet;
-            //    tmpComponenet.AddPoints(lineRenderPoints);
+                var tmpComponenet = (PhotonLineDrawing)myObjectComponenet;
+                tmpComponenet.AddPoints(lineRenderPoints);
 
-            //    return;
-            //}
+                isListeningForPenEvents = false;
 
+                return;
+            } 
+            else 
             {
 #if VIVE
 
@@ -316,9 +320,9 @@ namespace Photon_IATK
                 Debug.LogFormat(GlobalVariables.cRegister + "PenEvent listeners registered, Pen Events Name: {0}, Component attached to {1} parented in {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", penButtonEvents.name, myObjectComponenet.name, myObjectComponenet.transform.parent.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 isListeningForPenEvents = true;
-
-                return;
 #endif
+                return;
+
             }
 
             Debug.LogFormat(GlobalVariables.cError + "_setupLineRender failed, Is loaded: {0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", wasLoaded, "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
@@ -361,7 +365,7 @@ namespace Photon_IATK
                 this.transform.localPosition = point;
             }
 
-            point = HelperFunctions.PRA(point);
+            point = this.transform.InverseTransformPoint(point);
 
             float distPosition = Vector3.Distance(point, lastPoint);
 
@@ -442,6 +446,7 @@ namespace Photon_IATK
 
             serializeableAnnotation.myAnnotationType = myAnnotationType.ToString();
             serializeableAnnotation.myLineRenderPoints = lineRenderPoints;
+            serializeableAnnotation.wasLoaded = wasLoaded;
 
             return serializeableAnnotation;
         }
@@ -460,6 +465,7 @@ namespace Photon_IATK
 
             this.gameObject.tag = GlobalVariables.annotationTag;
 
+
             //Now we set up the annotation componenet
             isDeleted = serializeableAnnotation.isDeleted;
             myTextContent = serializeableAnnotation.myTextContent;
@@ -473,6 +479,17 @@ namespace Photon_IATK
             this.gameObject.transform.localScale = serializeableAnnotation.myLocalScale;
             this.myRelativeScale = serializeableAnnotation.myRelativeScale;
             this.lineRenderPoints = serializeableAnnotation.myLineRenderPoints;
+            this.wasLoaded = serializeableAnnotation.wasLoaded;
+
+            if (wasLoaded)
+            {
+                this.name = "Loaded_" + myAnnotationType + "_" + myUniqueAnnotationNumber;
+            }
+            else
+            {
+                this.name = "New_" + myAnnotationType + "_" + myUniqueAnnotationNumber;
+            }
+
 
             SetAnnotationObject();
             return this;
@@ -482,28 +499,3 @@ namespace Photon_IATK
 
     }
 }
-//if (isFirstUpdate)
-//{
-//    this.transform.localPosition = newPoint;
-
-//    Vector3[] points = tmpComponenet.GetPoints();
-
-//    Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "First Update Updating Points Now", points.Length, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
-
-//    //for (var i = 0; i < points.Length; i++)
-//    //{
-//    //    Vector3 point = points[i];
-//    //    Vector3 translatedPoint = this.gameObject.transform.InverseTransformPoint(point);
-//    //    tmpComponenet.lineRenderer.SetPosition(i, newPoint);
-//    //    Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Updating Points Now", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-//    //}
-
-
-//    //Vector3 pointToAdd = this.transform.InverseTransformPoint(newPoint);
-
-
-//    isFirstUpdate = false;
-
-//    return;
-//}

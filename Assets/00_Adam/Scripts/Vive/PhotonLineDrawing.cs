@@ -25,7 +25,22 @@ namespace Photon_IATK
         private void Awake()
         {
             Initalize();
+
         }
+
+        //private void getParentLinePoints()
+        //{
+        //    if (this.transform.parent.tag == GlobalVariables.annotationTag)
+        //    {
+        //        Annotation myParentAnnotation = this.GetComponentInParent<Annotation>();
+        //        if (myParentAnnotation == null || myParentAnnotation.lineRenderPoints.Length == 0) { return; }
+
+        //        lineRenderer.positionCount = myParentAnnotation.lineRenderPoints.Length;
+        //        lineRenderer.SetPositions(myParentAnnotation.lineRenderPoints);
+
+                
+        //    }
+        //}
 
         public void Initalize()
         {
@@ -53,7 +68,7 @@ namespace Photon_IATK
             oldPoint = NewPoint;
         }
 
-        public void Simplify(float tolerance = 0.005f)
+        public void Simplify(float tolerance = 0.0025f)
         {
             lineRenderer.Simplify(tolerance);
 
@@ -74,7 +89,9 @@ namespace Photon_IATK
                 Debug.LogFormat(GlobalVariables.cError + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "LineAnnotation Points list is too short: ", points.Length, " points.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                 return;
             }
+
             Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "LineAnnotation adding ", points.Length, " points.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
             lineRenderer.positionCount = points.Length - 1;
             lineRenderer.SetPositions(points);
         }

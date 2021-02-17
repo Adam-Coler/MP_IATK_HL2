@@ -34,5 +34,7 @@ namespace Photon_IATK
 
         public string myTextContent;
         public Vector3[] myLineRenderPoints;
+
+        public bool wasLoaded;
     }
 }
