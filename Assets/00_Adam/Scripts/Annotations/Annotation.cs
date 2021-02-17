@@ -33,7 +33,6 @@ namespace Photon_IATK
 
         private typesOfAnnotations _myAnnotationType;
         private bool wasObjectSetup = false;
-        public bool isFirstUpdate = true;
         public Vector3[] lineRenderPoints;
         public bool wasLoaded;
 
@@ -122,8 +121,6 @@ namespace Photon_IATK
             _setAxisNames();
 
             RequestContentFromMaster();
-
-            isFirstUpdate = true;
         }
 
         private void _setAxisNames()
@@ -234,10 +231,10 @@ namespace Photon_IATK
         #region Content Updates
         private void RequestContentFromMaster()
         {
-            isWaitingForContentFromMaster = true;
-            //request content
             if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
             {
+                isWaitingForContentFromMaster = true;
+
                 Debug.LogFormat(GlobalVariables.cEvent + "Client ~ Calling: {0}, Receivers: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Sending Event Code: {5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "RequestEventAnnotationContent", "MasterClient", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRequestAnnotationsListOfIDsEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 object[] content = new object[] { photonView.ViewID };
@@ -281,8 +278,6 @@ namespace Photon_IATK
 
             if (jsonSerializedAnnotation.Length < 2) { return; }
             SetUpFromSerializeableAnnotation(jsonSerializedAnnotation);
-
-
         }
 
         #endregion #Content Updates
@@ -299,16 +294,16 @@ namespace Photon_IATK
 
             myObjectComponenet = myObjectRepresentation.GetComponent<PhotonLineDrawing>();
 
-            if (wasLoaded)
-            {
-                Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Adding points to loaded line annotation", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            //if (wasLoaded)
+            //{
+            //    Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Adding points to loaded line annotation", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-                var tmpComponenet = (PhotonLineDrawing)myObjectComponenet;
-                tmpComponenet.AddPoints(lineRenderPoints);
+            //    var tmpComponenet = (PhotonLineDrawing)myObjectComponenet;
+            //    tmpComponenet.AddPoints(lineRenderPoints);
 
-                return;
-            }
-            else
+            //    return;
+            //}
+
             {
 #if VIVE
 
@@ -316,7 +311,7 @@ namespace Photon_IATK
                 if (!HelperFunctions.GetComponent<PenButtonEvents>(out penButtonEvents, System.Reflection.MethodBase.GetCurrentMethod())) { return; }
 
                 penButtonEvents.penTriggerPress.AddListener(_onPenTriggerPress);
-                penButtonEvents.penTriggerPressedLocation.AddListener(SendAddPointEvent);
+                penButtonEvents.penTriggerPressedLocation.AddListener(_sendAddPointEvent);
 
                 Debug.LogFormat(GlobalVariables.cRegister + "PenEvent listeners registered, Pen Events Name: {0}, Component attached to {1} parented in {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", penButtonEvents.name, myObjectComponenet.name, myObjectComponenet.transform.parent.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -339,7 +334,7 @@ namespace Photon_IATK
                 if (!HelperFunctions.GetComponent<PenButtonEvents>(out penButtonEvents, System.Reflection.MethodBase.GetCurrentMethod())) { return; }
 
                 penButtonEvents.penTriggerPress.RemoveListener(_onPenTriggerPress);
-                penButtonEvents.penTriggerPressedLocation.RemoveListener(SendAddPointEvent);
+                penButtonEvents.penTriggerPressedLocation.RemoveListener(_sendAddPointEvent);
 
                 Debug.LogFormat(GlobalVariables.cRegister + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "PenEvent listeners removed", " Pen Events Name:", penButtonEvents.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -352,30 +347,33 @@ namespace Photon_IATK
             }
         }
 
-
+        public bool isFirstPoint = true;
         Vector3 lastPoint;
-        public void SendAddPointEvent(Vector3 point)
+        /// <summary>
+        /// Called when the pen is pressed, point is the world coordianate point for the pen tip
+        /// </summary>
+        private void _sendAddPointEvent(Vector3 point)
         {
+            if (firstPoint == Vector3.one || firstPoint == Vector3.zero)
+            {
+                Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "FirstPoint: ", point, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                firstPoint = point;
+                this.transform.localPosition = point;
+            }
+
+            point = HelperFunctions.PRA(point);
+
             float distPosition = Vector3.Distance(point, lastPoint);
 
             bool isDistanceMeaningful = distPosition > .01f;
 
-            if (!isDistanceMeaningful)
-            {
-                return;
-            }
+            if (!isDistanceMeaningful){return;}
 
             lastPoint = point;
 
-
-            //point = this.transform.InverseTransformPoint(point);
-
-
-            //point = HelperFunctions.PRA(point);
-
             string pointString = JsonUtility.ToJson(point);
 
-            Debug.LogFormat(GlobalVariables.cEvent + "{0}, Any ~ Sending point, MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", " ViewID: ", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RespondEventWithContent, "all", " Point: ", pointString, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cEvent + "{0} Any ~ Sending point, MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RespondEventWithContent, "all", " Point: ", pointString, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             object[] content = new object[] { photonView.ViewID, pointString};
 
@@ -386,62 +384,35 @@ namespace Photon_IATK
             PhotonNetwork.SendAllOutgoingCommands();
         }
 
+        public Vector3 firstPoint = Vector3.one;
         public void AddPoint(object[] data)
         {
+            if (isWaitingForContentFromMaster) { return; }
 
             string pointstring = (string)data[1];
             Vector3 point = JsonUtility.FromJson<Vector3>(pointstring);
 
-            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}, Any ~ Adding point, MyView ID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.RequestEventAnnotationCreation, photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RespondEventWithContent, "all", " Point: ", pointstring, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
-            AddPoint(point);
-        }
-
-        public Vector3 firstPoint = Vector3.one;
-        public void AddPoint(Vector3 newPoint)
-        {
             var tmpComponenet = (PhotonLineDrawing)myObjectComponenet;
 
-            //if (isFirstUpdate)
-            //{
-            //    this.transform.localPosition = newPoint;
-
-            //    Vector3[] points = tmpComponenet.GetPoints();
-
-            //    Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "First Update Updating Points Now", points.Length, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}, Any ~ Adding point, MyView ID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.RequestEventAnnotationCreation, photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RespondEventWithContent, "all", " Point: ", pointstring, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
 
-            //    //for (var i = 0; i < points.Length; i++)
-            //    //{
-            //    //    Vector3 point = points[i];
-            //    //    Vector3 translatedPoint = this.gameObject.transform.InverseTransformPoint(point);
-            //    //    tmpComponenet.lineRenderer.SetPosition(i, newPoint);
-            //    //    Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Updating Points Now", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-            //    //}
-
-
-            //    //Vector3 pointToAdd = this.transform.InverseTransformPoint(newPoint);
-
-
-            //    isFirstUpdate = false;
-                
-            //    return;
-            //}
-
-            //newPoint = this.transform.InverseTransformPoint(newPoint);
-            //newPoint = HelperFunctions.PRA(this.gameObject);
-
-            if(firstPoint == Vector3.one || firstPoint == Vector3.zero)
+            if (isFirstPoint)
             {
-                Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "FirstPoint: ", newPoint, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-                firstPoint = newPoint;
-                this.transform.localPosition = newPoint;
-                //newPoint = this.transform.InverseTransformPoint(newPoint);
-                isFirstUpdate = false;
+                Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "FirstPoint: ", point, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                firstPoint = point;
+
+                this.transform.localPosition = point;
+
+                isFirstPoint = false;
+                return;
             }
-            newPoint = this.transform.InverseTransformPoint(newPoint);
-            tmpComponenet.addPoint(newPoint);
+
+            tmpComponenet.addPoint(point);
         }
+
+        
 
 #endregion LineRender
 
@@ -502,6 +473,8 @@ namespace Photon_IATK
             this.gameObject.transform.localScale = serializeableAnnotation.myLocalScale;
             this.myRelativeScale = serializeableAnnotation.myRelativeScale;
             this.lineRenderPoints = serializeableAnnotation.myLineRenderPoints;
+
+            SetAnnotationObject();
             return this;
         }
 
@@ -509,4 +482,28 @@ namespace Photon_IATK
 
     }
 }
+//if (isFirstUpdate)
+//{
+//    this.transform.localPosition = newPoint;
 
+//    Vector3[] points = tmpComponenet.GetPoints();
+
+//    Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "First Update Updating Points Now", points.Length, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+
+//    //for (var i = 0; i < points.Length; i++)
+//    //{
+//    //    Vector3 point = points[i];
+//    //    Vector3 translatedPoint = this.gameObject.transform.InverseTransformPoint(point);
+//    //    tmpComponenet.lineRenderer.SetPosition(i, newPoint);
+//    //    Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Updating Points Now", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+//    //}
+
+
+//    //Vector3 pointToAdd = this.transform.InverseTransformPoint(newPoint);
+
+
+//    isFirstUpdate = false;
+
+//    return;
+//}

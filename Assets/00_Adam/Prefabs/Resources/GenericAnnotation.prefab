@@ -90,8 +90,8 @@ MonoBehaviour:
   myUniqueAnnotationNumber: 0
   myObjectRepresentation: {fileID: 0}
   myObjectComponenet: {fileID: 0}
-  isFirstUpdate: 0
   lineRenderPoints: []
   wasLoaded: 0
   isListeningForPenEvents: 0
+  isFirstPoint: 0
   firstPoint: {x: 0, y: 0, z: 0}

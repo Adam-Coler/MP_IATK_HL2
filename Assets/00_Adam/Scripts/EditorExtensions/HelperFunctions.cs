@@ -354,8 +354,11 @@ namespace Photon_IATK
         /// Position Relative to Anchor
         /// </summary>
         public static Vector3 PRA(GameObject obj)
-        {            
-            return PlayspaceAnchor.Instance.transform.InverseTransformPoint(obj.transform.position);
+        {
+            return PlayspaceAnchor.Instance.transform.InverseTransformPoint(obj.transform.localPosition);
+
+            //This is wrong
+            //return obj.transform.transform.InverseTransformPoint(PlayspaceAnchor.Instance.transform.position);
         }
 
         /// <summary>

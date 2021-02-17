@@ -1,17 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "9CSgM+kBvFxRS/rGH87KmL0++MDjgmmhNWkDHDs8jUNJhvFtg6yfrvApSzRcXmzYtS866fhfK9fr0lMuBlRJ6A==",
+  "dgSpecHash": "mR9Tqd6pZkkmenZ60GyYst9nlQw+vk30h+zSpe7wnIqcKfd+w0IuzpXn3qR6VrZu5EGEk0D8sUKNxFjICioXNA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj",
+  "projectFilePath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Assets\\IATK_HL2.Dependencies.msb4u.csproj",
   "expectedPackageFiles": [
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
+    "C:\\Users\\NuiLab00\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.0\\microsoft.netframework.referenceassemblies.1.0.0.nupkg.sha512",
+    "C:\\Users\\NuiLab00\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net46\\1.0.0\\microsoft.netframework.referenceassemblies.net46.1.0.0.nupkg.sha512",
     "C:\\Users\\NuiLab00\\.nuget\\packages\\microsoft.windows.mixedreality.dotnetwinrt\\0.5.1049\\microsoft.windows.mixedreality.dotnetwinrt.0.5.1049.nupkg.sha512",
     "C:\\Users\\NuiLab00\\.nuget\\packages\\msbuildforunity\\0.9.1-123842\\msbuildforunity.0.9.1-123842.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512",
-    "C:\\Users\\NuiLab00\\.nuget\\packages\\system.drawing.primitives\\4.3.0\\system.drawing.primitives.4.3.0.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.runtime\\4.3.0\\system.runtime.4.3.0.nupkg.sha512",
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder\\system.runtime.extensions\\4.3.0\\system.runtime.extensions.4.3.0.nupkg.sha512"
+    "C:\\Users\\NuiLab00\\.nuget\\packages\\system.drawing.primitives\\4.3.0\\system.drawing.primitives.4.3.0.nupkg.sha512"
   ],
   "logs": []
 }

@@ -44,7 +44,7 @@ namespace Photon_IATK
         public void addPoint(Vector3 pointToAdd)
         {
             NewPoint = pointToAdd;
-            //pointToAdd = this.transform.InverseTransformPoint(pointToAdd);
+
             if (NewPoint == oldPoint || NewPoint == Vector3.zero) { return; }
 
             lineRenderer.positionCount++;

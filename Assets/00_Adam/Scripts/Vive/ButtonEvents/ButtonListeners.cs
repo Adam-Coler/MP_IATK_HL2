@@ -80,16 +80,16 @@ namespace Photon_IATK
 
             drawingVariables.penTipPosition = triggerPressPosition;
 
-            if (drawingVariables.isDrawing)
-            {
-                Annotation newAnnotation = PhotonView.Find(annotationManager.lastMadeAnnotationPhotonViewID).gameObject.GetComponent<Annotation>();
+            //if (drawingVariables.isDrawing)
+            //{
+            //    Annotation newAnnotation = PhotonView.Find(annotationManager.lastMadeAnnotationPhotonViewID).gameObject.GetComponent<Annotation>();
 
-                Debug.LogFormat(GlobalVariables.blue + "Trigger press position = {0}" + GlobalVariables.endColor + " : onPrimaryButtonEvent()" + this.GetType(), triggerPressPosition);
+            //    Debug.LogFormat(GlobalVariables.blue + "Trigger press position = {0}" + GlobalVariables.endColor + " : onPrimaryButtonEvent()" + this.GetType(), triggerPressPosition);
 
-                newAnnotation.AddPoint(triggerPressPosition);
+            //    newAnnotation.AddPoint(triggerPressPosition);
 
-                //tmp_Line_Render_Prefab.GetComponent<PhotonLineDrawing>().addPoint(triggerPressPosition);
-            }
+            //    //tmp_Line_Render_Prefab.GetComponent<PhotonLineDrawing>().addPoint(triggerPressPosition);
+            //}
         }
 
 

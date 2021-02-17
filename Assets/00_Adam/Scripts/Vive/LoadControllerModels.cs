@@ -65,7 +65,9 @@ namespace Photon_IATK
                     //HelperFunctions.ParentInSharedPlayspaceAnchor(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
 
                     //thisModel.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
-                    thisModel.transform.SetParent(this.transform);
+
+                    HelperFunctions.ParentInSharedPlayspaceAnchor(thisModel, System.Reflection.MethodBase.GetCurrentMethod());
+
                     thisModel.name = inputDevice.name;
                     TrackControllerByRefereance trackControllerByRefereance = thisModel.AddComponent<TrackControllerByRefereance>();
                     trackControllerByRefereance.thisInputDevice = inputDevice;
@@ -75,7 +77,9 @@ namespace Photon_IATK
                 } else if (inputDevice.name.Contains("logi"))
                 {
                     GameObject thisModel = PhotonNetwork.Instantiate("LogitechController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-                    thisModel.transform.SetParent(this.transform);
+
+                    HelperFunctions.ParentInSharedPlayspaceAnchor(thisModel, System.Reflection.MethodBase.GetCurrentMethod());
+
                     //thisModel.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
                     thisModel.name = inputDevice.name;
                     TrackControllerByRefereance trackControllerByRefereance = thisModel.AddComponent<TrackControllerByRefereance>();

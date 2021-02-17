@@ -21,14 +21,12 @@ namespace Photon_IATK
         /// <summary>
         /// The time that the movement event reciver takes to update its transform
         /// </summary>
-        public float time = .8f;
+        public float time = 1f;
 
         /// <summary>
         /// The distance required to be moved or rotated before the move event will be called
         /// </summary>
         public float meaningfulDist = .3f;
-
-
         private void LateUpdate()
         {
             if (!PhotonNetwork.IsConnected) { return; }
@@ -36,15 +34,17 @@ namespace Photon_IATK
             if (isCoroutineRunning) { return; }
 
             CheckIfPositionWasUpdated();
+        }
 
+        private void Awake()
+        {
+            HelperFunctions.ParentInSharedPlayspaceAnchor(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
         }
 
         private void OnEnable()
         {
             Debug.LogFormat(GlobalVariables.cRegister + "GenericTransformSync registering OnEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
-
-            //HelperFunctions.ParentInSharedPlayspaceAnchor(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
 
             if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
             {
@@ -257,6 +257,8 @@ namespace Photon_IATK
             Quaternion startingRot = myTransform.localRotation ;
             Vector3 startingScale = myTransform.localScale;
 
+            transform.localScale = lastLocalScale;
+
             while (elapsedTime < time)
             {
                 if (transform.localPosition != lastLocalLocation)
@@ -265,15 +267,15 @@ namespace Photon_IATK
                 if (transform.localRotation != lastLocalRotation)
                     transform.localRotation = Quaternion.Lerp(startingRot, lastLocalRotation, (elapsedTime / time));
 
-                if (transform.localScale != lastLocalScale)
-                    transform.localScale = Vector3.Lerp(startingScale, lastLocalScale, (elapsedTime / time));
+                //if (transform.localScale != lastLocalScale)
+                //    transform.localScale = Vector3.Lerp(startingScale, lastLocalScale, (elapsedTime / time));
 
                 elapsedTime += Time.deltaTime;
 
-
+                yield return null;
 
             }
-            yield return null;
+            
             isCoroutineRunning = false;
         }
 

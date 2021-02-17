@@ -18,8 +18,8 @@ namespace Photon_IATK
             {
                 if (networkLocalPosition == transform.localPosition || networkLocalRotation == transform.localRotation) { return; }
 
-                stream.SendNext(HelperFunctions.PRA(this.gameObject));
-                stream.SendNext(HelperFunctions.RRA(this.gameObject));
+                stream.SendNext(transform.localPosition);
+                stream.SendNext(transform.localRotation);
             }
             else
             {
@@ -31,7 +31,7 @@ namespace Photon_IATK
         private void Start()
         {
 
-            //HelperFunctions.ParentInSharedPlayspaceAnchor(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
+            HelperFunctions.ParentInSharedPlayspaceAnchor(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
 
 
             var trans = transform;
