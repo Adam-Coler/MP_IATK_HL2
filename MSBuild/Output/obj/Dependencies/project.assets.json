@@ -547,9 +547,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj",
-      "projectName": "IATK_VIVE.Dependencies.msb4u",
-      "projectPath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj",
+      "projectUniqueName": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Assets\\IATK_DESKTOP.Dependencies.msb4u.csproj",
+      "projectName": "IATK_DESKTOP.Dependencies.msb4u",
+      "projectPath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\Assets\\IATK_DESKTOP.Dependencies.msb4u.csproj",
       "packagesPath": "C:\\Users\\NuiLab00\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\MP_IATK_HL2_01\\MP_IATK_HL2\\MSBuild\\Output\\obj\\Dependencies\\",
       "projectStyle": "PackageReference",
