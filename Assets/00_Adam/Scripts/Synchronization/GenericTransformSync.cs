@@ -7,6 +7,7 @@ using System.Collections;
 
 namespace Photon_IATK
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Photon.Pun.PhotonView))]
     public class GenericTransformSync : MonoBehaviourPun
     {

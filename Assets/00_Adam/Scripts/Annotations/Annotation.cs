@@ -304,6 +304,7 @@ namespace Photon_IATK
                 tmpComponenet.AddPoints(lineRenderPoints);
 
                 isListeningForPenEvents = false;
+                tmpComponenet.bakeMesh();
 
                 return;
             } 

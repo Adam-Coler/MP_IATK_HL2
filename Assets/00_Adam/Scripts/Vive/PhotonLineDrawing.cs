@@ -55,6 +55,16 @@ namespace Photon_IATK
 
         }
 
+        public void bakeMesh()
+        {
+            Mesh mesh;
+            mesh = GetComponent<MeshFilter>().mesh;
+            lineRenderer.BakeMesh(mesh, false);
+
+            meshCollider.sharedMesh = mesh;
+
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Mesh Baked", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
 
         public void addPoint(Vector3 pointToAdd)
         {

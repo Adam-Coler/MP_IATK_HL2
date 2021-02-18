@@ -1886,7 +1886,8 @@ GameObject:
   - component: {fileID: 3508481770777948851}
   - component: {fileID: 8131391992978207911}
   - component: {fileID: 1058062613174048810}
-  - component: {fileID: 8454925233817578247}
+  - component: {fileID: -2077265917887354581}
+  - component: {fileID: -6244496131311407914}
   m_Layer: 0
   m_Name: LineDrawing
   m_TagString: Untagged
@@ -1922,7 +1923,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 1058062613174048810}
-  meshCollider: {fileID: 8454925233817578247}
+  meshCollider: {fileID: -6244496131311407914}
   _useAnalog: 1
   _lineMaterial: {fileID: 0}
   _maxLineWidth: 0.005
@@ -2021,7 +2022,15 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 0
   m_Loop: 0
---- !u!64 &8454925233817578247
+--- !u!33 &-2077265917887354581
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3934190893047059235}
+  m_Mesh: {fileID: 0}
+--- !u!64 &-6244496131311407914
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2032,7 +2041,7 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 14
   m_Mesh: {fileID: 0}
 --- !u!1 &3985181946276722627

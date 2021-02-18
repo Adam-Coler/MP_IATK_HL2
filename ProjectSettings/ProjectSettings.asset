@@ -312,6 +312,7 @@ PlayerSettings:
     m_Devices:
     - OpenVR
     - Oculus
+    - None
   - m_BuildTarget: Windows Store Apps
     m_Enabled: 1
     m_Devices:
