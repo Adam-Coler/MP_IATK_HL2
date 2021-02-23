@@ -25,6 +25,8 @@ namespace Photon_IATK
         public string myVisXAxis;
         public string myVisYAxis;
         public string myVisZAxis;
+        public string myVisSizeDimension;
+        public string myVisColorDimension;
         public string myTextContent;
         public int myUniqueAnnotationNumber;
 
@@ -132,12 +134,24 @@ namespace Photon_IATK
                 myVisXAxis = "Fake X Axis Title";
                 myVisYAxis = "Fake Y Axis Title";
                 myVisZAxis = "Fake Z Axis Title";
+                myVisColorDimension = "Fake Color Dimension";
+                myVisSizeDimension = "Fake Size Dimension";
             }
             else
             {
                 myVisXAxis = myParentsVisRPCClass.xDimension;
                 myVisYAxis = myParentsVisRPCClass.yDimension;
                 myVisZAxis = myParentsVisRPCClass.zDimension;
+            }
+
+            if (myVisSizeDimension == "" || myVisSizeDimension == null)
+            {
+                myVisSizeDimension = myParentsVisRPCClass.sizeDimension;
+            }
+
+            if (myVisColorDimension == "" || myVisColorDimension == null)
+            {
+                myVisColorDimension = myParentsVisRPCClass.colourDimension;
             }
         }
 
@@ -150,7 +164,7 @@ namespace Photon_IATK
             }
             else
             {
-                //destroy it over hte network
+                //destroy it over the network
             }
         }
 
@@ -442,6 +456,9 @@ namespace Photon_IATK
             serializeableAnnotation.myVisXAxis = myVisXAxis;
             serializeableAnnotation.myVisYAxis = myVisYAxis;
             serializeableAnnotation.myVisZAxis = myVisZAxis;
+            serializeableAnnotation.myVisColorDimension = myVisColorDimension;
+            serializeableAnnotation.myVisSizeDimension = myVisSizeDimension;
+
             serializeableAnnotation.myTextContent = myTextContent;
             serializeableAnnotation.myAnnotationNumber = myUniqueAnnotationNumber;
 
@@ -481,6 +498,8 @@ namespace Photon_IATK
             this.myRelativeScale = serializeableAnnotation.myRelativeScale;
             this.lineRenderPoints = serializeableAnnotation.myLineRenderPoints;
             this.wasLoaded = serializeableAnnotation.wasLoaded;
+            this.myVisColorDimension = serializeableAnnotation.myVisColorDimension;
+            this.myVisSizeDimension = serializeableAnnotation.myVisSizeDimension;
 
             if (wasLoaded)
             {

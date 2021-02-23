@@ -13,6 +13,8 @@ namespace Photon_IATK
         public string myVisXAxis;
         public string myVisYAxis;
         public string myVisZAxis;
+        public string myVisColorDimension;
+        public string myVisSizeDimension;
 
         public float myLocalXRotation;
         public float myLocalYRotation;

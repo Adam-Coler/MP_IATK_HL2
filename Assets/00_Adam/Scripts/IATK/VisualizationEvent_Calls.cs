@@ -15,7 +15,7 @@ namespace Photon_IATK
         public static OnEventCVisualisationUpdateRequest RPCvisualisationUpdateRequestDelegate;
 
         private VisWrapperClass thisVis;
-        private PhotonView thisPhotonView;
+        public PhotonView thisPhotonView;
 
         public bool isWaitingForPhotonRequestStateEvent = false;
 

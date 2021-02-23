@@ -59,8 +59,6 @@ namespace Photon_IATK
             //theVis.updateView(AbstractVisualisation.PropertyType.GeometryType);
 
             theVis.CreateVisualisation(theVis.visualisationType);
-            theVis.gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
-
 
             Debug.LogFormat(GlobalVariables.cInstance + "Instanced and set up a IATK visualisation, Online: {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsConnected, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -69,6 +67,8 @@ namespace Photon_IATK
 
             if (visualisationLoadingDelegate != null)
                 visualisationLoadingDelegate(false);
+
+            theVis.gameObject.transform.localScale = new Vector3(.25f, .25f, .25f);
 
             theVis.isTriggeringEvents = true;
 
