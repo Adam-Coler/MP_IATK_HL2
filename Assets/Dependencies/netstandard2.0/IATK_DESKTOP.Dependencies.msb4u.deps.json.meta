@@ -1,6 +1,12 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream:Assets/Dependencies/netstandard2.0/IATK_DESKTOP.Dependencies.msb4u.deps.json.meta
 guid: a6835a913755f23439171c9d14ee028b
 TextScriptImporter:
+=======
+guid: 4c81c8184f8aef2439d9635f9d0712a6
+folderAsset: yes
+DefaultImporter:
+>>>>>>> Stashed changes:Assets/Dependencies/net46/InEditor.meta
   externalObjects: {}
   userData: 
   assetBundleName: 

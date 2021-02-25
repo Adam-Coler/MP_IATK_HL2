@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream:Assets/Dependencies/netstandard2.0/Microsoft.Windows.MixedReality.DotNetWinRT/x64.meta
 guid: 05a07a29af2b08c49a4d7310280c3f1b
+=======
+guid: 8cdd54fb4dd97ee49894b6b24126a45c
+>>>>>>> Stashed changes:Assets/Dependencies/net46/Microsoft.Windows.MixedReality.DotNetWinRT/x64.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
