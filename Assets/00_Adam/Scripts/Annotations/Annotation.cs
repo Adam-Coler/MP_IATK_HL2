@@ -38,6 +38,23 @@ namespace Photon_IATK
         public Vector3[] lineRenderPoints;
         public bool wasLoaded;
 
+        public float myCreationTime;
+
+        public float[] myTimesofMoves;
+        public Vector3[] myLocations;
+
+        public float[] myTimesofRotations;
+        public Quaternion[] myRotations;
+
+        public float[] myTimesofScaleing;
+        public Vector3[] myRelativeScales;
+
+        private bool isDeleted = false;
+        private bool isWaitingForContentFromMaster = false;
+
+        private GameObject myVisParent;
+        private GameObject myAnnotationCollectionParent;
+
         private Vector3 recivedRealtiveScale;
         private Vector3 myRelativeScale { 
             get
@@ -83,12 +100,6 @@ namespace Photon_IATK
             LINERENDER
         }
 
-        private bool isDeleted = false;
-        private bool isWaitingForContentFromMaster = false;
-
-        private GameObject myVisParent;
-        private GameObject myAnnotationCollectionParent;
-
         #endregion Varbiales
 
         #region Setup
@@ -125,6 +136,15 @@ namespace Photon_IATK
             RequestContentFromMaster();
         }
 
+        public void ManipulationStarted() {
+        
+        }
+
+        public void ManipulationEnded()
+        {
+
+        }
+
         private void _setAxisNames()
         {
             VisualizationEvent_Calls myParentsVisRPCClass = myVisParent.GetComponent<VisualizationEvent_Calls>();
@@ -144,11 +164,13 @@ namespace Photon_IATK
                 myVisZAxis = myParentsVisRPCClass.zDimension;
             }
 
+            myVisSizeDimension = "none";
             if (myVisSizeDimension == "" || myVisSizeDimension == null)
             {
                 myVisSizeDimension = myParentsVisRPCClass.sizeDimension;
             }
 
+            myVisColorDimension = "none";
             if (myVisColorDimension == "" || myVisColorDimension == null)
             {
                 myVisColorDimension = myParentsVisRPCClass.colourDimension;
@@ -447,23 +469,40 @@ namespace Photon_IATK
         {
             SerializeableAnnotation serializeableAnnotation = new SerializeableAnnotation();
 
-            serializeableAnnotation.myLocalRotation = this.transform.localRotation;
-            serializeableAnnotation.myLocalPosition = this.transform.localPosition;
-            serializeableAnnotation.myRelativeScale = this.myRelativeScale;
-
-            serializeableAnnotation.isDeleted = isDeleted;
-
             serializeableAnnotation.myVisXAxis = myVisXAxis;
             serializeableAnnotation.myVisYAxis = myVisYAxis;
             serializeableAnnotation.myVisZAxis = myVisZAxis;
             serializeableAnnotation.myVisColorDimension = myVisColorDimension;
             serializeableAnnotation.myVisSizeDimension = myVisSizeDimension;
 
-            serializeableAnnotation.myTextContent = myTextContent;
+            serializeableAnnotation.myLocalPosition = this.transform.localPosition;
+            serializeableAnnotation.myLocalRotation = this.transform.localRotation;
+            serializeableAnnotation.myRelativeScale = this.myRelativeScale;
+
+            serializeableAnnotation.isDeleted = isDeleted;
+            serializeableAnnotation.myAnnotationType = myAnnotationType.ToString();
+
             serializeableAnnotation.myAnnotationNumber = myUniqueAnnotationNumber;
 
-            serializeableAnnotation.myAnnotationType = myAnnotationType.ToString();
+            VisWrapperClass visWrapperClass;
+            if (HelperFunctions.GetComponent<VisWrapperClass>(out visWrapperClass, System.Reflection.MethodBase.GetCurrentMethod())) { serializeableAnnotation.myDataSource = visWrapperClass.wrapperCSVDataSource.name; }
+            
+            serializeableAnnotation.myTextContent = myTextContent;
             serializeableAnnotation.myLineRenderPoints = lineRenderPoints;
+
+            serializeableAnnotation.myCreationTime = myCreationTime;
+
+            serializeableAnnotation.myTimesofMoves = myTimesofMoves;
+            serializeableAnnotation.myLocations = myLocations;
+
+            serializeableAnnotation.myTimesofRotations = myTimesofRotations;
+            serializeableAnnotation.myRotations = myRotations;
+
+            serializeableAnnotation.myTimesofScaleing = myTimesofScaleing;
+            serializeableAnnotation.myRelativeScales = myRelativeScales;
+
+
+
             serializeableAnnotation.wasLoaded = wasLoaded;
 
             return serializeableAnnotation;
@@ -483,23 +522,41 @@ namespace Photon_IATK
 
             this.gameObject.tag = GlobalVariables.annotationTag;
 
+            myVisXAxis = serializeableAnnotation.myVisXAxis;
+            myVisYAxis = serializeableAnnotation.myVisYAxis;
+            myVisZAxis = serializeableAnnotation.myVisZAxis;
+            myVisColorDimension = serializeableAnnotation.myVisColorDimension;
+            myVisSizeDimension = serializeableAnnotation.myVisSizeDimension;
 
-            //Now we set up the annotation componenet
+            this.transform.localPosition = serializeableAnnotation.myLocalPosition;
+            this.transform.localRotation = serializeableAnnotation.myLocalRotation;
+            this.myRelativeScale = serializeableAnnotation.myRelativeScale;
+
             isDeleted = serializeableAnnotation.isDeleted;
-            myTextContent = serializeableAnnotation.myTextContent;
-            myUniqueAnnotationNumber = serializeableAnnotation.myAnnotationNumber;
-
             myAnnotationType = (typesOfAnnotations)Enum.Parse(typeof(typesOfAnnotations), serializeableAnnotation.myAnnotationType, true);
 
-            this.gameObject.transform.parent = myAnnotationCollectionParent.transform;
-            this.gameObject.transform.localPosition = serializeableAnnotation.myLocalPosition;
-            this.gameObject.transform.localRotation = serializeableAnnotation.myLocalRotation;
-            this.gameObject.transform.localScale = serializeableAnnotation.myLocalScale;
-            this.myRelativeScale = serializeableAnnotation.myRelativeScale;
-            this.lineRenderPoints = serializeableAnnotation.myLineRenderPoints;
-            this.wasLoaded = serializeableAnnotation.wasLoaded;
-            this.myVisColorDimension = serializeableAnnotation.myVisColorDimension;
-            this.myVisSizeDimension = serializeableAnnotation.myVisSizeDimension;
+            myUniqueAnnotationNumber = serializeableAnnotation.myAnnotationNumber;
+
+            VisWrapperClass visWrapperClass;
+            if (HelperFunctions.GetComponent<VisWrapperClass>(out visWrapperClass, System.Reflection.MethodBase.GetCurrentMethod())) { serializeableAnnotation.myDataSource = visWrapperClass.wrapperCSVDataSource.name; }
+
+            myTextContent = serializeableAnnotation.myTextContent;
+            lineRenderPoints = serializeableAnnotation.myLineRenderPoints;
+
+            myCreationTime = serializeableAnnotation.myCreationTime;
+
+            myTimesofMoves = serializeableAnnotation.myTimesofMoves;
+            myLocations = serializeableAnnotation.myLocations;
+
+            myTimesofRotations = serializeableAnnotation.myTimesofRotations;
+            myRotations = serializeableAnnotation.myRotations;
+
+            myTimesofScaleing = serializeableAnnotation.myTimesofScaleing;
+            myRelativeScales = serializeableAnnotation.myRelativeScales;
+
+            myLocations = serializeableAnnotation.myLocations;
+
+            wasLoaded = serializeableAnnotation.wasLoaded;
 
             if (wasLoaded)
             {
@@ -509,7 +566,6 @@ namespace Photon_IATK
             {
                 this.name = "New_" + myAnnotationType + "_" + myUniqueAnnotationNumber;
             }
-
 
             SetAnnotationObject();
             return this;

@@ -16,26 +16,30 @@ namespace Photon_IATK
         public string myVisColorDimension;
         public string myVisSizeDimension;
 
-        public float myLocalXRotation;
-        public float myLocalYRotation;
-        public float myLocalZRotation;
-        public float myLocalWRotation;
-
         public Vector3 myLocalPosition;
         public Quaternion myLocalRotation;
-        public Vector3 myLocalScale;
         public Vector3 myRelativeScale;
 
         public bool isDeleted = false;
         public string myAnnotationType;
 
         public int myAnnotationNumber;
-        public float myCreationTime;
+
         public string myDataSource;
-        public int myTimesMoved;
 
         public string myTextContent;
         public Vector3[] myLineRenderPoints;
+
+        public float myCreationTime;
+
+        public float[] myTimesofMoves;
+        public Vector3[] myLocations;
+
+        public float[] myTimesofRotations;
+        public Quaternion[] myRotations;
+
+        public float[] myTimesofScaleing;
+        public Vector3[] myRelativeScales;
 
         public bool wasLoaded;
     }

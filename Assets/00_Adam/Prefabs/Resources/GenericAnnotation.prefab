@@ -91,12 +91,21 @@ MonoBehaviour:
   myVisXAxis: 
   myVisYAxis: 
   myVisZAxis: 
+  myVisSizeDimension: 
+  myVisColorDimension: 
   myTextContent: 
   myUniqueAnnotationNumber: 0
   myObjectRepresentation: {fileID: 0}
   myObjectComponenet: {fileID: 0}
   lineRenderPoints: []
   wasLoaded: 0
+  myCreationTime: 0
+  myTimesofMoves: []
+  myLocations: []
+  myTimesofRotations: []
+  myRotations: []
+  myTimesofScaleing: []
+  myRelativeScales: []
   isListeningForPenEvents: 0
   isFirstPoint: 0
   firstPoint: {x: 0, y: 0, z: 0}
