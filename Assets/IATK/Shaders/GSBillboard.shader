@@ -50,7 +50,7 @@ Shader "IATK/OutlineDots"
 			Offset -1, -1
 			ZTest LEqual
 			Zwrite On
-			Tags {"LightMode" = "ForwardBase" "Queue"="Transparent" "RenderType"="Transparent" }
+			Tags {"LightMode" = "ForwardBase" "Queue"="Geometry" "RenderType"="Transparent" }
 
             CGPROGRAM
                 #pragma target 5.0
@@ -320,7 +320,7 @@ Shader "IATK/OutlineDots"
                 LOD 200
                 ZTest LEqual
                 Zwrite On
-                Tags {"LightMode" = "ShadowCaster" "Queue" = "Transparent" "RenderType" = "Transparent" }
+                Tags {"LightMode" = "ShadowCaster" "Queue" = "Geometry" "RenderType" = "Transparent" }
 
                 CGPROGRAM
                     #pragma target 5.0

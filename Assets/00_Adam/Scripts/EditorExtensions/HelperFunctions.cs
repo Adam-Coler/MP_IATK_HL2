@@ -387,5 +387,10 @@ namespace Photon_IATK
             //return obj.transform.localScale;
         }
 
+        public static float GetTime()
+        {
+            return Time.realtimeSinceStartup;
+        }
+
     }
 }

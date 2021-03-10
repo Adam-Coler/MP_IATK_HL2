@@ -119,6 +119,11 @@ namespace Photon_IATK
             RequestAnnotationCreation(Annotation.typesOfAnnotations.TEST_TRACKER);
         }
 
+        public void RequestAnnotationCreationHighlightCube()
+        {
+            RequestAnnotationCreation(Annotation.typesOfAnnotations.HIGHLIGHTCUBE);
+        }
+
         /// <summary>
         /// Sends request to master client to room instantiate an annotation object
         /// Data Sent = object[] { photonView.ViewID, annotationType.ToString() };
@@ -178,8 +183,8 @@ namespace Photon_IATK
             {
                 annotation.myAnnotationType = annotationType;
                 annotation.myUniqueAnnotationNumber = annotationsCreated;
-                annotation.SendContentFromMaster();
                 annotation.wasLoaded = false;
+                annotation.SendContentFromMaster();
                 annotation.SetAnnotationObject();
                 annotationsCreated++;
             }

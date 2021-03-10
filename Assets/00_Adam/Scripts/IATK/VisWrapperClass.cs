@@ -48,14 +48,14 @@ namespace Photon_IATK
             }
         }
 
-        private void Update()
-        {
-            //if (lastLocalScale != this.transform.localScale)
-            //{
-            //    lastLocalScale = this.transform.localScale;
-            //    updateVisPropertiesSafe(AbstractVisualisation.PropertyType.Scaling);
-            //}
-        }
+        //private void Update()
+        //{
+        //    //if (lastLocalScale != this.transform.localScale)
+        //    //{
+        //    //    lastLocalScale = this.transform.localScale;
+        //    //    updateVisPropertiesSafe(AbstractVisualisation.PropertyType.Scaling);
+        //    //}
+        //}
 
         private string getCleanString(string str)
         {

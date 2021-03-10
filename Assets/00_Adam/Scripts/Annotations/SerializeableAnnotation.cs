@@ -32,14 +32,11 @@ namespace Photon_IATK
 
         public float myCreationTime;
 
-        public float[] myTimesofMoves;
-        public Vector3[] myLocations;
-
-        public float[] myTimesofRotations;
-        public Quaternion[] myRotations;
-
-        public float[] myTimesofScaleing;
-        public Vector3[] myRelativeScales;
+        public List<float> myStartTimesofMoves;
+        public List<float> myEndTimesofMoves;
+        public List<Vector3> myLocations;
+        public List<Quaternion> myRotations;
+        public List<Vector3> myRelativeScales;
 
         public bool wasLoaded;
     }

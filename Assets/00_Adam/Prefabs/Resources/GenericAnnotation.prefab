@@ -100,11 +100,10 @@ MonoBehaviour:
   lineRenderPoints: []
   wasLoaded: 0
   myCreationTime: 0
-  myTimesofMoves: []
+  myStartTimesofMoves: []
+  myEndTimesofMoves: []
   myLocations: []
-  myTimesofRotations: []
   myRotations: []
-  myTimesofScaleing: []
   myRelativeScales: []
   isListeningForPenEvents: 0
   isFirstPoint: 0
@@ -153,10 +152,32 @@ MonoBehaviour:
   elasticsManager: {fileID: 0}
   onManipulationStarted:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: -9026148766433918835}
+        m_MethodName: ManipulationStarted
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onManipulationEnded:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: -9026148766433918835}
+        m_MethodName: ManipulationEnded
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   onHoverEntered:
     m_PersistentCalls:
       m_Calls: []

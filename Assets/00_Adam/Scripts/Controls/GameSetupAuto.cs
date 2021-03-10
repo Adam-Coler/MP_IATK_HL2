@@ -62,7 +62,7 @@ namespace Photon_IATK
 
         enableVR();
 
-        Invoke("loadVis", 4f);
+            Invoke("loadVis", 4f);
 
         }
         private void loadVis()

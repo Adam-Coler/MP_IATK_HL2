@@ -72,6 +72,18 @@ namespace Photon_IATK
 
             theVis.isTriggeringEvents = true;
 
+            IATK.BigMesh bigmesh;
+            if (HelperFunctions.GetComponentInChild<BigMesh>(out bigmesh, theVis.gameObject, System.Reflection.MethodBase.GetCurrentMethod()))
+            {
+                bigmesh.SharedMaterial.renderQueue = 2000;
+                Debug.LogFormat(GlobalVariables.cError + "Bigmesh render que set to 2000 {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsConnected, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            } else
+            {
+                Debug.LogFormat(GlobalVariables.cError + "No Bigmesh Found {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsConnected, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            }
+
+
+
             Destroy(this);
 
         }

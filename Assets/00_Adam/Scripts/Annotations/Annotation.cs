@@ -40,14 +40,12 @@ namespace Photon_IATK
 
         public float myCreationTime;
 
-        public float[] myTimesofMoves;
-        public Vector3[] myLocations;
 
-        public float[] myTimesofRotations;
-        public Quaternion[] myRotations;
-
-        public float[] myTimesofScaleing;
-        public Vector3[] myRelativeScales;
+        public List<float> myStartTimesofMoves;
+        public List<float> myEndTimesofMoves;
+        public List<Vector3> myLocations;
+        public List<Quaternion> myRotations;
+        public List<Vector3> myRelativeScales;
 
         private bool isDeleted = false;
         private bool isWaitingForContentFromMaster = false;
@@ -97,7 +95,9 @@ namespace Photon_IATK
 
         public enum typesOfAnnotations {
             TEST_TRACKER,
-            LINERENDER
+            LINERENDER,
+            HIGHLIGHTCUBE,
+            HIGHLIGHTSPHERE
         }
 
         #endregion Varbiales
@@ -137,12 +137,17 @@ namespace Photon_IATK
         }
 
         public void ManipulationStarted() {
-        
+            //add the start time
+            myStartTimesofMoves.Add(HelperFunctions.GetTime());
         }
 
         public void ManipulationEnded()
         {
-
+            //Record all of the states to the arrays
+            myEndTimesofMoves.Add(HelperFunctions.GetTime());
+            myLocations.Add(this.transform.localPosition);
+            myRotations.Add(this.transform.localRotation);
+            myRelativeScales.Add(this.myRelativeScale);
         }
 
         private void _setAxisNames()
@@ -204,9 +209,14 @@ namespace Photon_IATK
             {
                 case typesOfAnnotations.TEST_TRACKER:
                     prefabGameObject = Resources.Load<GameObject>("Tracker");
+                    prefabGameObject = Instantiate(prefabGameObject, Vector3.zero, Quaternion.identity);
                     break;
                 case typesOfAnnotations.LINERENDER:
                     prefabGameObject = Resources.Load<GameObject>("LineDrawing");
+                    prefabGameObject = Instantiate(prefabGameObject, Vector3.zero, Quaternion.identity);
+                    break;
+                case typesOfAnnotations.HIGHLIGHTCUBE:
+                    prefabGameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
                     break;
                 default:
                     Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Loading this annotation type is not supported or the type is null.", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
@@ -214,7 +224,7 @@ namespace Photon_IATK
                     return;
             }
 
-            prefabGameObject = Instantiate(prefabGameObject, Vector3.zero, Quaternion.identity);
+            
 
             prefabGameObject.transform.parent = this.transform;
             prefabGameObject.transform.localPosition = Vector3.zero;
@@ -228,6 +238,7 @@ namespace Photon_IATK
 
             myObjectRepresentation = prefabGameObject;
             _setupLineRender();
+            _setupHighlight();
 
 
         }
@@ -280,6 +291,10 @@ namespace Photon_IATK
                 PhotonNetwork.RaiseEvent(GlobalVariables.RequestEventAnnotationContent, content, raiseEventOptions, GlobalVariables.sendOptions);
 
                 PhotonNetwork.SendAllOutgoingCommands();
+            } else
+            {
+                ManipulationStarted();
+                ManipulationEnded();
             }
         }
 
@@ -314,6 +329,9 @@ namespace Photon_IATK
 
             if (jsonSerializedAnnotation.Length < 2) { return; }
             SetUpFromSerializeableAnnotation(jsonSerializedAnnotation);
+
+            ManipulationStarted();
+            ManipulationEnded();
         }
 
         #endregion #Content Updates
@@ -453,10 +471,21 @@ namespace Photon_IATK
             tmpComponenet.addPoint(point);
         }
 
-        
 
-#endregion LineRender
 
+        #endregion LineRender
+
+        #region Highlights
+
+        private void _setupHighlight()
+        {
+            if (myAnnotationType != typesOfAnnotations.HIGHLIGHTCUBE && myAnnotationType != typesOfAnnotations.HIGHLIGHTSPHERE) { return; }
+
+            Material newMat = Resources.Load("Highlight", typeof(Material)) as Material;
+            myObjectRepresentation.GetComponent<Renderer>().material = newMat;
+        }
+
+        #endregion Highlights
 
         #region serialization
 
@@ -492,16 +521,11 @@ namespace Photon_IATK
 
             serializeableAnnotation.myCreationTime = myCreationTime;
 
-            serializeableAnnotation.myTimesofMoves = myTimesofMoves;
+            serializeableAnnotation.myStartTimesofMoves = myStartTimesofMoves;
+            serializeableAnnotation.myEndTimesofMoves = myEndTimesofMoves;
             serializeableAnnotation.myLocations = myLocations;
-
-            serializeableAnnotation.myTimesofRotations = myTimesofRotations;
             serializeableAnnotation.myRotations = myRotations;
-
-            serializeableAnnotation.myTimesofScaleing = myTimesofScaleing;
             serializeableAnnotation.myRelativeScales = myRelativeScales;
-
-
 
             serializeableAnnotation.wasLoaded = wasLoaded;
 
@@ -545,13 +569,10 @@ namespace Photon_IATK
 
             myCreationTime = serializeableAnnotation.myCreationTime;
 
-            myTimesofMoves = serializeableAnnotation.myTimesofMoves;
+            myStartTimesofMoves = serializeableAnnotation.myStartTimesofMoves;
+            myEndTimesofMoves = serializeableAnnotation.myEndTimesofMoves;
             myLocations = serializeableAnnotation.myLocations;
-
-            myTimesofRotations = serializeableAnnotation.myTimesofRotations;
             myRotations = serializeableAnnotation.myRotations;
-
-            myTimesofScaleing = serializeableAnnotation.myTimesofScaleing;
             myRelativeScales = serializeableAnnotation.myRelativeScales;
 
             myLocations = serializeableAnnotation.myLocations;
