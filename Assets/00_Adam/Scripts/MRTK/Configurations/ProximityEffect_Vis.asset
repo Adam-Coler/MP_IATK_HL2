@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: ProximityEffect_Vis
   m_EditorClassIdentifier: 
   proximityEffectActive: 1
-  objectMediumProximity: 0.1
-  objectCloseProximity: 0.03
+  objectMediumProximity: 0.01
+  objectCloseProximity: 0.025
   farScale: 0
-  mediumScale: 3
-  closeScale: 6
-  farGrowRate: 0.3
+  mediumScale: 0.5
+  closeScale: 1
+  farGrowRate: 0.2
   mediumGrowRate: 0.2
-  closeGrowRate: 0.3
+  closeGrowRate: 0.2

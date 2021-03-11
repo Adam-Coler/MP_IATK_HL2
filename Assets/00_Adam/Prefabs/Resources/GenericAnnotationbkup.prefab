@@ -9,13 +9,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7496671545426428099}
-  - component: {fileID: -8795253504189242873}
   - component: {fileID: -4927961879706127935}
   - component: {fileID: -5045831696436214831}
   - component: {fileID: -9026148766433918835}
+  - component: {fileID: -8795253504189242873}
   - component: {fileID: 5646032009005643188}
+  - component: {fileID: 5748993627153251713}
+  - component: {fileID: -8885410713879380986}
+  - component: {fileID: 2846005982072786599}
   - component: {fileID: 1040802647910635024}
-  - component: {fileID: -8205097489125937555}
   m_Layer: 0
   m_Name: GenericAnnotation
   m_TagString: Annotation
@@ -37,20 +39,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-8795253504189242873
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7496671545426428096}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a98de877dee5fc341b4eb59dfdab266c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  autoConstraintSelection: 1
-  selectedConstraints: []
 --- !u!114 &-4927961879706127935
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,6 +109,20 @@ MonoBehaviour:
   isListeningForPenEvents: 0
   isFirstPoint: 0
   firstPoint: {x: 0, y: 0, z: 0}
+--- !u!114 &-8795253504189242873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7496671545426428096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a98de877dee5fc341b4eb59dfdab266c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  autoConstraintSelection: 1
+  selectedConstraints: []
 --- !u!114 &5646032009005643188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,7 +185,29 @@ MonoBehaviour:
   onHoverExited:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1040802647910635024
+--- !u!33 &5748993627153251713
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7496671545426428096}
+  m_Mesh: {fileID: 0}
+--- !u!64 &-8885410713879380986
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7496671545426428096}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 0}
+--- !u!114 &2846005982072786599
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -191,6 +215,20 @@ MonoBehaviour:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7496671545426428096}
   m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f917b96570ecbc44bf608e4501b9c2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  time: 1
+  meaningfulDist: 0.3
+--- !u!114 &1040802647910635024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7496671545426428096}
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8200a044a5affb843ba856b902d9fd3c, type: 3}
   m_Name: 
@@ -204,13 +242,12 @@ MonoBehaviour:
   boxDisplayConfiguration: {fileID: 11400000, guid: 024baa6159a510d4092f0e8ce2b27986,
     type: 2}
   linksConfiguration: {fileID: 11400000, guid: afb6d0c3b23d1a94c9a8c7a305b0db23, type: 2}
-  scaleHandlesConfiguration: {fileID: 11400000, guid: a53fcfe06101cda41aa14607bf2efdbf,
+  scaleHandlesConfiguration: {fileID: 11400000, guid: e5f1948baab2ce5499240464051d4a86,
     type: 2}
   rotationHandlesConfiguration: {fileID: 11400000, guid: 7fca21dd20b867e40a63985c9eb39fed,
     type: 2}
   translationHandlesConfiguration: {fileID: 0}
-  handleProximityEffectConfiguration: {fileID: 11400000, guid: b7226a5b9e6b922469fbbf8e80842ff3,
-    type: 2}
+  handleProximityEffectConfiguration: {fileID: 0}
   hideElementsInInspector: 1
   smoothingActive: 0
   rotateLerpTime: 0.001
@@ -220,60 +257,16 @@ MonoBehaviour:
   constraintsManager: {fileID: -8795253504189242873}
   rotateStarted:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: -9026148766433918835}
-        m_MethodName: ManipulationStarted
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   rotateStopped:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: -9026148766433918835}
-        m_MethodName: ManipulationEnded
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   scaleStarted:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: -9026148766433918835}
-        m_MethodName: ManipulationStarted
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   scaleStopped:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: -9026148766433918835}
-        m_MethodName: ManipulationEnded
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   translateStarted:
     m_PersistentCalls:
       m_Calls: []
@@ -281,17 +274,3 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   elasticsManager: {fileID: 0}
---- !u!64 &-8205097489125937555
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7496671545426428096}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Convex: 1
-  m_CookingOptions: 14
-  m_Mesh: {fileID: 0}

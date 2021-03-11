@@ -9,7 +9,7 @@ using Photon.Compression;
 using Photon.Utilities;
 using System.Runtime.Serialization.Formatters.Binary;
 using System;
-
+using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
 
 
 namespace Photon_IATK
@@ -237,9 +237,16 @@ namespace Photon_IATK
             }
 
             myObjectRepresentation = prefabGameObject;
+
             _setupLineRender();
             _setupHighlight();
 
+
+            BoundsControl boundsControl;
+            if (HelperFunctions.GetComponent<BoundsControl>(out boundsControl, System.Reflection.MethodBase.GetCurrentMethod()))
+            {
+                boundsControl.enabled = true;
+            }
 
         }
         #endregion Setup
@@ -483,6 +490,8 @@ namespace Photon_IATK
 
             Material newMat = Resources.Load("Highlight", typeof(Material)) as Material;
             myObjectRepresentation.GetComponent<Renderer>().material = newMat;
+
+            myObjectRepresentation.transform.localScale = new Vector3(.05f, .05f, .05f);
         }
 
         #endregion Highlights
@@ -596,3 +605,8 @@ namespace Photon_IATK
 
     }
 }
+
+////Non-uniform scale
+//BoundsControl boundsControl =  gameObject.AddComponent<Microsoft.MixedReality.Toolkit.UI.BoundsControl.BoundsControl>();
+//boundsControl.ScaleHandlesConfig.ScaleBehavior = Microsoft.MixedReality.Toolkit.UI.BoundsControlTypes.HandleScaleMode.NonUniform;
+//boundsControl.HandleProximityEffectConfig.ProximityEffectActive = true;
