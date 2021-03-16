@@ -68,10 +68,16 @@ namespace Photon_IATK {
 
 #if UNITY_EDITOR
         // updates on called on scene change in editor
+        public string lastText = "";
         public void Update()
         {
-            Debug.Log(GlobalVariables.green + "Editor Mode: Updating Size " + GlobalVariables.endColor + "Update()" + " : " + this.GetType());
-            setSize();
+            if (lastText != GetComponent<TMP_InputField>().textComponent.text)
+            {
+                Debug.Log(GlobalVariables.green + "Editor Mode: Updating Size " + GlobalVariables.endColor + "Update()" + " : " + this.GetType());
+                setSize();
+                lastText = GetComponent<TMP_InputField>().textComponent.text;
+            }
+
         }
 #endif
     }
