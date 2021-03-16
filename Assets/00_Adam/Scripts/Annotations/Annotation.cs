@@ -57,28 +57,31 @@ namespace Photon_IATK
         private Vector3 myRelativeScale { 
             get
             {
-                Transform transform = this.transform;
-                GameObject vis;
-                if (!HelperFunctions.FindGameObjectOrMakeOneWithTag("Vis", out vis, false, System.Reflection.MethodBase.GetCurrentMethod())){ return Vector3.one; }
+                //Transform transform = this.transform;
+                //GameObject vis;
+                //if (!HelperFunctions.FindGameObjectOrMakeOneWithTag("Vis", out vis, false, System.Reflection.MethodBase.GetCurrentMethod())){ return Vector3.one; }
 
 
-                float outputX = vis.transform.localScale.x / transform.localScale.x;
-                float outputY = vis.transform.localScale.y / transform.localScale.y;
-                float outputZ = vis.transform.localScale.z / transform.localScale.z;
+                //float outputX = vis.transform.localScale.x / transform.localScale.x;
+                //float outputY = vis.transform.localScale.y / transform.localScale.y;
+                //float outputZ = vis.transform.localScale.z / transform.localScale.z;
 
-                return (new Vector3 (outputX, outputY, outputZ ));
+                //return (new Vector3 (outputX, outputY, outputZ ));
+
+                return transform.localScale;
             }
             set
             {
-                Transform transform = this.transform;
-                GameObject vis;
-                if (!HelperFunctions.FindGameObjectOrMakeOneWithTag("Vis", out vis, false, System.Reflection.MethodBase.GetCurrentMethod())) { return; }
+                //Transform transform = this.transform;
+                //GameObject vis;
+                //if (!HelperFunctions.FindGameObjectOrMakeOneWithTag("Vis", out vis, false, System.Reflection.MethodBase.GetCurrentMethod())) { return; }
 
-                float XScale = vis.transform.localScale.x * value.x;
-                float YScale = vis.transform.localScale.y * value.y;
-                float ZScale = vis.transform.localScale.z * value.z;
+                //float XScale = vis.transform.localScale.x * value.x;
+                //float YScale = vis.transform.localScale.y * value.y;
+                //float ZScale = vis.transform.localScale.z * value.z;
 
-                transform.localScale = new Vector3 (XScale, YScale, ZScale);
+                //transform.localScale = new Vector3 (XScale, YScale, ZScale);
+                transform.localScale = value;
             }
         }
 
@@ -217,6 +220,9 @@ namespace Photon_IATK
                     break;
                 case typesOfAnnotations.HIGHLIGHTCUBE:
                     prefabGameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    break;
+                case typesOfAnnotations.HIGHLIGHTSPHERE:
+                    prefabGameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                     break;
                 default:
                     Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Loading this annotation type is not supported or the type is null.", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());

@@ -204,7 +204,7 @@ MonoBehaviour:
   boxDisplayConfiguration: {fileID: 11400000, guid: 024baa6159a510d4092f0e8ce2b27986,
     type: 2}
   linksConfiguration: {fileID: 11400000, guid: afb6d0c3b23d1a94c9a8c7a305b0db23, type: 2}
-  scaleHandlesConfiguration: {fileID: 11400000, guid: a53fcfe06101cda41aa14607bf2efdbf,
+  scaleHandlesConfiguration: {fileID: 11400000, guid: e5f1948baab2ce5499240464051d4a86,
     type: 2}
   rotationHandlesConfiguration: {fileID: 11400000, guid: 7fca21dd20b867e40a63985c9eb39fed,
     type: 2}
