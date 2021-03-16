@@ -256,6 +256,8 @@ namespace Microsoft.MixedReality.Toolkit.UI
             }
         }
 
+        public bool isUniformScale = true;
+
         [SerializeField]
         [Obsolete("Use a MinMaxScaleConstraint script rather than setting minimum on BoundingBox directly", false)]
         [Tooltip("Minimum scaling allowed relative to the initial size")]
@@ -1395,7 +1397,6 @@ namespace Microsoft.MixedReality.Toolkit.UI
             }
         }
 
-        public bool isUniformScale = true;
         private void TransformTarget()
         {
             if (currentHandleType != HandleType.None)
