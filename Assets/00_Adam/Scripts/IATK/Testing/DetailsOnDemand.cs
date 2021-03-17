@@ -13,7 +13,7 @@ namespace Photon_IATK
         private GameObject vis;
 
         private VisWrapperClass visWrapperClass;
-        private DataSource dataSource;
+        private CSVDataSource csv;
 
         private Axis xAxis;
         private Axis yAxis;
@@ -22,14 +22,16 @@ namespace Photon_IATK
         public GameObject xIndicator;
         public GameObject yIndicator;
         public GameObject zIndicator;
+        public GameObject closestPointIndicator;
+
+        public TMPro.TextMeshPro mainText;
+        public TMPro.TextMeshPro xText;
+        public TMPro.TextMeshPro yText;
+        public TMPro.TextMeshPro zText;
+        public TMPro.TextMeshPro closestPointText;
 
         private void Awake()
         {
-            if (!HelperFunctions.GetComponentInChild<TMPro.TextMeshPro>(out textMeshPro, gameObject, System.Reflection.MethodBase.GetCurrentMethod())){
-                Debug.LogFormat(GlobalVariables.cError + "{0}." + GlobalVariables.cOnDestory + " {1}: {2} -> {3} -> {4}", "No TMP Pro Text Found, destroying self", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-                Destroy(this);
-            }
-
             if (!HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.visTag, out vis, false, System.Reflection.MethodBase.GetCurrentMethod()))
             {
                 Debug.LogFormat(GlobalVariables.cError + "{0}." + GlobalVariables.cError + " {1}: {2} -> {3} -> {4}", "No Vis tags Found", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
@@ -40,9 +42,11 @@ namespace Photon_IATK
             if (visWrapperClass == null)
                 Debug.LogFormat(GlobalVariables.cError + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "visWrapperClass is null", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            dataSource = visWrapperClass.dataSource;
+            DataSource dataSource = visWrapperClass.dataSource;
             if (dataSource == null)
                 Debug.LogFormat(GlobalVariables.cError + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "csvDataSource is null", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            csv = (CSVDataSource)dataSource;
 
             foreach (Axis axis in vis.GetComponentsInChildren<IATK.Axis>())
             {
@@ -58,24 +62,92 @@ namespace Photon_IATK
                         break;
                 }
             }
-
-            textMeshPro.text = xAxis.AttributeName;
         }
+
+        private AxisInfo xAxisInfo;
+        private AxisInfo yAxisInfo;
+        private AxisInfo zAxisInfo;
 
         private void Update()
         {
             if (transform.hasChanged)
             {
                 transform.hasChanged = false;
-                setlabel(xAxis, xIndicator);
-                setlabel(yAxis, yIndicator);
-                setlabel(zAxis, zIndicator);
+
+                xAxisInfo = setlabel(xAxis, xIndicator);
+                yAxisInfo = setlabel(yAxis, yIndicator);
+                zAxisInfo = setlabel(zAxis, zIndicator);
+
+                setLabels();
+
+                setClosestPoint();
             }
         }
 
-        private void setlabel(Axis axis, GameObject indicator)
+        private Vector3[] csvItems;
+        private void setClosestPoint()
         {
-            DataSource.DimensionData.Metadata metaData = dataSource[axis.AttributeName].MetaData;
+            //populate array of normalized points in vis
+            csvItems = new Vector3[csv.DataCount - 1];
+            for (int i = 0; i < csv.DataCount - 1; i++)
+            {
+                float x = csv[xAxis.AttributeName].Data[i];
+                float y = csv[yAxis.AttributeName].Data[i];
+                float z = csv[zAxis.AttributeName].Data[i];
+                csvItems[i] = new Vector3(x, y, z);
+            }
+
+            Vector3 pointToSearchFrom = new Vector3 (xAxisInfo.normValue, yAxisInfo.normValue, zAxisInfo.normValue);
+
+            Vector3 closestPoint = Vector3.one;
+            float closestDist = 99f;
+            foreach (Vector3 dataPoint in csvItems)
+            {
+                float dist = Vector3.Distance(pointToSearchFrom, dataPoint);
+                if (dist < closestDist)
+                {
+                    closestPoint = dataPoint;
+                    closestDist = dist;
+                }
+            }
+
+            var clostestPointX = csv.getOriginalValuePrecise(closestPoint.x, xAxis.AttributeName);
+            var clostestPointY = csv.getOriginalValuePrecise(closestPoint.y, yAxis.AttributeName);
+            var clostestPointZ = csv.getOriginalValuePrecise(closestPoint.z, zAxis.AttributeName);
+
+
+            closestPointText.text = "Closest Point\n";
+            closestPointText.text += "X: " + clostestPointX + "\n";
+            closestPointText.text += "Y: " + clostestPointY + "\n";
+            closestPointText.text += "Z: " + clostestPointZ + "\n";
+
+            //get location of new point
+            Vector3 closestPointWorldLocation = Vector3.zero;
+
+            closestPointWorldLocation.x = LerpByDistance(xAxis.minNormaliserObject.position, xAxis.maxNormaliserObject.position, closestPoint.x).x;
+            closestPointWorldLocation.y = LerpByDistance(yAxis.minNormaliserObject.position, yAxis.maxNormaliserObject.position, closestPoint.y).y;
+            closestPointWorldLocation.z = LerpByDistance(zAxis.minNormaliserObject.position, zAxis.maxNormaliserObject.position, closestPoint.z).z;
+
+            closestPointIndicator.transform.position = closestPointWorldLocation;
+        }
+
+        private void setLabels()
+        {
+            xText.text = xAxisInfo.labelText();
+            yText.text = yAxisInfo.labelText();
+            zText.text = zAxisInfo.labelText();
+
+            mainText.text = "Location\n";
+            mainText.text += "X: " + xAxisInfo.axisLocation + "\n";
+            mainText.text += "Y: " + yAxisInfo.axisLocation + "\n";
+            mainText.text += "Z: " + zAxisInfo.axisLocation + "\n";
+        }
+
+        private AxisInfo setlabel(Axis axis, GameObject indicator)
+        {
+            AxisInfo outAxisInfo = new AxisInfo();
+
+            DataSource.DimensionData.Metadata metaData = csv[axis.AttributeName].MetaData;
             Transform maxNormaliserTransform = axis.maxNormaliserObject;
             Transform minNormaliserTransform = axis.minNormaliserObject;
 
@@ -99,18 +171,17 @@ namespace Photon_IATK
             float minDistance = Mathf.Sqrt(minDelta.x * minDelta.x + minDelta.y * minDelta.y + minDelta.z * minDelta.z);
             float axisValue = (metaData.maxValue - metaData.minValue) * minDistance + metaData.minValue;
 
-            CSVDataSource csv = (CSVDataSource)dataSource;
             var normVal = csv.normaliseValue(axisValue, metaData.minValue, metaData.maxValue, 0f, 1f);
             var closestPointValue = csv.valueClosestTo(metaData.categories, normVal);
+            var closestPointOriginalValue = csv.getOriginalValuePrecise(closestPointValue, axis.AttributeName);
+            var originalValue = csv.getOriginalValuePrecise(normVal, axis.AttributeName);
 
-            var closestPointOriginalValue = dataSource.getOriginalValue(closestPointValue, axis.AttributeName);
-            var closestPointOriginalValuePrecise = dataSource.getOriginalValuePrecise(closestPointValue, axis.AttributeName);
+            outAxisInfo.axisDirection = axis.AxisDirection;
+            outAxisInfo.axisLocation = originalValue;
+            outAxisInfo.closestPointValue = closestPointOriginalValue;
+            outAxisInfo.normValue = normVal;
 
-            var originalValue = dataSource.getOriginalValue(normVal, axis.AttributeName);
-            var originalValuePrecise = dataSource.getOriginalValuePrecise(normVal, axis.AttributeName);
-
-            Debug.LogFormat(GlobalVariables.cCommon + "normVal: {0}, closestPointValue: {1}, originalValue: {2}, originalValuePrecise: {3}, closestPointOriginalValue: {4}, closestPointOriginalValuePrecise: {5}, axisValue: {6}, {7}." + GlobalVariables.endColor + " {8}: {9} -> {10} -> {11}", normVal, closestPointValue, originalValue, originalValuePrecise, closestPointOriginalValue, closestPointOriginalValuePrecise, axisValue, "7", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
+            return outAxisInfo;
         }
 
         public Vector3 LerpByDistance(Vector3 A, Vector3 B, float x)
@@ -137,6 +208,25 @@ namespace Photon_IATK
         }
 
     }
+}
+
+public class AxisInfo
+{
+    public int axisDirection;
+    public object axisLocation;
+    public object closestPointValue;
+    public float normValue;
+
+    public string labelText()
+    {
+        string axisLabelText = "Position: ";
+        axisLabelText += axisLocation.ToString();
+        axisLabelText += ", \nClosest point on this axis: ";
+        axisLabelText += closestPointValue.ToString();
+
+        return axisLabelText;
+    }
+
 }
 
 //Debug.LogFormat(GlobalVariables.cAlert + "xAxis.AttributeFilter.maxFilter: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}." + GlobalVariables.endColor + " {8}: {9} -> {10} -> {11}", "0", "1", "2", "3", "4", "5", "6", "7", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
