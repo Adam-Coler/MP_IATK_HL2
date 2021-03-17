@@ -10,8 +10,10 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
 using UnityPhysics = UnityEngine.Physics;
+using Microsoft.MixedReality.Toolkit.UI;
+using Microsoft.MixedReality.Toolkit;
 
-namespace Microsoft.MixedReality.Toolkit.UI
+namespace Photon_IATK
 {
     public class ManipulationControls : MonoBehaviour,
         IMixedRealitySourceStateHandler,

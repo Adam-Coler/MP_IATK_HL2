@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: -9026148766433918835}
   - component: {fileID: 5646032009005643188}
   - component: {fileID: -8205097489125937555}
-  - component: {fileID: 4274050015091161467}
+  - component: {fileID: 8753394847294861529}
   m_Layer: 0
   m_Name: GenericAnnotation
   m_TagString: Annotation
@@ -197,23 +197,24 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 14
   m_Mesh: {fileID: 0}
---- !u!114 &4274050015091161467
+--- !u!114 &8753394847294861529
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7496671545426428096}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23f9be7a3cb53794ead8b55e784b65aa, type: 3}
+  m_Script: {fileID: 11500000, guid: 65a6a3af82b9e7541af834a77fd8a41d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   targetObject: {fileID: 0}
   boundsOverride: {fileID: 0}
   boundsCalculationMethod: 0
-  activation: 0
-  scaleMinimum: 0.2
+  activation: 3
+  isUniformScale: 1
+  scaleMinimum: 0.1
   scaleMaximum: 2
   flattenAxis: 0
   flattenAxisDisplayScale: 0
@@ -222,15 +223,19 @@ MonoBehaviour:
   boxGrabbedMaterial: {fileID: 0}
   showWireframe: 1
   wireframeShape: 0
-  wireframeMaterial: {fileID: 0}
+  wireframeMaterial: {fileID: 2100000, guid: 900ccc2b24f90a040bf88cab2dd85590, type: 2}
   wireframeEdgeRadius: 0.001
-  handleMaterial: {fileID: 0}
-  handleGrabbedMaterial: {fileID: 0}
-  scaleHandlePrefab: {fileID: 0}
-  scaleHandleSlatePrefab: {fileID: 0}
+  handleMaterial: {fileID: 2100000, guid: 986558eab447a9847bbe138149edc1b4, type: 2}
+  handleGrabbedMaterial: {fileID: 2100000, guid: bf37b5eab60b288498d02fd524325d10,
+    type: 2}
+  scaleHandlePrefab: {fileID: 1361136173122186969, guid: ba9083550f965e545a628b53bfa80c9e,
+    type: 3}
+  scaleHandleSlatePrefab: {fileID: 1134031327877807717, guid: c45e552a6d92491468c421c35c5dd63d,
+    type: 3}
   scaleHandleSize: 0.016
   scaleHandleColliderPadding: {x: 0.016, y: 0.016, z: 0.016}
-  rotationHandlePrefab: {fileID: 0}
+  rotationHandlePrefab: {fileID: 3868891704370700786, guid: 969c9b04d1b1848489de0d6efe6250fc,
+    type: 3}
   rotationHandleSize: 0.016
   rotateHandleColliderPadding: {x: 0.016, y: 0.016, z: 0.016}
   rotationHandlePrefabColliderType: 1

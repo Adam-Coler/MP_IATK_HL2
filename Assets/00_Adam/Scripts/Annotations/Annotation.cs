@@ -248,10 +248,10 @@ namespace Photon_IATK
             _setupHighlight();
 
 
-            BoundsControl boundsControl;
-            if (HelperFunctions.GetComponent<BoundsControl>(out boundsControl, System.Reflection.MethodBase.GetCurrentMethod()))
+            ManipulationControls manipulationControls;
+            if (HelperFunctions.GetComponent<ManipulationControls>(out manipulationControls, System.Reflection.MethodBase.GetCurrentMethod()))
             {
-                boundsControl.enabled = true;
+                manipulationControls.enabled = true;
             }
 
         }
