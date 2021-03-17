@@ -11,9 +11,17 @@ namespace Photon_IATK
         //public text
         private TMPro.TextMeshPro textMeshPro;
         private GameObject vis;
+
+        private VisWrapperClass visWrapperClass;
+        private DataSource dataSource;
+
         private Axis xAxis;
+        private Axis yAxis;
+        private Axis zAxis;
 
         public GameObject xIndicator;
+        public GameObject yIndicator;
+        public GameObject zIndicator;
 
         private void Awake()
         {
@@ -28,11 +36,25 @@ namespace Photon_IATK
                 return;
             }
 
+            visWrapperClass = vis.GetComponent<VisWrapperClass>();
+            if (visWrapperClass == null)
+                Debug.LogFormat(GlobalVariables.cError + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "visWrapperClass is null", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            dataSource = visWrapperClass.dataSource;
+            if (dataSource == null)
+                Debug.LogFormat(GlobalVariables.cError + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "csvDataSource is null", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
             foreach (Axis axis in vis.GetComponentsInChildren<IATK.Axis>())
             {
                 switch (axis.AxisDirection){
                     case 1:
                         xAxis = axis;
+                        break;
+                    case 2:
+                        yAxis = axis;
+                        break;
+                    case 3:
+                        zAxis = axis;
                         break;
                 }
             }
@@ -45,33 +67,24 @@ namespace Photon_IATK
             if (transform.hasChanged)
             {
                 transform.hasChanged = false;
-                setLabel();
+                setXlabel();
             }
         }
 
-        private void setLabel()
+        private void setXlabel()
         {
             //get data from csv
-            VisWrapperClass visWrapperClass = vis.GetComponent<VisWrapperClass>();
-            DataSource dataSource = visWrapperClass.dataSource;
-
-            if(visWrapperClass == null)
-                Debug.LogFormat(GlobalVariables.cError + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "visWrapperClass is null", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
-            if (dataSource == null)
-                Debug.LogFormat(GlobalVariables.cError + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "csvDataSource is null", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
 
             DataSource.DimensionData.Metadata xMetaData = dataSource[xAxis.AttributeName].MetaData;
-
+            Transform maxNormaliserTransform = xAxis.maxNormaliserObject;
+            Transform minNormaliserTransform = xAxis.minNormaliserObject;
 
             HelperFunctions.getJson(xAxis, "xAxis");
             HelperFunctions.getJson(dataSource, "dataSource");
             HelperFunctions.getJson(dataSource[xAxis.AttributeName], "dataSource[xAxis.AttributeName]");
             HelperFunctions.getJson(xMetaData, "xMetaData");
 
-            Transform maxNormaliserTransform = xAxis.maxNormaliserObject;
-            Transform minNormaliserTransform = xAxis.minNormaliserObject;
 
             xIndicator.transform.position = new Vector3(this.transform.position.x, xIndicator.transform.position.y, xIndicator.transform.position.z);
             xIndicator.transform.rotation = xAxis.transform.rotation;
@@ -88,6 +101,24 @@ namespace Photon_IATK
             float xAxisValue = (xMetaData.maxValue - xMetaData.minValue) * minDistance + xMetaData.minValue;
             //float dist = DistanceLineSegmentPoint(minNormaliserTransform.position, maxNormaliserTransform.position, xIndicator.transform.position);
             Debug.Log("xAxisValue: " + xAxisValue);
+
+            //CSVDataSource csv =  (CSVDataSource)dataSource;
+            //var dict = csv.TextualDimensionsList;
+            //foreach (var item in dict)
+            //{
+            //    Debug.Log("item: " + item.Key + " " + item.Value);
+            //    foreach (var subItem in item.Value)
+            //    {
+            //        Debug.Log("subItem: " + subItem.Key + " " + subItem.Value);
+            //    }
+            //}
+
+            var tmp = dataSource.getOriginalValue(Mathf.Round(xAxisValue), "State");
+            
+            CSVDataSource csv = (CSVDataSource)dataSource;
+            var dict = csv.TextualDimensionsList;
+            int itemIndex = (int)Mathf.Round(xAxisValue);
+            Debug.Log(dict["State"][itemIndex]);
         }
 
         public Vector3 LerpByDistance(Vector3 A, Vector3 B, float x)
@@ -117,3 +148,9 @@ namespace Photon_IATK
 }
 
 //Debug.LogFormat(GlobalVariables.cAlert + "xAxis.AttributeFilter.maxFilter: {0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}." + GlobalVariables.endColor + " {8}: {9} -> {10} -> {11}", "0", "1", "2", "3", "4", "5", "6", "7", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+
+//HelperFunctions.getJson(xAxis, "xAxis");
+//HelperFunctions.getJson(dataSource, "dataSource");
+//HelperFunctions.getJson(dataSource[xAxis.AttributeName], "dataSource[xAxis.AttributeName]");
+//HelperFunctions.getJson(xMetaData, "xMetaData");

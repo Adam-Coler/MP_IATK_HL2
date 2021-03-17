@@ -32,6 +32,12 @@ namespace IATK
             set { textualDimensionsListReverse = value; }
         }
 
+        public Dictionary<string, Dictionary<int, string>> TextualDimensionsList
+        {
+            get { return textualDimensionsList; }
+            set { textualDimensionsList = value; }
+        }
+
         public Dictionary<int, List<int>> GraphEdges = new Dictionary<int, List<int>>();
 
         private bool isQuitting;
@@ -108,7 +114,6 @@ namespace IATK
             DimensionData.Metadata meta = this[identifier].MetaData;
 
             float normValue = normaliseValue(normalisedValue, 0f, 1f, meta.minValue, meta.maxValue);
-
             if (meta.type == DataType.String)
             {
                 normValue = normaliseValue(valueClosestTo(this[identifier].Data, normalisedValue), 0f, 1f, meta.minValue, meta.maxValue);
@@ -128,7 +133,6 @@ namespace IATK
             DimensionData.Metadata meta = this[identifier].MetaData;
 
             float normValue = normaliseValue(normalisedValue, 0f, 1f, meta.minValue, meta.maxValue);
-
             if (meta.type == DataType.String)
             {
                 return textualDimensionsList[this[identifier].Identifier][(int)normValue];
@@ -147,7 +151,6 @@ namespace IATK
             DimensionData.Metadata meta = this[identifier].MetaData;
 
             float normValue = normaliseValue(normalisedValue, 0f, 1f, meta.minValue, meta.maxValue);
-
             if (meta.type == DataType.String)
             {
                 return textualDimensionsList[this[identifier].Identifier][(int)normValue];
@@ -166,7 +169,6 @@ namespace IATK
             DimensionData.Metadata meta = this[identifier].MetaData;
 
             float normValue = normaliseValue(normalisedValue, 0f, 1f, meta.minValue, meta.maxValue);
-
             if (meta.type == DataType.String)
             {
                 normValue = normaliseValue(valueClosestTo(this[identifier].Data, normalisedValue), 0f, 1f, meta.minValue, meta.maxValue);
