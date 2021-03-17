@@ -30,6 +30,7 @@ namespace Photon_IATK
         public static string cSerialize = orange;
         public static string cFileOperations = orange;
         public static string cEvent = yellow;
+        public static string cJSON = purple;
 
         public static string endColor = "</color>";
         public static string newLine = "\n";

@@ -392,5 +392,20 @@ namespace Photon_IATK
             return Time.realtimeSinceStartup;
         }
 
+        public static string getJson(object obj, string objName)
+        {
+            string output = JsonUtility.ToJson(obj, GlobalVariables.JSONPrettyPrint);
+            Debug.Log(GlobalVariables.cJSON + objName + GlobalVariables.endColor + output);
+            return output;
+        }
+
+
+        static public GameObject getChildGameObject(GameObject fromGameObject, string withName)
+        {
+            Transform[] ts = fromGameObject.transform.GetComponentsInChildren<Transform>(true);
+            foreach (Transform t in ts) if (t.gameObject.name == withName) return t.gameObject;
+            return null;
+        }
+
     }
 }
