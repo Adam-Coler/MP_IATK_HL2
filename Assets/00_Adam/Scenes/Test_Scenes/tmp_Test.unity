@@ -1022,7 +1022,7 @@ Transform:
   m_GameObject: {fileID: 104572861}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.24000001, y: 1.12, z: 0.24000001}
+  m_LocalScale: {x: 1.12, y: 0.24000001, z: 0.24000001}
   m_Children: []
   m_Father: {fileID: 716445205}
   m_RootOrder: 1
@@ -5540,8 +5540,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   xIndicator: {fileID: 1523028123}
-  yIndicator: {fileID: 0}
-  zIndicator: {fileID: 0}
+  yIndicator: {fileID: 104572861}
+  zIndicator: {fileID: 838426503}
 --- !u!135 &716445202
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -7252,7 +7252,7 @@ Transform:
   m_GameObject: {fileID: 838426503}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.24000001, y: 0.24000001, z: 1.12}
+  m_LocalScale: {x: 1.12, y: 0.24000001, z: 0.24000001}
   m_Children: []
   m_Father: {fileID: 716445205}
   m_RootOrder: 2

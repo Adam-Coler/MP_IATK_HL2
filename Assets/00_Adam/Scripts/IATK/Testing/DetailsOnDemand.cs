@@ -67,58 +67,50 @@ namespace Photon_IATK
             if (transform.hasChanged)
             {
                 transform.hasChanged = false;
-                setXlabel();
+                setlabel(xAxis, xIndicator);
+                setlabel(yAxis, yIndicator);
+                setlabel(zAxis, zIndicator);
             }
         }
 
-        private void setXlabel()
+        private void setlabel(Axis axis, GameObject indicator)
         {
-            //get data from csv
+            DataSource.DimensionData.Metadata metaData = dataSource[axis.AttributeName].MetaData;
+            Transform maxNormaliserTransform = axis.maxNormaliserObject;
+            Transform minNormaliserTransform = axis.minNormaliserObject;
 
+            switch (axis.AxisDirection)
+            {
+                case 1:
+                    indicator.transform.position = new Vector3(this.transform.position.x, indicator.transform.position.y, indicator.transform.position.z);
+                    break;
+                case 2:
+                    indicator.transform.position = new Vector3(indicator.transform.position.x, this.transform.position.y, indicator.transform.position.z);
+                    break;
+                case 3:
+                    indicator.transform.position = new Vector3(indicator.transform.position.x, indicator.transform.position.y, this.transform.position.z);
+                    break;
+            }
 
-            DataSource.DimensionData.Metadata xMetaData = dataSource[xAxis.AttributeName].MetaData;
-            Transform maxNormaliserTransform = xAxis.maxNormaliserObject;
-            Transform minNormaliserTransform = xAxis.minNormaliserObject;
+            indicator.transform.rotation = axis.transform.rotation;
+            indicator.transform.position = ClosestPoint(minNormaliserTransform.position, maxNormaliserTransform.position, this.transform.position);
 
-            HelperFunctions.getJson(xAxis, "xAxis");
-            HelperFunctions.getJson(dataSource, "dataSource");
-            HelperFunctions.getJson(dataSource[xAxis.AttributeName], "dataSource[xAxis.AttributeName]");
-            HelperFunctions.getJson(xMetaData, "xMetaData");
-
-
-            xIndicator.transform.position = new Vector3(this.transform.position.x, xIndicator.transform.position.y, xIndicator.transform.position.z);
-            xIndicator.transform.rotation = xAxis.transform.rotation;
-            xIndicator.transform.position = ClosestPoint(minNormaliserTransform.position, maxNormaliserTransform.position, this.transform.position);
-
-            Vector3 minDelta = minNormaliserTransform.position - xIndicator.transform.position;
+            Vector3 minDelta = minNormaliserTransform.position - indicator.transform.position;
             float minDistance = Mathf.Sqrt(minDelta.x * minDelta.x + minDelta.y * minDelta.y + minDelta.z * minDelta.z);
-            Debug.Log("Dist from Min: " + minDistance);
+            float axisValue = (metaData.maxValue - metaData.minValue) * minDistance + metaData.minValue;
 
-            Vector3 maxDelta = maxNormaliserTransform.position - xIndicator.transform.position;
-            float maxDistance = Mathf.Sqrt(maxDelta.x * maxDelta.x + maxDelta.y * maxDelta.y + maxDelta.z * maxDelta.z);
-            Debug.Log("Dist from Max: " + maxDistance);
-
-            float xAxisValue = (xMetaData.maxValue - xMetaData.minValue) * minDistance + xMetaData.minValue;
-            //float dist = DistanceLineSegmentPoint(minNormaliserTransform.position, maxNormaliserTransform.position, xIndicator.transform.position);
-            Debug.Log("xAxisValue: " + xAxisValue);
-
-            //CSVDataSource csv =  (CSVDataSource)dataSource;
-            //var dict = csv.TextualDimensionsList;
-            //foreach (var item in dict)
-            //{
-            //    Debug.Log("item: " + item.Key + " " + item.Value);
-            //    foreach (var subItem in item.Value)
-            //    {
-            //        Debug.Log("subItem: " + subItem.Key + " " + subItem.Value);
-            //    }
-            //}
-
-            var tmp = dataSource.getOriginalValue(Mathf.Round(xAxisValue), "State");
-            
             CSVDataSource csv = (CSVDataSource)dataSource;
-            var dict = csv.TextualDimensionsList;
-            int itemIndex = (int)Mathf.Round(xAxisValue);
-            Debug.Log(dict["State"][itemIndex]);
+            var normVal = csv.normaliseValue(axisValue, metaData.minValue, metaData.maxValue, 0f, 1f);
+            var closestPointValue = csv.valueClosestTo(metaData.categories, normVal);
+
+            var closestPointOriginalValue = dataSource.getOriginalValue(closestPointValue, axis.AttributeName);
+            var closestPointOriginalValuePrecise = dataSource.getOriginalValuePrecise(closestPointValue, axis.AttributeName);
+
+            var originalValue = dataSource.getOriginalValue(normVal, axis.AttributeName);
+            var originalValuePrecise = dataSource.getOriginalValuePrecise(normVal, axis.AttributeName);
+
+            Debug.LogFormat(GlobalVariables.cCommon + "normVal: {0}, closestPointValue: {1}, originalValue: {2}, originalValuePrecise: {3}, closestPointOriginalValue: {4}, closestPointOriginalValuePrecise: {5}, axisValue: {6}, {7}." + GlobalVariables.endColor + " {8}: {9} -> {10} -> {11}", normVal, closestPointValue, originalValue, originalValuePrecise, closestPointOriginalValue, closestPointOriginalValuePrecise, axisValue, "7", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
         }
 
         public Vector3 LerpByDistance(Vector3 A, Vector3 B, float x)
