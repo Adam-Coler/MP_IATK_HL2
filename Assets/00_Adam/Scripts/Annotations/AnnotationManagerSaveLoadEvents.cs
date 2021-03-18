@@ -129,6 +129,11 @@ namespace Photon_IATK
             RequestAnnotationCreation(Annotation.typesOfAnnotations.HIGHLIGHTSPHERE);
         }
 
+        public void RequestAnnotationCreationDetailsOnDemand()
+        {
+            RequestAnnotationCreation(Annotation.typesOfAnnotations.DETAILSONDEMAND);
+        }
+
         /// <summary>
         /// Sends request to master client to room instantiate an annotation object
         /// Data Sent = object[] { photonView.ViewID, annotationType.ToString() };

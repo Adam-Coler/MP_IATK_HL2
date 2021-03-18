@@ -100,7 +100,8 @@ namespace Photon_IATK
             TEST_TRACKER,
             LINERENDER,
             HIGHLIGHTCUBE,
-            HIGHLIGHTSPHERE
+            HIGHLIGHTSPHERE,
+            DETAILSONDEMAND
         }
 
         #endregion Varbiales
@@ -223,6 +224,10 @@ namespace Photon_IATK
                     break;
                 case typesOfAnnotations.HIGHLIGHTSPHERE:
                     prefabGameObject = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                    break;
+                case typesOfAnnotations.DETAILSONDEMAND:
+                    prefabGameObject = Resources.Load<GameObject>("DetailsOnDemand");
+                    prefabGameObject = Instantiate(prefabGameObject, Vector3.zero, Quaternion.identity);
                     break;
                 default:
                     Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Loading this annotation type is not supported or the type is null.", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
