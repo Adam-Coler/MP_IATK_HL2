@@ -101,7 +101,8 @@ namespace Photon_IATK
             LINERENDER,
             HIGHLIGHTCUBE,
             HIGHLIGHTSPHERE,
-            DETAILSONDEMAND
+            DETAILSONDEMAND,
+            TEXT
         }
 
         #endregion Varbiales
@@ -229,13 +230,15 @@ namespace Photon_IATK
                     prefabGameObject = Resources.Load<GameObject>("DetailsOnDemand");
                     prefabGameObject = Instantiate(prefabGameObject, Vector3.zero, Quaternion.identity);
                     break;
+                case typesOfAnnotations.TEXT:
+                    prefabGameObject = Resources.Load<GameObject>("TextAnnotation");
+                    prefabGameObject = Instantiate(prefabGameObject, Vector3.zero, Quaternion.identity);
+                    break;
                 default:
                     Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Loading this annotation type is not supported or the type is null.", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                     wasObjectSetup = false;
                     return;
             }
-
-            
 
             prefabGameObject.transform.parent = this.transform;
             prefabGameObject.transform.localPosition = Vector3.zero;
@@ -251,6 +254,8 @@ namespace Photon_IATK
 
             _setupLineRender();
             _setupHighlight();
+            _setupDetailsOnDemand();
+            _setupText();
 
 
             ManipulationControls manipulationControls;
@@ -286,6 +291,9 @@ namespace Photon_IATK
                     break;
                 case GlobalVariables.RequestAddPointEvent:
                     AddPoint(data);
+                    break;
+                case GlobalVariables.RequestTextUpdate:
+                    UpdateText(data);
                     break;
                 default:
                     break;
@@ -506,6 +514,67 @@ namespace Photon_IATK
         }
 
         #endregion Highlights
+
+        #region Text
+
+        private TextAnnotationManager textManager;
+
+        private void _setupText()
+        {
+            if (myAnnotationType != typesOfAnnotations.TEXT) { return; }
+            textManager = myObjectRepresentation.GetComponent<TextAnnotationManager>();
+            if (textManager != null)
+            {
+                textManager.myAnnotationParent = this;
+            }
+            else
+            {
+                Debug.LogFormat(GlobalVariables.cError + "{0}{1}" + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", "No Text Manager Found.", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            }
+
+            GameObject.Destroy(this.GetComponent<ManipulationControls>());
+
+        }
+
+        public void UpdateText(string text)
+        {
+            myTextContent = text;
+
+            Debug.LogFormat(GlobalVariables.cEvent + "{0} Any ~ Sending Text, MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RespondEventWithContent, "Others", " Text: ", text, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            object[] content = new object[] { photonView.ViewID, text };
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+
+            PhotonNetwork.RaiseEvent(GlobalVariables.RequestTextUpdate, content, raiseEventOptions, GlobalVariables.sendOptions);
+
+            PhotonNetwork.SendAllOutgoingCommands();
+        }
+
+        public void UpdateText(object[] data)
+        {
+            if (myAnnotationType != typesOfAnnotations.TEXT) { return; }
+            string text = (string)data[1];
+            this.myTextContent = text;
+            textManager.updateContent(text);
+
+            Debug.LogFormat(GlobalVariables.cEvent + "{0} Any ~ Reciving Text, MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RespondEventWithContent, "Others", " Text: ", text, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
+
+        #endregion Text
+
+        #region DetailsOnDemand
+
+        private void _setupDetailsOnDemand()
+        {
+            if (myAnnotationType != typesOfAnnotations.DETAILSONDEMAND) { return; }
+
+            myObjectRepresentation.transform.localScale = new Vector3(.75f, .75f, .75f);
+            GameObject.Destroy(this.GetComponent<ManipulationControls>());
+        }
+
+        #endregion DetailsOnDemand
+
 
         #region serialization
 

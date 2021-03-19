@@ -18,7 +18,6 @@ namespace Photon_IATK
         private AxisInfo zAxisInfo;
 
         public Vector3[] csvItems;
-        public string[] csvItemsString;
 
         public GameObject xIndicator;
         public GameObject yIndicator;
@@ -110,7 +109,6 @@ namespace Photon_IATK
         {
             //populate array of normalized points in vis
             csvItems = new Vector3[csv.DataCount - 1];
-            csvItemsString = new string[csv.DataCount - 1];
             for (int i = 0; i < csv.DataCount - 1; i++)
             {
                 float x = csv[xAxis.AttributeName].Data[i];
@@ -137,109 +135,55 @@ namespace Photon_IATK
             var clostestPointY = csv.getOriginalValuePrecise(closestPoint.y, yAxis.AttributeName);
             var clostestPointZ = csv.getOriginalValuePrecise(closestPoint.z, zAxis.AttributeName);
 
+
             closestPointText.text = "Closest Point\n";
             closestPointText.text += "X: " + clostestPointX + "\n";
             closestPointText.text += "Y: " + clostestPointY + "\n";
             closestPointText.text += "Z: " + clostestPointZ + "\n";
 
-            closestPointWorldLocationX = Vector3.MoveTowards(xAxis.minNormaliserObject.position, xAxis.maxNormaliserObject.position, closestPoint.x * Vector3.Distance(xAxis.minNormaliserObject.position, xAxis.maxNormaliserObject.position));
+            Vector3 closestPointWorldLocationX = Vector3.MoveTowards(xAxis.minNormaliserObject.position, xAxis.maxNormaliserObject.position, closestPoint.x * Vector3.Distance(xAxis.minNormaliserObject.position, xAxis.maxNormaliserObject.position));
 
-            closestPointWorldLocationY = Vector3.MoveTowards(yAxis.minNormaliserObject.position, yAxis.maxNormaliserObject.position, closestPoint.y * Vector3.Distance(yAxis.minNormaliserObject.position, yAxis.maxNormaliserObject.position));
+            Vector3 closestPointWorldLocationY = Vector3.MoveTowards(yAxis.minNormaliserObject.position, yAxis.maxNormaliserObject.position, closestPoint.y * Vector3.Distance(yAxis.minNormaliserObject.position, yAxis.maxNormaliserObject.position));
 
-            closestPointWorldLocationZ = Vector3.MoveTowards(zAxis.minNormaliserObject.position, zAxis.maxNormaliserObject.position, closestPoint.z * Vector3.Distance(zAxis.minNormaliserObject.position, zAxis.maxNormaliserObject.position));
+            Vector3 closestPointWorldLocationZ = Vector3.MoveTowards(zAxis.minNormaliserObject.position, zAxis.maxNormaliserObject.position, closestPoint.z * Vector3.Distance(zAxis.minNormaliserObject.position, zAxis.maxNormaliserObject.position));
 
             closestPointIndicator.transform.position = getIntersectionOfThreeAxis(closestPointWorldLocationX, closestPointWorldLocationY, closestPointWorldLocationZ);
 
         }
 
-        Vector3 closestPointWorldLocationX = Vector3.zero;
-        Vector3 closestPointWorldLocationY = Vector3.zero;
-        Vector3 closestPointWorldLocationZ = Vector3.zero;
-        void OnDrawGizmos()
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(closestPointWorldLocationX, .025f);
-            Gizmos.color = Color.green;
-            Gizmos.DrawSphere(closestPointWorldLocationY, .025f);
-            Gizmos.color = Color.blue;
-            Gizmos.DrawSphere(closestPointWorldLocationZ, .025f);
-        }
-
         public Vector3 getIntersectionOfThreeAxis(Vector3 x, Vector3 y, Vector3 z)
         {
-
-            Vector3 pos = x;
-            Vector3 dir = (x + xIndicator.transform.right * -.5f);
-            Debug.DrawLine(pos, dir, Color.red, 2f);
-
-            pos = y;
-            dir = (y + yIndicator.transform.right * .5f);
-            Debug.DrawLine(pos, dir, Color.green, 2f);
-
             //First intersection
             Vector3 xyIntersection;
-            LineLineIntersection(out xyIntersection, x, xIndicator.transform.right, y, yIndicator.transform.right);
+            ClosestPointsOnTwoLines(out xyIntersection, x, xIndicator.transform.right, y, yIndicator.transform.right);
 
             //perpendicular to first intersection
             var xySide1 = x - y;
             var xySide2 = xyIntersection - x;
             var xyPerpandicularDirection = Vector3.Cross(xySide1, xySide2);
-            Debug.DrawRay(xyIntersection, xyPerpandicularDirection, Color.cyan, 2f);
 
             //Second Intersection
             Vector3 yzIntersection;
-            LineLineIntersection(out yzIntersection, z, zIndicator.transform.forward, y, yIndicator.transform.forward);
+            ClosestPointsOnTwoLines(out yzIntersection, z, zIndicator.transform.forward, y, yIndicator.transform.forward);
 
             //perpendicular to second intersection
             var yzSide1 = y - z;
             var yzSide2 = yzIntersection - z;
             var yzPerpandicularDirection = Vector3.Cross(yzSide1, yzSide2);
-            Debug.DrawRay(yzIntersection, yzPerpandicularDirection, Color.cyan, 2f);
 
             //third intersection
-            Vector3 xyClosestPointLine;
-            Vector3 yZclosestPointLine2;
-
-            ClosestPointsOnTwoLines(out xyClosestPointLine, out yZclosestPointLine2, xyIntersection, xyPerpandicularDirection, yzIntersection, yzPerpandicularDirection);
-            return (xyClosestPointLine + yZclosestPointLine2) / 2f;
-        }
-
-        public Vector3 getIntersectionOfThreeAxis()
-        {
-            //First intersection
-            Vector3 xyIntersection;
-            LineLineIntersection(out xyIntersection, xIndicator.transform.position, xIndicator.transform.right, yIndicator.transform.position, yIndicator.transform.right);
-
-            //perpendicular to first intersection
-            var xySide1 = xIndicator.transform.position - yIndicator.transform.position;
-            var xySide2 = xyIntersection - yIndicator.transform.position;
-            var xyPerpandicularDirection = Vector3.Cross(xySide1, xySide2);
-
-            //Second Intersection
-            Vector3 yzIntersection;
-            LineLineIntersection(out yzIntersection, zIndicator.transform.position, zIndicator.transform.forward, yIndicator.transform.position, yIndicator.transform.forward);
-
-            //perpendicular to second intersection
-            var yzSide1 = yIndicator.transform.position - zIndicator.transform.position;
-            var yzSide2 = yzIntersection - zIndicator.transform.position;
-            var yzPerpandicularDirection = Vector3.Cross(yzSide1, yzSide2);
-
-            //third intersection
-            Vector3 xyClosestPointLine;
-            Vector3 yZclosestPointLine2;
-
-            ClosestPointsOnTwoLines(out xyClosestPointLine, out yZclosestPointLine2, xyIntersection, xyPerpandicularDirection, yzIntersection, yzPerpandicularDirection);
-            return (xyClosestPointLine + yZclosestPointLine2) / 2f;
+            Vector3 xyzclosestPoint;
+            ClosestPointsOnTwoLines(out xyzclosestPoint, xyIntersection, xyPerpandicularDirection, yzIntersection, yzPerpandicularDirection);
+            return xyzclosestPoint;
         }
 
         //Two non-parallel lines which may or may not touch each other have a point on each line which are closest
         //to each other. This function finds those two points. If the lines are not parallel, the function 
         //outputs true, otherwise false.
-        public static bool ClosestPointsOnTwoLines(out Vector3 closestPointLine1, out Vector3 closestPointLine2, Vector3 linePoint1, Vector3 lineVec1, Vector3 linePoint2, Vector3 lineVec2)
+        public static bool ClosestPointsOnTwoLines(out Vector3 closestPointLine, Vector3 linePoint1, Vector3 lineVec1, Vector3 linePoint2, Vector3 lineVec2)
         {
-
-            closestPointLine1 = Vector3.zero;
-            closestPointLine2 = Vector3.zero;
+            Vector3 closestPointLine1 = Vector3.zero;
+            Vector3 closestPointLine2 = Vector3.zero;
 
             float a = Vector3.Dot(lineVec1, lineVec1);
             float b = Vector3.Dot(lineVec1, lineVec2);
@@ -260,53 +204,15 @@ namespace Photon_IATK
 
                 closestPointLine1 = linePoint1 + lineVec1 * s;
                 closestPointLine2 = linePoint2 + lineVec2 * t;
-
+                closestPointLine = (closestPointLine1 + closestPointLine2) / 2f;
                 return true;
             }
 
             else
             {
+                closestPointLine = Vector3.zero;
                 return false;
             }
-        }
-
-        //Calculate the intersection point of two lines. Returns true if lines intersect, otherwise false.
-        //Note that in 3d, two lines do not intersect most of the time. So if the two lines are not in the 
-        //same plane, use ClosestPointsOnTwoLines() instead.
-        public static bool LineLineIntersection(out Vector3 intersection, Vector3 linePoint1, Vector3 lineVec1, Vector3 linePoint2, Vector3 lineVec2)
-        {
-
-            Vector3 lineVec3 = linePoint2 - linePoint1;
-            Vector3 crossVec1and2 = Vector3.Cross(lineVec1, lineVec2);
-            Vector3 crossVec3and2 = Vector3.Cross(lineVec3, lineVec2);
-
-            float planarFactor = Vector3.Dot(lineVec3, crossVec1and2);
-
-            //is coplanar, and not parrallel
-            if (Mathf.Abs(planarFactor) < 0.0001f && crossVec1and2.sqrMagnitude > 0.0001f)
-            {
-                float s = Vector3.Dot(crossVec3and2, crossVec1and2) / crossVec1and2.sqrMagnitude;
-                intersection = linePoint1 + (lineVec1 * s);
-                return true;
-            }
-            else
-            {
-                intersection = Vector3.zero;
-                return false;
-            }
-        }
-
-        private Vector3 center(GameObject[] points)
-        {
-            Vector3 center = new Vector3(0, 0, 0);
-            float count = 0;
-            foreach (var item in points)
-            {
-                center += item.transform.position;
-                count++;
-            }
-            var theCenter = center / count;
-            return theCenter;
         }
 
         private void setLabels()
@@ -356,13 +262,6 @@ namespace Photon_IATK
             output.y = numerator.y / demoninator.y;
             output.z = numerator.z / demoninator.z;
             return output;
-        }
-
-
-        public Vector3 LerpByDistance(Vector3 A, Vector3 B, float x)
-        {
-            Vector3 P = x * Vector3.Normalize(B - A) + A;
-            return P;
         }
 
         private Vector3 ClosestPoint(Vector3 limit1, Vector3 limit2, Vector3 point)

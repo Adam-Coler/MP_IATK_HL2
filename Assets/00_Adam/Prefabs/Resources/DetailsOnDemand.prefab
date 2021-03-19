@@ -127,6 +127,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7af4d0823585c542bd70d242ab08807, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  csvItems: []
   xIndicator: {fileID: 272415361406112164}
   yIndicator: {fileID: 272415360383493762}
   zIndicator: {fileID: 272415359607660216}
@@ -863,7 +864,6 @@ GameObject:
   - component: {fileID: 272415360740044571}
   - component: {fileID: 272415360740044568}
   - component: {fileID: 272415360740044569}
-  - component: {fileID: 272415360740044570}
   m_Layer: 0
   m_Name: ClosestPoint
   m_TagString: Untagged
@@ -932,19 +932,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!135 &272415360740044570
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 272415360740044572}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &272415360923314872
 GameObject:
   m_ObjectHideFlags: 0
