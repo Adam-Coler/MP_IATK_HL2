@@ -264,6 +264,12 @@ namespace Photon_IATK
                 manipulationControls.enabled = true;
             }
 
+            MoveToTopCorner moveToTopCorner = this.GetComponentInChildren<MoveToTopCorner>();
+            if (moveToTopCorner != null)
+            {
+                moveToTopCorner.MoveToTop();
+            }
+
         }
         #endregion Setup
 
@@ -295,10 +301,47 @@ namespace Photon_IATK
                 case GlobalVariables.RequestTextUpdate:
                     UpdateText(data);
                     break;
+                case GlobalVariables.PhotonRequestAnnotationsDeleteOneEvent:
+                    RespondToRequestDelete();
+                    break;
                 default:
                     break;
             }
 
+        }
+
+        public void RequestDelete()
+        {
+            Debug.LogFormat(GlobalVariables.cEvent + "Any ~ Calling: {0}, Receivers: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Sending Event Code: {5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "PhotonRequestAnnotationsDeleteOneEvent", "Master", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRequestAnnotationsDeleteOneEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            object[] content = new object[] { photonView.ViewID };
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
+
+            PhotonNetwork.RaiseEvent(GlobalVariables.PhotonRequestAnnotationsDeleteOneEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
+
+            PhotonNetwork.SendAllOutgoingCommands();
+        }
+
+        private void RespondToRequestDelete()
+        {
+            this.isDeleted = true;
+
+            if (PhotonNetwork.IsMasterClient)
+            {
+                //save all annoatations
+                //need to not overwrite stuff anymore
+                //save to deleted folder?
+                Debug.LogFormat(GlobalVariables.cOnDestory + "Deleting: {0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", gameObject.name, "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                PhotonNetwork.Destroy(this.gameObject);
+
+            }
+
+            if (!PhotonNetwork.IsConnected)
+            {
+                Destroy(this.gameObject);
+            }
         }
 
         #region Content Updates
@@ -407,8 +450,6 @@ namespace Photon_IATK
             }
 
             Debug.LogFormat(GlobalVariables.cError + "_setupLineRender failed, Is loaded: {0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", wasLoaded, "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
-
         }
 
         private void _onPenTriggerPress(bool pressed)
@@ -526,6 +567,14 @@ namespace Photon_IATK
             if (textManager != null)
             {
                 textManager.myAnnotationParent = this;
+
+                if (myTextContent != "")
+                {
+                    textManager.content.text = myTextContent;
+                    textManager.placeholder.text = "";
+                }
+                    
+
             }
             else
             {
