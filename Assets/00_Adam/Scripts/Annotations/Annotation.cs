@@ -334,6 +334,8 @@ namespace Photon_IATK
                 //save to deleted folder?
                 Debug.LogFormat(GlobalVariables.cOnDestory + "Deleting: {0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", gameObject.name, "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
+                AnnotationManagerSaveLoadEvents.Instance.saveAnnotations();
+
                 PhotonNetwork.Destroy(this.gameObject);
 
             }

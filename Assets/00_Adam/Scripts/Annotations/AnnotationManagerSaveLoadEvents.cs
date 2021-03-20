@@ -21,8 +21,16 @@ namespace Photon_IATK
         public bool isWaitingForListOfAnnotationIDs = false;
         public int annotationsCreated = 0;
         public int lastMadeAnnotationPhotonViewID;
+        public static AnnotationManagerSaveLoadEvents Instance;
 
         #region Setup and Teardown
+
+        private void Awake()
+        {
+
+            Instance = this;
+
+        }
 
         private void OnEnable()
         {
@@ -201,7 +209,6 @@ namespace Photon_IATK
                 annotation.wasLoaded = false;
                 annotation.SendContentFromMaster();
                 annotation.SetAnnotationObject();
-                annotationsCreated++;
             }
             lastMadeAnnotationPhotonViewID = annotation.photonView.ViewID;
             sendAnnotationIDEvent();
@@ -209,6 +216,11 @@ namespace Photon_IATK
 
         private void CreateAnnotation(SerializeableAnnotation serializeableAnnotation)
         {
+            if (serializeableAnnotation.isDeleted)
+            {
+                return;
+            }
+
             GameObject genericAnnotationObj;
 
             if (PhotonNetwork.IsConnected)
@@ -391,7 +403,8 @@ namespace Photon_IATK
                 serializeableAnnotation.wasLoaded = true;
 
                 string filename = serializeableAnnotation.myAnnotationNumber.ToString("D3");
-                filename += "_" + serializeableAnnotation.myAnnotationType.ToString() + ".json";
+                filename += "_" + serializeableAnnotation.myAnnotationType.ToString();
+                filename += "_" + _getParentVisAxisKey() + ".json";
 
                 string jsonFormatAnnotion = JsonUtility.ToJson(serializeableAnnotation, true);
 
@@ -428,8 +441,9 @@ namespace Photon_IATK
             //_checkAndMakeDirectory(mainFolderPath);
 
             string date = System.DateTime.Now.ToString("yyyyMMdd");
-            string parentVisAxisKey = _getParentVisAxisKey();
-            string subFolderName = date + "_" + parentVisAxisKey;
+            //string parentVisAxisKey = _getParentVisAxisKey();
+            //string subFolderName = date + "_" + parentVisAxisKey;
+            string subFolderName = date;
             string subfolderPath = Path.Combine(mainFolderPath, subFolderName);
             _checkAndMakeDirectory(subfolderPath);
 
@@ -466,8 +480,11 @@ namespace Photon_IATK
             foreach (string jsonPath in filePaths)
             {
                 //Load file
-                SerializeableAnnotation serializeableAnnotation = JsonUtility.FromJson<SerializeableAnnotation>(File.ReadAllText(jsonPath));
-                CreateAnnotation(serializeableAnnotation);
+                if (jsonPath.Contains(_getParentVisAxisKey()))
+                {
+                    SerializeableAnnotation serializeableAnnotation = JsonUtility.FromJson<SerializeableAnnotation>(File.ReadAllText(jsonPath));
+                    CreateAnnotation(serializeableAnnotation);
+                }
             }
 
         }
