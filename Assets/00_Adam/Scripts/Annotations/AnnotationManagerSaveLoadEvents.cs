@@ -51,9 +51,16 @@ namespace Photon_IATK
             VisualizationEvent_Calls.RPCvisualisationUpdatedDelegate -= UpdatedView;
 
             saveAnnotations();
+            PushAllData();
         
             //send all annoations to next client if master
 
+        }
+
+        private void OnApplicationQuit()
+        {
+            saveAnnotations();
+            PushAllData();
         }
 
         #endregion Setup and Teardown
@@ -114,6 +121,9 @@ namespace Photon_IATK
                     break;
                 case GlobalVariables.SendEventNewAnnotationID:
                     setAnnotationIDEvent(data);
+                    break;
+                case GlobalVariables.RequestSaveAnnotation:
+                    _saveAnnotations(data);
                     break;
                 default:
                     break;
@@ -216,15 +226,19 @@ namespace Photon_IATK
 
         private void CreateAnnotation(SerializeableAnnotation serializeableAnnotation)
         {
-            if (serializeableAnnotation.isDeleted)
-            {
-                return;
-            }
+
 
             GameObject genericAnnotationObj;
 
             if (PhotonNetwork.IsConnected)
             {
+                annotationsCreated++;
+
+                if (serializeableAnnotation.isDeleted)
+                {
+                    return;
+                }
+
                 genericAnnotationObj = PhotonNetwork.InstantiateRoomObject("GenericAnnotation", Vector3.zero, Quaternion.identity);
                 HelperFunctions.SetObjectLocalTransformToZero(genericAnnotationObj, System.Reflection.MethodBase.GetCurrentMethod());
                 genericAnnotationObj.name = "LoadedAnnotation_" + serializeableAnnotation.myAnnotationNumber;
@@ -344,8 +358,44 @@ namespace Photon_IATK
 
         #region AnnotationSaveing
 
+        private void PushAllData()
+        {
+            Debug.LogFormat(GlobalVariables.cFileOperations + "PushAllData called{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            if (!PhotonNetwork.IsConnected || !PhotonNetwork.IsMasterClient || PhotonNetwork.PlayerList.Length <= 1) { return; }
+
+            bool loadSuccessfull = false;
+            var anno = _getAllAnnotationsAndConvertToSerializeableAnnotations(out loadSuccessfull);
+
+            if (loadSuccessfull)
+            {
+                foreach(SerializeableAnnotation annotation in anno)
+                {
+                    string jsonFormatAnnotion = JsonUtility.ToJson(annotation, true);
+                    object[] content = new object[] { photonView.ViewID, jsonFormatAnnotion };
+
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+
+                    PhotonNetwork.RaiseEvent(GlobalVariables.RequestSaveAnnotation, content, raiseEventOptions, GlobalVariables.sendOptionsReliable);
+                }
+
+                Debug.LogFormat(GlobalVariables.cFileOperations + "I am the MasterClient: {0}, Pushing all annotaitons to all users." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            }
+        }
+
+        private void _saveAnnotations(object[] data)
+        {
+            Debug.LogFormat(GlobalVariables.cCommon + "Annotation reviced, saving now: {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            string jsonAnnotation = (string)data[1];
+            SerializeableAnnotation serializeableAnnotation = JsonUtility.FromJson<SerializeableAnnotation>(jsonAnnotation);
+            _saveAnnotations(serializeableAnnotation);
+        }
+
         public void saveAnnotations()
         {
+            Debug.LogFormat(GlobalVariables.cFileOperations + "saveAnnotations called{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
             if (!PhotonNetwork.IsMasterClient) { return; }
 
             Debug.LogFormat(GlobalVariables.cCommon + "I am the MasterClient: {0}, Saving annotaitons." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
@@ -415,6 +465,27 @@ namespace Photon_IATK
             }
 
             Debug.LogFormat(GlobalVariables.cFileOperations + "Annotations saved for {0}, full path: {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", _getParentVisAxisKey(), subfolderPath, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
+
+        private void _saveAnnotations(SerializeableAnnotation serializeableAnnotation)
+        {
+
+            string subfolderPath = _getFolderPath();
+
+            serializeableAnnotation.wasLoaded = true;
+
+            string filename = serializeableAnnotation.myAnnotationNumber.ToString("D3");
+            filename += "_" + serializeableAnnotation.myAnnotationType.ToString();
+            filename += "_" + _getParentVisAxisKey() + ".json";
+
+            string jsonFormatAnnotion = JsonUtility.ToJson(serializeableAnnotation, true);
+
+            string fullFilePath = Path.Combine(subfolderPath, filename);
+
+            Debug.LogFormat(GlobalVariables.cFileOperations + "Saving {0}, full path: {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", filename, fullFilePath, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            System.IO.File.WriteAllText(fullFilePath, jsonFormatAnnotion);
+
+            Debug.LogFormat(GlobalVariables.cFileOperations + "Annotation saved for {0}, full path: {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", _getParentVisAxisKey(), subfolderPath, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
         private string _getParentVisAxisKey()

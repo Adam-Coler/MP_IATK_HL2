@@ -64,6 +64,7 @@ namespace Photon_IATK
         public static int photonSendRate = 60;
         public static int iPunObservableUpdateRate = photonSendRate;
         public static ExitGames.Client.Photon.SendOptions sendOptions = ExitGames.Client.Photon.SendOptions.SendUnreliable;
+        public static ExitGames.Client.Photon.SendOptions sendOptionsReliable = ExitGames.Client.Photon.SendOptions.SendReliable;
 
         //Movement 1-9
         public const byte PhotonMoveEvent = 1;
@@ -108,6 +109,7 @@ namespace Photon_IATK
 
         public const byte RequestEventAnnotationRemoval = 80;
         public const byte RequestEventAnnotationFileSystemDeletion = 81;
+        public const byte RequestSaveAnnotation = 82;
         //public const byte RespondToRequestAnnotationDeletionAll = 81;
 
         //One offs 90-99
