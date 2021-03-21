@@ -17,7 +17,7 @@ namespace Photon_IATK
         private AxisInfo yAxisInfo;
         private AxisInfo zAxisInfo;
 
-        public Vector3[] csvItems;
+        private Vector3[] csvItems;
 
         public GameObject xIndicator;
         public GameObject yIndicator;
