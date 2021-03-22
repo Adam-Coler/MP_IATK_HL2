@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 using IATK;
+using System.Collections.Generic;
 
 namespace Photon_IATK
 {
-    //[ExecuteInEditMode]
+    [ExecuteInEditMode]
     public class VisDataInterface : MonoBehaviour
     {
         public GameObject vis;
@@ -17,6 +18,8 @@ namespace Photon_IATK
         public Vector3[] csvItems;
 
         public GameObject obj;
+
+        public float eps = .001f;
 
         private void OnEnable()
         {
@@ -81,7 +84,6 @@ namespace Photon_IATK
 
         public Vector3[] getListOfPoints()
         {
-            Debug.Log(csv.DataCount);
             Vector3[] csvArrayOfDataPoints = new Vector3[csv.DataCount];
             for (int i = 0; i < csv.DataCount; i++)
             {
@@ -94,105 +96,83 @@ namespace Photon_IATK
             return csvArrayOfDataPoints;
         }
 
-        public void GetPointsInRectangularCuboid(GameObject obj)
+        public Vector3[] getListOfWorldLocationPoints()
         {
-
-        }
-
-        //public int i = 17;
-        private void OnDrawGizmos()
-        {
-            float radiusSmall = .015f;
-            float radiusBig = .025f;
-
-            Bounds bounds = obj.GetComponent<MeshRenderer>().bounds;
-            Vector3 center = bounds.center;
-            Vector3 extents = obj.transform.localScale / 2f;
-
-            Debug.DrawRay(center, obj.transform.up, Color.green);
-            Debug.DrawRay(center, obj.transform.forward, Color.blue);
-            Debug.DrawRay(center, obj.transform.right, Color.red);
-
-
-            Gizmos.DrawWireSphere(center, radiusSmall);
-
-            Vector3 forwardTopRight = center + (obj.transform.up * extents.y) + (obj.transform.forward * extents.z) + (obj.transform.right * extents.x);
-            Vector3 forwardTopLeft = center + (obj.transform.up * extents.y) + (obj.transform.forward * extents.z) + (-obj.transform.right * extents.x);
-            Vector3 backwardTopRight = center + (obj.transform.up * extents.y) + (-obj.transform.forward * extents.z) + (obj.transform.right * extents.x);
-            Vector3 backwardTopLeft = center + (obj.transform.up * extents.y) + (-obj.transform.forward * extents.z) + (-obj.transform.right * extents.x);
-
-            Vector3 forwardBottomRight = center + (-obj.transform.up * extents.y) + (obj.transform.forward * extents.z) + (obj.transform.right * extents.x);
-            Vector3 forwardBottomLeft = center + (-obj.transform.up * extents.y) + (obj.transform.forward * extents.z) + (-obj.transform.right * extents.x);
-            Vector3 backwardBottomRight = center + (-obj.transform.up * extents.y) + (-obj.transform.forward * extents.z) + (obj.transform.right * extents.x);
-            Vector3 backwardBottomLeft = center + (-obj.transform.up * extents.y) + (-obj.transform.forward * extents.z) + (-obj.transform.right * extents.x);
-
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(forwardTopRight, radiusSmall);
-            Gizmos.DrawWireSphere(forwardTopLeft, radiusSmall);
-            Gizmos.DrawWireSphere(backwardTopRight, radiusSmall);
-            Gizmos.DrawWireSphere(backwardTopLeft, radiusSmall);
-
-            Gizmos.DrawWireSphere(forwardBottomRight, radiusSmall);
-            Gizmos.DrawWireSphere(forwardBottomLeft, radiusSmall);
-            Gizmos.DrawWireSphere(backwardBottomRight, radiusSmall);
-            Gizmos.DrawWireSphere(backwardBottomLeft, radiusSmall);
-
-            //Vector3 closestPoint = csvItems[testPoints[i]];
-
-            MeshCollider mesh = obj.GetComponent<MeshCollider>();
-
-            foreach (Vector3 point in csvItems)
+            Vector3[] returnedPoints = new Vector3[csv.DataCount];
+            Vector3[] points = getListOfPoints();
+            for (int i = 0; i < csv.DataCount; i++)
             {
-                //var point = csvItems[5];
-
-                var worldLocation = GetVisPointWorldLocation(point);
-                var closestPoint = bounds.ClosestPoint(point);
-
-
-                //Gizmos.color = Color.red;
-                //Gizmos.DrawWireSphere(worldLocation, radiusSmall);
-
-                //Gizmos.color = Color.blue;
-                //Gizmos.DrawWireSphere(closestPoint, radiusSmall);
-
-                //Gizmos.color = Color.cyan;
-                ////Gizmos.DrawWireSphere(closestPoin2, radiusSmall);
-
-                //break;
-                if (IsInsideMesh(point))
-                {
-                    Gizmos.color = Color.red;
-                    Gizmos.DrawWireSphere(worldLocation, radiusBig);
-                }
-                else
-                {
-                    Gizmos.color = Color.cyan;
-                    Gizmos.DrawWireSphere(worldLocation, radiusSmall);
-                }
+                returnedPoints[i] = GetVisPointWorldLocation(points[i]);
             }
 
+            return returnedPoints;
         }
+
+        //private void OnDrawGizmos()
+        //{
+        //    float radiusSmall = .015f;
+        //    float radiusMed = .025f;
+        //    float radiusBig = .035f;
+
+        //    foreach (Vector3 point in islastmesh)
+        //    {
+        //        //var point = csvItems[5];
+
+        //        Gizmos.color = Color.cyan;
+        //        Gizmos.DrawWireSphere(point, radiusSmall);
+
+        //    }
+
+
+        //    foreach (Vector3 point in getListOfWorldLocationPoints())
+        //    {
+        //        if (IsInsideMesh(point))
+        //        {
+        //            Gizmos.color = Color.blue;
+        //            Gizmos.DrawWireSphere(point, radiusSmall);
+        //        } else
+        //        {
+        //            Gizmos.color = Color.green;
+        //            Gizmos.DrawWireSphere(point, radiusSmall);
+        //        }
+        //    }
+
+        //}
+
+        public List<Vector3> islastmesh = new List<Vector3>();
+        public Collider LastMesh;
+        public List<Vector3> IsInsideMesh(Collider mesh)
+        {
+            LastMesh = mesh;
+            List<Vector3> encapsalatedPoints = new List<Vector3>();
+
+            foreach(Vector3 point in getListOfWorldLocationPoints())
+            {
+                if (Vector3.Distance(point, mesh.ClosestPoint(point)) < eps)
+                {
+                    encapsalatedPoints.Add(point);
+                }
+            }
+            islastmesh = encapsalatedPoints;
+            return encapsalatedPoints;
+        }
+
         private bool IsInsideMesh(Vector3 point)
         {
-            RaycastHit[] _hitsUp = new RaycastHit[100];
-            RaycastHit[] _hitsDown = new RaycastHit[100];
+            Collider mesh = LastMesh;
+            //mesh.convex = true;
+            var meshClosestPoint = mesh.ClosestPoint(point);
 
-            Physics.queriesHitBackfaces = true;
-            int hitsUp = Physics.RaycastNonAlloc(point, Vector3.up, _hitsUp);
-            int hitsDown = Physics.RaycastNonAlloc(point, Vector3.down, _hitsDown);
-            Physics.queriesHitBackfaces = false;
-            for (var i = 0; i < hitsUp; i++)
-                if (_hitsUp[i].normal.y > 0)
-                    for (var j = 0; j < hitsDown; j++)
-                        if (_hitsDown[j].normal.y < 0 && _hitsDown[j].collider == _hitsUp[i].collider)
-                            return true;
+            if (Vector3.Distance(point, meshClosestPoint) < eps)
+            {
+                return true;
+            }
 
             return false;
         }
 
         public Vector3 GetVisPointWorldLocation(Vector3 normalizedAxisValues)
         {
-            float eps = .001f;
             if (normalizedAxisValues.x == 0)
             {
                 normalizedAxisValues.x += eps;

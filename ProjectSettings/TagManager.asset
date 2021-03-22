@@ -18,6 +18,7 @@ TagManager:
   - Annotation
   - AnnotationCollection
   - DataDrivenAnnotationCollection
+  - HighlightSphereCollection
   layers:
   - Default
   - TransparentFX

@@ -45,7 +45,8 @@ namespace Photon_IATK
         public static string annotationTag = "Annotation";
         public static string annotationCollectionTag = "AnnotationCollection";
         public static string dataDrivenAnnotationTag = "DataDrivenAnnotations";
-        public static string annotationSaveFolder = "AnnotationFiles";
+        public static string annotationSaveFolder = "AnnotationFiles"; 
+        public static string HighlightSphereCollection = "HighlightSphereCollection";
         public static string visInterfaceMenuTag = "VisMenu";
         public static string gameControllerModelTag = "GameController";
 
