@@ -4,12 +4,12 @@ using System.Collections.Generic;
 
 namespace Photon_IATK
 {
-    [ExecuteInEditMode]
+
     public class VisDataInterface : MonoBehaviour
     {
         public GameObject vis;
         public VisWrapperClass visWrapperClass;
-        private CSVDataSource csv;
+        public CSVDataSource csv;
 
         public Axis xAxis;
         public Axis yAxis;
@@ -20,6 +20,10 @@ namespace Photon_IATK
         private GameObject obj;
 
         public float eps = .01f;
+
+        public Quaternion xAxisRotation { get {return xAxis.transform.rotation; }}
+        public Quaternion yAxisRotation { get { return yAxis.transform.rotation; } }
+        public Quaternion zAxisRotation { get { return zAxis.transform.rotation; }}
 
         private void OnEnable()
         {
@@ -80,6 +84,165 @@ namespace Photon_IATK
             }
 
             csvItems = getListOfPoints();
+        }
+
+        public Vector3 GetNormalizedPoint(Vector3 point)
+        {
+            Vector3 output = Vector3.zero;
+            output.x = GetSingleAxisNormalizedValue(1, point);
+            output.y = GetSingleAxisNormalizedValue(2, point);
+            output.z = GetSingleAxisNormalizedValue(3, point);
+            return output;
+        }
+
+        /// <summary>
+        /// Axis values 1=X, 2=Y, 3=Z
+        /// </summary>
+        /// <param name="axis"></param>
+        /// <returns></returns>
+        public float GetSingleAxisNormalizedValue(int axisDirection, Vector3 point)
+        {
+            Axis axis = GetAxisFromInt(axisDirection);
+            DataSource.DimensionData.Metadata metaData = csv[axis.AttributeName].MetaData;
+
+            //Vector3 closestPoint = ClosestPoint(axis.minNormaliserObject.position, axis.maxNormaliserObject.position, point);
+
+            Vector3 closestPoint = GetClosestPointOnAxis(axisDirection, point);
+
+            Vector3 minDelta = axis.minNormaliserObject.position - closestPoint;
+            minDelta = Vector3.Scale(minDelta, divideVectorValues(Vector3.one, vis.transform.localScale));
+
+            float minDistance = Mathf.Sqrt(minDelta.x * minDelta.x + minDelta.y * minDelta.y + minDelta.z * minDelta.z);
+            float axisValue = (metaData.maxValue - metaData.minValue) * minDistance + metaData.minValue;
+            var normVal = csv.normaliseValue(axisValue, metaData.minValue, metaData.maxValue, 0f, 1f);
+
+            return normVal;
+        }
+
+        private Axis GetAxisFromInt(int axisDirection)
+        {
+            Axis axis;
+            switch (axisDirection)
+            {
+                case 1:
+                    axis = xAxis;
+                    break;
+                case 2:
+                    axis = yAxis;
+                    break;
+                case 3:
+                    axis = zAxis;
+                    break;
+                default:
+                    axis = xAxis;
+                    break;
+            }
+            return axis;
+        }
+
+        /// <summary>
+        /// typeOfValues = 0: closest point on each axis (not overall)
+        /// typeOfValues = 1: actual axis value
+        /// typeOfValues = 2: closest actual point
+        /// </summary>
+        /// <param name="point"></param>
+        /// <param name="typeOfValues"></param>
+        /// <returns>object[3] {x label, y label, z label}</returns>
+        public object[] GetLabelsForPoint(Vector3 point, int typeOfValues)
+        {
+            object[] output = new object[3];
+            output[0] = GetLabelForPoint(1, point)[typeOfValues];
+            output[1] = GetLabelForPoint(2, point)[typeOfValues];
+            output[2] = GetLabelForPoint(3, point)[typeOfValues];
+            return output;
+        }
+
+        /// <summary>
+        /// Return Object[3] {closest point value on axis, actual value on axis, closest points label for that axis}
+        /// </summary>
+        /// <param name="axisDirection"></param>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public object[] GetLabelForPoint(int axisDirection, Vector3 point)
+        {
+            object[] output = new object[3];
+            Axis axis = GetAxisFromInt(axisDirection);
+            DataSource.DimensionData.Metadata metaData = csv[axis.AttributeName].MetaData;
+
+            float normVal = GetSingleAxisNormalizedValue(axisDirection, point);
+            var closestPointValue = csv.valueClosestTo(metaData.categories, normVal);
+            output[0] = closestPointValue;
+            output[0] = csv.getOriginalValuePrecise(closestPointValue, axis.AttributeName);
+
+            output[1] = csv.getOriginalValuePrecise(normVal, axis.AttributeName);
+            output[2] = csv.getOriginalValuePrecise(GetClosestPoint(point)[axisDirection - 1], axis.AttributeName);
+
+            return output;
+        }
+        public object[] GetLabelsForAxisLocations(Vector3 point)
+        {
+            object[] output = new object[3];
+
+            float normVal = GetSingleAxisNormalizedValue(1, point);
+            output[0] = csv.getOriginalValuePrecise(normVal, xAxis.AttributeName);
+
+            normVal = GetSingleAxisNormalizedValue(2, point);
+            output[1] = csv.getOriginalValuePrecise(normVal, yAxis.AttributeName);
+
+            normVal = GetSingleAxisNormalizedValue(3, point);
+            output[2] = csv.getOriginalValuePrecise(normVal, zAxis.AttributeName);
+
+            return output;
+        }
+
+        public Vector3 GetClosestPointOnAxis(int axisDirection, Vector3 point)
+        {
+            Axis axis = GetAxisFromInt(axisDirection);
+            return ClosestPoint(axis.minNormaliserObject.position, axis.maxNormaliserObject.position, point);
+        }
+
+        public object[] GetLabelsForClosestPoint(Vector3 point)
+        {
+            object[] output = new object[3];
+
+            var closestPoint = GetClosestPoint(point, true);
+            output[0] = csv.getOriginalValuePrecise(closestPoint.x, xAxis.AttributeName);
+            output[1] = csv.getOriginalValuePrecise(closestPoint.y, yAxis.AttributeName);
+            output[2] = csv.getOriginalValuePrecise(closestPoint.z, zAxis.AttributeName);
+
+            return output;
+        }
+
+        public Vector3 GetClosestPoint(Vector3 worldLocationToSearchFrom, bool isNormalized = false)
+        {
+            Vector3 pointToSearchFrom = GetNormalizedPoint(worldLocationToSearchFrom);
+            Vector3 closestPoint = Vector3.one;
+            float closestDist = 99f;
+            foreach (Vector3 dataPoint in csvItems)
+            {
+                float dist = Vector3.Distance(pointToSearchFrom, dataPoint);
+                if (dist < closestDist)
+                {
+                    closestPoint = dataPoint;
+                    closestDist = dist;
+                }
+            }
+
+            if (isNormalized)
+            {
+                return closestPoint;
+            }
+            return GetVisPointWorldLocation(closestPoint);
+        }
+
+        private Vector3 divideVectorValues(Vector3 numerator, Vector3 demoninator)
+        {
+
+            Vector3 output = Vector3.zero;
+            output.x = numerator.x / demoninator.x;
+            output.y = numerator.y / demoninator.y;
+            output.z = numerator.z / demoninator.z;
+            return output;
         }
 
         public Vector3[] getListOfPoints()
@@ -231,8 +394,23 @@ namespace Photon_IATK
             return xyzclosestPoint;
         }
 
-        public Vector3 closest1 = Vector3.zero;
-        public Vector3 closest2 = Vector3.zero;
+        public Vector3 ClosestPoint(Vector3 limit1, Vector3 limit2, Vector3 point)
+        {
+            Vector3 lineVector = limit2 - limit1;
+
+            float lineVectorSqrMag = lineVector.sqrMagnitude;
+
+            // Trivial case where limit1 == limit2
+            if (lineVectorSqrMag < 1e-3f)
+                return limit1;
+
+            float dotProduct = Vector3.Dot(lineVector, limit1 - point);
+
+            float t = -dotProduct / lineVectorSqrMag;
+
+            return limit1 + Mathf.Clamp01(t) * lineVector;
+        }
+
         public bool ClosestPointsOnTwoLines(out Vector3 closestPointLine, Vector3 linePoint1, Vector3 lineVec1, Vector3 linePoint2, Vector3 lineVec2)
         {
             Vector3 closestPointLine1 = Vector3.zero;
@@ -258,9 +436,6 @@ namespace Photon_IATK
                 closestPointLine1 = linePoint1 + lineVec1 * s;
                 closestPointLine2 = linePoint2 + lineVec2 * t;
                 closestPointLine = (closestPointLine1 + closestPointLine2) / 2f;
-
-                closest1 = closestPointLine1;
-                closest2 = closestPointLine2;
                 return true;
             }
 
