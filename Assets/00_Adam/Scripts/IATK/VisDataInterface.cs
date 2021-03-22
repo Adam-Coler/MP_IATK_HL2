@@ -140,45 +140,6 @@ namespace Photon_IATK
             return axis;
         }
 
-        /// <summary>
-        /// typeOfValues = 0: closest point on each axis (not overall)
-        /// typeOfValues = 1: actual axis value
-        /// typeOfValues = 2: closest actual point
-        /// </summary>
-        /// <param name="point"></param>
-        /// <param name="typeOfValues"></param>
-        /// <returns>object[3] {x label, y label, z label}</returns>
-        public object[] GetLabelsForPoint(Vector3 point, int typeOfValues)
-        {
-            object[] output = new object[3];
-            output[0] = GetLabelForPoint(1, point)[typeOfValues];
-            output[1] = GetLabelForPoint(2, point)[typeOfValues];
-            output[2] = GetLabelForPoint(3, point)[typeOfValues];
-            return output;
-        }
-
-        /// <summary>
-        /// Return Object[3] {closest point value on axis, actual value on axis, closest points label for that axis}
-        /// </summary>
-        /// <param name="axisDirection"></param>
-        /// <param name="point"></param>
-        /// <returns></returns>
-        public object[] GetLabelForPoint(int axisDirection, Vector3 point)
-        {
-            object[] output = new object[3];
-            Axis axis = GetAxisFromInt(axisDirection);
-            DataSource.DimensionData.Metadata metaData = csv[axis.AttributeName].MetaData;
-
-            float normVal = GetSingleAxisNormalizedValue(axisDirection, point);
-            var closestPointValue = csv.valueClosestTo(metaData.categories, normVal);
-            output[0] = closestPointValue;
-            output[0] = csv.getOriginalValuePrecise(closestPointValue, axis.AttributeName);
-
-            output[1] = csv.getOriginalValuePrecise(normVal, axis.AttributeName);
-            output[2] = csv.getOriginalValuePrecise(GetClosestPoint(point)[axisDirection - 1], axis.AttributeName);
-
-            return output;
-        }
         public object[] GetLabelsForAxisLocations(Vector3 point)
         {
             object[] output = new object[3];
@@ -276,37 +237,6 @@ namespace Photon_IATK
 
             return returnedPoints;
         }
-
-        //private void OnDrawGizmos()
-        //{
-        //    float radiusSmall = .015f;
-        //    float radiusMed = .025f;
-        //    float radiusBig = .035f;
-
-        //    foreach (Vector3 point in islastmesh)
-        //    {
-        //        //var point = csvItems[5];
-
-        //        Gizmos.color = Color.cyan;
-        //        Gizmos.DrawWireSphere(point, radiusSmall);
-
-        //    }
-
-
-        //    foreach (Vector3 point in getListOfWorldLocationPoints())
-        //    {
-        //        if (IsInsideMesh(point))
-        //        {
-        //            Gizmos.color = Color.blue;
-        //            Gizmos.DrawWireSphere(point, radiusSmall);
-        //        } else
-        //        {
-        //            Gizmos.color = Color.green;
-        //            Gizmos.DrawWireSphere(point, radiusSmall);
-        //        }
-        //    }
-
-        //}
 
         public List<Vector3> IsInsideMesh(Collider mesh)
         {

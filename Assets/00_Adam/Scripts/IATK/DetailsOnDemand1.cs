@@ -239,9 +239,11 @@ namespace Photon_IATK
             DataSource.DimensionData.Metadata metaData = csv[axis.AttributeName].MetaData;
 
             indicator.transform.rotation = axis.transform.rotation;
+
             indicator.transform.position = ClosestPoint(axis.minNormaliserObject.position, axis.maxNormaliserObject.position, this.transform.position);
 
             Vector3 minDelta = axis.minNormaliserObject.position - indicator.transform.position;
+
             minDelta = Vector3.Scale(minDelta, divideVectorValues(Vector3.one, vis.transform.localScale));
 
             float minDistance = Mathf.Sqrt(minDelta.x * minDelta.x + minDelta.y * minDelta.y + minDelta.z * minDelta.z);
@@ -253,7 +255,7 @@ namespace Photon_IATK
             var originalValue = csv.getOriginalValuePrecise(normVal, axis.AttributeName);
 
             outAxisInfo.axisDirection = axis.AxisDirection;
-            outAxisInfo.axisLocation = originalValue;
+            outAxisInfo.axisLocation = originalValue; //here
             outAxisInfo.closestPointValue = closestPointOriginalValue;
             outAxisInfo.normValue = normVal;
 

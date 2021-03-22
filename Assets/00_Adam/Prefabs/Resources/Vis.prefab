@@ -257,12 +257,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vis: {fileID: 0}
   visWrapperClass: {fileID: 0}
+  csv: {fileID: 0}
   xAxis: {fileID: 0}
   yAxis: {fileID: 0}
   zAxis: {fileID: 0}
   eps: 0.01
-  closest1: {x: 0, y: 0, z: 0}
-  closest2: {x: 0, y: 0, z: 0}
 --- !u!1001 &7193140530980369934
 PrefabInstance:
   m_ObjectHideFlags: 0

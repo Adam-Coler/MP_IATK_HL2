@@ -61,3 +61,35 @@ namespace Photon_IATK
         }
     }
 }
+
+//private void OnDrawGizmos()
+//{
+//    float radiusSmall = .015f;
+//    float radiusMed = .025f;
+//    float radiusBig = .035f;
+
+//    foreach (Vector3 point in islastmesh)
+//    {
+//        //var point = csvItems[5];
+
+//        Gizmos.color = Color.cyan;
+//        Gizmos.DrawWireSphere(point, radiusSmall);
+
+//    }
+
+
+//    foreach (Vector3 point in getListOfWorldLocationPoints())
+//    {
+//        if (IsInsideMesh(point))
+//        {
+//            Gizmos.color = Color.blue;
+//            Gizmos.DrawWireSphere(point, radiusSmall);
+//        } else
+//        {
+//            Gizmos.color = Color.green;
+//            Gizmos.DrawWireSphere(point, radiusSmall);
+//        }
+//    }
+
+//}
+
