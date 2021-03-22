@@ -9,17 +9,17 @@ namespace Photon_IATK
     {
         public GameObject vis;
         public VisWrapperClass visWrapperClass;
-        public CSVDataSource csv;
+        private CSVDataSource csv;
 
         public Axis xAxis;
         public Axis yAxis;
         public Axis zAxis;
 
-        public Vector3[] csvItems;
+        private Vector3[] csvItems;
 
-        public GameObject obj;
+        private GameObject obj;
 
-        public float eps = .001f;
+        public float eps = .01f;
 
         private void OnEnable()
         {
@@ -98,6 +98,12 @@ namespace Photon_IATK
 
         public Vector3[] getListOfWorldLocationPoints()
         {
+            if (csv == null)
+            {
+                Debug.LogFormat(GlobalVariables.cError + "No CSV set.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                return new Vector3[0];
+            }
+
             Vector3[] returnedPoints = new Vector3[csv.DataCount];
             Vector3[] points = getListOfPoints();
             for (int i = 0; i < csv.DataCount; i++)
@@ -139,11 +145,8 @@ namespace Photon_IATK
 
         //}
 
-        public List<Vector3> islastmesh = new List<Vector3>();
-        public Collider LastMesh;
         public List<Vector3> IsInsideMesh(Collider mesh)
         {
-            LastMesh = mesh;
             List<Vector3> encapsalatedPoints = new List<Vector3>();
 
             foreach(Vector3 point in getListOfWorldLocationPoints())
@@ -153,22 +156,7 @@ namespace Photon_IATK
                     encapsalatedPoints.Add(point);
                 }
             }
-            islastmesh = encapsalatedPoints;
             return encapsalatedPoints;
-        }
-
-        private bool IsInsideMesh(Vector3 point)
-        {
-            Collider mesh = LastMesh;
-            //mesh.convex = true;
-            var meshClosestPoint = mesh.ClosestPoint(point);
-
-            if (Vector3.Distance(point, meshClosestPoint) < eps)
-            {
-                return true;
-            }
-
-            return false;
         }
 
         public Vector3 GetVisPointWorldLocation(Vector3 normalizedAxisValues)

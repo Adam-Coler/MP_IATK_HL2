@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 namespace Photon_IATK
@@ -33,7 +32,8 @@ namespace Photon_IATK
                 return;
             }
 
-            if (!HelperFunctions.GetComponent<Collider>(out mesh, System.Reflection.MethodBase.GetCurrentMethod()))
+            mesh = GetComponentInParent<Collider>();
+            if (mesh == null)
             {
                 Debug.LogFormat(GlobalVariables.cError + "No Collider found.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                 return;
@@ -45,15 +45,14 @@ namespace Photon_IATK
 
         private void Update()
         {
-            if (transform.parent.hasChanged)
+            if (transform.hasChanged)
             {
-                transform.parent.hasChanged = false;
+                transform.hasChanged = false;
                 drawEncapsalatedPoints();
             }
         }
 
         private Vector3 scale = new Vector3(.025f,.025f, .025f);
-        //public List<Vector3> encapsalatedPoints;
         List<GameObject> DrawnSpheres;
         private void drawEncapsalatedPoints()
         {
@@ -63,8 +62,6 @@ namespace Photon_IATK
             
 
             var tmp = new List<GameObject>(DrawnSpheres);
-            List<Vector3> tmpEncapsalatedPoints = new List<Vector3>(encapsalatedPoints);
-
             foreach (GameObject obj in tmp)
             {
                 if (!encapsalatedPoints.Contains(obj.transform.position))
@@ -77,7 +74,7 @@ namespace Photon_IATK
                 }
             }
 
-            foreach (Vector3 point in tmpEncapsalatedPoints)
+            foreach (Vector3 point in encapsalatedPoints)
             {
                 Debug.LogFormat(GlobalVariables.cCommon + "Generating Sphere.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -86,35 +83,17 @@ namespace Photon_IATK
                 newSphere.transform.localScale = scale;
                 newSphere.transform.parent = highlightSphereCollection.transform;
                 newSphere.GetComponent<Renderer>().material = newMat;
+                Destroy(newSphere.GetComponent<Collider>());
                 DrawnSpheres.Add(newSphere);
             }
-
         }
 
-        //private void OnDrawGizmos()
-        //{
-        //    float radiusSmall = .015f;
-        //    float radiusMed = .025f;
-        //    float radiusBig = .035f;
-
-        //    foreach (Vector3 point in visDataInterface.getListOfWorldLocationPoints())
-        //    {
-        //        //var point = csvItems[5];
-
-        //        Gizmos.color = Color.cyan;
-        //        Gizmos.DrawWireSphere(point, radiusMed);
-
-        //    }
-
-        //    foreach (Vector3 point in visDataInterface.IsInsideMesh(mesh))
-        //    {
-        //        //var point = csvItems[5];
-
-        //        Gizmos.color = Color.blue;
-        //        Gizmos.DrawWireSphere(point, radiusSmall);
-
-        //    }
-        //}
-
+        private void OnDestroy()
+        {
+            foreach (GameObject obj in DrawnSpheres)
+            {
+                    Destroy(obj);
+            }
+        }
     }
 }

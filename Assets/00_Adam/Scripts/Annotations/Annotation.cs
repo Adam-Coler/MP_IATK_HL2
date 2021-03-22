@@ -550,10 +550,25 @@ namespace Photon_IATK
         {
             if (myAnnotationType != typesOfAnnotations.HIGHLIGHTCUBE && myAnnotationType != typesOfAnnotations.HIGHLIGHTSPHERE) { return; }
 
-            Material newMat = Resources.Load("Highlight", typeof(Material)) as Material;
+            Material newMat = Resources.Load("TransparentYellow", typeof(Material)) as Material;
             myObjectRepresentation.GetComponent<Renderer>().material = newMat;
 
-            myObjectRepresentation.transform.localScale = new Vector3(.05f, .05f, .05f);
+            myObjectRepresentation.transform.localScale = new Vector3(1f, 1f, 1f);
+            gameObject.AddComponent<HighlightScript>();
+
+            MeshFilter meshFilter = myObjectRepresentation.GetComponent<MeshFilter>();
+            gameObject.GetComponent<MeshCollider>().sharedMesh = meshFilter.mesh;
+
+            Destroy(myObjectRepresentation.GetComponent<Collider>());
+
+            this.transform.localScale = new Vector3(.1f, .1f, .1f);
+
+            ManipulationControls manipulationControls;
+            if (HelperFunctions.GetComponent<ManipulationControls>(out manipulationControls, System.Reflection.MethodBase.GetCurrentMethod()))
+            {
+                manipulationControls.enabled = true;
+                manipulationControls.isUniformScale = false;
+            }
         }
 
         #endregion Highlights

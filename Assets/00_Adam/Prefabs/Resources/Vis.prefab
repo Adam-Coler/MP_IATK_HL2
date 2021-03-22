@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 4860348563888633785}
   - component: {fileID: 4500439297307763228}
   - component: {fileID: 4972528823325447019}
+  - component: {fileID: -5274898171002143499}
   m_Layer: 0
   m_Name: Vis
   m_TagString: Vis
@@ -242,6 +243,31 @@ MonoBehaviour:
   ScaleStopped:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-5274898171002143499
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9105368823616601759}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c86c2005bc4a52e41a2843c364828e04, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vis: {fileID: 0}
+  visWrapperClass: {fileID: 0}
+  csv: {fileID: 0}
+  xAxis: {fileID: 0}
+  yAxis: {fileID: 0}
+  zAxis: {fileID: 0}
+  csvItems: []
+  obj: {fileID: 0}
+  eps: 0.01
+  islastmesh: []
+  LastMesh: {fileID: 0}
+  closest1: {x: 0, y: 0, z: 0}
+  closest2: {x: 0, y: 0, z: 0}
 --- !u!1001 &7193140530980369934
 PrefabInstance:
   m_ObjectHideFlags: 0
