@@ -33,13 +33,16 @@ namespace Photon_IATK
         public GameObject myObjectRepresentation;
         public Component myObjectComponenet;
 
-        private typesOfAnnotations _myAnnotationType;
+        public typesOfAnnotations _myAnnotationType;
+
         private bool wasObjectSetup = false;
         public Vector3[] lineRenderPoints;
         public bool wasLoaded;
 
         public float myCreationTime;
 
+        public MeanPlane.axisSelection axisSelection;
+        public MeanPlane.summeryValueType summeryValueType;
 
         public List<float> myStartTimesofMoves;
         public List<float> myEndTimesofMoves;
@@ -102,7 +105,8 @@ namespace Photon_IATK
             HIGHLIGHTCUBE,
             HIGHLIGHTSPHERE,
             DETAILSONDEMAND,
-            TEXT
+            TEXT,
+            CENTRALITY
         }
 
         #endregion Varbiales
@@ -234,6 +238,10 @@ namespace Photon_IATK
                     prefabGameObject = Resources.Load<GameObject>("TextAnnotation");
                     prefabGameObject = Instantiate(prefabGameObject, Vector3.zero, Quaternion.identity);
                     break;
+                case typesOfAnnotations.CENTRALITY:
+                    prefabGameObject = Resources.Load<GameObject>("MeanMedianPlane");
+                    prefabGameObject = Instantiate(prefabGameObject, Vector3.zero, Quaternion.identity);
+                    break;
                 default:
                     Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Loading this annotation type is not supported or the type is null.", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                     wasObjectSetup = false;
@@ -256,7 +264,7 @@ namespace Photon_IATK
             _setupHighlight();
             _setupDetailsOnDemand();
             _setupText();
-
+            _setupCentrality();
 
             ManipulationControls manipulationControls;
             if (HelperFunctions.GetComponent<ManipulationControls>(out manipulationControls, System.Reflection.MethodBase.GetCurrentMethod()))
@@ -641,6 +649,29 @@ namespace Photon_IATK
 
         #endregion DetailsOnDemand
 
+        #region Centrality
+
+        private void _setupCentrality()
+        {
+            if (myAnnotationType != typesOfAnnotations.CENTRALITY) { return; }
+
+            GameObject.Destroy(this.GetComponent<ManipulationControls>());
+            GameObject.Destroy(this.GetComponent<BoxCollider>());
+            GameObject.Destroy(this.GetComponent<MeshCollider>());
+
+            MeanPlane meanPlane = myObjectRepresentation.GetComponent<MeanPlane>();
+            myObjectComponenet = meanPlane;
+
+            meanPlane.currentAxis = axisSelection;
+            meanPlane.currentSummeryValueType = summeryValueType;
+
+            meanPlane.myAnnotationParent = this;
+
+            meanPlane.SetMaterial();
+            meanPlane.SetMeanPlane();
+        }
+
+        #endregion Centrality
 
         #region serialization
 
@@ -684,6 +715,9 @@ namespace Photon_IATK
 
             serializeableAnnotation.wasLoaded = wasLoaded;
 
+            serializeableAnnotation.axisSelection = axisSelection.ToString();
+            serializeableAnnotation.summeryValueType = summeryValueType.ToString();
+
             return serializeableAnnotation;
         }
 
@@ -713,6 +747,11 @@ namespace Photon_IATK
 
             isDeleted = serializeableAnnotation.isDeleted;
             myAnnotationType = (typesOfAnnotations)Enum.Parse(typeof(typesOfAnnotations), serializeableAnnotation.myAnnotationType, true);
+
+
+            axisSelection = (MeanPlane.axisSelection)Enum.Parse(typeof(MeanPlane.axisSelection), serializeableAnnotation.axisSelection, true);
+
+            summeryValueType = (MeanPlane.summeryValueType)Enum.Parse(typeof(MeanPlane.summeryValueType), serializeableAnnotation.summeryValueType, true);
 
             myUniqueAnnotationNumber = serializeableAnnotation.myAnnotationNumber;
 

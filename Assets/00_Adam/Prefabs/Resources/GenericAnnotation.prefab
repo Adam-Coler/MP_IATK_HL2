@@ -110,9 +110,12 @@ MonoBehaviour:
   myUniqueAnnotationNumber: 0
   myObjectRepresentation: {fileID: 0}
   myObjectComponenet: {fileID: 0}
+  _myAnnotationType: 0
   lineRenderPoints: []
   wasLoaded: 0
   myCreationTime: 0
+  axisSelection: 0
+  summeryValueType: 0
   myStartTimesofMoves: []
   myEndTimesofMoves: []
   myLocations: []

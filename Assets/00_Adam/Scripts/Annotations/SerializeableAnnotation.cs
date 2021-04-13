@@ -38,6 +38,9 @@ namespace Photon_IATK
         public List<Quaternion> myRotations;
         public List<Vector3> myRelativeScales;
 
+        public string axisSelection;
+        public string summeryValueType;
+
         public bool wasLoaded;
     }
 }

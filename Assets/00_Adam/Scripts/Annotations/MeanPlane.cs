@@ -16,27 +16,31 @@ namespace Photon_IATK
 
         public enum axisSelection { xAxis, yAxis, zAxis };
         public axisSelection currentAxis = axisSelection.zAxis;
-        private axisSelection lastAxisSelection;
 
 
         public enum summeryValueType { Mean, Median};
         public summeryValueType currentSummeryValueType = summeryValueType.Mean;
-        private summeryValueType lastSummeryValueType;
 
-        private void Update()
-        {
-            if (currentAxis != lastAxisSelection)
-            {
-                lastAxisSelection = currentAxis;
-                SetMeanPlane();
-            }
+        public Annotation myAnnotationParent;
 
-            if (currentSummeryValueType != lastSummeryValueType)
-            {
-                lastSummeryValueType = currentSummeryValueType;
-                SetMeanPlane();
-            }
-        }
+
+        //private axisSelection lastAxisSelection;
+        //private summeryValueType lastSummeryValueType;
+
+        //private void Update()
+        //{
+        //    if (currentAxis != lastAxisSelection)
+        //    {
+        //        lastAxisSelection = currentAxis;
+        //        SetMeanPlane();
+        //    }
+
+        //    if (currentSummeryValueType != lastSummeryValueType)
+        //    {
+        //        lastSummeryValueType = currentSummeryValueType;
+        //        SetMeanPlane();
+        //    }
+        //}
 
         private void Awake()
         {
@@ -53,32 +57,40 @@ namespace Photon_IATK
                 return;
             }
 
-            Invoke("SetMeanPlane", 3f);
-
         }
 
-        private void SetMeanPlane()
+        public void SetMeanPlane()
         {
+            if (visDataInterface == null) { return; }
+
             Vector3 meanLocation = Vector3.zero;
             object metricValue = "";
 
             switch (currentSummeryValueType)
             {
                 case summeryValueType.Mean:
-                    visDataInterface.getMeanLocation((int)currentAxis, out metricValue, out meanLocation);
+                    visDataInterface.getCentralityMetricLocation((int)currentAxis, out metricValue, out meanLocation, true);
                     axisValue.text = "Mean: " + metricValue.ToString();
                     break;
                 case summeryValueType.Median:
-                    visDataInterface.getMedianLocation((int)currentAxis, out metricValue, out meanLocation);
+                    visDataInterface.getCentralityMetricLocation((int)currentAxis, out metricValue, out meanLocation, false);
                     axisValue.text = "Median: " + metricValue.ToString();
                     break;
             }
 
             var visRotation = visDataInterface.GetVisRotation();
 
-            this.gameObject.transform.position = meanLocation;
-            this.gameObject.transform.localScale = visDataInterface.GetVisScale() / 10;
-            this.gameObject.transform.eulerAngles = visRotation;
+            Transform transform = this.transform;
+
+            if (this.transform.parent != null)
+            {
+                transform = this.transform.parent;
+            }
+             
+
+            transform.position = meanLocation;
+            transform.localScale = visDataInterface.GetVisScale() / 10;
+            transform.eulerAngles = visRotation;
 
             axisLabel.text = visDataInterface.GetAxisName((int)currentAxis + 1);
 
@@ -89,12 +101,24 @@ namespace Photon_IATK
                     transform.RotateAround(this.transform.position, transform.up, -90f);
                     break;
                 case axisSelection.yAxis:
-                    transform.RotateAround(this.transform.position, transform.right, -90f);
                     break;
                 case axisSelection.zAxis:
+                    transform.RotateAround(this.transform.position, transform.right, -90f);
                     break;
             }
 
+            SetMaterial();
+
+            if (myAnnotationParent != null)
+            {
+                myAnnotationParent.axisSelection = currentAxis;
+                myAnnotationParent.summeryValueType = currentSummeryValueType;
+            }
+
+        }
+
+        public void SetMaterial()
+        {
             this.GetComponent<Renderer>().material = materials[(int)currentAxis];
         }
 
@@ -102,26 +126,31 @@ namespace Photon_IATK
         public void setCurrentAxisToX()
         {
             currentAxis = axisSelection.xAxis;
+            SetMeanPlane();
         }
 
         public void setCurrentAxisToY()
         {
             currentAxis = axisSelection.yAxis;
+            SetMeanPlane();
         }
 
         public void setCurrentAxisToZ()
         {
             currentAxis = axisSelection.zAxis;
+            SetMeanPlane();
         }
 
         public void setCurrentValueTypeToMean()
         {
             currentSummeryValueType = summeryValueType.Mean;
+            SetMeanPlane();
         }
 
         public void setCurrentValueTypeToMedian()
         {
             currentSummeryValueType = summeryValueType.Median;
+            SetMeanPlane();
         }
 
     }

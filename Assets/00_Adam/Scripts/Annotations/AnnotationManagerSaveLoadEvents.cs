@@ -22,6 +22,7 @@ namespace Photon_IATK
         public int annotationsCreated = 0;
         public int lastMadeAnnotationPhotonViewID;
         public static AnnotationManagerSaveLoadEvents Instance;
+        public bool isFirstLoad = true;
 
         #region Setup and Teardown
 
@@ -71,7 +72,16 @@ namespace Photon_IATK
         {
             Debug.LogFormat(GlobalVariables.cTest + "Vis view {0} updated. Name: " + PhotonNetwork.NickName + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            if (propertyType == AbstractVisualisation.PropertyType.DimensionChange || propertyType == AbstractVisualisation.PropertyType.VisualisationType) { loadAnnotations(); }
+            if (propertyType == AbstractVisualisation.PropertyType.DimensionChange || propertyType == AbstractVisualisation.PropertyType.VisualisationType) {
+                if (isFirstLoad)
+                {
+                    Invoke("loadAnnotations", 1f);
+                } else
+                {
+                    loadAnnotations();
+                }
+                
+            }
 
         }
 
@@ -135,6 +145,11 @@ namespace Photon_IATK
         public void RequestAnnotationCreationTestTracker()
         {
             RequestAnnotationCreation(Annotation.typesOfAnnotations.TEST_TRACKER);
+        }
+
+        public void RequestAnnotationCreationCentralityMetricPlane()
+        {
+            RequestAnnotationCreation(Annotation.typesOfAnnotations.CENTRALITY);
         }
 
         public void RequestAnnotationCreationHighlightCube()
@@ -537,6 +552,7 @@ namespace Photon_IATK
 
         public void loadAnnotations()
         {
+            isFirstLoad = false;
             if (!PhotonNetwork.IsMasterClient) { return; }
 
             Debug.LogFormat(GlobalVariables.cCommon + "I am the MasterClient: {0}, Loading annotaitons." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());

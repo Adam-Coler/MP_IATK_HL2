@@ -262,6 +262,7 @@ MonoBehaviour:
   yAxis: {fileID: 0}
   zAxis: {fileID: 0}
   eps: 0.01
+  isSetUp: 0
 --- !u!1001 &7193140530980369934
 PrefabInstance:
   m_ObjectHideFlags: 0

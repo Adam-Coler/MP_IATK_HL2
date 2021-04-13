@@ -26,6 +26,8 @@ namespace Photon_IATK
         public Quaternion yAxisRotation { get { return yAxis.transform.rotation; } }
         public Quaternion zAxisRotation { get { return zAxis.transform.rotation; } }
 
+        public bool isSetUp = false;
+
         private void OnEnable()
         {
             Debug.LogFormat(GlobalVariables.cRegister + "GenericTransformSync registering OnEvent, RPCvisualisationUpdatedDelegate.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
@@ -85,10 +87,15 @@ namespace Photon_IATK
             }
 
             csvItems = getListOfPoints();
+
+            isSetUp = true;
+
         }
 
         public string GetAxisName(int axis)
         {
+            if (!isSetUp) { return ""; }
+
             string output = "";
             switch (axis)
             {
@@ -106,46 +113,74 @@ namespace Photon_IATK
             return output;
         }
 
-        public void getMeanLocation(int axis, out object meanValue, out Vector3 meanLocation)
+        public void getCentralityMetricLocation(int axis, out object actualValue, out Vector3 location, bool isMean = true)
         {
+
+            if (axis >= 4 || axis < 0 || !isSetUp) {
+                actualValue = 0f;
+                location = Vector3.zero;
+                return;
+            }
+
             axis += 1;
-            string axisName = GetAxisFromInt(axis).AttributeName;
+            Axis axisClass = GetAxisFromInt(axis);
+
+            string axisName = "";
+            if (axisClass != null)
+            {
+                axisName = axisClass.AttributeName;
+            }
+            
             var points = csv[axisName].Data;
 
-            //normalized
-            var mean = points.Average();
+            float metric = 0;
+
+            if (isMean)
+            {
+                //normalized mean
+                metric = points.Average();
+            }
+            else
+            {
+                //normalized median
+                metric = HelperFunctions.getMedian(points);
+            }
+
 
             //actual mean
-            meanValue = csv.getOriginalValuePrecise(mean, axisName);
+            actualValue = csv.getOriginalValuePrecise(metric, axisName);
 
             //direction
-            meanLocation = GetVisPointWorldLocation(new Vector3(mean, mean, mean));
+            location = Vector3.zero;
 
-        }
-
-        public void getMedianLocation(int axis, out object actualValue, out Vector3 medianLocation)
-        {
-            axis += 1;
-            string axisName = GetAxisFromInt(axis).AttributeName;
-            var points = csv[axisName].Data;
-
-            //normalized
-            var median = HelperFunctions.getMedian(points);
-
-            //actual mean
-            actualValue = csv.getOriginalValuePrecise(median, axisName);
-
-            //direction
-            medianLocation = GetVisPointWorldLocation(new Vector3(median, median, median));
+            switch (axis)
+            {
+                case 1:
+                    location = new Vector3(metric, .5f, .5f);
+                    break;
+                case 2:
+                    location = new Vector3(.5f, metric, .5f);
+                    break;
+                case 3:
+                    location = new Vector3(.5f, .5f, metric);
+                    break;
+            }
+            location = GetVisPointWorldLocation(location);
         }
 
         public Vector3 GetVisScale()
         {
+            if (!isSetUp) { return Vector3.one; }
+            //if (vis == null) { return Vector3.one; }
+
             return vis.transform.localScale;
         }
 
         public Vector3 GetVisRotation()
         {
+            if (!isSetUp) { return Vector3.zero; }
+            //if (vis == null) { return Vector3.zero; }
+
             return vis.transform.rotation.eulerAngles;
         }
 
