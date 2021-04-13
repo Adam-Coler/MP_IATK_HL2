@@ -87,8 +87,28 @@ namespace Photon_IATK
             csvItems = getListOfPoints();
         }
 
+        public string GetAxisName(int axis)
+        {
+            string output = "";
+            switch (axis)
+            {
+                case 1:
+                    output = xAxis.AttributeName;
+                    break;
+                case 2:
+                    output = yAxis.AttributeName;
+                    break;
+                case 3:
+                    output = zAxis.AttributeName;
+                    break;
+            }
+
+            return output;
+        }
+
         public void getMeanLocation(int axis, out object meanValue, out Vector3 meanLocation)
         {
+            axis += 1;
             string axisName = GetAxisFromInt(axis).AttributeName;
             var points = csv[axisName].Data;
 
@@ -101,8 +121,22 @@ namespace Photon_IATK
             //direction
             meanLocation = GetVisPointWorldLocation(new Vector3(mean, mean, mean));
 
-            Debug.Log("Axis: " + axisName + " , Mean: " + mean + " , Actual value: " + meanValue);
+        }
 
+        public void getMedianLocation(int axis, out object actualValue, out Vector3 medianLocation)
+        {
+            axis += 1;
+            string axisName = GetAxisFromInt(axis).AttributeName;
+            var points = csv[axisName].Data;
+
+            //normalized
+            var median = HelperFunctions.getMedian(points);
+
+            //actual mean
+            actualValue = csv.getOriginalValuePrecise(median, axisName);
+
+            //direction
+            medianLocation = GetVisPointWorldLocation(new Vector3(median, median, median));
         }
 
         public Vector3 GetVisScale()

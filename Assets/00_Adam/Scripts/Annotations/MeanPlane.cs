@@ -11,9 +11,17 @@ namespace Photon_IATK
 
         public VisDataInterface visDataInterface;
 
+        public TMPro.TextMeshPro axisLabel;
+        public TMPro.TextMeshPro axisValue;
+
         public enum axisSelection { xAxis, yAxis, zAxis };
         public axisSelection currentAxis = axisSelection.zAxis;
         private axisSelection lastAxisSelection;
+
+
+        public enum summeryValueType { Mean, Median};
+        public summeryValueType currentSummeryValueType = summeryValueType.Mean;
+        private summeryValueType lastSummeryValueType;
 
         private void Update()
         {
@@ -22,10 +30,13 @@ namespace Photon_IATK
                 lastAxisSelection = currentAxis;
                 SetMeanPlane();
             }
+
+            if (currentSummeryValueType != lastSummeryValueType)
+            {
+                lastSummeryValueType = currentSummeryValueType;
+                SetMeanPlane();
+            }
         }
-
-
-
 
         private void Awake()
         {
@@ -48,10 +59,20 @@ namespace Photon_IATK
 
         private void SetMeanPlane()
         {
-            Vector3 meanLocation;
-            object meanValue;
+            Vector3 meanLocation = Vector3.zero;
+            object metricValue = "";
 
-            visDataInterface.getMeanLocation((int)currentAxis, out meanValue, out meanLocation);
+            switch (currentSummeryValueType)
+            {
+                case summeryValueType.Mean:
+                    visDataInterface.getMeanLocation((int)currentAxis, out metricValue, out meanLocation);
+                    axisValue.text = "Mean: " + metricValue.ToString();
+                    break;
+                case summeryValueType.Median:
+                    visDataInterface.getMedianLocation((int)currentAxis, out metricValue, out meanLocation);
+                    axisValue.text = "Median: " + metricValue.ToString();
+                    break;
+            }
 
             var visRotation = visDataInterface.GetVisRotation();
 
@@ -59,10 +80,13 @@ namespace Photon_IATK
             this.gameObject.transform.localScale = visDataInterface.GetVisScale() / 10;
             this.gameObject.transform.eulerAngles = visRotation;
 
+            axisLabel.text = visDataInterface.GetAxisName((int)currentAxis + 1);
+
             switch (currentAxis)
             {
                 case axisSelection.xAxis:
                     transform.RotateAround(this.transform.position, transform.forward, -90f);
+                    transform.RotateAround(this.transform.position, transform.up, -90f);
                     break;
                 case axisSelection.yAxis:
                     transform.RotateAround(this.transform.position, transform.right, -90f);
@@ -70,6 +94,7 @@ namespace Photon_IATK
                 case axisSelection.zAxis:
                     break;
             }
+
             this.GetComponent<Renderer>().material = materials[(int)currentAxis];
         }
 
@@ -88,6 +113,17 @@ namespace Photon_IATK
         {
             currentAxis = axisSelection.zAxis;
         }
+
+        public void setCurrentValueTypeToMean()
+        {
+            currentSummeryValueType = summeryValueType.Mean;
+        }
+
+        public void setCurrentValueTypeToMedian()
+        {
+            currentSummeryValueType = summeryValueType.Median;
+        }
+
     }
 }
 

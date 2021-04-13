@@ -407,5 +407,24 @@ namespace Photon_IATK
             return null;
         }
 
+
+        static public float getMedian(float[] values)
+        {
+            int numberCount = values.Count();
+            int halfIndex = values.Count() / 2;
+            var sortedNumbers = values.OrderBy(n => n);
+            float median;
+            if ((numberCount % 2) == 0)
+            {
+                var tmp = halfIndex - 1;
+                median = (sortedNumbers.ElementAt(halfIndex) + sortedNumbers.ElementAt(tmp)) / 2;
+            }
+            else
+            {
+                median = sortedNumbers.ElementAt(halfIndex);
+            }
+            return median;
+        }
+
     }
 }
