@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using IATK;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Photon_IATK
 {
@@ -21,9 +22,9 @@ namespace Photon_IATK
 
         public float eps = .01f;
 
-        public Quaternion xAxisRotation { get {return xAxis.transform.rotation; }}
+        public Quaternion xAxisRotation { get { return xAxis.transform.rotation; } }
         public Quaternion yAxisRotation { get { return yAxis.transform.rotation; } }
-        public Quaternion zAxisRotation { get { return zAxis.transform.rotation; }}
+        public Quaternion zAxisRotation { get { return zAxis.transform.rotation; } }
 
         private void OnEnable()
         {
@@ -84,6 +85,34 @@ namespace Photon_IATK
             }
 
             csvItems = getListOfPoints();
+        }
+
+        public void getMeanLocation(int axis, out object meanValue, out Vector3 meanLocation)
+        {
+            string axisName = GetAxisFromInt(axis).AttributeName;
+            var points = csv[axisName].Data;
+
+            //normalized
+            var mean = points.Average();
+
+            //actual mean
+            meanValue = csv.getOriginalValuePrecise(mean, axisName);
+
+            //direction
+            meanLocation = GetVisPointWorldLocation(new Vector3(mean, mean, mean));
+
+            Debug.Log("Axis: " + axisName + " , Mean: " + mean + " , Actual value: " + meanValue);
+
+        }
+
+        public Vector3 GetVisScale()
+        {
+            return vis.transform.localScale;
+        }
+
+        public Vector3 GetVisRotation()
+        {
+            return vis.transform.rotation.eulerAngles;
         }
 
         public Vector3 GetNormalizedPoint(Vector3 point)
