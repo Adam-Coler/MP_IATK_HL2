@@ -7451,6 +7451,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4d30aa09cd52ef44d8080a29ade42902, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  participantID: 
 --- !u!1 &678403029
 GameObject:
   m_ObjectHideFlags: 0
@@ -22137,6 +22138,7 @@ MonoBehaviour:
   isWaitingForListOfAnnotationIDs: 0
   annotationsCreated: 0
   lastMadeAnnotationPhotonViewID: 0
+  isFirstLoad: 1
 --- !u!114 &1980925318
 MonoBehaviour:
   m_ObjectHideFlags: 0

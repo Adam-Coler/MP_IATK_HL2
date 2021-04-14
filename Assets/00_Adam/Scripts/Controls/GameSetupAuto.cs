@@ -7,6 +7,8 @@ namespace Photon_IATK
     {
 
         private Btn_Functions_For_In_Scene_Scripts btn_functions;
+        public string participantID;
+
         // Start is called before the first frame update
         void Start()
         {
