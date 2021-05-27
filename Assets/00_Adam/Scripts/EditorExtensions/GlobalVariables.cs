@@ -49,6 +49,7 @@ namespace Photon_IATK
         public static string HighlightSphereCollection = "HighlightSphereCollection";
         public static string visInterfaceMenuTag = "VisMenu";
         public static string gameControllerModelTag = "GameController";
+        public static string pcElicitTag = "HL2RemoveElicit";
 
         public enum allSymbols
         {
@@ -122,9 +123,10 @@ namespace Photon_IATK
         //Other 100-109
         public const byte PhotonRequestLatencyCheckEvent = 100;
         public const byte PhotonRequestLatencyCheckResponseEvent = 101;
+        public const byte RequestElicitationSetupEvent = 102;
 
-        
         //public const byte PhotonEvent = 6;
+
 
 
 

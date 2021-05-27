@@ -82,6 +82,13 @@ namespace Photon_IATK
                 Debug.LogFormat(GlobalVariables.cError + "No Bigmesh Found {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsConnected, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
 
+            //Setup PC Elicit
+#if HL2
+            if (GeneralEventManager.instance.isElictationOnPC)
+            {
+                GeneralEventManager.instance.ElicitationSetUpEvent();
+            }
+#endif
 
 
             Destroy(this);

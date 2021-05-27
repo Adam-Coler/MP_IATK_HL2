@@ -132,6 +132,8 @@ namespace Photon_IATK
         }
 
 
+
+
         void setNickname()
         {
             txtNickName.text = photonView.Owner.NickName;
@@ -145,8 +147,8 @@ namespace Photon_IATK
             Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}{3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", "Hiding Controller Models","","","", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
-        #endregion
-        #region Custom
+#endregion
+#region Custom
 #if DESKTOP
         private void setup()
         {
@@ -244,7 +246,7 @@ namespace Photon_IATK
         }
 
 #endif
-        #endregion
+#endregion
 
     }
 }

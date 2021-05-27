@@ -19,6 +19,7 @@ TagManager:
   - AnnotationCollection
   - DataDrivenAnnotationCollection
   - HighlightSphereCollection
+  - HL2RemoveElicit
   layers:
   - Default
   - TransparentFX

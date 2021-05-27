@@ -1711,7 +1711,7 @@ GameObject:
   - component: {fileID: 148463206}
   - component: {fileID: 148463205}
   m_Layer: 0
-  m_Name: btn14_VisInterface
+  m_Name: btn14_SetUP_Elicit_PC_VR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1913,8 +1913,8 @@ MonoBehaviour:
   OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 879995203}
-        m_MethodName: showVisInterface
+      - m_Target: {fileID: 1720533476}
+        m_MethodName: SendSetupElicitatoinPCRequest
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12186,7 +12186,7 @@ GameObject:
   - component: {fileID: 1115409071}
   m_Layer: 0
   m_Name: WizardInterface
-  m_TagString: Untagged
+  m_TagString: HL2RemoveElicit
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20817,6 +20817,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec139f958e4e0ed48b10e411d9b8841b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isElictationOnPC: 0
 --- !u!114 &1720533477
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24105,7 +24106,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Show Vis Interface
+  m_text: Set up\nElicitation
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6a84f857bec7e7345843ae29404c57ce, type: 2}
   m_sharedMaterial: {fileID: 21202819797275496, guid: 6a84f857bec7e7345843ae29404c57ce,

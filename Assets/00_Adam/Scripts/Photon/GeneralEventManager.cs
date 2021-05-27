@@ -16,6 +16,7 @@ namespace Photon_IATK
     public class GeneralEventManager : MonoBehaviourPun
     {
         public static GeneralEventManager instance;
+        public bool isElictationOnPC = false;
 
         #region Setup
 
@@ -80,6 +81,10 @@ namespace Photon_IATK
                     break;
                 case GlobalVariables.PhotonRequestLatencyCheckResponseEvent:
                     PhotonProcessRequestLatencyCheckResponseEvent(data);
+                    break;
+                case GlobalVariables.RequestElicitationSetupEvent:
+                    ElicitationSetUpEvent();
+                    Debug.Log("RequestElicitationSetupEvent");
                     break;
                 default:
                     break;
@@ -192,10 +197,78 @@ namespace Photon_IATK
             }
         }
 
+        /// <summary>
+        /// Using an RPC so that new clients recive the call on loggin in
+        /// </summary>
+        public void SendSetupElicitatoinPCRequest()
+        {
+            if (PhotonNetwork.IsConnected)
+            {
+                //RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; //Will not recived own message
+
+                //object[] content = new object[] { photonView.ViewID };
+
+                //PhotonNetwork.RaiseEvent(GlobalVariables.RequestElicitationSetupEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
+                PhotonView photonView = PhotonView.Get(this);
+
+                photonView.RPC("ElicitationSetUpEvent", RpcTarget.All);
+            }
+            else
+            {
+                ElicitationSetUpEvent();
+            }
+        }
+
         #endregion
 
         #region Receive Events
 
+        [PunRPC]
+        public void ElicitationSetUpEvent()
+        {
+            // All clients now have this flagged.
+            isElictationOnPC = true;
+#if !HL2
+            Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}{3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", "Setup elicitation environment requested, doing nothing", "", "", "", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+#endif
+
+#if HL2
+            Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}{3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", "Setting up elicitation environment on HoloLens", "", "", "", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            RemoveVisItemsForElicitPC();
+            DisableManipulations();
+
+
+
+#endif
+        }
+
+        public void DisableManipulations()
+        {
+            var manipulatorScripts = FindObjectsOfType<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
+            foreach (var script in manipulatorScripts)
+            {
+                script.ManipulationType = 0;
+            }
+
+            var manipulationControlsScripts = FindObjectsOfType<ManipulationControls>();
+            foreach (var script in manipulationControlsScripts)
+            {
+                script.BoundingBoxActivation = ManipulationControls.BoundingBoxActivationType.ActivateManually;
+            }
+        }
+
+
+        public void RemoveVisItemsForElicitPC()
+        {
+            //if exists find and remove
+            //remove menu
+            //remove platform
+            GameObject[] taggedItems = GameObject.FindGameObjectsWithTag(GlobalVariables.pcElicitTag);
+            foreach (GameObject obj in taggedItems)
+            {
+                Destroy(obj);
+            }
+        }
 
         private List<int> timesRequestToReturned = new List<int> { };
         private List<int> timesReturnedToRecived = new List<int> { };

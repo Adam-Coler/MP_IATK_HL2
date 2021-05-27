@@ -1247,7 +1247,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1988184525}
-        m_MethodName: sceneManager_Load_01_SetupMenu
+        m_MethodName: sceneManager_Load_Main
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
