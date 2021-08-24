@@ -17,7 +17,7 @@ namespace Photon_IATK
         private Vector3 lastLocalScale;
 
         public bool isWaitingForPhotonRequestTransformEvent = true;
-        private bool isCoroutineRunning = false;
+        public bool isCoroutineRunning = false;
 
         /// <summary>
         /// The time that the movement event reciver takes to update its transform
@@ -262,7 +262,7 @@ namespace Photon_IATK
 
             transform.localScale = lastLocalScale;
 
-            while (elapsedTime < time)
+            while (elapsedTime < time+.1)
             {
                 if (transform.localPosition != lastLocalLocation)
                     transform.localPosition = Vector3.Lerp(startingPos, lastLocalLocation, (elapsedTime / time));
