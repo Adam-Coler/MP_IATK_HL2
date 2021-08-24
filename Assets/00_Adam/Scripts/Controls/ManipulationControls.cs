@@ -1244,7 +1244,7 @@ namespace Photon_IATK
         private void OnEnable()
         {
             CreateRig();
-            CaptureInitialState();
+            //CaptureInitialState();
 
             if (activation == BoundingBoxActivationType.ActivateByProximityAndPointer ||
                 activation == BoundingBoxActivationType.ActivateByProximity ||
@@ -2054,23 +2054,23 @@ namespace Photon_IATK
 
         private void CaptureInitialState()
         {
-            var target = Target;
-            if (target != null)
-            {
-                isChildOfTarget = transform.IsChildOf(target.transform);
+//            var target = Target;
+//            if (target != null)
+//            {
+//                isChildOfTarget = transform.IsChildOf(target.transform);
 
-                scaleConstraint = GetComponent<MinMaxScaleConstraint>();
-                if (scaleConstraint == null)
-                {
-                    scaleConstraint = gameObject.AddComponent<MinMaxScaleConstraint>();
-#pragma warning disable 0618
-                    scaleConstraint.ScaleMinimum = scaleMinimum;
-                    scaleConstraint.ScaleMaximum = scaleMaximum;
-#pragma warning restore 0618
-                }
+//                scaleConstraint = GetComponent<MinMaxScaleConstraint>();
+//                if (scaleConstraint == null)
+//                {
+//                    scaleConstraint = gameObject.AddComponent<MinMaxScaleConstraint>();
+//#pragma warning disable 0618
+//                    scaleConstraint.ScaleMinimum = scaleMinimum;
+//                    scaleConstraint.ScaleMaximum = scaleMaximum;
+//#pragma warning restore 0618
+//                }
 
-                scaleConstraint.Initialize(new MixedRealityTransform(target.transform));
-            }
+//                scaleConstraint.Initialize(new MixedRealityTransform(target.transform));
+//            }
         }
 
         private Vector3 GetLinkDimensions()
