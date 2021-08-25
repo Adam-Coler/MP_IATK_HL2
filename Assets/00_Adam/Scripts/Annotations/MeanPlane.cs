@@ -59,6 +59,13 @@ namespace Photon_IATK
 
         }
 
+        public void SetMeanPlane(summeryValueType measure, axisSelection axis)
+        {
+            currentSummeryValueType = measure;
+            currentAxis = axis;
+            SetMeanPlane();
+        }
+
         public void SetMeanPlane()
         {
             if (visDataInterface == null) { return; }
@@ -114,7 +121,14 @@ namespace Photon_IATK
                 myAnnotationParent.axisSelection = currentAxis;
                 myAnnotationParent.summeryValueType = currentSummeryValueType;
             }
+        }
 
+        private void _updateCentrality()
+        {
+            if (myAnnotationParent != null)
+            {
+                myAnnotationParent.UpdateCentrality(currentSummeryValueType, currentAxis);
+            }
         }
 
         public void SetMaterial()
@@ -127,30 +141,35 @@ namespace Photon_IATK
         {
             currentAxis = axisSelection.xAxis;
             SetMeanPlane();
+            _updateCentrality();
         }
 
         public void setCurrentAxisToY()
         {
             currentAxis = axisSelection.yAxis;
             SetMeanPlane();
+            _updateCentrality();
         }
 
         public void setCurrentAxisToZ()
         {
             currentAxis = axisSelection.zAxis;
             SetMeanPlane();
+            _updateCentrality();
         }
 
         public void setCurrentValueTypeToMean()
         {
             currentSummeryValueType = summeryValueType.Mean;
             SetMeanPlane();
+            _updateCentrality();
         }
 
         public void setCurrentValueTypeToMedian()
         {
             currentSummeryValueType = summeryValueType.Median;
             SetMeanPlane();
+            _updateCentrality();
         }
 
     }

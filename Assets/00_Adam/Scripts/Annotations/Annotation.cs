@@ -292,6 +292,8 @@ namespace Photon_IATK
             object[] data = (object[])photonEventData.CustomData;
             int callerPhotonViewID = (int)data[0];
 
+            //Debug.Log("reciving event: " + eventCode);
+
             //make sure that this object is the same as the sender object
             if (photonView.ViewID != callerPhotonViewID) { return; }
 
@@ -311,6 +313,9 @@ namespace Photon_IATK
                     break;
                 case GlobalVariables.PhotonRequestAnnotationsDeleteOneEvent:
                     RespondToRequestDelete();
+                    break;
+                case GlobalVariables.RequestCentralityUpdate:
+                    RespondToCentralityUpdate(data);
                     break;
                 default:
                     break;
@@ -632,7 +637,7 @@ namespace Photon_IATK
             this.myTextContent = text;
             textManager.updateContent(text);
 
-            Debug.LogFormat(GlobalVariables.cEvent + "{0} Any ~ Reciving Text, MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RespondEventWithContent, "Others", " Text: ", text, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cEvent + "{0} Any ~ Reciving Text, MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, reciving Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestTextUpdate, "Others", " Text: ", text, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
         #endregion Text
@@ -651,6 +656,7 @@ namespace Photon_IATK
 
         #region Centrality
 
+        MeanPlane meanPlane;
         private void _setupCentrality()
         {
             if (myAnnotationType != typesOfAnnotations.CENTRALITY) { return; }
@@ -658,8 +664,9 @@ namespace Photon_IATK
             GameObject.Destroy(this.GetComponent<ManipulationControls>());
             GameObject.Destroy(this.GetComponent<BoxCollider>());
             GameObject.Destroy(this.GetComponent<MeshCollider>());
+            GameObject.Destroy(this.GetComponent<GenericTransformSync>());
 
-            MeanPlane meanPlane = myObjectRepresentation.GetComponent<MeanPlane>();
+            meanPlane = myObjectRepresentation.GetComponent<MeanPlane>();
             myObjectComponenet = meanPlane;
 
             meanPlane.currentAxis = axisSelection;
@@ -669,6 +676,36 @@ namespace Photon_IATK
 
             meanPlane.SetMaterial();
             meanPlane.SetMeanPlane();
+        }
+
+        public void UpdateCentrality(MeanPlane.summeryValueType measure, MeanPlane.axisSelection axis)
+        {
+            summeryValueType = measure;
+            axisSelection = axis;
+
+            Debug.LogFormat(GlobalVariables.cEvent + "{0} Any ~ Sending RequestCentralityUpdate: , MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestCentralityUpdate, "Others", " Text: ", summeryValueType.ToString() + " , " + axisSelection.ToString(), Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            object[] content = new object[] { photonView.ViewID, summeryValueType.ToString(), axisSelection.ToString() };
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+
+            PhotonNetwork.RaiseEvent(GlobalVariables.RequestCentralityUpdate, content, raiseEventOptions, GlobalVariables.sendOptions);
+
+            PhotonNetwork.SendAllOutgoingCommands();
+        }
+
+        public void RespondToCentralityUpdate(object[] data)
+        {
+            if (myAnnotationType != typesOfAnnotations.CENTRALITY) { return; }
+
+            axisSelection = (MeanPlane.axisSelection)Enum.Parse(typeof(MeanPlane.axisSelection), (string)data[2], true);
+
+            summeryValueType = (MeanPlane.summeryValueType)Enum.Parse(typeof(MeanPlane.summeryValueType), (string)data[1], true);
+
+
+            Debug.LogFormat(GlobalVariables.cEvent + "{0} Any ~ Reciving RequestCentralityUpdate: , MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Recived Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestCentralityUpdate, "Others", " Text: ", summeryValueType.ToString() + " , " + axisSelection.ToString(), Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            meanPlane.SetMeanPlane(summeryValueType, axisSelection);
         }
 
         #endregion Centrality
