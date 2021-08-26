@@ -131,6 +131,10 @@ namespace Photon_IATK
         public const byte PhotonRequestLatencyCheckResponseEvent = 101;
         public const byte RequestElicitationSetupEvent = 102;
 
+        public const byte RequestGrabEvent = 103;
+        public const byte RequestReleaseEvent = 104;
+
+
         //public const byte PhotonEvent = 6;
 
 
