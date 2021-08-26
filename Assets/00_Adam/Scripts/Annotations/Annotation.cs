@@ -138,6 +138,7 @@ namespace Photon_IATK
             if (myVisParent == null || myAnnotationCollectionParent == null) { _setupParentObjects(); }
 
             HelperFunctions.SetObjectLocalTransformToZero(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
+            //TODO
 
             //set axis to that parent
             _setAxisNames();
@@ -565,6 +566,7 @@ namespace Photon_IATK
 
             Material newMat = Resources.Load("TransparentYellow", typeof(Material)) as Material;
             myObjectRepresentation.GetComponent<Renderer>().material = newMat;
+            myObjectRepresentation.AddComponent<GrabFeedbackTarget>();
 
             myObjectRepresentation.transform.localScale = new Vector3(1f, 1f, 1f);
             gameObject.AddComponent<HighlightScript>();
@@ -573,6 +575,8 @@ namespace Photon_IATK
             gameObject.GetComponent<MeshCollider>().sharedMesh = meshFilter.mesh;
 
             Destroy(myObjectRepresentation.GetComponent<Collider>());
+
+            
 
             this.transform.localScale = new Vector3(.1f, .1f, .1f);
 

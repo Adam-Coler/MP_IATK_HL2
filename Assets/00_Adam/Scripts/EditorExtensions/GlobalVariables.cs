@@ -50,6 +50,7 @@ namespace Photon_IATK
         public static string visInterfaceMenuTag = "VisMenu";
         public static string gameControllerModelTag = "GameController";
         public static string pcElicitTag = "HL2RemoveElicit";
+        public static string handleTag = "Handle";
 
         public enum allSymbols
         {

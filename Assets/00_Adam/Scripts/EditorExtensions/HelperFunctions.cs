@@ -407,7 +407,6 @@ namespace Photon_IATK
             return null;
         }
 
-
         static public float getMedian(float[] values)
         {
             int numberCount = values.Count();
