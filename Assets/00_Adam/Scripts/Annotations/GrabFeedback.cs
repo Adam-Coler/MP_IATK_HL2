@@ -12,7 +12,6 @@ namespace Photon_IATK
     /// </summary>
 
     [RequireComponent(typeof(Photon.Pun.PhotonView))]
-    [RequireComponent(typeof(Annotation))]
     [DisallowMultipleComponent]
     public class GrabFeedback : MonoBehaviourPun
     {
