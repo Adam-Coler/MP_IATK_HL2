@@ -21,6 +21,7 @@ TagManager:
   - HighlightSphereCollection
   - HL2RemoveElicit
   - Handle
+  - SpawnPoint
   layers:
   - Default
   - TransparentFX
