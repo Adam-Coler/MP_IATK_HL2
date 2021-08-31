@@ -22,6 +22,7 @@ TagManager:
   - HL2RemoveElicit
   - Handle
   - SpawnPoint
+  - Center
   layers:
   - Default
   - TransparentFX

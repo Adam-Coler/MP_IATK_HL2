@@ -234,9 +234,36 @@ namespace Photon_IATK
                 annotation.wasLoaded = false;
                 annotation.SendContentFromMaster();
                 annotation.SetAnnotationObject();
+                lastMadeAnnotationPhotonViewID = annotation.photonView.ViewID;
+                centerAnnotationOnSpawnPoint(annotation);
+                sendAnnotationIDEvent();
             }
-            lastMadeAnnotationPhotonViewID = annotation.photonView.ViewID;
-            sendAnnotationIDEvent();
+
+        }
+
+        private void centerAnnotationOnSpawnPoint(Annotation annotation)
+        {
+            GameObject spawnPoint;
+            HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.spawnTag, out spawnPoint, false, System.Reflection.MethodBase.GetCurrentMethod());
+
+            if (annotation.myAnnotationType == Annotation.typesOfAnnotations.CENTRALITY)
+            {
+                annotation.transform.rotation = spawnPoint.transform.rotation;
+                annotation.transform.Rotate(new Vector3(-90f, 0, 0));
+
+                Transform centerPoint;
+                centerPoint = annotation.myObjectRepresentation.transform.GetChild(0);
+                //Vector3 travelPathVector = centerPoint - fromTransform.position;
+                annotation.transform.position = spawnPoint.transform.position;
+                annotation.transform.position = annotation.transform.position + (annotation.transform.position - centerPoint.transform.position);
+
+            } else
+            {
+                annotation.transform.position = spawnPoint.transform.position;
+                annotation.transform.rotation = spawnPoint.transform.rotation;
+            }
+            
+
         }
 
         private void CreateAnnotation(SerializeableAnnotation serializeableAnnotation)

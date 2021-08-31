@@ -119,8 +119,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 1876798022786485399}
-  - {fileID: 4386919768916786443}
+  - {fileID: 9016502011273354283}
+  - {fileID: 5399389939659653812}
   - {fileID: 5875555060443166590}
   - {fileID: 7200677216131019863}
   m_Father: {fileID: 0}
@@ -139,7 +139,7 @@ GameObject:
   - component: {fileID: 6390016260006849760}
   m_Layer: 0
   m_Name: SpawnPoint
-  m_TagString: Untagged
+  m_TagString: SpawnPoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -568,7 +568,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 54e316036e1b3f64eab9ea0b3be63b86, type: 3}
---- !u!4 &1876798022786485399 stripped
+--- !u!4 &9016502011273354283 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7433953238569915368, guid: 54e316036e1b3f64eab9ea0b3be63b86,
     type: 3}
@@ -900,7 +900,7 @@ PrefabInstance:
     - {fileID: 8507023458995485901, guid: 832905a7dc2d2074b8819ff46a878975, type: 3}
     - {fileID: 8507023458995485900, guid: 832905a7dc2d2074b8819ff46a878975, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 832905a7dc2d2074b8819ff46a878975, type: 3}
---- !u!4 &4386919768916786443 stripped
+--- !u!4 &5399389939659653812 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8507023458995485898, guid: 832905a7dc2d2074b8819ff46a878975,
     type: 3}
