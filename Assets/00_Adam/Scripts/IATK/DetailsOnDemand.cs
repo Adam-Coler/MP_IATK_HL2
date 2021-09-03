@@ -58,27 +58,101 @@ namespace Photon_IATK
             closestPointIndicator.transform.position = visDataInterface.GetClosestPoint(this.transform.position);
             object[] labels = visDataInterface.GetLabelsForClosestPoint(transform.position);
 
+            float xF;
+            string x = labels[0].ToString();
+
+            if (float.TryParse(x, out xF))
+            {
+                x = string.Format("{0:0.##}", xF);
+            }
+
+            float yF;
+            string y = labels[1].ToString();
+
+            if (float.TryParse(y, out yF))
+            {
+                y = string.Format("{0:0.##}", yF);
+            }
+
+            float zF;
+            string z = labels[2].ToString();
+
+            if (float.TryParse(z, out zF))
+            {
+                z = string.Format("{0:0.##}", zF);
+            }
+
             closestPointText.text = "Closest Point\n";
-            closestPointText.text += "X: " + labels[0] + "\n";
-            closestPointText.text += "Y: " + labels[1] + "\n";
-            closestPointText.text += "Z: " + labels[2] + "\n";
+            closestPointText.text += "X: " + x + "\n";
+            closestPointText.text += "Y: " + y + "\n";
+            closestPointText.text += "Z: " + z + "\n";
         }
 
         private void setMainText()
         {
             object[] labels = visDataInterface.GetLabelsForAxisLocations(transform.position);
+
+            float xF;
+            string x = labels[0].ToString();
+
+            if (float.TryParse(x, out xF))
+            {
+                x = string.Format("{0:0.##}", xF);
+            }
+
+            float yF;
+            string y = labels[1].ToString();
+
+            if (float.TryParse(y, out yF))
+            {
+                y = string.Format("{0:0.##}", yF);
+            }
+
+            float zF;
+            string z = labels[2].ToString();
+
+            if (float.TryParse(z, out zF))
+            {
+                z = string.Format("{0:0.##}", zF);
+            }
+
             mainText.text = "Location\n";
-            mainText.text += "X: " + labels[0] + "\n";
-            mainText.text += "Y: " + labels[1] + "\n";
-            mainText.text += "Z: " + labels[2] + "\n";
+            mainText.text += "X: " + x + "\n";
+            mainText.text += "Y: " + y + "\n";
+            mainText.text += "Z: " + z + "\n";
         }
 
         private void setIndicatorText()
         {
             object[] labels = visDataInterface.GetLabelsForAxisLocations(transform.position);
-            xText.text = labels[0].ToString();
-            yText.text = labels[1].ToString();
-            zText.text = labels[2].ToString();
+
+            float xF;
+            string x = labels[0].ToString();
+
+            if (float.TryParse(x, out xF))
+            {
+                x = string.Format("{0:0.##}", xF);
+            }
+
+            float yF;
+            string y = labels[1].ToString();
+
+            if (float.TryParse(y, out yF))
+            {
+                y = string.Format("{0:0.##}", yF);
+            }
+
+            float zF;
+            string z = labels[2].ToString();
+
+            if (float.TryParse(z, out zF))
+            {
+                z = string.Format("{0:0.##}", zF);
+            }
+
+            xText.text = x.ToString();
+            yText.text = y.ToString();
+            zText.text = z.ToString();
         }
 
 
