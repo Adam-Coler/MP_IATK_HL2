@@ -51,10 +51,10 @@ namespace Photon_IATK
             switch (eventCode)
             {
                 case GlobalVariables.RequestParentEvent:
-                    reParent();
+                    reParent(data);
                     break;
                 case GlobalVariables.RequestUnParentEvent:
-                    deParent();
+                    deParent(data);
                     break;
                 default:
                     break;
@@ -66,7 +66,8 @@ namespace Photon_IATK
         {
             Debug.LogFormat(GlobalVariables.cEvent + "Any ~ Calling: {0}, Receivers: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Sending Event Code: {5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "RequestUnParentEvent", "all", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestGrabEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            object[] content = new object[] { photonView.ViewID };
+            Transform myTransform = this.gameObject.transform;
+            object[] content = new object[] { photonView.ViewID, HelperFunctions.PRA(this.gameObject), HelperFunctions.RRA(this.gameObject), myTransform.localScale, this.photonView.GetInstanceID() };
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
@@ -79,7 +80,8 @@ namespace Photon_IATK
         {
             Debug.LogFormat(GlobalVariables.cEvent + "Any ~ Calling: {0}, Receivers: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Sending Event Code: {5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "RequestParentEvent", "all", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestGrabEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            object[] content = new object[] { photonView.ViewID };
+            Transform myTransform = this.gameObject.transform;
+            object[] content = new object[] { photonView.ViewID, myTransform.localPosition, myTransform.localRotation, myTransform.localScale, this.photonView.GetInstanceID() };
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
@@ -90,16 +92,25 @@ namespace Photon_IATK
 
         #endregion //events
 
-        public void deParent()
+        public void deParent(object[] data)
         {
-            if (myParent == null) return;
-            this.transform.parent = null;
+            //if (myParent == null) return;
+
+            //transform.localPosition = (Vector3)data[1];
+            //transform.localRotation = (Quaternion)data[2];
+            //transform.localScale = (Vector3)data[3];
+
+            //this.transform.parent = null;
         }
 
-        public void reParent()
+        public void reParent(object[] data)
         {
-            if (myParent == null) return;
-            this.transform.parent = myParent;
+            //if (myParent == null) return;
+            //this.transform.parent = myParent;
+
+            //transform.localPosition = (Vector3)data[1];
+            //transform.localRotation = (Quaternion)data[2];
+            //transform.localScale = (Vector3)data[3];
         }
 
     }

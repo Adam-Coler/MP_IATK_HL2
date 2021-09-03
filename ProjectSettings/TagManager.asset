@@ -23,6 +23,7 @@ TagManager:
   - Handle
   - SpawnPoint
   - Center
+  - VISLEFT
   layers:
   - Default
   - TransparentFX

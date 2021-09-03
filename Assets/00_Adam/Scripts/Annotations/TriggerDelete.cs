@@ -6,7 +6,7 @@ namespace Photon_IATK {
     {
         private void OnTriggerEnter(Collider collidedObject)
         {
-            Debug.LogFormat(GlobalVariables.cOnDestory + "Requestion deletaion of: {0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", collidedObject.gameObject.name, "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cOnDestory + "Initiating the request for deletaion of: {0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", collidedObject.gameObject.name, "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             GameObject annotationObj;
             if (findParentWithTag(out annotationObj, collidedObject.gameObject, GlobalVariables.annotationTag))
@@ -14,7 +14,7 @@ namespace Photon_IATK {
                 Annotation annotation = annotationObj.GetComponent<Annotation>();
                 if (annotation != null)
                 {
-                    Debug.LogFormat(GlobalVariables.cOnDestory + "Requestion deletaion of: {0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", collidedObject.gameObject.name, "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                    Debug.LogFormat(GlobalVariables.cOnDestory + "Requesting deletaion of: {0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", collidedObject.gameObject.name, "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                     annotation.RequestDelete();
                 }
             }

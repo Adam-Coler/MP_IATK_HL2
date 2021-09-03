@@ -21,7 +21,7 @@ namespace Photon_IATK
 
         public void LoadVis()
         {
-            VisWrapperClass[] visWrappers = FindObjectsOfType<VisWrapperClass>();
+            VisDeleteTarget[] visWrappers = FindObjectsOfType<VisDeleteTarget>();
 
             if (visWrappers.Length == 0)
             {
@@ -37,7 +37,7 @@ namespace Photon_IATK
                 annotationManager.saveAnnotations();
             }
 
-            GeneralEventManager.instance.SendDeleteAllObjectsWithComponentRequest(typeof(VisWrapperClass).AssemblyQualifiedName);
+            GeneralEventManager.instance.SendDeleteAllObjectsWithComponentRequest(typeof(VisDeleteTarget).AssemblyQualifiedName);
 
         }
 
