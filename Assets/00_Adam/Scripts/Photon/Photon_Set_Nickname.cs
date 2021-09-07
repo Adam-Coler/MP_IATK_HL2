@@ -31,7 +31,14 @@ namespace Photon_IATK
 
         public void SetPlayerName()
         {
-            string value = InputFeild.text;
+
+            string value = "";
+
+            if (InputFeild != null)
+            {
+                value = InputFeild.text;
+            }
+
             // #Important
             if (string.IsNullOrEmpty(value))
             {
