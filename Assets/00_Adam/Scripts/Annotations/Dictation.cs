@@ -25,19 +25,22 @@ namespace Photon_IATK
 
             if (dictationRecognizer != null)
             {
+                resultedDictation.text = "Listening....";
+
+                dictationRecognizer.DictationResult -= dictationRecognizer_Result;
+                dictationRecognizer.DictationHypothesis -= dictationRecognizer_Hypothesis;
+                dictationRecognizer.DictationComplete -= dictationRecognizer_Complete;
+                dictationRecognizer.DictationError -= dictationRecognizer_Error;
+
                 dictationRecognizer.Stop();
                 dictationRecognizer.Dispose();
             }
 
             dictationRecognizer = new DictationRecognizer();
 
-
             dictationRecognizer.DictationResult += dictationRecognizer_Result;
-
             dictationRecognizer.DictationHypothesis += dictationRecognizer_Hypothesis;
-
             dictationRecognizer.DictationComplete += dictationRecognizer_Complete;
-
             dictationRecognizer.DictationError += dictationRecognizer_Error;
 
             dictationRecognizer.Start();
@@ -47,6 +50,7 @@ namespace Photon_IATK
         {
             resultedDictation.text = textDA;
             resultedDictation.onEndEdit.Invoke(resultedDictation.text);
+            dictationRecognizer.Stop();
             Debug.Log("Dictation result: " + resultedDictation.text);
         }
 

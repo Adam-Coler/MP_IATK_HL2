@@ -8,7 +8,7 @@ namespace Photon_IATK
     public class TextAnnotationManager : MonoBehaviour
     {
         public DictationHandler dictationHandler;
-        public TMPro.TextMeshProUGUI content;
+        public TMPro.TMP_InputField content;
         public TMPro.TextMeshProUGUI placeholder;
         public Annotation myAnnotationParent;
 
@@ -28,14 +28,35 @@ namespace Photon_IATK
             }
         }
 
+        public void updateContentKeyboard()
+        {
+            if (content.text != "")
+                placeholder.text = "";
+
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Dictation update from keyboard: ", content.text, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            onContentUpdate();
+        }
+
         public void updateContent(string text)
         {
             if (text != "")
                 placeholder.text = "";
 
             content.text = text;
-            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Dictation: ", text, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Updating content to ", text, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             onContentUpdate();
+        }
+
+        public void updateContentLocal(string text)
+        {
+            if (text != "")
+                placeholder.text = "";
+
+            content.text = text + "testContent";
+
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Content updateContentLocal: ", text, ", content text: " + content.text, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
         public void DictationComplete(string text)
@@ -71,7 +92,7 @@ namespace Photon_IATK
             //}
 
             //print(dictationHandler.OnDictationComplete == null ? "Delegate not assigned." : "Delegate assigned.");
-            
+
             //dictationHandler.OnDictationComplete.AddListener(DictationComplete);
             ////dictationHandler.OnDictationError.AddListener(DictationError);
             ////dictationHandler.OnDictationHypothesis.AddListener(DictationHypothisis);

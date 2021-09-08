@@ -28,6 +28,8 @@ namespace Photon_IATK
         public string myDataSource;
 
         public string myTextContent;
+        public List<string> myTextContents;
+
         public Vector3[] myLineRenderPoints;
 
         public float myCreationTime;

@@ -142,26 +142,33 @@ namespace Photon_IATK
             int callerPhotonViewID = (int)data[0];
             if (photonView.ViewID != callerPhotonViewID) { return; }
 
+            AbstractVisualisation.PropertyType propertyType = AbstractVisualisation.PropertyType.GeometryType;
+
             switch (eventCode)
             {
                 case GlobalVariables.PhotonChangeX_AxisEvent:
                     _changeXAxis((string)data[1]);
                     Debug.Log("PhotonChangeX_AxisEvent");
+                    propertyType = AbstractVisualisation.PropertyType.X;
                     break;
                 case GlobalVariables.PhotonChangeY_AxisEvent:
                     _changeYAxis((string)data[1]);
                     Debug.Log("PhotonChangeY_AxisEvent");
+                    propertyType = AbstractVisualisation.PropertyType.Y;
                     break;
                 case GlobalVariables.PhotonChangeZ_AxisEvent:
                     _changeZAxis((string)data[1]);
+                    propertyType = AbstractVisualisation.PropertyType.Z;
                     Debug.Log("PhotonChangeZ_AxisEvent");
                     break;
                 case GlobalVariables.PhotonChangeColorDimensionEvent:
                     _changeColorDimension((string)data[1]);
+                    propertyType = AbstractVisualisation.PropertyType.Colour;
                     Debug.Log("PhotonChangeSizeDimensionEvent");
                     break;
                 case GlobalVariables.PhotonChangeSizeDimensionEvent:
                     _changeSizeDimension((string)data[1]);
+                    propertyType = AbstractVisualisation.PropertyType.Size;
                     Debug.Log("PhotonChangeColorDimensionEvent");
                     break;
                 case GlobalVariables.PhotonRequestStateEvent:
@@ -175,6 +182,9 @@ namespace Photon_IATK
                 default:
                     break;
             }
+
+            if (RPCvisualisationUpdatedDelegate != null && propertyType != AbstractVisualisation.PropertyType.GeometryType)
+                RPCvisualisationUpdatedDelegate(propertyType);
         }
 
 

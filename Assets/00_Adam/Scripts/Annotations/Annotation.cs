@@ -27,7 +27,10 @@ namespace Photon_IATK
         public string myVisZAxis;
         public string myVisSizeDimension;
         public string myVisColorDimension;
+        
         public string myTextContent;
+        public List<string> myTextContents;
+
         public int myUniqueAnnotationNumber;
 
         public GameObject myObjectRepresentation;
@@ -621,9 +624,20 @@ namespace Photon_IATK
 
         public void UpdateText(string text)
         {
+            Debug.LogFormat(GlobalVariables.cTest + "{0}{1}{2}{3}{4}{5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "myTextContent = ", myTextContent, " Text = ", text, "", "", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            if (myTextContent == text)
+            {
+
+                //Debug.LogFormat(GlobalVariables.cTest + "{0}{1}{2}{3}{4}{5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", "", "", "", "", "", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                return;
+            }
+
+
+            myTextContents.Add(text);
             myTextContent = text;
 
-            Debug.LogFormat(GlobalVariables.cEvent + "{0} Any ~ Sending Text, MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RespondEventWithContent, "Others", " Text: ", text, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cEvent + "{0} Any ~ Sending Text, MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestTextUpdate, "Others", ", Text: ", text, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             object[] content = new object[] { photonView.ViewID, text };
 
@@ -638,10 +652,12 @@ namespace Photon_IATK
         {
             if (myAnnotationType != typesOfAnnotations.TEXT) { return; }
             string text = (string)data[1];
-            this.myTextContent = text;
-            textManager.updateContent(text);
 
-            Debug.LogFormat(GlobalVariables.cEvent + "{0} Any ~ Reciving Text, MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, reciving Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestTextUpdate, "Others", " Text: ", text, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cEvent + "{0} Any ~ Reciving Text, " + ", My text content: " + myTextContent + ", MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, reciving Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestTextUpdate, "Others", " Text: ", text, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            myTextContents.Add(text);
+            myTextContent = text;
+            textManager.updateContentLocal(text);
         }
 
         #endregion Text
@@ -744,6 +760,8 @@ namespace Photon_IATK
             if (HelperFunctions.GetComponent<VisWrapperClass>(out visWrapperClass, System.Reflection.MethodBase.GetCurrentMethod())) { serializeableAnnotation.myDataSource = visWrapperClass.wrapperCSVDataSource.name; }
             
             serializeableAnnotation.myTextContent = myTextContent;
+            serializeableAnnotation.myTextContents = myTextContents;
+
             serializeableAnnotation.myLineRenderPoints = lineRenderPoints;
 
             serializeableAnnotation.myCreationTime = myCreationTime;
@@ -800,6 +818,8 @@ namespace Photon_IATK
             if (HelperFunctions.GetComponent<VisWrapperClass>(out visWrapperClass, System.Reflection.MethodBase.GetCurrentMethod())) { serializeableAnnotation.myDataSource = visWrapperClass.wrapperCSVDataSource.name; }
 
             myTextContent = serializeableAnnotation.myTextContent;
+            myTextContents = serializeableAnnotation.myTextContents;
+
             lineRenderPoints = serializeableAnnotation.myLineRenderPoints;
 
             myCreationTime = serializeableAnnotation.myCreationTime;

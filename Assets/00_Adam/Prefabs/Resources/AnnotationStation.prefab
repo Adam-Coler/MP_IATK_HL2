@@ -165,7 +165,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 476c6d1c4fe377f4282c1355827da7b2, type: 2}
+  - {fileID: 2100000, guid: d4d6b039a3a40eb4abd797083ac0ebd9, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -627,6 +627,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8786833530696298249}
     m_Modifications:
+    - target: {fileID: 1094697546187434975, guid: 54e316036e1b3f64eab9ea0b3be63b86,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1410672748109273739, guid: 54e316036e1b3f64eab9ea0b3be63b86,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1428456923858605012, guid: 54e316036e1b3f64eab9ea0b3be63b86,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -651,6 +661,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2152353461138189673, guid: 54e316036e1b3f64eab9ea0b3be63b86,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2249185267136145331, guid: 54e316036e1b3f64eab9ea0b3be63b86,
         type: 3}
@@ -892,6 +907,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7175384684140863889, guid: 54e316036e1b3f64eab9ea0b3be63b86,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7433953238569915368, guid: 54e316036e1b3f64eab9ea0b3be63b86,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -951,6 +971,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 8512637883368981295, guid: 54e316036e1b3f64eab9ea0b3be63b86,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8814123515430993467, guid: 54e316036e1b3f64eab9ea0b3be63b86,
         type: 3}

@@ -42,7 +42,7 @@ namespace Photon_IATK
                 string axisID = "";
                 string xAxis = getCleanString(this.xDimension.Attribute);
                 string yAxis = getCleanString(this.yDimension.Attribute);
-                string zAxis = getCleanString(this.zDimension.Attribute);                
+                string zAxis = getCleanString(this.zDimension.Attribute);
                 axisID = xAxis + "_" + yAxis + "_" + zAxis;
                 return axisID;
             }
@@ -73,12 +73,13 @@ namespace Photon_IATK
         }
 
         private bool _isisTriggeringEvents;
-        public bool isTriggeringEvents {
-        get
+        public bool isTriggeringEvents
+        {
+            get
             {
                 return _isisTriggeringEvents;
             }
-        set
+            set
             {
                 _isisTriggeringEvents = value;
                 if (value)
@@ -139,12 +140,17 @@ namespace Photon_IATK
 
         private void UpdatedView(AbstractVisualisation.PropertyType propertyType)
         {
-            if (_isisTriggeringEvents) 
+            if (_isisTriggeringEvents)
             {
                 if (visualisationUpdatedDelegate != null)
                     visualisationUpdatedDelegate(propertyType);
+                Debug.LogFormat(GlobalVariables.cEvent + "visualisationUpdatedDelegate called for " + propertyType + "." + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
-            Debug.LogFormat(GlobalVariables.cEvent + "Vis updating but not sending events." + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            else
+            {
+                Debug.LogFormat(GlobalVariables.cEvent + "Vis updating but not sending events." + GlobalVariables.endColor + " {0}: {1} -> {2} -> {3}", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            }
+
         }
 
         public void updateVisPropertiesSafe(AbstractVisualisation.PropertyType propertyType = AbstractVisualisation.PropertyType.VisualisationType)

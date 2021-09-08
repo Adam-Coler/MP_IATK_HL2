@@ -28,27 +28,32 @@ namespace Photon_IATK
 
         public void changeXAxis()
         {
-            theVisualizationEvent_Calls.RequestChangeXAxisEvent(xAxisDropdown.options[xAxisDropdown.value].text);
+            if (theVisualizationEvent_Calls.xDimension != xAxisDropdown.options[xAxisDropdown.value].text)
+                theVisualizationEvent_Calls.RequestChangeXAxisEvent(xAxisDropdown.options[xAxisDropdown.value].text);
         }
 
         public void changeYAxis()
         {
-            theVisualizationEvent_Calls.RequestChangeYAxisEvent(yAxisDropdown.options[yAxisDropdown.value].text);
+            if (theVisualizationEvent_Calls.yDimension != yAxisDropdown.options[yAxisDropdown.value].text)
+                theVisualizationEvent_Calls.RequestChangeYAxisEvent(yAxisDropdown.options[yAxisDropdown.value].text);
         }
 
         public void changeZAxis()
         {
-            theVisualizationEvent_Calls.RequestChangeZAxisEvent(zAxisDropdown.options[zAxisDropdown.value].text);
+            if (theVisualizationEvent_Calls.zDimension != zAxisDropdown.options[zAxisDropdown.value].text)
+                theVisualizationEvent_Calls.RequestChangeZAxisEvent(zAxisDropdown.options[zAxisDropdown.value].text);
         }
 
         public void changeColorDimension()
         {
-            theVisualizationEvent_Calls.RequestChangeColorDimensionEvent(colorDimensionDropdown.options[colorDimensionDropdown.value].text);
+            if (theVisualizationEvent_Calls.colourDimension != colorDimensionDropdown.options[colorDimensionDropdown.value].text)
+                theVisualizationEvent_Calls.RequestChangeColorDimensionEvent(colorDimensionDropdown.options[colorDimensionDropdown.value].text);
         }
 
         public void changeSizeDimension()
         {
-            theVisualizationEvent_Calls.RequestChangeSizeDimensionEvent(sizeDimensionDropdown.options[sizeDimensionDropdown.value].text);
+            if (theVisualizationEvent_Calls.sizeDimension != sizeDimensionDropdown.options[sizeDimensionDropdown.value].text)
+                theVisualizationEvent_Calls.RequestChangeSizeDimensionEvent(sizeDimensionDropdown.options[sizeDimensionDropdown.value].text);
         }
 
         private void OnEnable()
@@ -61,10 +66,25 @@ namespace Photon_IATK
             }
 
             VisualizationEvent_Calls.RPCvisualisationUpdatedDelegate += UpdatedView;
+            //VisWrapperClass.visualisationUpdatedDelegate += UpdatedView;
+
             Debug.LogFormat(GlobalVariables.cRegister + "Registering {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "UpdatedView", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             //Now we need to get the RPC interface assuming one VIS object and that the vis object is loaded before the menu
             findAndStoreVisualizationRPC_Calls();
+            updateAllLabels();
+
+        }
+
+        private void updateAllLabels()
+        {
+            VisualizationEvent_Calls.RPCvisualisationUpdatedDelegate -= UpdatedView;
+
+            updateDropDown(AbstractVisualisation.PropertyType.X);
+            updateDropDown(AbstractVisualisation.PropertyType.Y);
+            updateDropDown(AbstractVisualisation.PropertyType.Z);
+            updateDropDown(AbstractVisualisation.PropertyType.Colour);
+            updateDropDown(AbstractVisualisation.PropertyType.Size);
         }
 
         private void UpdatedView(AbstractVisualisation.PropertyType propertyType)
@@ -89,10 +109,9 @@ namespace Photon_IATK
                 case AbstractVisualisation.PropertyType.Y:
                     yAxisDropdown.value = yAxisDropdown.options.FindIndex(option => option.text == theVisualizationEvent_Calls.yDimension);
                     yAxisDropdown.RefreshShownValue();
-                    Debug.LogFormat(GlobalVariables.cCommon + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                    Debug.LogFormat(GlobalVariables.cCommon + "Vis view {0} updated to " + theVisualizationEvent_Calls.yDimension + "." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                     break;
                 case AbstractVisualisation.PropertyType.Z:
-
                     zAxisDropdown.value = zAxisDropdown.options.FindIndex(option => option.text == theVisualizationEvent_Calls.zDimension);
                     zAxisDropdown.RefreshShownValue();
                     Debug.LogFormat(GlobalVariables.cCommon + "Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
@@ -109,6 +128,8 @@ namespace Photon_IATK
                     break;
                 default:
                     Debug.LogFormat(GlobalVariables.cCommon + "DEFUALT: Vis view {0} updated." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                    updateAllLabels();
+                    //I don't like this fix, the event is sending a VisualisationType change which is not catching 
                     break;
             }
         }
@@ -150,7 +171,7 @@ namespace Photon_IATK
                 }
             }
             Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "The registered VisRPC is still valid.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-            }
+        }
 
         private void setUpMenus()
         {
@@ -197,7 +218,8 @@ namespace Photon_IATK
         private void OnDisable()
         {
             Debug.LogFormat(GlobalVariables.cRegister + "Un-registering {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "UpdatedView", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-            VisWrapperClass.visualisationUpdatedDelegate -= UpdatedView;
+            //VisWrapperClass.visualisationUpdatedDelegate -= UpdatedView;
+            VisualizationEvent_Calls.RPCvisualisationUpdatedDelegate -= UpdatedView;
         }
 
         private void clearDropdownOptions()
