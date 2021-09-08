@@ -183,8 +183,20 @@ namespace Photon_IATK
                     break;
             }
 
+            if (RPCvisualisationUpdateRequestDelegate != null && propertyType != AbstractVisualisation.PropertyType.GeometryType)
+            {
+                Debug.Log("RPCvisualisationUpdatedDelegate from VisEventCalls");
+                RPCvisualisationUpdateRequestDelegate(AbstractVisualisation.PropertyType.DimensionChange);
+            }
+
             if (RPCvisualisationUpdatedDelegate != null && propertyType != AbstractVisualisation.PropertyType.GeometryType)
-                RPCvisualisationUpdatedDelegate(propertyType);
+            {
+                Debug.Log("RPCvisualisationUpdatedDelegate from VisEventCalls");
+                RPCvisualisationUpdatedDelegate(AbstractVisualisation.PropertyType.DimensionChange);
+            }
+
+
+
         }
 
 

@@ -87,7 +87,7 @@ namespace Photon_IATK
 
         private void UpdatedViewRequested(AbstractVisualisation.PropertyType propertyType)
         {
-            Debug.LogFormat(GlobalVariables.cTest + "Vis view {0} update requested." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cTest + "Vis view {0} update requested." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}, I am the MasterClient: {5}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod(), PhotonNetwork.IsMasterClient);
 
             //Save annotations handled by other class
 
@@ -97,6 +97,7 @@ namespace Photon_IATK
             if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
                 Debug.LogFormat(GlobalVariables.cCommon + "I am the MasterClient: {0}, Removing annotaitons." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                 RespondToRequestAnnotationRemoval();
+                //RequestAnnotationRemoval();
             }
         }
 
