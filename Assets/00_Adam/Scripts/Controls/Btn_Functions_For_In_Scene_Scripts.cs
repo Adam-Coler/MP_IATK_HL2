@@ -225,6 +225,12 @@ namespace Photon_IATK
             Pun_Player_Event_Calls.Event_showHideControllerModels();
         }
 
+        public void ShowHideExtras()
+        {
+            Pun_Player_Event_Calls.Event_HideExtras();
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}{3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", "Btn pressed", ": ", "Event_HideExtras", "", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
+
         public void SetNickname()
         {
             Pun_Player_Event_Calls.Event_setNickName();
@@ -233,6 +239,25 @@ namespace Photon_IATK
 
         #endregion
 
+        #region spawn items
+
+        public void LoadSetNameBox()
+        {
+            DestroySetNameBox();
+            GameObject instance = Instantiate(Resources.Load("IDEntry", typeof(GameObject))) as GameObject;
+        }
+
+        public void DestroySetNameBox()
+        {
+            GameObject[] IDBoxs = GameObject.FindGameObjectsWithTag("PIDEntry");
+
+            foreach (GameObject IDBox in IDBoxs)
+            {
+                Destroy(IDBox);
+            }
+        }
+
+        #endregion
 
         #endregion
 

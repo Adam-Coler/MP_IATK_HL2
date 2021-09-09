@@ -131,6 +131,16 @@ namespace Photon_IATK
                 RPCvisualisationUpdatedDelegate(propertyType);
         }
 
+
+        private void _RPCvisualisationUpdateRequestDelegate()
+        {
+            if (RPCvisualisationUpdateRequestDelegate != null)
+            {
+                Debug.Log("RPCvisualisationUpdateRequestDelegate from VisEventCalls");
+                RPCvisualisationUpdateRequestDelegate(AbstractVisualisation.PropertyType.DimensionChange);
+            }
+        }
+
         private void OnEvent(EventData photonEventData)
         {
             byte eventCode = photonEventData.Code;
@@ -147,16 +157,19 @@ namespace Photon_IATK
             switch (eventCode)
             {
                 case GlobalVariables.PhotonChangeX_AxisEvent:
+                    _RPCvisualisationUpdateRequestDelegate();
                     _changeXAxis((string)data[1]);
                     Debug.Log("PhotonChangeX_AxisEvent");
                     propertyType = AbstractVisualisation.PropertyType.X;
                     break;
                 case GlobalVariables.PhotonChangeY_AxisEvent:
+                    _RPCvisualisationUpdateRequestDelegate();
                     _changeYAxis((string)data[1]);
                     Debug.Log("PhotonChangeY_AxisEvent");
                     propertyType = AbstractVisualisation.PropertyType.Y;
                     break;
                 case GlobalVariables.PhotonChangeZ_AxisEvent:
+                    _RPCvisualisationUpdateRequestDelegate();
                     _changeZAxis((string)data[1]);
                     propertyType = AbstractVisualisation.PropertyType.Z;
                     Debug.Log("PhotonChangeZ_AxisEvent");
@@ -183,17 +196,11 @@ namespace Photon_IATK
                     break;
             }
 
-            if (RPCvisualisationUpdateRequestDelegate != null && propertyType != AbstractVisualisation.PropertyType.GeometryType)
-            {
-                Debug.Log("RPCvisualisationUpdatedDelegate from VisEventCalls");
-                RPCvisualisationUpdateRequestDelegate(AbstractVisualisation.PropertyType.DimensionChange);
-            }
-
-            if (RPCvisualisationUpdatedDelegate != null && propertyType != AbstractVisualisation.PropertyType.GeometryType)
-            {
-                Debug.Log("RPCvisualisationUpdatedDelegate from VisEventCalls");
-                RPCvisualisationUpdatedDelegate(AbstractVisualisation.PropertyType.DimensionChange);
-            }
+            //if (RPCvisualisationUpdatedDelegate != null && propertyType != AbstractVisualisation.PropertyType.GeometryType)
+            //{
+            //    Debug.Log("RPCvisualisationUpdatedDelegate from VisEventCalls");
+            //    RPCvisualisationUpdatedDelegate(AbstractVisualisation.PropertyType.DimensionChange);
+            //}
 
 
 

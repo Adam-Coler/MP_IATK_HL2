@@ -53,6 +53,7 @@ namespace Photon_IATK
         public static string handleTag = "Handle";
         public static string spawnTag = "SpawnPoint";
         public static string CenterTag = "Center";
+        public static string ExtraTag = "Extra";
 
         public enum allSymbols
         {
@@ -93,6 +94,7 @@ namespace Photon_IATK
         //Player 40 - 49
         public const byte PhotonRequestHideControllerModelsEvent = 40;
         public const byte PhotonRequestNicknameUpdateEvent = 41;
+        public const byte PhotonRequestHideExtrasEvent = 42;
 
         //Annotations 50 - 69
         public const byte PhotonRequestAnnotationsSaveAllEvent = 50;

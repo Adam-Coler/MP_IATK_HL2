@@ -24,6 +24,7 @@ TagManager:
   - SpawnPoint
   - Center
   - VISLEFT
+  - Extra
   layers:
   - Default
   - TransparentFX

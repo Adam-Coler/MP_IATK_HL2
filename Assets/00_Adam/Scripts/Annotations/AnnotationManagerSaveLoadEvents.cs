@@ -441,7 +441,7 @@ namespace Photon_IATK
 
             if (!PhotonNetwork.IsMasterClient) { return; }
 
-            Debug.LogFormat(GlobalVariables.cCommon + "I am the MasterClient: {0}, Saving annotaitons." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cCommon + "I am the MasterClient: {0}, Saving annotaitons. Vis Key: " + _getParentVisAxisKey() + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             bool saveWasSuccessfull = false;
 

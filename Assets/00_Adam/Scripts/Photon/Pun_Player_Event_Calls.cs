@@ -21,5 +21,12 @@ namespace Photon_IATK
             if (HelperFunctions.getLocalPlayer(out photonView, out photon_Player, System.Reflection.MethodBase.GetCurrentMethod())) { photon_Player.RequestHideControllerModelsEvent(); }
         }
 
+        public static void Event_HideExtras()
+        {
+            PhotonView photonView;
+            Photon_Player photon_Player;
+            if (HelperFunctions.getLocalPlayer(out photonView, out photon_Player, System.Reflection.MethodBase.GetCurrentMethod())) { photon_Player.RequestHideExtrasEvent(); }
+        }
+
     }
 }

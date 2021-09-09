@@ -124,7 +124,7 @@ namespace Photon_IATK
             _grabbed();
         }
 
-        private void _grabbed()
+        public void _grabbed()
         {
             foreach (Renderer key in renderersAndMats.Keys)
             {
@@ -132,7 +132,7 @@ namespace Photon_IATK
             }
         }
 
-        public void Released()
+        private void Released()
         {
             Debug.LogFormat(GlobalVariables.cEvent + "Any ~ Calling: {0}, Receivers: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Sending Event Code: {5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "RequestReleaseEvent", "Others", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestReleaseEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 

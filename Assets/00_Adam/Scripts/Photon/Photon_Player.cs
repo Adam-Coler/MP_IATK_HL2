@@ -51,6 +51,8 @@ namespace Photon_IATK
         public void OnEnable()
         {
             Debug.LogFormat(GlobalVariables.cRegister + "Photon_Player registering OnEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
             PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
 
             setup();
@@ -83,6 +85,9 @@ namespace Photon_IATK
             if (eventCode == 0 || eventCode > 199) { return; }
 
             object[] data = (object[])photonEventData.CustomData;
+            int photonViewID = (int)data[0];
+
+            if (photonViewID != photonView.ViewID) { return; }
 
             //route the event
             switch (eventCode)
@@ -94,6 +99,10 @@ namespace Photon_IATK
                 case GlobalVariables.PhotonRequestNicknameUpdateEvent:
                     setNickname();
                     Debug.Log("PhotonRequestNicknameUpdateEvent");
+                    break;
+                case GlobalVariables.PhotonRequestHideExtrasEvent:
+                    showHideExtras();
+                    Debug.Log("PhotonRequestHideExtrasEvent");
                     break;
                 default:
                     break;
@@ -131,6 +140,24 @@ namespace Photon_IATK
             }
         }
 
+        public void RequestHideExtrasEvent()
+        {
+            if (PhotonNetwork.IsConnected)
+            {
+                Debug.LogFormat(GlobalVariables.cEvent + "Calling RequestHideExtrasEvent, to: {0}, code: {1}{2}{3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", "others", GlobalVariables.PhotonRequestHideExtrasEvent, "", "", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others }; //Will not recived own message
+
+                object[] content = new object[] { photonView.ViewID };
+
+                PhotonNetwork.RaiseEvent(GlobalVariables.PhotonRequestHideExtrasEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
+            }
+            else
+            {
+                showHideExtras();
+            }
+        }
+
 
 
 
@@ -147,8 +174,31 @@ namespace Photon_IATK
             Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}{3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", "Hiding Controller Models","","","", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
-#endregion
-#region Custom
+        public void showHideExtras()
+        {
+            GameObject[] extras = GameObject.FindGameObjectsWithTag(GlobalVariables.ExtraTag);
+
+            foreach (GameObject extra in extras)
+            {
+                bool currentState = extra.transform.GetChild(0).gameObject.activeSelf;
+
+                if (currentState)
+                {
+                    extra.transform.GetChild(0).gameObject.SetActive(false);
+
+                    Debug.LogFormat(GlobalVariables.cCommon + "Hiding {0}, current state: {1}, settting to: {2}, parent: {3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", extra.name, "True", "False", extra.transform.parent.name, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                } else
+                {
+                    extra.transform.GetChild(0).gameObject.SetActive(true);
+
+                    Debug.LogFormat(GlobalVariables.cCommon + "Hiding {0}, current state: {1}, settting to: {2}, parent: {3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", extra.name, "False", "True", extra.transform.parent.name, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                }
+                
+            }
+        }
+
+        #endregion
+        #region Custom
 #if DESKTOP
         private void setup()
         {

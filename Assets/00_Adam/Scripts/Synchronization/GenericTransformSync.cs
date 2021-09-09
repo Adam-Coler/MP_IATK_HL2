@@ -134,9 +134,9 @@ namespace Photon_IATK
 
             Transform myTransform = this.gameObject.transform;
 
-            //object[] content = new object[] { photonView.ViewID, myTransform.localPosition, myTransform.localRotation, myTransform.localScale };
+            object[] content = new object[] { photonView.ViewID, myTransform.localPosition, myTransform.localRotation, myTransform.localScale, this.photonView.GetInstanceID() };
 
-            object[] content = new object[] { photonView.ViewID, HelperFunctions.PRA(this.gameObject), HelperFunctions.RRA(this.gameObject), myTransform.localScale, this.photonView.GetInstanceID() };
+            //object[] content = new object[] { photonView.ViewID, HelperFunctions.PRA(this.gameObject), HelperFunctions.RRA(this.gameObject), myTransform.localScale, this.photonView.GetInstanceID() };
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; //Will not recived own message
 
@@ -270,8 +270,8 @@ namespace Photon_IATK
                 if (transform.localRotation != lastLocalRotation)
                     transform.localRotation = Quaternion.Lerp(startingRot, lastLocalRotation, (elapsedTime / time));
 
-                //if (transform.localScale != lastLocalScale)
-                //    transform.localScale = Vector3.Lerp(startingScale, lastLocalScale, (elapsedTime / time));
+                if (transform.localScale != lastLocalScale)
+                    transform.localScale = Vector3.Lerp(startingScale, lastLocalScale, (elapsedTime / time));
 
                 elapsedTime += Time.deltaTime;
 
