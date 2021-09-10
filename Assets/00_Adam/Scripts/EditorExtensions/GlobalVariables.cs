@@ -123,12 +123,16 @@ namespace Photon_IATK
         
         //Pen 
         public const byte RequestAddPointEvent = 90;
+        public const byte RequestLineCompleation = 91;
+        
         
         //Text Annotation
-        public const byte RequestTextUpdate = 91;
+        public const byte RequestTextUpdate = 92;
 
         //Centrality
-        public const byte RequestCentralityUpdate = 92;
+        public const byte RequestCentralityUpdate = 93;
+
+
 
         //Other 100-109
         public const byte PhotonRequestLatencyCheckEvent = 100;

@@ -7,14 +7,14 @@
   "targets": {
     ".NETStandard,Version=v2.0": {},
     ".NETStandard,Version=v2.0/": {
-      "IATK_VIVE.Dependencies.msb4u/1.0.0": {
+      "IATK_HL2.Dependencies.msb4u/1.0.0": {
         "dependencies": {
           "DotNetAdapter": "1.0.0",
           "MSBuildForUnity": "0.9.1-123842",
           "NETStandard.Library": "2.0.3"
         },
         "runtime": {
-          "IATK_VIVE.Dependencies.msb4u.dll": {}
+          "IATK_HL2.Dependencies.msb4u.dll": {}
         }
       },
       "Microsoft.NETCore.Platforms/1.1.0": {},
@@ -64,7 +64,7 @@
     }
   },
   "libraries": {
-    "IATK_VIVE.Dependencies.msb4u/1.0.0": {
+    "IATK_HL2.Dependencies.msb4u/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

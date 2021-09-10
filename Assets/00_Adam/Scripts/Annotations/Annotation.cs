@@ -321,6 +321,9 @@ namespace Photon_IATK
                 case GlobalVariables.RequestCentralityUpdate:
                     RespondToCentralityUpdate(data);
                     break;
+                case GlobalVariables.RequestLineCompleation:
+                    _lineComplete(data);
+                    break;
                 default:
                     break;
             }
@@ -491,36 +494,48 @@ namespace Photon_IATK
 
                 isListeningForPenEvents = false;
 
-                var tmpComponenet = (PhotonLineDrawing)myObjectComponenet;
-                tmpComponenet.Simplify();
-                tmpComponenet.bakeMesh();
+                //var tmpComponenet = (PhotonLineDrawing)myObjectComponenet;
+                //tmpComponenet.Simplify();
+                //tmpComponenet.bakeMesh();
 
-                ManipulationControls manipulationControls;
-                if (HelperFunctions.GetComponent<ManipulationControls>(out manipulationControls, System.Reflection.MethodBase.GetCurrentMethod()))
-                {
-                    manipulationControls.enabled = true;
-                }
+                //ManipulationControls manipulationControls;
+                //if (HelperFunctions.GetComponent<ManipulationControls>(out manipulationControls, System.Reflection.MethodBase.GetCurrentMethod()))
+                //{
+                //    manipulationControls.enabled = true;
+                //}
 
-                lineRenderPoints = tmpComponenet.GetPoints();
+                //lineRenderPoints = tmpComponenet.GetPoints();
+
+                _sendLineCompleteEvent();
             }
         }
 
-        Vector3 ogPoint;
-
-
-        private void OnDrawGizmos()
+        private void _sendLineCompleteEvent()
         {
-            
-            float rad = .025f;
+            Debug.LogFormat(GlobalVariables.cEvent + "{0} Any ~ Sending Line complete event, MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestLineCompleation, "all", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(ogPoint, rad);
+            object[] content = new object[] { photonView.ViewID };
 
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(firstPoint, rad);
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(lastPoint, rad);
+            PhotonNetwork.RaiseEvent(GlobalVariables.RequestLineCompleation, content, raiseEventOptions, GlobalVariables.sendOptions);
+
+            PhotonNetwork.SendAllOutgoingCommands();
+        }
+
+        private void _lineComplete(object[] data)
+        {
+            var tmpComponenet = (PhotonLineDrawing)myObjectComponenet;
+            tmpComponenet.Simplify();
+            tmpComponenet.bakeMesh();
+
+            ManipulationControls manipulationControls;
+            if (HelperFunctions.GetComponent<ManipulationControls>(out manipulationControls, System.Reflection.MethodBase.GetCurrentMethod()))
+            {
+                manipulationControls.enabled = true;
+            }
+
+            lineRenderPoints = tmpComponenet.GetPoints();
         }
 
         public bool isFirstPoint = true;
@@ -530,7 +545,6 @@ namespace Photon_IATK
         /// </summary>
         private void _sendAddPointEvent(Vector3 point)
         {
-            ogPoint = point;
 
             if (firstPoint == Vector3.one || firstPoint == Vector3.zero)
             {
