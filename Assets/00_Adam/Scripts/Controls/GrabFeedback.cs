@@ -111,6 +111,24 @@ namespace Photon_IATK
                     }
                 }
             }
+
+            if (renderersAndMats == null)
+            {
+                Transform[] ts = this.transform.GetComponentsInChildren<Transform>(true);
+                foreach (Transform t in ts)
+                {
+                    if (t.GetComponent<GrabFeedbackTarget>() == null) continue;
+                    LineRenderer renderer = t.GetComponent<LineRenderer>();
+                    if (renderer != null)
+                    {
+                        Material material = renderer.material;
+                        if (material != null)
+                        {
+                            renderersAndMats.Add(renderer, renderer.material);
+                        }
+                    }
+                }
+            }
         }
 
         public void Grabbed()

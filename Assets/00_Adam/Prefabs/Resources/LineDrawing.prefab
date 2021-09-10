@@ -1888,6 +1888,7 @@ GameObject:
   - component: {fileID: 1058062613174048810}
   - component: {fileID: -2077265917887354581}
   - component: {fileID: -6244496131311407914}
+  - component: {fileID: 3871927143419963349}
   m_Layer: 0
   m_Name: LineDrawing
   m_TagString: Untagged
@@ -1925,7 +1926,7 @@ MonoBehaviour:
   lineRenderer: {fileID: 1058062613174048810}
   meshCollider: {fileID: -6244496131311407914}
   _useAnalog: 1
-  _lineMaterial: {fileID: 0}
+  _lineMaterial: {fileID: 2100000, guid: 1ecb9f3a7c2e6e24c93e156351265310, type: 2}
   _maxLineWidth: 0.005
 --- !u!120 &1058062613174048810
 LineRenderer:
@@ -1944,7 +1945,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 1ecb9f3a7c2e6e24c93e156351265310, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2044,6 +2045,18 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 14
   m_Mesh: {fileID: 0}
+--- !u!114 &3871927143419963349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3934190893047059235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc0c9cec84f442c4fae323ca015611e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3985181946276722627
 GameObject:
   m_ObjectHideFlags: 0
