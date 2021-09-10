@@ -408,7 +408,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isWaitingForPhotonRequestTransformEvent: 1
   isCoroutineRunning: 0
-  time: 0.2
+  time: 0.1
   meaningfulDist: 0.015
   movingToPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &3839861298050379501
@@ -500,6 +500,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grabbedMaterial: {fileID: 0}
+  grabbedHandleMaterial: {fileID: 0}
 --- !u!114 &2503380007071009939
 MonoBehaviour:
   m_ObjectHideFlags: 0

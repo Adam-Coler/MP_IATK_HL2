@@ -17,6 +17,7 @@ namespace Photon_IATK
     {
 
         public Material grabbedMaterial;
+        public Material grabbedHandleMaterial;
         private Dictionary<Renderer, Material> renderersAndMats;
         private bool isSecondAttempt = false;
 
@@ -40,6 +41,11 @@ namespace Photon_IATK
             if (grabbedMaterial == null)
             {
                 grabbedMaterial = Resources.Load("GrabFeedback", typeof(Material)) as Material;
+            }
+
+            if (grabbedHandleMaterial == null)
+            {
+                grabbedHandleMaterial = Resources.Load("GrabHandleFeedback", typeof(Material)) as Material;
             }
 
             setupRenderers();
@@ -69,6 +75,12 @@ namespace Photon_IATK
                     break;
                 case GlobalVariables.RequestReleaseEvent:
                     _ReleasedEvent();
+                    break;
+                case GlobalVariables.RequestGrabHandleEvent:
+                    _grabedHandleEvent();
+                    break;
+                case GlobalVariables.RequestReleaseHandleEvent:
+                    _ReleasedHandleEvent();
                     break;
                 default:
                     break;
@@ -132,9 +144,40 @@ namespace Photon_IATK
             }
         }
 
-        private void Released()
+        public void GrabbedHandle()
         {
-            Debug.LogFormat(GlobalVariables.cEvent + "Any ~ Calling: {0}, Receivers: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Sending Event Code: {5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "RequestReleaseEvent", "Others", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestReleaseEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            Debug.LogFormat(GlobalVariables.cEvent + "Any ~ Calling: {0}, Receivers: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Sending Event Code: {5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "RequestGrabEvent", "all", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestGrabHandleEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            object[] content = new object[] { photonView.ViewID };
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+
+            PhotonNetwork.RaiseEvent(GlobalVariables.RequestGrabHandleEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
+
+            PhotonNetwork.SendAllOutgoingCommands();
+
+            //_grabbed();
+        }
+
+        private void _grabedHandleEvent()
+        {
+            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}{1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}{5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.RequestGrabEvent, "", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, "", "all", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            _grabbedHandle();
+        }
+
+        public void _grabbedHandle()
+        {
+            foreach (Renderer key in renderersAndMats.Keys)
+            {
+                key.material = grabbedHandleMaterial;
+            }
+        }
+
+        public void Released()
+        {
+            Debug.LogFormat(GlobalVariables.cEvent + "Any ~ Calling: {0}, Receivers: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Sending Event Code: {5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "RequestReleaseEvent", "Others", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestReleaseHandleEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             object[] content = new object[] { photonView.ViewID };
 
@@ -155,6 +198,36 @@ namespace Photon_IATK
         }
 
         private void _released()
+        {
+            foreach (Renderer key in renderersAndMats.Keys)
+            {
+                key.material = renderersAndMats[key];
+            }
+        }
+
+        public void ReleasedHandle()
+        {
+            Debug.LogFormat(GlobalVariables.cEvent + "Any ~ Calling: {0}, Receivers: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Sending Event Code: {5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "RequestReleaseEvent", "Others", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestReleaseEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            object[] content = new object[] { photonView.ViewID };
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+
+            PhotonNetwork.RaiseEvent(GlobalVariables.RequestReleaseHandleEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
+
+            PhotonNetwork.SendAllOutgoingCommands();
+
+            //_released();
+        }
+
+        private void _ReleasedHandleEvent()
+        {
+            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}{1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}{5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.RequestReleaseEvent, "", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, "", "Others", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            _releasedHandle();
+        }
+
+        private void _releasedHandle()
         {
             foreach (Renderer key in renderersAndMats.Keys)
             {

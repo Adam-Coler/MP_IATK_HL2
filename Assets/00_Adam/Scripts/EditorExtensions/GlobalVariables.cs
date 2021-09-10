@@ -137,6 +137,8 @@ namespace Photon_IATK
 
         public const byte RequestGrabEvent = 103;
         public const byte RequestReleaseEvent = 104;
+        public const byte RequestGrabHandleEvent = 105;
+        public const byte RequestReleaseHandleEvent = 106;
 
         public const byte RequestUnParentEvent = 105;
         public const byte RequestParentEvent = 106;

@@ -276,11 +276,11 @@ namespace Photon_IATK
                 manipulationControls.enabled = true;
             }
 
-            MoveToTopCorner moveToTopCorner = this.GetComponentInChildren<MoveToTopCorner>();
-            if (moveToTopCorner != null)
-            {
-                moveToTopCorner.MoveToTop();
-            }
+            //MoveToTopCorner moveToTopCorner = this.GetComponentInChildren<MoveToTopCorner>();
+            //if (moveToTopCorner != null)
+            //{
+            //    moveToTopCorner.MoveToTop();
+            //}
 
         }
         #endregion Setup
@@ -579,9 +579,10 @@ namespace Photon_IATK
 
             Destroy(myObjectRepresentation.GetComponent<Collider>());
 
-            
-
-            this.transform.localScale = new Vector3(.1f, .1f, .1f);
+            if (!wasLoaded)
+            {
+                this.transform.localScale = new Vector3(.1f, .1f, .1f);
+            }
 
             ManipulationControls manipulationControls;
             if (HelperFunctions.GetComponent<ManipulationControls>(out manipulationControls, System.Reflection.MethodBase.GetCurrentMethod()))

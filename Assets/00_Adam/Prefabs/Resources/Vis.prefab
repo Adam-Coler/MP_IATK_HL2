@@ -347,8 +347,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isWaitingForPhotonRequestTransformEvent: 1
   isCoroutineRunning: 0
-  time: 0.2
-  meaningfulDist: 0.3
+  time: 0.1
+  meaningfulDist: 0.015
   movingToPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &4972528823325447019
 MonoBehaviour:
@@ -373,7 +373,7 @@ MonoBehaviour:
   flattenAxisDisplayScale: 0
   boxPadding: {x: 0, y: 0, z: 0}
   boxMaterial: {fileID: 2100000, guid: 476c6d1c4fe377f4282c1355827da7b2, type: 2}
-  boxGrabbedMaterial: {fileID: 2100000, guid: 9bd231f1aa2bf0b479b641984a2ac5e1, type: 2}
+  boxGrabbedMaterial: {fileID: 0}
   showWireframe: 1
   wireframeShape: 0
   wireframeMaterial: {fileID: 0}
@@ -412,8 +412,8 @@ MonoBehaviour:
   RotateStarted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: Unparent
+      - m_Target: {fileID: 698160650147068}
+        m_MethodName: GrabbedHandle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -437,8 +437,8 @@ MonoBehaviour:
   RotateStopped:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: Parent
+      - m_Target: {fileID: 698160650147068}
+        m_MethodName: ReleasedHandle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -462,8 +462,8 @@ MonoBehaviour:
   ScaleStarted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: Unparent
+      - m_Target: {fileID: 698160650147068}
+        m_MethodName: GrabbedHandle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -487,8 +487,8 @@ MonoBehaviour:
   ScaleStopped:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: Parent
+      - m_Target: {fileID: 698160650147068}
+        m_MethodName: ReleasedHandle
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -542,6 +542,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grabbedMaterial: {fileID: 0}
+  grabbedHandleMaterial: {fileID: 0}
 --- !u!114 &-1091279527618535526
 MonoBehaviour:
   m_ObjectHideFlags: 0
