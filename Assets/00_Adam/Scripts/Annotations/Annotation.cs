@@ -271,7 +271,7 @@ namespace Photon_IATK
             _setupCentrality();
 
             ManipulationControls manipulationControls;
-            if (HelperFunctions.GetComponent<ManipulationControls>(out manipulationControls, System.Reflection.MethodBase.GetCurrentMethod()))
+            if (HelperFunctions.GetComponent<ManipulationControls>(out manipulationControls, System.Reflection.MethodBase.GetCurrentMethod()) && myAnnotationType != typesOfAnnotations.LINERENDER)
             {
                 manipulationControls.enabled = true;
             }
@@ -448,6 +448,12 @@ namespace Photon_IATK
                 isListeningForPenEvents = false;
                 tmpComponenet.bakeMesh();
 
+                ManipulationControls manipulationControls;
+                if (HelperFunctions.GetComponent<ManipulationControls>(out manipulationControls, System.Reflection.MethodBase.GetCurrentMethod()))
+                {
+                    manipulationControls.enabled = true;
+                }
+
                 return;
             } 
             else 
@@ -487,9 +493,34 @@ namespace Photon_IATK
 
                 var tmpComponenet = (PhotonLineDrawing)myObjectComponenet;
                 tmpComponenet.Simplify();
+                tmpComponenet.bakeMesh();
+
+                ManipulationControls manipulationControls;
+                if (HelperFunctions.GetComponent<ManipulationControls>(out manipulationControls, System.Reflection.MethodBase.GetCurrentMethod()))
+                {
+                    manipulationControls.enabled = true;
+                }
 
                 lineRenderPoints = tmpComponenet.GetPoints();
             }
+        }
+
+        Vector3 ogPoint;
+
+
+        private void OnDrawGizmos()
+        {
+            
+            float rad = .025f;
+
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(ogPoint, rad);
+
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(firstPoint, rad);
+
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(lastPoint, rad);
         }
 
         public bool isFirstPoint = true;
@@ -499,11 +530,14 @@ namespace Photon_IATK
         /// </summary>
         private void _sendAddPointEvent(Vector3 point)
         {
+            ogPoint = point;
+
             if (firstPoint == Vector3.one || firstPoint == Vector3.zero)
             {
                 Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "FirstPoint: ", point, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
                 firstPoint = point;
-                this.transform.localPosition = point;
+                this.transform.position = point;
             }
 
             point = this.transform.InverseTransformPoint(point);
@@ -512,7 +546,7 @@ namespace Photon_IATK
 
             bool isDistanceMeaningful = distPosition > .01f;
 
-            if (!isDistanceMeaningful){return;}
+            if (!isDistanceMeaningful) { return; }
 
             lastPoint = point;
 
@@ -520,7 +554,7 @@ namespace Photon_IATK
 
             Debug.LogFormat(GlobalVariables.cEvent + "{0} Any ~ Sending point, MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RespondEventWithContent, "all", " Point: ", pointString, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            object[] content = new object[] { photonView.ViewID, pointString};
+            object[] content = new object[] { photonView.ViewID, pointString };
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 

@@ -244,6 +244,14 @@ namespace Photon_IATK
 
         private void centerAnnotationOnSpawnPoint(Annotation annotation)
         {
+            if (annotation.myAnnotationType == Annotation.typesOfAnnotations.LINERENDER) {
+                Debug.LogFormat(GlobalVariables.cTest + "Not centering annotation, is linerender.{0} {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                return; 
+            } else
+            {
+                Debug.LogFormat(GlobalVariables.cTest + "Centering annotation Type is {0} {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", annotation.myAnnotationType.ToString(), "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            }
+
             GameObject spawnPoint;
             HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.spawnTag, out spawnPoint, false, System.Reflection.MethodBase.GetCurrentMethod());
 
