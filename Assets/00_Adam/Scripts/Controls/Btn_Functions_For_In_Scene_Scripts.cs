@@ -243,8 +243,24 @@ namespace Photon_IATK
 
         public void LoadSetNameBox()
         {
-            DestroySetNameBox();
-            GameObject instance = Instantiate(Resources.Load("IDEntry", typeof(GameObject))) as GameObject;
+            GameObject[] IDBoxs = GameObject.FindGameObjectsWithTag("PIDEntry");
+
+            if (IDBoxs.Length > 0)
+            {
+                foreach (GameObject IDBox in IDBoxs)
+                {
+                    Photon_Set_Nickname setNickName = IDBox.GetComponentInChildren<Photon_Set_Nickname>();
+                    if (setNickName != null)
+                    {
+                        setNickName.SetPlayerName();
+                    }
+
+                    Destroy(IDBox);
+                }
+            } else
+            {
+                GameObject instance = Instantiate(Resources.Load("IDEntry", typeof(GameObject))) as GameObject;
+            }
         }
 
         public void DestroySetNameBox()
