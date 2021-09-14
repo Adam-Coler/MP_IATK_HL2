@@ -195,17 +195,6 @@ namespace Photon_IATK
         }
 
 #endif
-        private void OnDrawGizmos()
-        {
-            float r = .1f;
-
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(getMiddle(), r);
-
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(getMiddle(), r);
-
-        }
     }
 }
 

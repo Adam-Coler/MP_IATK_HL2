@@ -4,18 +4,13 @@ using UnityEngine.Events;
 using UnityEngine.XR;
 
 
-namespace trash
+namespace Photon_IATK
 {
-    public class TriggerButtonEvent : UnityEvent<bool> { }
-    public class TriggerButtonFoceEvent : UnityEvent<float> { }
-
-    public class TriggerPressedLocation : UnityEvent<Vector3> { }
-
     public class TriggerButtonWatcher : MonoBehaviour
     {
-        public TriggerButtonEvent TriggerButtonPress;
-        public TriggerButtonFoceEvent TriggerButtonPressForce;
-        public TriggerPressedLocation triggerPressedLocation;
+        //public TriggerButtonEvent TriggerButtonPress;
+        //public TriggerButtonFoceEvent TriggerButtonPressForce;
+        //public TriggerPressedLocation triggerPressedLocation;
 
         private float lastButtonPressure = 0f;
         private bool lastButtonState = false;
@@ -26,20 +21,20 @@ namespace trash
         {
             //Debug.LogFormat(GlobalVariables.blue + "Primary button event broadcaster added" + GlobalVariables.endColor + " : Awake()" + this.GetType());
 
-            if (TriggerButtonPress == null)
-            {
-                TriggerButtonPress = new TriggerButtonEvent();
-            }
+            //if (TriggerButtonPress == null)
+            //{
+            //    TriggerButtonPress = new TriggerButtonEvent();
+            //}
 
-            if (TriggerButtonPressForce == null)
-            {
-                TriggerButtonPressForce = new TriggerButtonFoceEvent();
-            }
+            //if (TriggerButtonPressForce == null)
+            //{
+            //    TriggerButtonPressForce = new TriggerButtonFoceEvent();
+            //}
 
-            if (triggerPressedLocation == null)
-            {
-                triggerPressedLocation = new TriggerPressedLocation();
-            }
+            //if (triggerPressedLocation == null)
+            //{
+            //    triggerPressedLocation = new TriggerPressedLocation();
+            //}
 
             devicesWithTriggerButton = new List<InputDevice>();
         }
@@ -91,8 +86,10 @@ namespace trash
 
                 if (tempState != lastButtonState) // Button state changed since last frame
                 {
-                    TriggerButtonPress.Invoke(tempState);
+                    //TriggerButtonPress.Invoke(tempState);
                     lastButtonState = tempState;
+
+                    Debug.Log("button pressed");
                 }
 
                 //if (tempState)
@@ -120,8 +117,11 @@ namespace trash
                 //}
 
             }
-
-
         }
+
+        //public class TriggerButtonEvent : UnityEvent<bool> { }
+        //public class TriggerButtonFoceEvent : UnityEvent<float> { }
+        //public class TriggerPressedLocation : UnityEvent<Vector3> { }
+
     }
 }
