@@ -69,7 +69,6 @@ namespace Photon_IATK
             _unload_01_SetupMenu();
         }
 
-
         public void load_02_EnterPID()
         {
             Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Loading new level", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
@@ -93,7 +92,19 @@ namespace Photon_IATK
             _unload_03_Vuforia_Setup();
         }
 
+        public void load_04_TriVuforia()
+        {
+            Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Loading new level", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
+            _load_04_TriVuforia();
+        }
+
+        public void unload_04_TriVuforia()
+        {
+            Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Unloading level", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            _unload_04_TriVuforia();
+        }
 
         #endregion
 
@@ -165,6 +176,22 @@ namespace Photon_IATK
             if (isMine)
             {
                 await sceneSystem.UnloadContent("03_Vuforia_Setup");
+            }
+        }
+
+        private async System.Threading.Tasks.Task _load_04_TriVuforia()
+        {
+            if (isMine)
+            {
+                await sceneSystem.LoadContent("04_TriVuforia_Setup", LoadSceneMode.Additive);
+            }
+        }
+
+        private async System.Threading.Tasks.Task _unload_04_TriVuforia()
+        {
+            if (isMine)
+            {
+                await sceneSystem.UnloadContent("04_TriVuforia_Setup");
             }
         }
 

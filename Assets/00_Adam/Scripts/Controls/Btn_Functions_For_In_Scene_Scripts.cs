@@ -128,6 +128,15 @@ namespace Photon_IATK
         {
             GetOrAddComponent<MRTK_Scene_Manager>().load_03_Vuforia_Setup();
         }
+
+        public void sceneManager_load_04_TriVuforia()
+        {
+            GetOrAddComponent<MRTK_Scene_Manager>().load_04_TriVuforia();
+        }
+        public void sceneManager_unload_04_TriVuforia()
+        {
+            GetOrAddComponent<MRTK_Scene_Manager>().unload_04_TriVuforia();
+        }
         #endregion
 
         #region Photon
