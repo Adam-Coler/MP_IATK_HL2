@@ -477,7 +477,14 @@ namespace Photon_IATK
 
             Plane p = new Plane(point2, point3, point4);
 
-            return Quaternion.LookRotation((FacedPoint - getMiddle(new Vector3[] {point2, point3, point4})).normalized, Vector3.up);
+            Vector3 middle = getMiddle(new Vector3[] { point2, point3, point4 });
+
+            Vector3 lookPos = FacedPoint - middle;
+            Quaternion lookRot = Quaternion.LookRotation(lookPos, Vector3.up);
+            float eulerY = lookRot.eulerAngles.y;
+            Quaternion rotation = Quaternion.Euler(0, eulerY, 0);
+
+            return rotation;
         }
 
     }

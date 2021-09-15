@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Windows.Speech;
-using UnityEngine.XR.WSA.Input;
+
+#if !VIVE
+            using UnityEngine.XR.WSA.Input;
+#endif
+
 
 namespace Photon_IATK
 {

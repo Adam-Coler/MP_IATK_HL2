@@ -21,28 +21,44 @@ namespace Photon_IATK
 
         private void Awake()
         {
+#if HL2
+            Destroy(this.gameObject);
+#endif
             devicesWithTriggerButton = new List<InputDevice>();
         }
 
         void OnEnable()
         {
-            List<InputDevice> allDevices = new List<InputDevice>();
-            InputDevices.GetDevices(allDevices);
-            foreach (InputDevice device in allDevices)
-            {
-                if (device.name.Contains("VIVE"))
-                {
-                    InputDevices_deviceConnected(device);
-                } else
-                {
-                    allDevices.Remove(device);
-                }
-            }
-                
+            getDevices();
             InputDevices.deviceConnected += InputDevices_deviceConnected;
             InputDevices.deviceDisconnected += InputDevices_deviceDisconnected;
         }
 
+        public void getDevices()
+        {
+
+
+            List<InputDevice> allDevices = new List<InputDevice>();
+            InputDevices.GetDevices(allDevices);
+
+            Debug.LogFormat(GlobalVariables.cCommon + "Getting devices, {0} found" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", allDevices.Count, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod()) ;
+
+            foreach (InputDevice device in allDevices)
+            {
+                if (!device.name.Contains("Logi"))
+                {
+                    filterDevices(device);
+
+                    Debug.LogFormat(GlobalVariables.cCommon + "Controller connected: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", device.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                }
+                else
+                {
+                    allDevices.Remove(device);
+
+                    Debug.LogFormat(GlobalVariables.cError + "Controller does not meet reqs: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", device.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                }
+            }
+        }
         
 
         private void OnDisable()
@@ -54,12 +70,25 @@ namespace Photon_IATK
 
         private void InputDevices_deviceConnected(InputDevice device)
         {
+            getDevices();
+        }
+
+        private void filterDevices(InputDevice device)
+        {
             bool discardedValue;
             if (device.TryGetFeatureValue(CommonUsages.triggerButton, out discardedValue))
             {
+                Debug.LogFormat(GlobalVariables.cCommon + "Adding device {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", device.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
                 devicesWithTriggerButton.Add(device); // Add any devices that have a primary button.
             }
+            else
+            {
+                Debug.LogFormat(GlobalVariables.cError + "Device connected but not added.  Device name: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", device.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            }
         }
+
+
 
         private void InputDevices_deviceDisconnected(InputDevice device)
         {
@@ -69,7 +98,6 @@ namespace Photon_IATK
 
         void Update()
         {
-
             bool tempState = false;
             foreach (var device in devicesWithTriggerButton)
             {
