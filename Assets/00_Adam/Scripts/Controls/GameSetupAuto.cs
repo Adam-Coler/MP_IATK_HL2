@@ -37,14 +37,14 @@ namespace Photon_IATK
 #if DESKTOP
         private void setup()
         {
-            Screen.SetResolution(1920, 1080, false);
+            //Screen.SetResolution(1920, 1080, false);
 
-            if (btn_functions != null)
-                btn_functions.showDebugLog();
+            //if (btn_functions != null)
+            //    btn_functions.showDebugLog();
 
-            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Seting up Desktop Environement", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            //Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Seting up Desktop Environement", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            disableVR();
+            //disableVR();
         }
 
 #elif HL2
@@ -60,20 +60,20 @@ namespace Photon_IATK
         private void setup()
         {
      
-         Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Seting up VIVE Environement", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        // Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Seting up VIVE Environement", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-        enableVR();
+        //enableVR();
 
-            Invoke("loadVis", 4f);
+        //    Invoke("loadVis", 4f);
 
-        }
-        private void loadVis()
-        {
-            GameObject vis;
-            if(!HelperFunctions.FindGameObjectOrMakeOneWithTag("Vis", out vis, false, System.Reflection.MethodBase.GetCurrentMethod()))
-            {
-                btn_functions.LoadRemoveVis();
-            }
+        //}
+        //private void loadVis()
+        //{
+        //    GameObject vis;
+        //    if(!HelperFunctions.FindGameObjectOrMakeOneWithTag("Vis", out vis, false, System.Reflection.MethodBase.GetCurrentMethod()))
+        //    {
+        //        btn_functions.LoadRemoveVis();
+        //    }
 
         }
 

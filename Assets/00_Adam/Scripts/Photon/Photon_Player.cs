@@ -169,8 +169,9 @@ namespace Photon_IATK
 
         public void showHideControllerModels()
         {
+#if HL2
             HelperFunctions.hideShowChildrenOfTag(GlobalVariables.gameControllerModelTag);
-
+#endif
             Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}{3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", "Hiding Controller Models","","","", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
