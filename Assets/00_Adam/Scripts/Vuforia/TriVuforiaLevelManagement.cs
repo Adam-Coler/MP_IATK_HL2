@@ -89,50 +89,6 @@ namespace Photon_IATK
         }
 
 
-        private Vector3 getMiddle() {
-            return (Tracker2.transform.position + Tracker3.transform.position + Tracker4.transform.position) / 3;
-        }
-
-        private Quaternion getRotation()
-        {
-            Vector3 point2 = Tracker2.transform.position;
-            Vector3 point3 = Tracker3.transform.position;
-            Vector3 point4 = Tracker4.transform.position;
-            Vector3 FacedPoint;
-
-            float dist23 = Vector3.Distance(point2, point3);
-            float dist24 = Vector3.Distance(point2, point4);
-            float dist34 = Vector3.Distance(point3, point4);
-
-            if (dist23 > dist24 && dist23 > dist34)
-            {
-                FacedPoint = point4;
-
-            }
-            else if (dist24 > dist23 && dist24 > dist34)
-            {
-                FacedPoint = point3;
-            }
-            else
-            {
-                FacedPoint = point2;
-            }
-
-            Vector3 a = point2;
-            Vector3 b = point3;
-            Vector3 c = point4;
-
-            Vector3 side1 = b - a;
-            Vector3 side2 = c - a;
-
-            Plane p = new Plane(point2, point3, point4);
-            Vector3 norm = -p.normal;
-
-            if (isInvert) { norm = -1f * norm; }
-
-            return Quaternion.LookRotation((FacedPoint - getMiddle()).normalized, norm);
-        }
-
         public void isInverted()
         {
             isInvert = !isInvert;
@@ -146,13 +102,13 @@ namespace Photon_IATK
             if (PlayspaceAnchor.Instance != null)
             {
 
-                this.transform.position = getMiddle();
-                this.transform.rotation = getRotation();
+                this.transform.position = HelperFunctions.getMiddle(new GameObject[] { Tracker2, Tracker3, Tracker4});
+                this.transform.rotation = HelperFunctions.getRotation(Tracker2, Tracker3, Tracker4);
 
                 //Move playspace to the tracker
                 Transform playspaceAnchorTransform = PlayspaceAnchor.Instance.transform;
-                playspaceAnchorTransform.position = getMiddle();
-                playspaceAnchorTransform.rotation = getRotation();
+                playspaceAnchorTransform.position = this.transform.position;
+                playspaceAnchorTransform.rotation = this.transform.rotation;
 
                 //get location
                 Vector3 oldPosition = playspaceAnchorTransform.position;

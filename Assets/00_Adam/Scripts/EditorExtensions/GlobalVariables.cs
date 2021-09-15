@@ -54,6 +54,8 @@ namespace Photon_IATK
         public static string spawnTag = "SpawnPoint";
         public static string CenterTag = "Center";
         public static string ExtraTag = "Extra";
+        public static string AnchorMenuTag = "AnchorMenu";
+
 
         public enum allSymbols
         {
@@ -144,11 +146,13 @@ namespace Photon_IATK
         public const byte RequestGrabHandleEvent = 105;
         public const byte RequestReleaseHandleEvent = 106;
 
-        public const byte RequestUnParentEvent = 105;
-        public const byte RequestParentEvent = 106;
+        public const byte RequestUnParentEvent = 107;
+        public const byte RequestParentEvent = 108;
 
+        public const byte RequestPlayspaceTransform = 109;
+        public const byte SendPlayspaceTransform = 110;
+        public const byte RequestUpdatePlayspaceTransform = 111;
 
-        //public const byte PhotonEvent = 6;
 
 
 

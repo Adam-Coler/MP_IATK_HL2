@@ -25,6 +25,7 @@ TagManager:
   - Center
   - VISLEFT
   - Extra
+  - AnchorMenu
   layers:
   - Default
   - TransparentFX

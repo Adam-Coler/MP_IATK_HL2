@@ -207,6 +207,24 @@ namespace Photon_IATK
                 Debug.LogFormat(GlobalVariables.cCommon + "Loading Photon Log{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
+
+        public void showAnchorMenu()
+        {
+            GameObject anchorMenu;
+            if (HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.AnchorMenuTag, out anchorMenu, false, System.Reflection.MethodBase.GetCurrentMethod()))
+            {
+                Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying anchorMenu{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                Destroy(anchorMenu);
+            }
+            else
+            {
+                anchorMenu = Resources.Load<GameObject>("MovePlayspaceMenu");
+                anchorMenu = Instantiate(anchorMenu);
+
+                Debug.LogFormat(GlobalVariables.cCommon + "Loading anchorMenu Log{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            }
+        }
         #endregion
 
         #region VisIATK

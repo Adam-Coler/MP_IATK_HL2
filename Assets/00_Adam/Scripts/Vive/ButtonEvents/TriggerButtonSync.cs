@@ -63,6 +63,9 @@ namespace Photon_IATK
 
         private void OnDisable()
         {
+#if HL2
+            return;
+#endif
             InputDevices.deviceConnected -= InputDevices_deviceConnected;
             InputDevices.deviceDisconnected -= InputDevices_deviceDisconnected;
             devicesWithTriggerButton.Clear();
