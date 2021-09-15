@@ -2220,7 +2220,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2435047485796776022}
+      - m_Target: {fileID: 1354368344672992750}
         m_MethodName: updateValues
         m_Mode: 1
         m_Arguments:
@@ -2693,7 +2693,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2435047485796776022}
+      - m_Target: {fileID: 1354368344672992750}
         m_MethodName: dropDownChanged
         m_Mode: 1
         m_Arguments:
@@ -2857,7 +2857,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2435047485796776022}
+      - m_Target: {fileID: 1354368344672992750}
         m_MethodName: updateValues
         m_Mode: 1
         m_Arguments:
@@ -3210,7 +3210,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2435047485796776022}
+      - m_Target: {fileID: 1354368344672992750}
         m_MethodName: updateValues
         m_Mode: 1
         m_Arguments:
@@ -3890,7 +3890,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2435047485796776022}
+      - m_Target: {fileID: 1354368344672992750}
         m_MethodName: updateValues
         m_Mode: 1
         m_Arguments:
@@ -4145,7 +4145,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2435047485796776022}
+      - m_Target: {fileID: 1354368344672992750}
         m_MethodName: updateValues
         m_Mode: 1
         m_Arguments:
@@ -6475,14 +6475,14 @@ GameObject:
   - component: {fileID: 1601389788918049649}
   - component: {fileID: 1601389788918049653}
   - component: {fileID: 1601389788918049652}
-  - component: {fileID: 1601389788918049655}
-  - component: {fileID: 1601389788918049654}
   - component: {fileID: 2124818716}
   - component: {fileID: 2124818717}
   - component: {fileID: 2124818718}
+  - component: {fileID: 1354368344672992750}
+  - component: {fileID: 4196062460421991361}
   m_Layer: 0
   m_Name: MovePlayspaceMenu
-  m_TagString: Extra
+  m_TagString: AnchorMenu
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -6548,7 +6548,7 @@ MonoBehaviour:
   onManipulationStarted:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1601389788918049654}
+      - m_Target: {fileID: 4196062460421991361}
         m_MethodName: Grabbed
         m_Mode: 1
         m_Arguments:
@@ -6574,7 +6574,7 @@ MonoBehaviour:
   onManipulationEnded:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1601389788918049654}
+      - m_Target: {fileID: 4196062460421991361}
         m_MethodName: Released
         m_Mode: 1
         m_Arguments:
@@ -6603,42 +6603,6 @@ MonoBehaviour:
   onHoverExited:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1601389788918049655
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1601389788918049648}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  observableSearch: 2
-  Synchronization: 3
-  OwnershipTransfer: 0
-  ObservedComponents: []
-  viewIdField: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
---- !u!114 &1601389788918049654
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1601389788918049648}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d261215af4977964e90857debec9549a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grabbedMaterial: {fileID: 0}
-  grabbedHandleMaterial: {fileID: 0}
 --- !u!114 &2124818716
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6705,6 +6669,45 @@ MonoBehaviour:
   additionalOffset: {x: 0, y: 0, z: 0}
   additionalRotation: {x: 0, y: 0, z: 0}
   updateSolvers: 1
+--- !u!114 &1354368344672992750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601389788918049648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75ab2929620217e4b8dd97fc43782863, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerDropDown: {fileID: 1601389787959331036}
+  posX_TMP: {fileID: 1601389787840582601}
+  posY_TMP: {fileID: 1601389789655678127}
+  posZ_TMP: {fileID: 1601389788399694970}
+  rotX_TMP: {fileID: 1601389788094423915}
+  rotY_TMP: {fileID: 1601389788003177316}
+  rotZ_TMP: {fileID: 1601389788460612653}
+  mpi: {fileID: 0}
+  posX: 0
+  posY: 0
+  posZ: 0
+  rotX: 0
+  rotY: 0
+  rotZ: 0
+--- !u!114 &4196062460421991361
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601389788918049648}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 499a825a5a49cff4bb4fc11e86026506, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grabbedMaterial: {fileID: 0}
 --- !u!1 &1601389788948371690
 GameObject:
   m_ObjectHideFlags: 0
@@ -8265,7 +8268,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2435047485796776022}
+      - m_Target: {fileID: 1354368344672992750}
         m_MethodName: updateValues
         m_Mode: 1
         m_Arguments:
@@ -9029,8 +9032,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2435047485796777617}
   - component: {fileID: 2435047485796777233}
-  - component: {fileID: 2435047485796776022}
-  - component: {fileID: 2435047485796776023}
   m_Layer: 0
   m_Name: MenuSystem
   m_TagString: HL2RemoveElicit
@@ -9157,53 +9158,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &2435047485796776022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2435047485796776017}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75ab2929620217e4b8dd97fc43782863, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerDropDown: {fileID: 1601389787959331036}
-  posX_TMP: {fileID: 1601389787840582601}
-  posY_TMP: {fileID: 1601389789655678127}
-  posZ_TMP: {fileID: 1601389788399694970}
-  rotX_TMP: {fileID: 1601389788094423915}
-  rotY_TMP: {fileID: 1601389788003177316}
-  rotZ_TMP: {fileID: 1601389788460612653}
-  posX: 0
-  posY: 0
-  posZ: 0
-  rotX: 0
-  rotY: 0
-  rotZ: 0
---- !u!114 &2435047485796776023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2435047485796776017}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  observableSearch: 2
-  Synchronization: 3
-  OwnershipTransfer: 0
-  ObservedComponents: []
-  viewIdField: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
 --- !u!1 &2435047485796776920
 GameObject:
   m_ObjectHideFlags: 0

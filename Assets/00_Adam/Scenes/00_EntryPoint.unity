@@ -26886,6 +26886,7 @@ GameObject:
   - component: {fileID: 1720533477}
   - component: {fileID: 1720533476}
   - component: {fileID: 1720533480}
+  - component: {fileID: 1720533481}
   m_Layer: 0
   m_Name: PhotonScriptHolder
   m_TagString: Untagged
@@ -26980,6 +26981,18 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 32ee43fd85c50b74388ddc455edc2e3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &1720533481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1720533474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae04a57e99d0a6645b1d8a7fbb0912dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1740544428
