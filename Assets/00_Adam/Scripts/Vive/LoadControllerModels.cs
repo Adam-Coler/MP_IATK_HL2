@@ -94,7 +94,7 @@ namespace Photon_IATK
 #else
         private void Awake()
         {
-            Debug.Log(GlobalVariables.purple + "Deestorying LoadContollerModels, Game not set tt Vive" + GlobalVariables.endColor + " : Awake(), " + this.GetType());
+            Debug.Log(GlobalVariables.purple + "Destorying LoadContollerModels, Game not set tt Vive" + GlobalVariables.endColor + " : Awake(), " + this.GetType());
             Destroy(this);
         }
 #endif
