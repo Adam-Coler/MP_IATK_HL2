@@ -7549,12 +7549,18 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.25
       objectReference: {fileID: 0}
+    - target: {fileID: 7462261846276394348, guid: c1e504c4233d326468b87d19eb464d5b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8085940340421905088, guid: c1e504c4233d326468b87d19eb464d5b,
         type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2909373295205192044, guid: c1e504c4233d326468b87d19eb464d5b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c1e504c4233d326468b87d19eb464d5b, type: 3}
 --- !u!1 &606948913 stripped
 GameObject:
@@ -10083,7 +10089,9 @@ MonoBehaviour:
   tracker2: {fileID: 1640557991}
   tracker3: {fileID: 606948913}
   lastButtonState: 0
-  angle: {x: 55, y: 0, z: 0}
+  tempVector3: {x: 0, y: 0, z: 0}
+  tempRotation: {x: 0, y: 0, z: 0, w: 1}
+  angle: -58
   distSecond: 0.03
   distFirst: 0.012
 --- !u!4 &891642797
@@ -19648,12 +19656,18 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.25
       objectReference: {fileID: 0}
+    - target: {fileID: 7462261846276394348, guid: c1e504c4233d326468b87d19eb464d5b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8085940340421905088, guid: c1e504c4233d326468b87d19eb464d5b,
         type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2909373295205192044, guid: c1e504c4233d326468b87d19eb464d5b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c1e504c4233d326468b87d19eb464d5b, type: 3}
 --- !u!1 &1366601968 stripped
 GameObject:
@@ -22868,12 +22882,18 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.25
       objectReference: {fileID: 0}
+    - target: {fileID: 7462261846276394348, guid: c1e504c4233d326468b87d19eb464d5b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8085940340421905088, guid: c1e504c4233d326468b87d19eb464d5b,
         type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2909373295205192044, guid: c1e504c4233d326468b87d19eb464d5b, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: c1e504c4233d326468b87d19eb464d5b, type: 3}
 --- !u!1 &1640557991 stripped
 GameObject:

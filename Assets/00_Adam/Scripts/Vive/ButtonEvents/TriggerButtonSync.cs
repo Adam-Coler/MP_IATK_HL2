@@ -9,13 +9,15 @@ namespace Photon_IATK
 {
     public class TriggerButtonSync : MonoBehaviour
     {
-        private List<InputDevice> devicesWithTriggerButton;
-
         public GameObject tracker1;
         public GameObject tracker2;
         public GameObject tracker3;
 
         private GameObject currentTracker;
+        private bool lastButtonState = false;
+        private Vector3 tempVector3 = Vector3.zero;
+        private Quaternion tempRotation = Quaternion.identity;
+        private List<InputDevice> devicesWithTriggerButton;
 
         private void Awake()
         {
@@ -65,14 +67,10 @@ namespace Photon_IATK
                 devicesWithTriggerButton.Remove(device);
         }
 
-        public bool lastButtonState = false;
-        Vector3 tempVector3 = Vector3.zero;
-        Quaternion tempRotation = Quaternion.identity;
         void Update()
         {
 
             bool tempState = false;
-
             foreach (var device in devicesWithTriggerButton)
             {
                 device.TryGetFeatureValue(CommonUsages.triggerButton, out tempState);
@@ -88,8 +86,14 @@ namespace Photon_IATK
                         device.TryGetFeatureValue(CommonUsages.deviceRotation, out tempRotation);
 
                         updateTracker();
-                        currentTracker.transform.position = tempVector3;
-                        currentTracker.transform.rotation = tempRotation;
+                        Vector3 middlePos;
+                        Quaternion middleRot;
+                        getmiddleOfRingOnViveControler(out middlePos, out middleRot);
+                        currentTracker.transform.position = middlePos;
+                        currentTracker.transform.rotation = middleRot;
+
+                        PlayspaceAnchor.Instance.transform.position = HelperFunctions.getMiddle(new GameObject[] {tracker1, tracker2, tracker3});
+                        PlayspaceAnchor.Instance.transform.rotation = HelperFunctions.getRotation(tracker1, tracker2, tracker3);
 
                     } else
                     {
@@ -97,61 +101,19 @@ namespace Photon_IATK
                     }
                     
                 }
-                device.TryGetFeatureValue(CommonUsages.devicePosition, out tempVector3);
-                device.TryGetFeatureValue(CommonUsages.deviceRotation, out tempRotation);
             }
         }
 
-        public Vector3 angle = Vector3.zero;
-        public float distSecond = 0;
-        public float distFirst = 0;
-        private void OnDrawGizmos()
+        public float angle = -58f;
+        public float distSecond = 0.03f;
+        public float distFirst = 0.012f;
+
+        private void getmiddleOfRingOnViveControler(out Vector3 middleOfRing, out Quaternion rotation)
         {
-            float r = .005f;
-            float scale = 2f;
-
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(tempVector3, r);
-            Gizmos.DrawWireSphere(tempVector3, r/ scale);
-
-            Vector3 secondPoint = tempVector3 + (tempRotation * Vector3.forward * distFirst);
-
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(secondPoint, r);
-            Gizmos.DrawWireSphere(secondPoint, r/ scale);
-
-            Quaternion test = tempRotation;
-            Vector3 eular = test.eulerAngles;
-            eular = eular + angle;
-            test = Quaternion.Euler(eular);
-
-            Vector3 pos2 = (secondPoint + (test * Vector3.forward * distSecond));
-
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(pos2, r);
-            Gizmos.DrawWireSphere(pos2, r/scale);
-            Gizmos.DrawLine(secondPoint, pos2);
-
-            Vector3 pos3 = (pos2 + (test * Vector3.forward * distSecond));
-
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(pos3, r);
-            Gizmos.DrawWireSphere(pos3, r / scale);
-            Gizmos.DrawLine(pos3, pos2);
-
-            //    Gizmos.color = Color.green;
-            //    Gizmos.DrawWireSphere(point3, r);
-
-            //    Gizmos.color = Color.blue;
-            //    Gizmos.DrawWireSphere(point4, r);
-
-            //    Gizmos.color = Color.black;
-            //    Gizmos.DrawWireSphere(middle, r);
-
-            //    Gizmos.color = Color.cyan;
-            //    Gizmos.DrawLine(point2, point3);
-            //    Gizmos.DrawLine(point2, point4);
-            //    Gizmos.DrawLine(point4, point3);
+            Vector3 edgeOfInnerRing = tempVector3 + (tempRotation * Vector3.forward * distFirst);
+            rotation = tempRotation * Quaternion.AngleAxis(angle, Vector3.left);
+            middleOfRing = (edgeOfInnerRing + (rotation * Vector3.forward * distSecond));
+            rotation = rotation * Quaternion.AngleAxis(180, Vector3.left);
         }
 
         private void updateTracker()
@@ -174,3 +136,66 @@ namespace Photon_IATK
     }
 
 }
+
+
+//public Vector3 angle = Vector3.zero;
+//public float distSecond = 0;
+//public float distFirst = 0;
+//public Vector3 eluarAngles;
+//private void OnDrawGizmos()
+//{
+//    float r = .005f;
+//    float lineLength = .05f;
+//    float scale = 2f;
+
+//    Gizmos.color = Color.blue;
+//    Gizmos.DrawWireSphere(tempVector3, r / scale);
+
+//    Vector3 secondPoint = tempVector3 + (tempRotation * Vector3.forward * distFirst);
+
+//    Gizmos.color = Color.cyan;
+//    Gizmos.DrawWireSphere(secondPoint, r / scale);
+
+//    Gizmos.color = Color.blue;
+//    Gizmos.DrawLine(secondPoint, secondPoint + (tempRotation * Vector3.forward * lineLength));
+
+//    Gizmos.color = Color.green;
+//    Gizmos.DrawLine(secondPoint, secondPoint + (tempRotation * Vector3.up * lineLength));
+
+//    Gizmos.color = Color.red;
+//    Gizmos.DrawLine(secondPoint, secondPoint + (tempRotation * Vector3.left * lineLength));
+
+
+//    Quaternion test = tempRotation;
+//    Vector3 eular = test.eulerAngles;
+//    eular = eular + angle;
+
+//    eluarAngles = eular;
+
+//    test = Quaternion.Euler(eular);
+
+//    test = tempRotation * Quaternion.AngleAxis(angle.x, Vector3.left);
+//    Vector3 pos2 = (secondPoint + (test * Vector3.forward * distSecond));
+
+//    Gizmos.color = Color.cyan;
+//    Gizmos.DrawWireSphere(pos2, r / scale);
+//    Gizmos.DrawLine(secondPoint, pos2);
+
+//    Vector3 pos3 = (pos2 + (test * Vector3.forward * distSecond));
+
+//    Gizmos.color = Color.blue;
+//    Gizmos.DrawWireSphere(pos3, r / scale);
+//    Gizmos.DrawLine(pos3, pos2);
+
+//    Vector3 pos4 = (pos2 + (test * Vector3.left * distSecond));
+
+//    Gizmos.color = Color.magenta;
+//    Gizmos.DrawWireSphere(pos4, r / scale);
+//    Gizmos.DrawLine(pos4, pos2);
+
+//    Vector3 pos5 = (pos2 + (test * Vector3.right * distSecond));
+
+//    Gizmos.color = Color.red;
+//    Gizmos.DrawWireSphere(pos5, r / scale);
+//    Gizmos.DrawLine(pos5, pos2);
+//}

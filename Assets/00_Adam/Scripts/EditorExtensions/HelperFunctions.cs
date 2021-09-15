@@ -426,5 +426,59 @@ namespace Photon_IATK
             return median;
         }
 
+        public static Vector3 getMiddle(GameObject[] objs)
+        {
+            Vector3[] points = new Vector3[objs.Length];
+
+            for (int i = 0; i < objs.Length; i++)
+            {
+                points[i] = objs[i].transform.position;
+            }
+
+            return getMiddle(points);
+        }
+
+        public static Vector3 getMiddle(Vector3[] points)
+        {
+            Vector3 middle = Vector3.zero;
+            foreach (Vector3 point in points)
+            {
+                middle += point;
+            }
+
+            middle = middle / (points.Length);
+            return middle;
+        }
+
+        public static Quaternion getRotation(GameObject position1, GameObject position2, GameObject position3)
+        {
+            Vector3 point2 = position1.transform.position;
+            Vector3 point3 = position2.transform.position;
+            Vector3 point4 = position3.transform.position;
+            Vector3 FacedPoint;
+
+            float dist23 = Vector3.Distance(point2, point3);
+            float dist24 = Vector3.Distance(point2, point4);
+            float dist34 = Vector3.Distance(point3, point4);
+
+            if (dist23 > dist24 && dist23 > dist34)
+            {
+                FacedPoint = point4;
+
+            }
+            else if (dist24 > dist23 && dist24 > dist34)
+            {
+                FacedPoint = point3;
+            }
+            else
+            {
+                FacedPoint = point2;
+            }
+
+            Plane p = new Plane(point2, point3, point4);
+
+            return Quaternion.LookRotation((FacedPoint - getMiddle(new Vector3[] {point2, point3, point4})).normalized, Vector3.up);
+        }
+
     }
 }
