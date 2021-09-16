@@ -1,0 +1,104 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &976693754824224368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 976693754824224367}
+  - component: {fileID: 976693754824224366}
+  - component: {fileID: 976693754824224369}
+  m_Layer: 0
+  m_Name: NetworkedHandSender
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &976693754824224367
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976693754824224368}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.35099435, y: 0.12462615, z: 0.52218103}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &976693754824224366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976693754824224368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7be3104347ef8ca4f86f06c114e2c3d1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Wrist: 0
+  Palm: 1
+  ThumbMetacarpalJoint: 0
+  ThumbProximalJoint: 0
+  ThumbDistalJoint: 1
+  ThumbTip: 1
+  IndexMetacarpal: 0
+  IndexKnuckle: 0
+  IndexMiddleJoint: 0
+  IndexDistalJoint: 1
+  IndexTip: 1
+  MiddleMetacarpal: 0
+  MiddleKnuckle: 0
+  MiddleMiddleJoint: 0
+  MiddleDistalJoint: 1
+  MiddleTip: 1
+  RingMetacarpal: 0
+  RingKnuckle: 0
+  RingMiddleJoint: 0
+  RingDistalJoint: 0
+  RingTip: 0
+  PinkyMetacarpal: 0
+  PinkyKnuckle: 0
+  PinkyMiddleJoint: 0
+  PinkyDistalJoint: 0
+  handedness: 2
+  isSending: 0
+  isShowing: 1
+  isUpdating: 0
+  thumb: {fileID: 2100000, guid: 5a1314f24054b2348af6bf14430f0aa4, type: 2}
+  index: {fileID: 2100000, guid: cca6f2acb68c6664f8cf5dd38eca1006, type: 2}
+  middle: {fileID: 2100000, guid: c3c7d03528978064bbd81c2b77dce78f, type: 2}
+  ring: {fileID: 2100000, guid: 3974a94a0b1a28b4a9b361f39d7a2273, type: 2}
+  pinky: {fileID: 2100000, guid: 1ecb9f3a7c2e6e24c93e156351265310, type: 2}
+  wrist: {fileID: 2100000, guid: d4c27ecf60fb0404e892b8031cab60d6, type: 2}
+--- !u!114 &976693754824224369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976693754824224368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  observableSearch: 2
+  Synchronization: 3
+  OwnershipTransfer: 0
+  ObservedComponents:
+  - {fileID: 976693754824224366}
+  viewIdField: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0

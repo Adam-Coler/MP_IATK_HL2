@@ -396,7 +396,7 @@ namespace Photon_IATK
         public static string getJson(object obj, string objName)
         {
             string output = JsonUtility.ToJson(obj, GlobalVariables.JSONPrettyPrint);
-            Debug.Log(GlobalVariables.cJSON + objName + GlobalVariables.endColor + output);
+            //Debug.Log(GlobalVariables.cJSON + objName + GlobalVariables.endColor + output);
             return output;
         }
 
