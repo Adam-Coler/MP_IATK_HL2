@@ -44,21 +44,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7be3104347ef8ca4f86f06c114e2c3d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Wrist: 0
-  Palm: 1
+  Wrist: 1
+  Palm: 0
   ThumbMetacarpalJoint: 0
   ThumbProximalJoint: 0
-  ThumbDistalJoint: 1
+  ThumbDistalJoint: 0
   ThumbTip: 1
   IndexMetacarpal: 0
   IndexKnuckle: 0
-  IndexMiddleJoint: 0
+  IndexMiddleJoint: 1
   IndexDistalJoint: 1
   IndexTip: 1
   MiddleMetacarpal: 0
   MiddleKnuckle: 0
-  MiddleMiddleJoint: 0
-  MiddleDistalJoint: 1
+  MiddleMiddleJoint: 1
+  MiddleDistalJoint: 0
   MiddleTip: 1
   RingMetacarpal: 0
   RingKnuckle: 0
@@ -78,7 +78,7 @@ MonoBehaviour:
   middle: {fileID: 2100000, guid: c3c7d03528978064bbd81c2b77dce78f, type: 2}
   ring: {fileID: 2100000, guid: 3974a94a0b1a28b4a9b361f39d7a2273, type: 2}
   pinky: {fileID: 2100000, guid: 1ecb9f3a7c2e6e24c93e156351265310, type: 2}
-  wrist: {fileID: 2100000, guid: d4c27ecf60fb0404e892b8031cab60d6, type: 2}
+  wrist: {fileID: 2100000, guid: fe519a2eb5adcbb4e9f7c2000c3721e6, type: 2}
 --- !u!114 &976693754824224369
 MonoBehaviour:
   m_ObjectHideFlags: 0

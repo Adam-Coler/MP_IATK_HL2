@@ -116,14 +116,7 @@ namespace Photon_IATK
 
             for (int i = 0; i < representations.Count; i++)
             {
-                if (handData.myPositions[i] != new Vector3(10, 10, 10))
-                {
-                    Debug.LogFormat("Rep {0}, Joint {1}, Pos {2}", representations[i], handData.myJoints[i], handData.myPositions[i]);
-                    representations[i].transform.localPosition = handData.myPositions[i];
-                } else
-                {
-
-                }
+                representations[i].transform.localPosition = handData.myPositions[i];
             }
         }
 
@@ -160,6 +153,12 @@ namespace Photon_IATK
                     if (tmp != null)
                     {
                         tmp.material = getMat(joint.ToString());
+                    }
+
+                    Collider tmpCol = sphere.GetComponent<Collider>();
+                    if (tmpCol != null)
+                    {
+                        Destroy(tmpCol);
                     }
                 }
             }
@@ -239,7 +238,7 @@ namespace Photon_IATK
 
         private void Update()
         {
-            if (isShowing && isUpdating)
+            if (isShowing && PhotonNetwork.PlayerList.Length == 1)
             {
                 updateLocations();
             }

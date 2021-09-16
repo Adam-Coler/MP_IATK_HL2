@@ -273,17 +273,16 @@ namespace Photon_IATK
                     Microsoft.MixedReality.Toolkit.MixedRealityPlayspace.AddChild(this.gameObject.transform);
 
 #if UNITY_EDITOR
-                    //return;
+                    return;
 #endif
                     GameObject rightHand = PhotonNetwork.Instantiate("NetworkedHandSender", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-
                     NetworkedHandDataSender rightHandInterface = rightHand.GetComponent<NetworkedHandDataSender>();
 
                     if (rightHandInterface != null)
                     {
                         rightHandInterface.handedness = Microsoft.MixedReality.Toolkit.Utilities.Handedness.Right;
                         rightHandInterface.isSending = true;
-                        rightHandInterface.isShowing = true;
+                        rightHandInterface.isShowing = false;
                         rightHandInterface.isUpdating = true;
                         rightHandInterface.setUp();
                                                 
@@ -291,6 +290,23 @@ namespace Photon_IATK
                     else
                     {
                         PhotonNetwork.Destroy(rightHand);
+                    }
+
+                    GameObject leftHand = PhotonNetwork.Instantiate("NetworkedHandSender", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+                    NetworkedHandDataSender leftHandInterface = leftHand.GetComponent<NetworkedHandDataSender>();
+
+                    if (leftHandInterface != null)
+                    {
+                        leftHandInterface.handedness = Microsoft.MixedReality.Toolkit.Utilities.Handedness.Left;
+                        leftHandInterface.isSending = true;
+                        leftHandInterface.isShowing = false;
+                        leftHandInterface.isUpdating = true;
+                        leftHandInterface.setUp();
+
+                    }
+                    else
+                    {
+                        PhotonNetwork.Destroy(leftHand);
                     }
 
                 }
