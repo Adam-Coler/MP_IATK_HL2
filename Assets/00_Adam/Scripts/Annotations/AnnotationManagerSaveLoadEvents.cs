@@ -14,25 +14,23 @@ using System;
 
 namespace Photon_IATK
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Photon.Pun.PhotonView))]
     public class AnnotationManagerSaveLoadEvents : MonoBehaviourPun
     {
         public bool isWaitingForListOfAnnotationIDs = false;
         public int annotationsCreated = 0;
+        public int lastMadeAnnotationPhotonViewID;
+        public static AnnotationManagerSaveLoadEvents Instance;
+        public bool isFirstLoad = true;
 
-        private List<int> myListOfAnnotationIDs
+        #region Setup and Teardown
+
+        private void Awake()
         {
-            get
-            {
-                Annotation[] annotations = FindObjectsOfType<Annotation>();
-                List<int> listOfIDs = new List<int> { };
-                foreach (Annotation annotation in annotations)
-                {
-                    listOfIDs.Add(annotation.myUniqueAnnotationNumber);
-                }
 
-                return listOfIDs;
-            }
+            Instance = this;
+
         }
 
         private void OnEnable()
@@ -54,33 +52,56 @@ namespace Photon_IATK
             VisualizationEvent_Calls.RPCvisualisationUpdatedDelegate -= UpdatedView;
 
             saveAnnotations();
+            PushAllData();
         
             //send all annoations to next client if master
 
         }
 
+        private void OnApplicationQuit()
+        {
+            saveAnnotations();
+            PushAllData();
+        }
+
+        #endregion Setup and Teardown
+
+        #region Delegates
+
         private void UpdatedView(AbstractVisualisation.PropertyType propertyType)
         {
             Debug.LogFormat(GlobalVariables.cTest + "Vis view {0} updated. Name: " + PhotonNetwork.NickName + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-
-            loadAnnotations();
+            if (propertyType == AbstractVisualisation.PropertyType.DimensionChange || propertyType == AbstractVisualisation.PropertyType.VisualisationType) {
+                if (isFirstLoad)
+                {
+                    Invoke("loadAnnotations", 1f);
+                } else
+                {
+                    loadAnnotations();
+                }
+                
+            }
 
         }
 
         private void UpdatedViewRequested(AbstractVisualisation.PropertyType propertyType)
         {
-            Debug.LogFormat(GlobalVariables.cTest + "Vis view {0} update requested." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cTest + "Vis view {0} update requested." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}, I am the MasterClient: {5}", propertyType, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod(), PhotonNetwork.IsMasterClient);
 
             //Save annotations handled by other class
-            saveAnnotations();
+
+            if (propertyType == AbstractVisualisation.PropertyType.DimensionChange || propertyType == AbstractVisualisation.PropertyType.VisualisationType) { saveAnnotations(); }
 
             //Delete annotations without marking delete but as safe
             if (PhotonNetwork.IsConnected && PhotonNetwork.IsMasterClient) {
                 Debug.LogFormat(GlobalVariables.cCommon + "I am the MasterClient: {0}, Removing annotaitons." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                 RespondToRequestAnnotationRemoval();
+                //RequestAnnotationRemoval();
             }
         }
+
+        #endregion Delegates
 
         #region Events
 
@@ -109,7 +130,12 @@ namespace Photon_IATK
                 case GlobalVariables.RequestEventAnnotationFileSystemDeletion:
                     DeleteAnnotaitonFileSystem();
                     break;
-
+                case GlobalVariables.SendEventNewAnnotationID:
+                    setAnnotationIDEvent(data);
+                    break;
+                case GlobalVariables.RequestSaveAnnotation:
+                    _saveAnnotations(data);
+                    break;
                 default:
                     break;
             }
@@ -120,6 +146,31 @@ namespace Photon_IATK
         public void RequestAnnotationCreationTestTracker()
         {
             RequestAnnotationCreation(Annotation.typesOfAnnotations.TEST_TRACKER);
+        }
+
+        public void RequestAnnotationCreationCentralityMetricPlane()
+        {
+            RequestAnnotationCreation(Annotation.typesOfAnnotations.CENTRALITY);
+        }
+
+        public void RequestAnnotationCreationHighlightCube()
+        {
+            RequestAnnotationCreation(Annotation.typesOfAnnotations.HIGHLIGHTCUBE);
+        }
+
+        public void RequestAnnotationCreationHighlightSphere()
+        {
+            RequestAnnotationCreation(Annotation.typesOfAnnotations.HIGHLIGHTSPHERE);
+        }
+
+        public void RequestAnnotationCreationDetailsOnDemand()
+        {
+            RequestAnnotationCreation(Annotation.typesOfAnnotations.DETAILSONDEMAND);
+        }
+
+        public void RequestAnnotationCreationText()
+        {
+            RequestAnnotationCreation(Annotation.typesOfAnnotations.TEXT);
         }
 
         /// <summary>
@@ -168,7 +219,7 @@ namespace Photon_IATK
                 annotationsCreated++;
                 genericAnnotationObj = PhotonNetwork.InstantiateRoomObject("GenericAnnotation", Vector3.zero, Quaternion.identity);
                 HelperFunctions.SetObjectLocalTransformToZero(genericAnnotationObj, System.Reflection.MethodBase.GetCurrentMethod());
-                genericAnnotationObj.name = "NewAnnotation";
+                genericAnnotationObj.name = "NewAnnotation_" + annotationsCreated;
             } else
             {
                 Debug.LogFormat(GlobalVariables.cError + "Offline annotations are disabled.{0} {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
@@ -181,21 +232,67 @@ namespace Photon_IATK
             {
                 annotation.myAnnotationType = annotationType;
                 annotation.myUniqueAnnotationNumber = annotationsCreated;
+                annotation.wasLoaded = false;
                 annotation.SendContentFromMaster();
-                annotation._setAnnotationObject();
+                annotation.SetAnnotationObject();
+                lastMadeAnnotationPhotonViewID = annotation.photonView.ViewID;
+                centerAnnotationOnSpawnPoint(annotation);
+                sendAnnotationIDEvent();
             }
+
+        }
+
+        private void centerAnnotationOnSpawnPoint(Annotation annotation)
+        {
+            if (annotation.myAnnotationType == Annotation.typesOfAnnotations.LINERENDER) {
+                Debug.LogFormat(GlobalVariables.cTest + "Not centering annotation, is linerender.{0} {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                return; 
+            } else
+            {
+                Debug.LogFormat(GlobalVariables.cTest + "Centering annotation Type is {0} {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", annotation.myAnnotationType.ToString(), "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            }
+
+            GameObject spawnPoint;
+            HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.spawnTag, out spawnPoint, false, System.Reflection.MethodBase.GetCurrentMethod());
+
+            if (annotation.myAnnotationType == Annotation.typesOfAnnotations.CENTRALITY)
+            {
+                annotation.transform.rotation = spawnPoint.transform.rotation;
+                annotation.transform.Rotate(new Vector3(-90f, 0, 0));
+
+                Transform centerPoint;
+                centerPoint = annotation.myObjectRepresentation.transform.GetChild(0);
+                //Vector3 travelPathVector = centerPoint - fromTransform.position;
+                annotation.transform.position = spawnPoint.transform.position;
+                annotation.transform.position = annotation.transform.position + (annotation.transform.position - centerPoint.transform.position);
+
+            } else
+            {
+                annotation.transform.position = spawnPoint.transform.position;
+                annotation.transform.rotation = spawnPoint.transform.rotation;
+            }
+            
+
         }
 
         private void CreateAnnotation(SerializeableAnnotation serializeableAnnotation)
         {
+
+
             GameObject genericAnnotationObj;
 
             if (PhotonNetwork.IsConnected)
             {
                 annotationsCreated++;
+
+                if (serializeableAnnotation.isDeleted)
+                {
+                    return;
+                }
+
                 genericAnnotationObj = PhotonNetwork.InstantiateRoomObject("GenericAnnotation", Vector3.zero, Quaternion.identity);
                 HelperFunctions.SetObjectLocalTransformToZero(genericAnnotationObj, System.Reflection.MethodBase.GetCurrentMethod());
-                genericAnnotationObj.name = "LoadedAnnotation";
+                genericAnnotationObj.name = "LoadedAnnotation_" + serializeableAnnotation.myAnnotationNumber;
             }
             else
             {
@@ -206,11 +303,42 @@ namespace Photon_IATK
             Annotation annotation;
             if (HelperFunctions.GetComponentInChild<Annotation>(out annotation, genericAnnotationObj, System.Reflection.MethodBase.GetCurrentMethod()))
             {
-                annotation.setUpFromSerializeableAnnotation(serializeableAnnotation);
+                annotation.SetUpFromSerializeableAnnotation(serializeableAnnotation);
+                annotation.wasLoaded = true;
                 annotation.SendContentFromMaster();
-                annotation._setAnnotationObject();
+                annotation.SetAnnotationObject();
+
             }
+            lastMadeAnnotationPhotonViewID = annotation.photonView.ViewID;
+            sendAnnotationIDEvent();
         }
+
+        /// <summary>
+        /// Sends new annotation ID from master client to all clients
+        /// Data Sent = object[] { photonView.ViewID, new annotation photonView.ViewID };
+        /// Raises = GlobalVariables.SendEventNewAnnotationID
+        /// Reciver = ReceiverGroup.Others
+        /// </summary>
+        private void sendAnnotationIDEvent()
+        {
+            Debug.LogFormat(GlobalVariables.cEvent + "MasterClient ~ Calling: {0}, Receivers: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Sending Event Code: {5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "sendAnnotationIDEvent()", "Others", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.SendEventNewAnnotationID, "", ", annotation ID: ", lastMadeAnnotationPhotonViewID, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            object[] content = new object[] { photonView.ViewID, lastMadeAnnotationPhotonViewID };
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+
+            PhotonNetwork.RaiseEvent(GlobalVariables.SendEventNewAnnotationID, content, raiseEventOptions, GlobalVariables.sendOptions);
+        }
+
+
+        private void setAnnotationIDEvent(object[] data)
+        {
+            lastMadeAnnotationPhotonViewID = (int)data[1];
+
+            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code: {0}, Client ~ {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}{5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.SendEventNewAnnotationID, "Updating latest Annotation ID.", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, "", "", "Annotation View ID: ", lastMadeAnnotationPhotonViewID, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+        }
+
         #endregion Annotation Creation
 
         #region AnnotaitonRemoval
@@ -274,18 +402,54 @@ namespace Photon_IATK
 
             string mainFolderName = GlobalVariables.annotationSaveFolder;
             string mainFolderPath = Path.Combine(Application.persistentDataPath, mainFolderName);
-            System.IO.Directory.Delete(mainFolderPath, true);
+            if (Directory.Exists(mainFolderPath)) { Directory.Delete(mainFolderPath, true); }
         }
 
         #endregion AnnotaitonRemoval
 
         #region AnnotationSaveing
 
+        private void PushAllData()
+        {
+            Debug.LogFormat(GlobalVariables.cFileOperations + "PushAllData called{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            if (!PhotonNetwork.IsConnected || !PhotonNetwork.IsMasterClient || PhotonNetwork.PlayerList.Length <= 1) { return; }
+
+            bool loadSuccessfull = false;
+            var anno = _getAllAnnotationsAndConvertToSerializeableAnnotations(out loadSuccessfull);
+
+            if (loadSuccessfull)
+            {
+                foreach(SerializeableAnnotation annotation in anno)
+                {
+                    string jsonFormatAnnotion = JsonUtility.ToJson(annotation, true);
+                    object[] content = new object[] { photonView.ViewID, jsonFormatAnnotion };
+
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+
+                    PhotonNetwork.RaiseEvent(GlobalVariables.RequestSaveAnnotation, content, raiseEventOptions, GlobalVariables.sendOptionsReliable);
+                }
+
+                Debug.LogFormat(GlobalVariables.cFileOperations + "I am the MasterClient: {0}, Pushing all annotaitons to all users." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            }
+        }
+
+        private void _saveAnnotations(object[] data)
+        {
+            Debug.LogFormat(GlobalVariables.cCommon + "Annotation reviced, saving now: {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            string jsonAnnotation = (string)data[1];
+            SerializeableAnnotation serializeableAnnotation = JsonUtility.FromJson<SerializeableAnnotation>(jsonAnnotation);
+            _saveAnnotations(serializeableAnnotation);
+        }
+
         public void saveAnnotations()
         {
+            Debug.LogFormat(GlobalVariables.cFileOperations + "saveAnnotations called{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
             if (!PhotonNetwork.IsMasterClient) { return; }
 
-            Debug.LogFormat(GlobalVariables.cCommon + "I am the MasterClient: {0}, Saving annotaitons." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cCommon + "I am the MasterClient: {0}, Saving annotaitons. Vis Key: " + _getParentVisAxisKey() + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             bool saveWasSuccessfull = false;
 
@@ -318,7 +482,7 @@ namespace Photon_IATK
                     Annotation annotation = annotationHolder.GetComponent<Annotation>();
                     if (annotation != null)
                     {
-                        listOfAnnotations.Add(annotation.getSerializeableAnnotation());
+                        listOfAnnotations.Add(annotation.GetSerializeableAnnotation());
                         countOfAnnotationsFound++;
                     }
                 }
@@ -337,12 +501,16 @@ namespace Photon_IATK
 
             foreach (SerializeableAnnotation serializeableAnnotation in listOfSerializeableAnnotations)
             {
+                serializeableAnnotation.wasLoaded = true;
+
                 string filename = serializeableAnnotation.myAnnotationNumber.ToString("D3");
-                filename += "_" + serializeableAnnotation.myAnnotationType.ToString() + ".json";
+                filename += "_" + serializeableAnnotation.myAnnotationType.ToString();
+                filename += "_" + _getParentVisAxisKey() + ".json";
 
                 string jsonFormatAnnotion = JsonUtility.ToJson(serializeableAnnotation, true);
 
                 string fullFilePath = Path.Combine(subfolderPath, filename);
+
                 Debug.LogFormat(GlobalVariables.cFileOperations + "Saving {0}, full path: {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", filename, fullFilePath, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                 System.IO.File.WriteAllText(fullFilePath, jsonFormatAnnotion);
             }
@@ -350,10 +518,31 @@ namespace Photon_IATK
             Debug.LogFormat(GlobalVariables.cFileOperations + "Annotations saved for {0}, full path: {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", _getParentVisAxisKey(), subfolderPath, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
+        private void _saveAnnotations(SerializeableAnnotation serializeableAnnotation)
+        {
+
+            string subfolderPath = _getFolderPath();
+
+            serializeableAnnotation.wasLoaded = true;
+
+            string filename = serializeableAnnotation.myAnnotationNumber.ToString("D3");
+            filename += "_" + serializeableAnnotation.myAnnotationType.ToString();
+            filename += "_" + _getParentVisAxisKey() + ".json";
+
+            string jsonFormatAnnotion = JsonUtility.ToJson(serializeableAnnotation, true);
+
+            string fullFilePath = Path.Combine(subfolderPath, filename);
+
+            Debug.LogFormat(GlobalVariables.cFileOperations + "Saving {0}, full path: {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", filename, fullFilePath, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            System.IO.File.WriteAllText(fullFilePath, jsonFormatAnnotion);
+
+            Debug.LogFormat(GlobalVariables.cFileOperations + "Annotation saved for {0}, full path: {1} " + GlobalVariables.endColor + " {2}: {3} -> {4} -> {5}", _getParentVisAxisKey(), subfolderPath, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
+
         private string _getParentVisAxisKey()
         {
             VisualizationEvent_Calls visualisationEvent_Calls;
-            if (!HelperFunctions.GetComponent<VisualizationEvent_Calls>(out visualisationEvent_Calls, System.Reflection.MethodBase.GetCurrentMethod())) { return "EmmulatedVisObject"; }
+            if (!HelperFunctions.GetComponent<VisualizationEvent_Calls>(out visualisationEvent_Calls, System.Reflection.MethodBase.GetCurrentMethod())) { return "NoVisEventCallsFound"; }
 
             return visualisationEvent_Calls.axisKey;
         }
@@ -363,11 +552,20 @@ namespace Photon_IATK
             //Annotations are saved per VisState in a folder with the names of that vis axis
             string mainFolderName = GlobalVariables.annotationSaveFolder;
             string mainFolderPath = Path.Combine(Application.persistentDataPath, mainFolderName);
+
+#if UWP
+            Windows.Storage.StorageFolder installedLocation = Windows.ApplicationModel.Package.Current.InstalledLocation;
+
+            mainFolderPath = Path.Combine(installedLocation, mainFolderName);
+#endif
+
+
             //_checkAndMakeDirectory(mainFolderPath);
 
             string date = System.DateTime.Now.ToString("yyyyMMdd");
-            string parentVisAxisKey = _getParentVisAxisKey();
-            string subFolderName = date + "_" + parentVisAxisKey;
+            //string parentVisAxisKey = _getParentVisAxisKey();
+            //string subFolderName = date + "_" + parentVisAxisKey;
+            string subFolderName = date;
             string subfolderPath = Path.Combine(mainFolderPath, subFolderName);
             _checkAndMakeDirectory(subfolderPath);
 
@@ -384,12 +582,13 @@ namespace Photon_IATK
             }
         }
 
-        #endregion AnnotationSaveing
+#endregion AnnotationSaveing
 
-        #region AnnotationLoading
+#region AnnotationLoading
 
         public void loadAnnotations()
         {
+            isFirstLoad = false;
             if (!PhotonNetwork.IsMasterClient) { return; }
 
             Debug.LogFormat(GlobalVariables.cCommon + "I am the MasterClient: {0}, Loading annotaitons." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
@@ -404,16 +603,19 @@ namespace Photon_IATK
             foreach (string jsonPath in filePaths)
             {
                 //Load file
-                SerializeableAnnotation serializeableAnnotation = JsonUtility.FromJson<SerializeableAnnotation>(File.ReadAllText(jsonPath));
-                CreateAnnotation(serializeableAnnotation);
+                if (jsonPath.Contains(_getParentVisAxisKey()))
+                {
+                    SerializeableAnnotation serializeableAnnotation = JsonUtility.FromJson<SerializeableAnnotation>(File.ReadAllText(jsonPath));
+                    CreateAnnotation(serializeableAnnotation);
+                }
             }
 
         }
 
 
-        #endregion AnnotationLoading
+#endregion AnnotationLoading
 
-        #endregion Events
+#endregion Events
     }
 }
 

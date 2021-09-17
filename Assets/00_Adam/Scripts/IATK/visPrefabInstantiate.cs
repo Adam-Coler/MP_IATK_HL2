@@ -59,8 +59,6 @@ namespace Photon_IATK
             //theVis.updateView(AbstractVisualisation.PropertyType.GeometryType);
 
             theVis.CreateVisualisation(theVis.visualisationType);
-            theVis.gameObject.transform.localScale = new Vector3(1f, 1f, 1f);
-
 
             Debug.LogFormat(GlobalVariables.cInstance + "Instanced and set up a IATK visualisation, Online: {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsConnected, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -70,7 +68,28 @@ namespace Photon_IATK
             if (visualisationLoadingDelegate != null)
                 visualisationLoadingDelegate(false);
 
+            theVis.gameObject.transform.localScale = new Vector3(.5f, .5f, .5f);
+
             theVis.isTriggeringEvents = true;
+
+            IATK.BigMesh bigmesh;
+            if (HelperFunctions.GetComponentInChild<BigMesh>(out bigmesh, theVis.gameObject, System.Reflection.MethodBase.GetCurrentMethod()))
+            {
+                bigmesh.SharedMaterial.renderQueue = 2000;
+                Debug.LogFormat(GlobalVariables.cError + "Bigmesh render que set to 2000 {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsConnected, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            } else
+            {
+                Debug.LogFormat(GlobalVariables.cError + "No Bigmesh Found {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsConnected, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            }
+
+            //Setup PC Elicit
+#if HL2
+            if (GeneralEventManager.instance.isElictationOnPC)
+            {
+                GeneralEventManager.instance.ElicitationSetUpEvent();
+            }
+#endif
+
 
             Destroy(this);
 

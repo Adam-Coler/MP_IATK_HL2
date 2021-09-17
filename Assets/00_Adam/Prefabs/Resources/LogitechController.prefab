@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2103967629336944728}
   - component: {fileID: 2061012005737876671}
   - component: {fileID: 1454945443750672827}
+  - component: {fileID: 7743316592240112508}
   m_Layer: 0
   m_Name: LogitechController
   m_TagString: GameController
@@ -51,7 +52,8 @@ MonoBehaviour:
   observableSearch: 2
   Synchronization: 3
   OwnershipTransfer: 0
-  ObservedComponents: []
+  ObservedComponents:
+  - {fileID: 1454945443750672827}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -67,6 +69,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ad18f5d63689344db341d6eeb34ff0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &7743316592240112508
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155482209281258439}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9b564b887399ea43b673af3cf9f3eca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isWaitingForPhotonRequestTransformEvent: 1
+  isCoroutineRunning: 0
+  time: 0.8
+  meaningfulDist: 0.3
+  movingToPosition: {x: 0, y: 0, z: 0}
 --- !u!1001 &3616420842732794159
 PrefabInstance:
   m_ObjectHideFlags: 0

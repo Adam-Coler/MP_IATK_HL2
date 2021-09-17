@@ -135,7 +135,7 @@ namespace Photon_IATK
         {
             Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No random room available, Calling: PhotonNetwork.CreateRoom", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            var roomOptions = new RoomOptions { IsVisible = true, IsOpen = true, MaxPlayers = 10 , CleanupCacheOnLeave = true};
+            var roomOptions = new RoomOptions { IsVisible = true, IsOpen = true, MaxPlayers = 10 , CleanupCacheOnLeave = true, PublishUserId=true};
             PhotonNetwork.CreateRoom("Room" + Random.Range(1, 3000), roomOptions);
         }
 

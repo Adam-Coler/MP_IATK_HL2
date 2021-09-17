@@ -48,7 +48,7 @@ namespace Photon_IATK
             Annotation annotation = newObj.AddComponent<Annotation>();
 
             VisWrapperClass wrapperClass = GameObject.FindGameObjectWithTag("Vis").GetComponent<VisWrapperClass>();
-            annotation.myUniqueAnnotationNumber = wrapperClass.getCountOfAnnotationsAndIncrement();
+
         }
 
 

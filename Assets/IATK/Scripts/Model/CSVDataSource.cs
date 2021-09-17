@@ -32,6 +32,12 @@ namespace IATK
             set { textualDimensionsListReverse = value; }
         }
 
+        public Dictionary<string, Dictionary<int, string>> TextualDimensionsList
+        {
+            get { return textualDimensionsList; }
+            set { textualDimensionsList = value; }
+        }
+
         public Dictionary<int, List<int>> GraphEdges = new Dictionary<int, List<int>>();
 
         private bool isQuitting;
@@ -108,11 +114,10 @@ namespace IATK
             DimensionData.Metadata meta = this[identifier].MetaData;
 
             float normValue = normaliseValue(normalisedValue, 0f, 1f, meta.minValue, meta.maxValue);
-
             if (meta.type == DataType.String)
             {
                 normValue = normaliseValue(valueClosestTo(this[identifier].Data, normalisedValue), 0f, 1f, meta.minValue, meta.maxValue);
-                return textualDimensionsList[this[identifier].Identifier][(int)normValue];  // textualDimensions[(int)normValue];
+                return textualDimensionsList[this[identifier].Identifier][Mathf.RoundToInt(normValue)];  // textualDimensions[(int)normValue];
             }
             else return normValue;
         }
@@ -128,10 +133,9 @@ namespace IATK
             DimensionData.Metadata meta = this[identifier].MetaData;
 
             float normValue = normaliseValue(normalisedValue, 0f, 1f, meta.minValue, meta.maxValue);
-
             if (meta.type == DataType.String)
             {
-                return textualDimensionsList[this[identifier].Identifier][(int)normValue];
+                return textualDimensionsList[this[identifier].Identifier][Mathf.RoundToInt(normValue)];
             }
             else return normValue;
         }
@@ -147,10 +151,9 @@ namespace IATK
             DimensionData.Metadata meta = this[identifier].MetaData;
 
             float normValue = normaliseValue(normalisedValue, 0f, 1f, meta.minValue, meta.maxValue);
-
             if (meta.type == DataType.String)
             {
-                return textualDimensionsList[this[identifier].Identifier][(int)normValue];
+                return textualDimensionsList[this[identifier].Identifier][Mathf.RoundToInt(normValue)];
             }
             else return normValue;
         }
@@ -166,11 +169,10 @@ namespace IATK
             DimensionData.Metadata meta = this[identifier].MetaData;
 
             float normValue = normaliseValue(normalisedValue, 0f, 1f, meta.minValue, meta.maxValue);
-
             if (meta.type == DataType.String)
             {
                 normValue = normaliseValue(valueClosestTo(this[identifier].Data, normalisedValue), 0f, 1f, meta.minValue, meta.maxValue);
-                return textualDimensionsList[identifier][(int)normValue]; // textualDimensions[(int)normValue];
+                return textualDimensionsList[identifier][Mathf.RoundToInt(normValue)]; // textualDimensions[(int)normValue];
             }
             else return normValue;
         }
@@ -680,7 +682,7 @@ namespace IATK
             return BitConverter.ToString(BitConverter.GetBytes(value));
         }
 
-        float normaliseValue(float value, float i0, float i1, float j0, float j1)
+        public float normaliseValue(float value, float i0, float i1, float j0, float j1)
         {
             float L = (j0 - j1) / (i0 - i1);
             return (j0 - (L * i0) + (L * value));

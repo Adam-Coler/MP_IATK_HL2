@@ -7,6 +7,7 @@ using System.Collections;
 
 namespace Photon_IATK
 {
+    [DisallowMultipleComponent]
     [RequireComponent(typeof(Photon.Pun.PhotonView))]
     public class GenericTransformSync : MonoBehaviourPun
     {
@@ -16,19 +17,17 @@ namespace Photon_IATK
         private Vector3 lastLocalScale;
 
         public bool isWaitingForPhotonRequestTransformEvent = true;
-        private bool isCoroutineRunning = false;
+        public bool isCoroutineRunning = false;
 
         /// <summary>
         /// The time that the movement event reciver takes to update its transform
         /// </summary>
-        public float time = .8f;
+        public float time = .2f;
 
         /// <summary>
         /// The distance required to be moved or rotated before the move event will be called
         /// </summary>
-        public float meaningfulDist = .3f;
-
-
+        public float meaningfulDist = .015f;
         private void LateUpdate()
         {
             if (!PhotonNetwork.IsConnected) { return; }
@@ -38,12 +37,15 @@ namespace Photon_IATK
             CheckIfPositionWasUpdated();
         }
 
+        private void Awake()
+        {
+            HelperFunctions.ParentInSharedPlayspaceAnchor(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
+        }
+
         private void OnEnable()
         {
             Debug.LogFormat(GlobalVariables.cRegister + "GenericTransformSync registering OnEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
-
-            HelperFunctions.ParentInSharedPlayspaceAnchor(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
 
             if (PhotonNetwork.IsConnected && !PhotonNetwork.IsMasterClient)
             {
@@ -54,6 +56,7 @@ namespace Photon_IATK
                 isWaitingForPhotonRequestTransformEvent = false;
                 Debug.LogFormat(GlobalVariables.cEvent + "GenericTransformSync Not calling PhotonRequestTransformEvent, Is master client.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
+
         }
 
         private void OnDisable()
@@ -97,7 +100,7 @@ namespace Photon_IATK
             }
 
             //log it
-            Debug.LogFormat(GlobalVariables.cEvent + "Event Found, Sender: {0}, Event code: {1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", photonEventData.Sender, eventCode, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            //Debug.LogFormat(GlobalVariables.cEvent + "Event Found, Sender: {0}, Event code: {1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", photonEventData.Sender, eventCode, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
         }
 
@@ -131,9 +134,11 @@ namespace Photon_IATK
 
             Transform myTransform = this.gameObject.transform;
 
-            object[] content = new object[] { photonView.ViewID, myTransform.localPosition, myTransform.localRotation, myTransform.localScale };
+            object[] content = new object[] { photonView.ViewID, myTransform.localPosition, myTransform.localRotation, myTransform.localScale, this.photonView.GetInstanceID() };
 
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others }; //Will not recived own message
+            //object[] content = new object[] { photonView.ViewID, HelperFunctions.PRA(this.gameObject), HelperFunctions.RRA(this.gameObject), myTransform.localScale, this.photonView.GetInstanceID() };
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; //Will not recived own message
 
             PhotonNetwork.RaiseEvent(GlobalVariables.PhotonMoveEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
 
@@ -150,7 +155,7 @@ namespace Photon_IATK
         {
             isWaitingForPhotonRequestTransformEvent = true;
 
-            Debug.LogFormat(GlobalVariables.cEvent + "{0}Client ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", "", "Requesting transform from master", "MasterClient", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRequestTransformEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            //Debug.LogFormat(GlobalVariables.cEvent + "{0}Client ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", "", "Requesting transform from master", "MasterClient", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRequestTransformEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             object[] content = new object[] { photonView.ViewID, this.gameObject.GetInstanceID() };
 
@@ -166,21 +171,20 @@ namespace Photon_IATK
         private void PhotonProcessResponseToRequestTransformEvent(object[] data)
         {
 
-
             if (!isWaitingForPhotonRequestTransformEvent) 
             {
-                Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: Client ~ {1}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", GlobalVariables.PhotonRespondToRequestTransformEvent, "I am not waiting for this event", "", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRequestTransformEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                //Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: Client ~ {1}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", GlobalVariables.PhotonRespondToRequestTransformEvent, "I am not waiting for this event", "", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRequestTransformEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 return;
             }
 
-            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: Client ~ {1}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", GlobalVariables.PhotonRespondToRequestTransformEvent, " procssing the request", "", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRequestTransformEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            //Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: Client ~ {1}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", GlobalVariables.PhotonRespondToRequestTransformEvent, " procssing the request", "", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRequestTransformEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             //if so process the event
             Vector3 newLocalPosition = (Vector3)data[2];
             Quaternion newLocalRotation = (Quaternion)data[3];
             Vector3 newLocalScale = (Vector3)data[4];
-
+            
             SetLocalTransformAndLastTransform(newLocalPosition, newLocalRotation, newLocalScale);
             isWaitingForPhotonRequestTransformEvent = false;
         }
@@ -213,6 +217,9 @@ namespace Photon_IATK
         /// </summary>
         private void PhotonMoveEvent(object[] data)
         {
+
+            if (this.photonView.GetInstanceID() == (int)data[4]) { return; }
+
 
             Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: Any ~ {1}{2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", GlobalVariables.PhotonMoveEvent, " Move Event", "", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRespondToRequestTransformEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -253,7 +260,9 @@ namespace Photon_IATK
             Quaternion startingRot = myTransform.localRotation ;
             Vector3 startingScale = myTransform.localScale;
 
-            while (elapsedTime < time)
+            transform.localScale = lastLocalScale;
+
+            while (elapsedTime < time+.1)
             {
                 if (transform.localPosition != lastLocalLocation)
                     transform.localPosition = Vector3.Lerp(startingPos, lastLocalLocation, (elapsedTime / time));
@@ -266,10 +275,10 @@ namespace Photon_IATK
 
                 elapsedTime += Time.deltaTime;
 
-
+                yield return null;
 
             }
-            yield return null;
+            SetLocalTransformAndLastTransform(lastLocalLocation, lastLocalRotation, lastLocalScale);
             isCoroutineRunning = false;
         }
 

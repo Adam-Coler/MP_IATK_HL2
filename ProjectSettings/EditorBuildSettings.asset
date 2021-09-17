@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/00_Adam/Scenes/03_Vuforia_Setup.unity
     guid: c26ba392a1bce684d83ac704ea7973bf
+  - enabled: 1
+    path: Assets/00_Adam/Scenes/04_TriVuforia_Setup.unity
+    guid: 054c0d7955572a544a8e0231696648f7
   m_configObjects: {}

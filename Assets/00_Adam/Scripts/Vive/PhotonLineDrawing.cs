@@ -1,24 +1,13 @@
-﻿using System.Linq;
-using System;
-using System.Collections.Generic;
-using UnityEngine;
-using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
+﻿using UnityEngine;
 using Photon.Pun;
 
 namespace Photon_IATK
 {
-    public class PhotonLineDrawing : MonoBehaviourPun, IPunObservable
+    [DisallowMultipleComponent]
+    public class PhotonLineDrawing : MonoBehaviour
     {
         public LineRenderer lineRenderer;
         public MeshCollider meshCollider;
-    
-        [SerializeField] public bool isUser = default;
-
-        private Vector3 networkLocalPosition;
-        private Quaternion networkLocalRotation;
-
-        private Vector3 startingLocalPosition;
-        private Quaternion startingLocalRotation;
 
         private Vector3 NewPoint;
         private Vector3 oldPoint;
@@ -31,77 +20,31 @@ namespace Photon_IATK
         private Material _lineMaterial;
 
         public float _maxLineWidth = .005f;
-
-        private DrawingVariables drawingVariables;
-
-        private const float TimeInterval = 0f;
-
-        private float _timer = 0f;
         private LineRenderer _currentLine = null;
-
-        [SerializeField]
-        private Transform _drawingParent;
-        //playspace anchor for synced views
-
-        private Vector3 _lastPosition = Vector3.zero;
-        private const float MinimalDrawingDistance = 0.001f;
-
-        [Header("Line Smoothing")]
-        [SerializeField]
-        private bool _isSmoothingActive = true;
-
-        [SerializeField, Range(0, 11)]
-        private int _windowSize = 2;
-
-        private Vector3[] _lastPositionsBuffer;
-
-
-
-        void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-        {
-            if (stream.IsWriting)
-            {
-                stream.SendNext(NewPoint);
-            }
-            else
-            {
-                NewPoint = (Vector3)stream.ReceiveNext();
-            }
-        }
 
         private void Awake()
         {
-            if (!photonView.IsMine)
-            {
-                Initalize();
-            }
+            Initalize();
+
         }
+
+        //private void getParentLinePoints()
+        //{
+        //    if (this.transform.parent.tag == GlobalVariables.annotationTag)
+        //    {
+        //        Annotation myParentAnnotation = this.GetComponentInParent<Annotation>();
+        //        if (myParentAnnotation == null || myParentAnnotation.lineRenderPoints.Length == 0) { return; }
+
+        //        lineRenderer.positionCount = myParentAnnotation.lineRenderPoints.Length;
+        //        lineRenderer.SetPositions(myParentAnnotation.lineRenderPoints);
+
+                
+        //    }
+        //}
 
         public void Initalize()
         {
-
-            if (PlayspaceAnchor.Instance != null)
-            {
-                transform.parent = FindObjectOfType<PlayspaceAnchor>().transform;
-                Debug.Log(GlobalVariables.green + "Parenting: " + this.gameObject.name + " in " + transform.parent.name + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
-            }
-            else
-            {
-                Debug.Log(GlobalVariables.red + "No Playspace anchor exists, nothing parented" + GlobalVariables.endColor + " : " + "Start()" + " : " + this.GetType());
-            }
-
-
-
-            var trans = transform;
-            startingLocalPosition = trans.localPosition;
-            startingLocalRotation = trans.localRotation;
-
-            networkLocalPosition = startingLocalPosition;
-            networkLocalRotation = startingLocalRotation;
-
-            _lastPosition = Vector3.zero;
             _currentLine = lineRenderer;
-
             _currentLine.material = new Material(Shader.Find("Sprites/Default")); ;
             _currentLine.material.color = DrawingVariables.Instance.currentColor;
             _currentLine.widthMultiplier = .005f;
@@ -112,6 +55,16 @@ namespace Photon_IATK
 
         }
 
+        public void bakeMesh()
+        {
+            Mesh mesh;
+            mesh = GetComponent<MeshFilter>().mesh;
+            lineRenderer.BakeMesh(mesh, false);
+
+            meshCollider.sharedMesh = mesh;
+
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Mesh Baked", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
 
         public void addPoint(Vector3 pointToAdd)
         {
@@ -125,15 +78,32 @@ namespace Photon_IATK
             oldPoint = NewPoint;
         }
 
-        // private void FixedUpdate()
-        private void FixedUpdate()
+        public void Simplify(float tolerance = 0.0025f)
         {
-            if (!photonView.IsMine && PhotonNetwork.IsConnected)
-            {
-                GameObject pen = GameObject.FindGameObjectWithTag("GameController");
+            lineRenderer.Simplify(tolerance);
 
-                addPoint(NewPoint);
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "LineAnnotation Set, Simplifying to tolerance: ", tolerance, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        }
+
+        public Vector3[] GetPoints()
+        {
+            Vector3[] newPos = new Vector3[lineRenderer.positionCount];
+            lineRenderer.GetPositions(newPos);
+            return newPos;
+        }
+
+        public void AddPoints(Vector3[] points)
+        {
+            if (points.Length < 1)
+            {
+                Debug.LogFormat(GlobalVariables.cError + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "LineAnnotation Points list is too short: ", points.Length, " points.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                return;
             }
+
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "LineAnnotation adding ", points.Length, " points.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            lineRenderer.positionCount = points.Length - 1;
+            lineRenderer.SetPositions(points);
         }
 
     }

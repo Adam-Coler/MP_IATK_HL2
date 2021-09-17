@@ -17,6 +17,16 @@ TagManager:
   - VisMenu
   - Annotation
   - AnnotationCollection
+  - DataDrivenAnnotationCollection
+  - HighlightSphereCollection
+  - HL2RemoveElicit
+  - Handle
+  - SpawnPoint
+  - Center
+  - VISLEFT
+  - Extra
+  - AnchorMenu
+  - Tracker
   layers:
   - Default
   - TransparentFX

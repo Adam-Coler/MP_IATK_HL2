@@ -128,6 +128,15 @@ namespace Photon_IATK
         {
             GetOrAddComponent<MRTK_Scene_Manager>().load_03_Vuforia_Setup();
         }
+
+        public void sceneManager_load_04_TriVuforia()
+        {
+            GetOrAddComponent<MRTK_Scene_Manager>().load_04_TriVuforia();
+        }
+        public void sceneManager_unload_04_TriVuforia()
+        {
+            GetOrAddComponent<MRTK_Scene_Manager>().unload_04_TriVuforia();
+        }
         #endregion
 
         #region Photon
@@ -198,6 +207,24 @@ namespace Photon_IATK
                 Debug.LogFormat(GlobalVariables.cCommon + "Loading Photon Log{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
+
+        public void showAnchorMenu()
+        {
+            GameObject anchorMenu;
+            if (HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.AnchorMenuTag, out anchorMenu, false, System.Reflection.MethodBase.GetCurrentMethod()))
+            {
+                Debug.LogFormat(GlobalVariables.cOnDestory + "Destorying anchorMenu{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                Destroy(anchorMenu);
+            }
+            else
+            {
+                anchorMenu = Resources.Load<GameObject>("MovePlayspaceMenu");
+                anchorMenu = Instantiate(anchorMenu);
+
+                Debug.LogFormat(GlobalVariables.cCommon + "Loading anchorMenu Log{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            }
+        }
         #endregion
 
         #region VisIATK
@@ -205,17 +232,54 @@ namespace Photon_IATK
         {
             GetOrAddComponent<NetworkedLoadVisualisation>().LoadVis();
         }
+
+        public void CenterVis()
+        {
+            if (PlayspaceAnchor.Instance == null) { return; }
+
+            Vector3 pos = PlayspaceAnchor.Instance.transform.position;
+
+            GameObject[] viss = GameObject.FindGameObjectsWithTag(GlobalVariables.visTag);
+
+
+
+            foreach (GameObject vis in viss)
+            {
+                vis.transform.position = pos;
+
+                Vector3 lookPos = Camera.main.transform.position;
+                Quaternion lookRot = Quaternion.LookRotation((lookPos - vis.transform.position).normalized);
+                float eulerY = lookRot.eulerAngles.y;
+                Quaternion rotation = Quaternion.Euler(0, eulerY + 180, 0);
+
+                vis.transform.rotation = rotation;
+
+                //Quaternion lookPos = Camera.main.transform.rotation;
+                //float eulerY = lookPos.eulerAngles.y;
+                //Quaternion rotation = Quaternion.Euler(0, eulerY, 0);
+
+                //vis.transform.rotation = rotation;
+            }
+
+            MoveToTagLocation[] moveToTagLocations = Object.FindObjectsOfType<MoveToTagLocation>();
+            foreach (MoveToTagLocation move in moveToTagLocations)
+            {
+                move.moveToTag();
+            }
+
+
+        }
         #endregion
 
         #region Annotations
         public void SaveAnnotations()
         {
-            GetOrAddComponent<AnnotationManagerSaveLoadRPC>().saveAnnotations();
+            GetOrAddComponent<AnnotationManagerSaveLoadEvents>().saveAnnotations();
         }
 
         public void LoadAnnotations()
         {
-            GetOrAddComponent<AnnotationManagerSaveLoadRPC>().loadAnnotations();
+            GetOrAddComponent<AnnotationManagerSaveLoadEvents>().loadAnnotations();
         }
         #endregion
 
@@ -223,6 +287,12 @@ namespace Photon_IATK
         public void ShowHideControllerModels()
         {
             Pun_Player_Event_Calls.Event_showHideControllerModels();
+        }
+
+        public void ShowHideExtras()
+        {
+            Pun_Player_Event_Calls.Event_HideExtras();
+            Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}{3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", "Btn pressed", ": ", "Event_HideExtras", "", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
         public void SetNickname()
@@ -233,8 +303,44 @@ namespace Photon_IATK
 
         #endregion
 
+        #region spawn items
+
+        public void LoadSetNameBox()
+        {
+            GameObject[] IDBoxs = GameObject.FindGameObjectsWithTag("PIDEntry");
+
+            if (IDBoxs.Length > 0)
+            {
+                foreach (GameObject IDBox in IDBoxs)
+                {
+                    Photon_Set_Nickname setNickName = IDBox.GetComponentInChildren<Photon_Set_Nickname>();
+                    if (setNickName != null)
+                    {
+                        setNickName.SetPlayerName();
+                    }
+
+                    Destroy(IDBox);
+                }
+            } else
+            {
+                GameObject instance = Instantiate(Resources.Load("IDEntry", typeof(GameObject))) as GameObject;
+            }
+        }
+
+        public void DestroySetNameBox()
+        {
+            GameObject[] IDBoxs = GameObject.FindGameObjectsWithTag("PIDEntry");
+
+            foreach (GameObject IDBox in IDBoxs)
+            {
+                Destroy(IDBox);
+            }
+        }
 
         #endregion
+
+        #endregion
+
 
     }
 }

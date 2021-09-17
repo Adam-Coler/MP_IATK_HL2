@@ -1886,13 +1886,12 @@ GameObject:
   - component: {fileID: 3508481770777948851}
   - component: {fileID: 8131391992978207911}
   - component: {fileID: 1058062613174048810}
-  - component: {fileID: 8454925233817578247}
-  - component: {fileID: 1999129629727214084}
-  - component: {fileID: 862074748855345882}
-  - component: {fileID: 3404242196657133980}
+  - component: {fileID: -2077265917887354581}
+  - component: {fileID: -6244496131311407914}
+  - component: {fileID: 3871927143419963349}
   m_Layer: 0
   m_Name: LineDrawing
-  m_TagString: Annotation
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1925,14 +1924,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 1058062613174048810}
-  meshCollider: {fileID: 8454925233817578247}
-  isUser: 0
+  meshCollider: {fileID: -6244496131311407914}
   _useAnalog: 1
-  _lineMaterial: {fileID: 0}
+  _lineMaterial: {fileID: 2100000, guid: 1ecb9f3a7c2e6e24c93e156351265310, type: 2}
   _maxLineWidth: 0.005
-  _drawingParent: {fileID: 0}
-  _isSmoothingActive: 1
-  _windowSize: 2
 --- !u!120 &1058062613174048810
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -1950,7 +1945,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 1ecb9f3a7c2e6e24c93e156351265310, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2028,7 +2023,15 @@ LineRenderer:
     generateLightingData: 0
   m_UseWorldSpace: 0
   m_Loop: 0
---- !u!64 &8454925233817578247
+--- !u!33 &-2077265917887354581
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3934190893047059235}
+  m_Mesh: {fileID: 0}
+--- !u!64 &-6244496131311407914
 MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2039,10 +2042,10 @@ MeshCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Convex: 0
+  m_Convex: 1
   m_CookingOptions: 14
   m_Mesh: {fileID: 0}
---- !u!114 &1999129629727214084
+--- !u!114 &3871927143419963349
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2051,51 +2054,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3934190893047059235}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Script: {fileID: 11500000, guid: fc0c9cec84f442c4fae323ca015611e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObservedComponentsFoldoutOpen: 1
-  Group: 0
-  prefixField: -1
-  observableSearch: 2
-  Synchronization: 1
-  OwnershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 8131391992978207911}
-  viewIdField: 0
-  InstantiationId: 0
-  isRuntimeInstantiated: 0
---- !u!114 &862074748855345882
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3934190893047059235}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9b564b887399ea43b673af3cf9f3eca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isWaitingForPhotonRequestTransformEvent: 1
---- !u!114 &3404242196657133980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3934190893047059235}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a87c82ce16fce01478184bfa7a503902, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  myVisXAxis: 
-  myVisYAxis: 
-  myVisZAxis: 
-  myTextContent: 
-  myUniqueAnnotationNumber: 0
-  myAnnotationType: 1
 --- !u!1 &3985181946276722627
 GameObject:
   m_ObjectHideFlags: 0

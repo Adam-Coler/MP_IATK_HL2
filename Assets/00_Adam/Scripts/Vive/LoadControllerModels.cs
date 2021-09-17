@@ -61,25 +61,31 @@ namespace Photon_IATK
                 if (inputDevice.name.Contains("VIVE"))
                 {
                     GameObject thisModel = PhotonNetwork.Instantiate("ViveController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-                    thisModel.transform.SetParent(this.transform);
+
+                    //HelperFunctions.ParentInSharedPlayspaceAnchor(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
+
                     //thisModel.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
+
+                    HelperFunctions.ParentInSharedPlayspaceAnchor(thisModel, System.Reflection.MethodBase.GetCurrentMethod());
+
                     thisModel.name = inputDevice.name;
                     TrackControllerByRefereance trackControllerByRefereance = thisModel.AddComponent<TrackControllerByRefereance>();
                     trackControllerByRefereance.thisInputDevice = inputDevice;
 
-
-                    Debug.Log(GlobalVariables.purple + "Instantiated Vive Controller" + GlobalVariables.endColor + " : registerDevice(), " + this.GetType());
+                    Debug.LogFormat(GlobalVariables.cInstance + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Instantiated Vive Controller", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 } else if (inputDevice.name.Contains("logi"))
                 {
                     GameObject thisModel = PhotonNetwork.Instantiate("LogitechController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-                    thisModel.transform.SetParent(this.transform);
+
+                    HelperFunctions.ParentInSharedPlayspaceAnchor(thisModel, System.Reflection.MethodBase.GetCurrentMethod());
+
                     //thisModel.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
                     thisModel.name = inputDevice.name;
                     TrackControllerByRefereance trackControllerByRefereance = thisModel.AddComponent<TrackControllerByRefereance>();
                     trackControllerByRefereance.thisInputDevice = inputDevice;
 
-                    Debug.Log(GlobalVariables.purple + "Instantiated Logitech Controller" + GlobalVariables.endColor + " : registerDevice(), " + this.GetType());
+                    Debug.LogFormat(GlobalVariables.cInstance + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Instantiated Logitech Controller", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                 }
                 
             }
@@ -88,7 +94,7 @@ namespace Photon_IATK
 #else
         private void Awake()
         {
-            Debug.Log(GlobalVariables.purple + "Deestorying LoadContollerModels, Game not set tt Vive" + GlobalVariables.endColor + " : Awake(), " + this.GetType());
+            Debug.Log(GlobalVariables.purple + "Destorying LoadContollerModels, Game not set tt Vive" + GlobalVariables.endColor + " : Awake(), " + this.GetType());
             Destroy(this);
         }
 #endif

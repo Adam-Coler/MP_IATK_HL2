@@ -21,7 +21,7 @@ namespace Photon_IATK
 
         public void LoadVis()
         {
-            VisWrapperClass[] visWrappers = FindObjectsOfType<VisWrapperClass>();
+            VisDeleteTarget[] visWrappers = FindObjectsOfType<VisDeleteTarget>();
 
             if (visWrappers.Length == 0)
             {
@@ -34,10 +34,13 @@ namespace Photon_IATK
             AnnotationManagerSaveLoadEvents annotationManager;
             if (HelperFunctions.GetComponent<AnnotationManagerSaveLoadEvents>(out annotationManager, System.Reflection.MethodBase.GetCurrentMethod()))
             {
+                Debug.LogFormat(GlobalVariables.cOnDestory + "{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "Saving/deleting annotations", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                 annotationManager.saveAnnotations();
+
+                annotationManager.RequestAnnotationRemoval();
             }
 
-            GeneralEventManager.instance.SendDeleteAllObjectsWithComponentRequest(typeof(VisWrapperClass).AssemblyQualifiedName);
+            GeneralEventManager.instance.SendDeleteAllObjectsWithComponentRequest(typeof(VisDeleteTarget).AssemblyQualifiedName);
 
         }
 

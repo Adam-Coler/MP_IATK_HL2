@@ -32,10 +32,10 @@ namespace IATK
         private GameObject axisTickLabelPrefab;
         [SerializeField]
         [Tooltip("The minimum normaliser handle.")]
-        private Transform minNormaliserObject;
+        public Transform minNormaliserObject;
         [SerializeField]
         [Tooltip("The maximum normaliser handle.")]
-        private Transform maxNormaliserObject;
+        public Transform maxNormaliserObject;
         [SerializeField]
         [Tooltip("The minimum filter handle.")]
         private Transform minFilterObject;

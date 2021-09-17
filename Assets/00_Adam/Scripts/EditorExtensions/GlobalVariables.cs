@@ -30,6 +30,7 @@ namespace Photon_IATK
         public static string cSerialize = orange;
         public static string cFileOperations = orange;
         public static string cEvent = yellow;
+        public static string cJSON = purple;
 
         public static string endColor = "</color>";
         public static string newLine = "\n";
@@ -43,9 +44,19 @@ namespace Photon_IATK
         public static string visTag = "Vis";
         public static string annotationTag = "Annotation";
         public static string annotationCollectionTag = "AnnotationCollection";
-        public static string annotationSaveFolder = "AnnotationFiles";
+        public static string dataDrivenAnnotationTag = "DataDrivenAnnotations";
+        public static string annotationSaveFolder = "AnnotationFiles"; 
+        public static string HighlightSphereCollection = "HighlightSphereCollection";
         public static string visInterfaceMenuTag = "VisMenu";
         public static string gameControllerModelTag = "GameController";
+        public static string pcElicitTag = "HL2RemoveElicit";
+        public static string handleTag = "Handle";
+        public static string spawnTag = "SpawnPoint";
+        public static string CenterTag = "Center";
+        public static string ExtraTag = "Extra";
+        public static string AnchorMenuTag = "AnchorMenu";
+        public static string TrackerTag = "Tracker";
+
 
         public enum allSymbols
         {
@@ -59,9 +70,10 @@ namespace Photon_IATK
             ParticipantID
         };
 
-        public static int photonSendRate = 45;
-        public static int iPunObservableUpdateRate = 45;
+        public static int photonSendRate = 60;
+        public static int iPunObservableUpdateRate = photonSendRate;
         public static ExitGames.Client.Photon.SendOptions sendOptions = ExitGames.Client.Photon.SendOptions.SendUnreliable;
+        public static ExitGames.Client.Photon.SendOptions sendOptionsReliable = ExitGames.Client.Photon.SendOptions.SendReliable;
 
         //Movement 1-9
         public const byte PhotonMoveEvent = 1;
@@ -85,18 +97,20 @@ namespace Photon_IATK
         //Player 40 - 49
         public const byte PhotonRequestHideControllerModelsEvent = 40;
         public const byte PhotonRequestNicknameUpdateEvent = 41;
+        public const byte PhotonRequestHideExtrasEvent = 42;
 
         //Annotations 50 - 69
         public const byte PhotonRequestAnnotationsSaveAllEvent = 50;
         public const byte PhotonRequestAnnotationsDeleteAllEvent = 51;
         public const byte PhotonRequestAnnotationsDeleteOneEvent = 52;
         public const byte PhotonRequestAnnotationsLoadAllEvent = 53;
+        public const byte SendEventNewAnnotationID = 54;
 
-        public const byte PhotonRequestAnnotationsListOfIDsEvent = 54;
-        public const byte PhotonResponseRequestAnnotationsListOfIDsEventNONE_FOUNDEvent = 55;
-        public const byte PhotonResponseToRequestAnnotationsListOfIDsEvent = 56;
-        public const byte PhotonRequestAnnotationsByListOfIDsEvent = 57;
-        public const byte PhotonResponseToRequestAnnotationsByListOfIDsEvent = 58;
+        public const byte PhotonRequestAnnotationsListOfIDsEvent = 55;
+        //public const byte PhotonResponseRequestAnnotationsListOfIDsEventNONE_FOUNDEvent = 55;
+        //public const byte PhotonResponseToRequestAnnotationsListOfIDsEvent = 56;
+        //public const byte PhotonRequestAnnotationsByListOfIDsEvent = 57;
+        //public const byte PhotonResponseToRequestAnnotationsByListOfIDsEvent = 58;
 
         //Annotations 2 70 - 79
         public const byte RequestEventAnnotationCreation = 70;
@@ -105,16 +119,45 @@ namespace Photon_IATK
 
         public const byte RequestEventAnnotationRemoval = 80;
         public const byte RequestEventAnnotationFileSystemDeletion = 81;
+        public const byte RequestSaveAnnotation = 82;
         //public const byte RespondToRequestAnnotationDeletionAll = 81;
+
+        //One offs 90-99
+        
+        //Pen 
+        public const byte RequestAddPointEvent = 90;
+        public const byte RequestLineCompleation = 91;
+        
+        
+        //Text Annotation
+        public const byte RequestTextUpdate = 92;
+
+        //Centrality
+        public const byte RequestCentralityUpdate = 93;
+
+
 
         //Other 100-109
         public const byte PhotonRequestLatencyCheckEvent = 100;
         public const byte PhotonRequestLatencyCheckResponseEvent = 101;
+        public const byte RequestElicitationSetupEvent = 102;
 
-        //public const byte PhotonEvent = 6;
+        public const byte RequestGrabEvent = 103;
+        public const byte RequestReleaseEvent = 104;
+        public const byte RequestGrabHandleEvent = 105;
+        public const byte RequestReleaseHandleEvent = 106;
+
+        public const byte RequestUnParentEvent = 107;
+        public const byte RequestParentEvent = 108;
+
+        public const byte RequestPlayspaceTransform = 109;
+        public const byte SendPlayspaceTransform = 110;
+        public const byte RequestUpdatePlayspaceTransform = 111;
+        public const byte RequestHideTrackers = 112;
 
 
-        //Debug.LogFormat(GlobalVariables.cLevel + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+
 
         //Debug.LogFormat(GlobalVariables.cRegister + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 

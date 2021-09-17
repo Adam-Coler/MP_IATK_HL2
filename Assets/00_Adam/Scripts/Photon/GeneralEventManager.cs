@@ -16,6 +16,7 @@ namespace Photon_IATK
     public class GeneralEventManager : MonoBehaviourPun
     {
         public static GeneralEventManager instance;
+        public bool isElictationOnPC = false;
 
         #region Setup
 
@@ -81,6 +82,10 @@ namespace Photon_IATK
                 case GlobalVariables.PhotonRequestLatencyCheckResponseEvent:
                     PhotonProcessRequestLatencyCheckResponseEvent(data);
                     break;
+                case GlobalVariables.RequestElicitationSetupEvent:
+                    ElicitationSetUpEvent();
+                    Debug.Log("RequestElicitationSetupEvent");
+                    break;
                 default:
                     break;
             }
@@ -143,7 +148,12 @@ namespace Photon_IATK
                 Debug.LogFormat(GlobalVariables.cEvent + "SendVisSceneInstantiateEvent() triggered but you are offline, loading Vis offline{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 GameObject prefab = Resources.Load("Vis") as GameObject;
+                GameObject prefabAnnotationStation = Resources.Load("AnnotationStation") as GameObject;
+                GameObject prefabTrashCube = Resources.Load("TrashCube") as GameObject;
+
                 obj = Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.identity);
+                obj = Instantiate(prefabAnnotationStation, new Vector3(0, 0, 0), Quaternion.identity);
+                obj = Instantiate(prefabTrashCube, new Vector3(0, 0, 0), Quaternion.identity);
             } 
             else
             {
@@ -192,10 +202,78 @@ namespace Photon_IATK
             }
         }
 
+        /// <summary>
+        /// Using an RPC so that new clients recive the call on loggin in
+        /// </summary>
+        public void SendSetupElicitatoinPCRequest()
+        {
+            if (PhotonNetwork.IsConnected)
+            {
+                //RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; //Will not recived own message
+
+                //object[] content = new object[] { photonView.ViewID };
+
+                //PhotonNetwork.RaiseEvent(GlobalVariables.RequestElicitationSetupEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
+                PhotonView photonView = PhotonView.Get(this);
+
+                photonView.RPC("ElicitationSetUpEvent", RpcTarget.All);
+            }
+            else
+            {
+                ElicitationSetUpEvent();
+            }
+        }
+
         #endregion
 
         #region Receive Events
 
+        [PunRPC]
+        public void ElicitationSetUpEvent()
+        {
+            // All clients now have this flagged.
+            isElictationOnPC = true;
+#if !HL2
+            Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}{3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", "Setup elicitation environment requested, doing nothing", "", "", "", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+#endif
+
+#if HL2
+            Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}{3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", "Setting up elicitation environment on HoloLens", "", "", "", this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            RemoveVisItemsForElicitPC();
+            DisableManipulations();
+
+
+
+#endif
+        }
+
+        public void DisableManipulations()
+        {
+            var manipulatorScripts = FindObjectsOfType<Microsoft.MixedReality.Toolkit.UI.ObjectManipulator>();
+            foreach (var script in manipulatorScripts)
+            {
+                script.ManipulationType = 0;
+            }
+
+            var manipulationControlsScripts = FindObjectsOfType<ManipulationControls>();
+            foreach (var script in manipulationControlsScripts)
+            {
+                script.BoundingBoxActivation = ManipulationControls.BoundingBoxActivationType.ActivateManually;
+            }
+        }
+
+
+        public void RemoveVisItemsForElicitPC()
+        {
+            //if exists find and remove
+            //remove menu
+            //remove platform
+            GameObject[] taggedItems = GameObject.FindGameObjectsWithTag(GlobalVariables.pcElicitTag);
+            foreach (GameObject obj in taggedItems)
+            {
+                Destroy(obj);
+            }
+        }
 
         private List<int> timesRequestToReturned = new List<int> { };
         private List<int> timesReturnedToRecived = new List<int> { };
@@ -239,8 +317,16 @@ namespace Photon_IATK
         {
             Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: Master ~ {1}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}{6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", GlobalVariables.PhotonVisSceneInstantiateEvent, "InstantiateRoomObject Vis", "", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, "", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            GameObject obj;
-            obj = PhotonNetwork.InstantiateRoomObject("Vis", Vector3.zero, Quaternion.identity);
+            GameObject visObj;
+            GameObject annotationObj;
+            GameObject trashCube;
+
+
+            visObj = PhotonNetwork.InstantiateRoomObject("Vis", Vector3.zero, Quaternion.identity);
+            annotationObj = PhotonNetwork.InstantiateRoomObject("AnnotationStation", Vector3.zero, Quaternion.identity);
+            trashCube = PhotonNetwork.InstantiateRoomObject("TrashCube", Vector3.zero, Quaternion.identity);
+
+
         }
 
         //delete vis

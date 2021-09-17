@@ -114,10 +114,12 @@ namespace Photon_IATK
             {
                 if (makeOneIfNotFound)
                 {
-                    Debug.LogFormat(GlobalVariables.cError + "No GameObjects found with tag: {0}. None will be made{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", tag, "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
+                    Debug.LogFormat(GlobalVariables.cError + "No GameObjects found with tag: {0}. One will be made but has been disabled{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", tag, "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
 
-                    returnedGameObject = new GameObject("EmmulatedVisObject");
-                    returnedGameObject.tag = GlobalVariables.visTag;
+                    //returnedGameObject = new GameObject("EmmulatedVisObject");
+                    //returnedGameObject.tag = GlobalVariables.visTag;
+                    returnedGameObject = null;
+                    return false;
                 } 
                 else
                 {
@@ -283,6 +285,7 @@ namespace Photon_IATK
 
         public static byte[] SerializeToByteArray<T>(T serializableObject, System.Reflection.MethodBase fromMethodBase)
         {
+
             byte[] bytes;
             IFormatter formatter = new BinaryFormatter();
             MemoryStream stream = new MemoryStream();
@@ -293,6 +296,26 @@ namespace Photon_IATK
             Debug.LogFormat(GlobalVariables.cCommon + "Successful Serizalization. Input Type: {0}{1}{2}" + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6} -> {7}", serializableObject.GetType(), "", "", Time.realtimeSinceStartup, fromMethodBase.ReflectedType.Name, fromMethodBase.Name, MethodBase.GetCurrentMethod().Name, MethodBase.GetCurrentMethod().ReflectedType.Name);
 
             return bytes;
+        }
+
+        public static Vector3 StringToVector3(string sVector)
+        {
+            // Remove the parentheses
+            if (sVector.StartsWith("(") && sVector.EndsWith(")"))
+            {
+                sVector = sVector.Substring(1, sVector.Length - 2);
+            }
+
+            // split the items
+            string[] sArray = sVector.Split(',');
+
+            // store as a Vector3
+            Vector3 result = new Vector3(
+                float.Parse(sArray[0]),
+                float.Parse(sArray[1]),
+                float.Parse(sArray[2]));
+
+            return result;
         }
 
 
@@ -327,10 +350,142 @@ namespace Photon_IATK
 
 
 
+        /// <summary>
+        /// Position Relative to Anchor
+        /// </summary>
+        public static Vector3 PRA(GameObject obj)
+        {
+            return obj.transform.localPosition;
+            //return PlayspaceAnchor.Instance.transform.InverseTransformPoint(obj.transform.localPosition);
+
+            //This is wrong
+            //return obj.transform.transform.InverseTransformPoint(PlayspaceAnchor.Instance.transform.position);
+        }
+
+        /// <summary>
+        /// Position Relative to Anchor
+        /// </summary>
+        public static Vector3 PRA(Vector3 point)
+        {
+            return PlayspaceAnchor.Instance.transform.InverseTransformPoint(point);
+        }
+
+        /// <summary>
+        /// Rotation Relative to Anchor
+        /// </summary>
+        public static Quaternion RRA(GameObject obj)
+        {
+            return Quaternion.Inverse(PlayspaceAnchor.Instance.transform.rotation) * obj.transform.rotation;
+        }
+
+        /// <summary>
+        /// Scale Relative to Anchor
+        /// </summary>
+        public static Vector3 SRA(GameObject obj)
+        {
+
+            return obj.transform.lossyScale;
+            //return obj.transform.localScale;
+        }
+
+        public static float GetTime()
+        {
+            return Time.realtimeSinceStartup;
+        }
+
+        public static string getJson(object obj, string objName)
+        {
+            string output = JsonUtility.ToJson(obj, GlobalVariables.JSONPrettyPrint);
+            //Debug.Log(GlobalVariables.cJSON + objName + GlobalVariables.endColor + output);
+            return output;
+        }
 
 
+        static public GameObject getChildGameObject(GameObject fromGameObject, string withName)
+        {
+            Transform[] ts = fromGameObject.transform.GetComponentsInChildren<Transform>(true);
+            foreach (Transform t in ts) if (t.gameObject.name == withName) return t.gameObject;
+            return null;
+        }
 
+        static public float getMedian(float[] values)
+        {
+            int numberCount = values.Count();
+            int halfIndex = values.Count() / 2;
+            var sortedNumbers = values.OrderBy(n => n);
+            float median;
+            if ((numberCount % 2) == 0)
+            {
+                var tmp = halfIndex - 1;
+                median = (sortedNumbers.ElementAt(halfIndex) + sortedNumbers.ElementAt(tmp)) / 2;
+            }
+            else
+            {
+                median = sortedNumbers.ElementAt(halfIndex);
+            }
+            return median;
+        }
 
+        public static Vector3 getMiddle(GameObject[] objs)
+        {
+            Vector3[] points = new Vector3[objs.Length];
+
+            for (int i = 0; i < objs.Length; i++)
+            {
+                points[i] = objs[i].transform.position;
+            }
+
+            return getMiddle(points);
+        }
+
+        public static Vector3 getMiddle(Vector3[] points)
+        {
+            Vector3 middle = Vector3.zero;
+            foreach (Vector3 point in points)
+            {
+                middle += point;
+            }
+
+            middle = middle / (points.Length);
+            return middle;
+        }
+
+        public static Quaternion getRotation(GameObject position1, GameObject position2, GameObject position3)
+        {
+            Vector3 point2 = position1.transform.position;
+            Vector3 point3 = position2.transform.position;
+            Vector3 point4 = position3.transform.position;
+            Vector3 FacedPoint;
+
+            float dist23 = Vector3.Distance(point2, point3);
+            float dist24 = Vector3.Distance(point2, point4);
+            float dist34 = Vector3.Distance(point3, point4);
+
+            if (dist23 > dist24 && dist23 > dist34)
+            {
+                FacedPoint = point4;
+
+            }
+            else if (dist24 > dist23 && dist24 > dist34)
+            {
+                FacedPoint = point3;
+            }
+            else
+            {
+                FacedPoint = point2;
+            }
+
+            Plane p = new Plane(point2, point3, point4);
+
+            Vector3 middle = getMiddle(new Vector3[] { point2, point3, point4 });
+
+            Vector3 lookPos = FacedPoint - middle;
+            Quaternion lookRot = Quaternion.LookRotation(lookPos, Vector3.up);
+            float eulerY = lookRot.eulerAngles.y;
+            Quaternion rotation = Quaternion.Euler(0, eulerY, 0);
+
+            return rotation;
+        }
 
     }
 }
