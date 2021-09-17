@@ -49,9 +49,10 @@ namespace Photon_IATK
         {
             HelperFunctions.ParentInSharedPlayspaceAnchor(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
 
+            if (beam != null) { Destroy(beam); }
+
             if (isBeam)
             {
-                if (beam != null) { Destroy(beam); }
 
                 beam = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
                 beam.name = "Gaze beam";
@@ -103,7 +104,7 @@ namespace Photon_IATK
             Vector3 dir = orginPlus - orgin;
 
             Quaternion q = Quaternion.FromToRotation(transform.up, dir);
-            Quaternion rot = q * beam.transform.rotation;
+            //Quaternion rot = q * beam.transform.rotation;
 
             beam.transform.position = orgin + (beam.transform.localScale.y * 1 * dir.normalized);
             beam.transform.rotation = q;

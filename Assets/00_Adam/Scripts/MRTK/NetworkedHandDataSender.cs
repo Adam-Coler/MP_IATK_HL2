@@ -308,17 +308,22 @@ namespace Photon_IATK
                     // Ignore anything that is not a hand because we want articulated hands
                     if (source.SourceType == Microsoft.MixedReality.Toolkit.Input.InputSourceType.Hand)
                     {
-                        if (!source.SourceName.Contains(handedness.ToString())) { continue; }
+                        if (!source.SourceName.Contains(handedness.ToString()))
+                        {
+                            continue;
+                        }
 
                         foreach (var p in source.Pointers)
                         {
                             if (p is IMixedRealityNearPointer)
                             {
+                                Debug.Log("Not sending data for " + p.PointerName);
                                 // Ignore near pointers, we only want the rays
                                 continue;
                             }
                             if (p.Result != null)
                             {
+                                Debug.Log("Sending data for " + source.SourceName);
                                 myHandData.startPoint = PlayspaceAnchor.Instance.gameObject.transform.InverseTransformPoint(p.Position);
                                 myHandData.endPoint = PlayspaceAnchor.Instance.gameObject.transform.InverseTransformPoint(p.Result.Details.Point);
                                 myHandData.hitObj = p.Result.Details.Object;
@@ -358,15 +363,9 @@ namespace Photon_IATK
 
         private void updateBeamAndHitLocation(SerializeableHandData handData)
         {
-            if (!isShowing || beam == null || hitPoint == null) { return; }
+            if (beam == null || hitPoint == null) { return; }
 
-            if (myHandData.hitObj)
-            {
-                hitPoint.transform.position = handData.endPoint;
-            } else
-            {
-                hitPoint.transform.position = new Vector3(10f, 10f, 10f);
-            }
+            hitPoint.transform.position = handData.endPoint;
 
             Vector3 dir = handData.endPoint - handData.startPoint;
 
