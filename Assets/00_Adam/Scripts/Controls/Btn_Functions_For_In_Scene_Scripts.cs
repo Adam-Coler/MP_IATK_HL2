@@ -232,6 +232,43 @@ namespace Photon_IATK
         {
             GetOrAddComponent<NetworkedLoadVisualisation>().LoadVis();
         }
+
+        public void CenterVis()
+        {
+            if (PlayspaceAnchor.Instance == null) { return; }
+
+            Vector3 pos = PlayspaceAnchor.Instance.transform.position;
+
+            GameObject[] viss = GameObject.FindGameObjectsWithTag(GlobalVariables.visTag);
+
+
+
+            foreach (GameObject vis in viss)
+            {
+                vis.transform.position = pos;
+
+                Vector3 lookPos = Camera.main.transform.position;
+                Quaternion lookRot = Quaternion.LookRotation((lookPos - vis.transform.position).normalized);
+                float eulerY = lookRot.eulerAngles.y;
+                Quaternion rotation = Quaternion.Euler(0, eulerY + 180, 0);
+
+                vis.transform.rotation = rotation;
+
+                //Quaternion lookPos = Camera.main.transform.rotation;
+                //float eulerY = lookPos.eulerAngles.y;
+                //Quaternion rotation = Quaternion.Euler(0, eulerY, 0);
+
+                //vis.transform.rotation = rotation;
+            }
+
+            MoveToTagLocation[] moveToTagLocations = Object.FindObjectsOfType<MoveToTagLocation>();
+            foreach (MoveToTagLocation move in moveToTagLocations)
+            {
+                move.moveToTag();
+            }
+
+
+        }
         #endregion
 
         #region Annotations

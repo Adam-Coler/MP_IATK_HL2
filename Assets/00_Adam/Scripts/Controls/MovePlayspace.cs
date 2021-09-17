@@ -94,6 +94,23 @@ namespace Photon_IATK
             }
         }
 
+        public void requestTrackerUpdate()
+        {
+            Debug.Log("button pressed");
+            if (playerDropDown.options[playerDropDown.value].text == "Undefined")
+            {
+                getplayers();
+            }
+            else if (playerDropDown.options[playerDropDown.value].text == "FindPlayers")
+            {
+
+            }
+            else
+            {
+                mpi.requestTrackerUpdate(players[playerDropDown.value - 2]);
+            }
+        }
+
         public void updateValues()
         {
             float.TryParse(posX_TMP.text, NumberStyles.Any, CultureInfo.CurrentCulture, out posX);

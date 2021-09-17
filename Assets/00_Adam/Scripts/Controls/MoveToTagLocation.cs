@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Photon_IATK
 {
+    [DisallowMultipleComponent]
     public class MoveToTagLocation : MonoBehaviour
     {
         public string locationToMoveTo;
@@ -11,6 +12,11 @@ namespace Photon_IATK
         public bool isLocation;
 
         public void Start()
+        {
+            moveToTag();
+        }
+
+        public void moveToTag()
         {
             Debug.LogFormat(GlobalVariables.cCommon + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "MoveToTagLocation on " + this.name + ", is location (" + isLocation + "), set location: " + myLocation + ", Move to: " + locationToMoveTo + ". ", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -32,7 +38,7 @@ namespace Photon_IATK
                         }
                     }
                 }
-                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No suitable location found for " + this.name + ", set location: " + locationToMoveTo + ". ", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                Debug.LogFormat(GlobalVariables.cError + "{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "No suitable location found for " + this.name + ", set location: " + locationToMoveTo + ". My location: " + myLocation + ".", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
     }

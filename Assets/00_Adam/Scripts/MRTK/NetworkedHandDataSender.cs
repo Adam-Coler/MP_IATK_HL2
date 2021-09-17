@@ -41,31 +41,31 @@ namespace Photon_IATK
         {
             List<TrackedHandJoint> trackedHandJoints = new List<TrackedHandJoint>();
 
-            if (Wrist ){ trackedHandJoints.Add(TrackedHandJoint.Wrist); }
-            if (Palm ){trackedHandJoints.Add(TrackedHandJoint.Palm); }
-            if (ThumbMetacarpalJoint ){trackedHandJoints.Add(TrackedHandJoint.ThumbMetacarpalJoint); }
-            if (ThumbProximalJoint ){trackedHandJoints.Add(TrackedHandJoint.ThumbProximalJoint); }
-            if (ThumbDistalJoint ){trackedHandJoints.Add(TrackedHandJoint.ThumbDistalJoint); }
-            if (ThumbTip ){trackedHandJoints.Add(TrackedHandJoint.ThumbTip); }
-            if (IndexMetacarpal ){trackedHandJoints.Add(TrackedHandJoint.IndexMetacarpal); }
-            if (IndexKnuckle ){trackedHandJoints.Add(TrackedHandJoint.IndexKnuckle); }
-            if (IndexMiddleJoint ){trackedHandJoints.Add(TrackedHandJoint.IndexMiddleJoint); }
-            if (IndexDistalJoint ){trackedHandJoints.Add(TrackedHandJoint.IndexDistalJoint); }
-            if (IndexTip ){trackedHandJoints.Add(TrackedHandJoint.IndexTip); }
-            if (MiddleMetacarpal ){trackedHandJoints.Add(TrackedHandJoint.MiddleMetacarpal); }
-            if (MiddleKnuckle ){trackedHandJoints.Add(TrackedHandJoint.MiddleKnuckle); }
-            if (MiddleMiddleJoint ){trackedHandJoints.Add(TrackedHandJoint.MiddleMiddleJoint); }
-            if (MiddleDistalJoint ){trackedHandJoints.Add(TrackedHandJoint.MiddleDistalJoint); }
-            if (MiddleTip ){trackedHandJoints.Add(TrackedHandJoint.MiddleTip); }
-            if (RingMetacarpal ){trackedHandJoints.Add(TrackedHandJoint.RingMetacarpal); }
-            if (RingKnuckle ){trackedHandJoints.Add(TrackedHandJoint.RingKnuckle); }
-            if (RingMiddleJoint ){trackedHandJoints.Add(TrackedHandJoint.RingMiddleJoint); }
-            if (RingDistalJoint ){trackedHandJoints.Add(TrackedHandJoint.RingDistalJoint); }
-            if (RingTip ){trackedHandJoints.Add(TrackedHandJoint.RingTip); }
-            if (PinkyMetacarpal ){trackedHandJoints.Add(TrackedHandJoint.PinkyMetacarpal); }
-            if (PinkyKnuckle ){trackedHandJoints.Add(TrackedHandJoint.PinkyKnuckle); }
-            if (PinkyMiddleJoint ){trackedHandJoints.Add(TrackedHandJoint.PinkyMiddleJoint); }
-            if (PinkyDistalJoint ){trackedHandJoints.Add(TrackedHandJoint.PinkyDistalJoint); }
+            if (Wrist) { trackedHandJoints.Add(TrackedHandJoint.Wrist); }
+            if (Palm) { trackedHandJoints.Add(TrackedHandJoint.Palm); }
+            if (ThumbMetacarpalJoint) { trackedHandJoints.Add(TrackedHandJoint.ThumbMetacarpalJoint); }
+            if (ThumbProximalJoint) { trackedHandJoints.Add(TrackedHandJoint.ThumbProximalJoint); }
+            if (ThumbDistalJoint) { trackedHandJoints.Add(TrackedHandJoint.ThumbDistalJoint); }
+            if (ThumbTip) { trackedHandJoints.Add(TrackedHandJoint.ThumbTip); }
+            if (IndexMetacarpal) { trackedHandJoints.Add(TrackedHandJoint.IndexMetacarpal); }
+            if (IndexKnuckle) { trackedHandJoints.Add(TrackedHandJoint.IndexKnuckle); }
+            if (IndexMiddleJoint) { trackedHandJoints.Add(TrackedHandJoint.IndexMiddleJoint); }
+            if (IndexDistalJoint) { trackedHandJoints.Add(TrackedHandJoint.IndexDistalJoint); }
+            if (IndexTip) { trackedHandJoints.Add(TrackedHandJoint.IndexTip); }
+            if (MiddleMetacarpal) { trackedHandJoints.Add(TrackedHandJoint.MiddleMetacarpal); }
+            if (MiddleKnuckle) { trackedHandJoints.Add(TrackedHandJoint.MiddleKnuckle); }
+            if (MiddleMiddleJoint) { trackedHandJoints.Add(TrackedHandJoint.MiddleMiddleJoint); }
+            if (MiddleDistalJoint) { trackedHandJoints.Add(TrackedHandJoint.MiddleDistalJoint); }
+            if (MiddleTip) { trackedHandJoints.Add(TrackedHandJoint.MiddleTip); }
+            if (RingMetacarpal) { trackedHandJoints.Add(TrackedHandJoint.RingMetacarpal); }
+            if (RingKnuckle) { trackedHandJoints.Add(TrackedHandJoint.RingKnuckle); }
+            if (RingMiddleJoint) { trackedHandJoints.Add(TrackedHandJoint.RingMiddleJoint); }
+            if (RingDistalJoint) { trackedHandJoints.Add(TrackedHandJoint.RingDistalJoint); }
+            if (RingTip) { trackedHandJoints.Add(TrackedHandJoint.RingTip); }
+            if (PinkyMetacarpal) { trackedHandJoints.Add(TrackedHandJoint.PinkyMetacarpal); }
+            if (PinkyKnuckle) { trackedHandJoints.Add(TrackedHandJoint.PinkyKnuckle); }
+            if (PinkyMiddleJoint) { trackedHandJoints.Add(TrackedHandJoint.PinkyMiddleJoint); }
+            if (PinkyDistalJoint) { trackedHandJoints.Add(TrackedHandJoint.PinkyDistalJoint); }
 
             return trackedHandJoints;
         }
@@ -77,6 +77,7 @@ namespace Photon_IATK
         private IMixedRealityHandJointService handJointService = null;
 
         private List<GameObject> representations = new List<GameObject>();
+        private GameObject beam;
 
         public bool isSending = true;
         public bool isShowing = true;
@@ -90,6 +91,8 @@ namespace Photon_IATK
         public Material ring;
         public Material pinky;
         public Material wrist;
+        public Material beamRight;
+        public Material beamLeft;
 
         void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
@@ -118,6 +121,8 @@ namespace Photon_IATK
             {
                 representations[i].transform.localPosition = handData.myPositions[i];
             }
+
+            updateBeam(myHandData.tip, myHandData.orgin);
         }
 
         public void setUp()
@@ -163,6 +168,36 @@ namespace Photon_IATK
                 }
             }
 
+            if (isShowing)
+            {
+                beam = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                beam.name = "pointer beam - " + handedness.ToString();
+                beam.transform.localScale = new Vector3(.005f, 1f, .005f);
+                beam.transform.parent = this.transform;
+
+                Renderer tmp = beam.GetComponent<Renderer>();
+                if (tmp != null)
+                {
+                    if (handedness == Handedness.Left)
+                    {
+                        tmp.material = beamLeft;
+                    }
+                    else
+                    {
+                        tmp.material = beamRight;
+                    }
+
+                }
+
+                Collider tmpCol = beam.GetComponent<Collider>();
+                if (tmpCol != null)
+                {
+                    Destroy(tmpCol);
+                }
+            }
+
+
+
             if (isSending)
             {
                 if (CoreServices.InputSystem != null)
@@ -191,16 +226,20 @@ namespace Photon_IATK
             else if (forJoint.Contains("Index"))
             {
                 output = index;
-            } else if (forJoint.Contains("Ring"))
+            }
+            else if (forJoint.Contains("Ring"))
             {
                 output = ring;
-            } else if (forJoint.Contains("Middle"))
+            }
+            else if (forJoint.Contains("Middle"))
             {
                 output = middle;
-            } else if (forJoint.Contains("Pink"))
+            }
+            else if (forJoint.Contains("Pink"))
             {
                 output = pinky;
-            } else
+            }
+            else
             {
                 output = wrist;
             }
@@ -221,9 +260,10 @@ namespace Photon_IATK
                     if (HandJointUtils.TryGetJointPose(jointToTrack, handedness, out _pose))
                     {
                         myHandData.myPositions[i] = PlayspaceAnchor.Instance.gameObject.transform.InverseTransformPoint(_pose.Position);
-                    } else
+                    }
+                    else
                     {
-                        myHandData.myPositions[i] = new Vector3(10,10,10);
+                        myHandData.myPositions[i] = new Vector3(10, 10, 10);
                     }
 
                     if (isShowing)
@@ -231,10 +271,68 @@ namespace Photon_IATK
                         representations[i].transform.position = myHandData.myPositions[i];
                     }
 
+                    if (jointToTrack == TrackedHandJoint.IndexTip)
+                    {
+                        myHandData.tip = i;
+                    }
+                    else if (jointToTrack == TrackedHandJoint.Wrist && handedness == Handedness.Right)
+                    {
+                        myHandData.orgin = i;
+                    }
+                    else if (jointToTrack == TrackedHandJoint.IndexDistalJoint && handedness == Handedness.Left)
+                    {
+                        myHandData.orgin = i;
+                    }
+
+
+                }
+
+
+                foreach (var source in MixedRealityToolkit.InputSystem.DetectedInputSources)
+                {
+                    // Ignore anything that is not a hand because we want articulated hands
+                    if (source.SourceType == Microsoft.MixedReality.Toolkit.Input.InputSourceType.Hand)
+                    {
+                        foreach (var p in source.Pointers)
+                        {
+                            if (p is IMixedRealityNearPointer)
+                            {
+                                // Ignore near pointers, we only want the rays
+                                continue;
+                            }
+                            if (p.Result != null)
+                            {
+                                var startPoint = p.Position;
+                                var endPoint = p.Result.Details.Point;
+                                var hitObject = p.Result.Details.Object;
+                                if (hitObject)
+                                {
+                                    var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                                    sphere.transform.localScale = Vector3.one * 0.01f;
+                                    sphere.transform.position = endPoint;
+                                }
+                            }
+
+                        }
+                    }
                 }
             }
         }
 
+        }
+
+        private void updateBeam(int startJointIndex, int nextBackJointIndex)
+        {
+            if (!isShowing || beam == null) { return; }
+
+            Vector3 dir = myHandData.myPositions[startJointIndex] - myHandData.myPositions[nextBackJointIndex];
+
+            Quaternion q = Quaternion.FromToRotation(transform.up, dir);
+            //Quaternion rot = q * beam.transform.rotation;
+
+            beam.transform.position = myHandData.myPositions[nextBackJointIndex] + (beam.transform.localScale.y * 1 * dir.normalized);
+            beam.transform.rotation = q;
+        }
 
         private void Update()
         {
@@ -242,7 +340,7 @@ namespace Photon_IATK
             {
                 updateLocations();
             }
-        }
+
     }
 
     [System.Serializable]
@@ -250,6 +348,9 @@ namespace Photon_IATK
     {
         public List<string> myJoints = new List<string>();
         public List<Vector3> myPositions = new List<Vector3>();
+        public Vector3 startPoint = Vector3.one;
+        public Vector3 endPoint = Vector3.one;
+        public bool hitObj;
     }
 }
 

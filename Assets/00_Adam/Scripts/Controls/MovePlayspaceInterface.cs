@@ -81,6 +81,9 @@ namespace Photon_IATK
                 case GlobalVariables.RequestUpdatePlayspaceTransform:
                     updatePlayspaceTransform(data);
                     break;
+                case GlobalVariables.RequestHideTrackers:
+                    updateTrackerVisability(data);
+                    break;
                 default:
                     break;
             }
@@ -99,6 +102,18 @@ namespace Photon_IATK
 
             PhotonNetwork.RaiseEvent(GlobalVariables.RequestPlayspaceTransform, content, raiseEventOptions, GlobalVariables.sendOptions);
         }
+
+        public void requestTrackerUpdate(Player selcetedPlayer)
+        {
+            Debug.LogFormat(GlobalVariables.cEvent + "{0}Any ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}, requested userID {7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", "", "Sending RequestHideTrackers", "All", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestHideTrackers, selcetedPlayer.UserId, "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            object[] content = new object[] { photonView.ViewID, selcetedPlayer.UserId };
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+
+            PhotonNetwork.RaiseEvent(GlobalVariables.RequestHideTrackers, content, raiseEventOptions, GlobalVariables.sendOptions);
+        }
+
 
         private void sendPlayspaceTransform(object[] data)
         {
@@ -175,6 +190,23 @@ namespace Photon_IATK
             }
         }
 
+        private void updateTrackerVisability(object[] data)
+        {
+            string userID = (string)data[1];
+
+            if (userID != PhotonNetwork.LocalPlayer.UserId) { return; }
+
+            Debug.LogFormat(GlobalVariables.cEvent + "Hiding trackers{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            GameObject[] Trackers = GameObject.FindGameObjectsWithTag(GlobalVariables.TrackerTag);
+
+            foreach (GameObject tracker in Trackers)
+            {
+                tracker.transform.GetChild(0).gameObject.SetActive(!tracker.transform.GetChild(0).gameObject.activeSelf); 
+
+            }
+
+        }
 
 
 

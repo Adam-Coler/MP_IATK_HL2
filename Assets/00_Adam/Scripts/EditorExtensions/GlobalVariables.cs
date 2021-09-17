@@ -55,6 +55,7 @@ namespace Photon_IATK
         public static string CenterTag = "Center";
         public static string ExtraTag = "Extra";
         public static string AnchorMenuTag = "AnchorMenu";
+        public static string TrackerTag = "Tracker";
 
 
         public enum allSymbols
@@ -152,6 +153,7 @@ namespace Photon_IATK
         public const byte RequestPlayspaceTransform = 109;
         public const byte SendPlayspaceTransform = 110;
         public const byte RequestUpdatePlayspaceTransform = 111;
+        public const byte RequestHideTrackers = 112;
 
 
 

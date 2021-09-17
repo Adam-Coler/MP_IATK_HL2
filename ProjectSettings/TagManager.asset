@@ -26,6 +26,7 @@ TagManager:
   - VISLEFT
   - Extra
   - AnchorMenu
+  - Tracker
   layers:
   - Default
   - TransparentFX
