@@ -79,8 +79,9 @@ MonoBehaviour:
   ring: {fileID: 2100000, guid: 3974a94a0b1a28b4a9b361f39d7a2273, type: 2}
   pinky: {fileID: 2100000, guid: 1ecb9f3a7c2e6e24c93e156351265310, type: 2}
   wrist: {fileID: 2100000, guid: fe519a2eb5adcbb4e9f7c2000c3721e6, type: 2}
-  beamRight: {fileID: 2100000, guid: 153ea3357be85154ea28f6f982224333, type: 2}
-  beamLeft: {fileID: 2100000, guid: 5a1314f24054b2348af6bf14430f0aa4, type: 2}
+  beamRight: {fileID: 2100000, guid: caae297c3d0b3eb40a8cd005742ca8b0, type: 2}
+  beamLeft: {fileID: 2100000, guid: e631bca21a3104e4caea0ae309ab5f97, type: 2}
+  hit: {fileID: 2100000, guid: ac8bef554d904e5459c662614fb6237d, type: 2}
 --- !u!114 &976693754824224369
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -78,6 +78,7 @@ namespace Photon_IATK
 
         private List<GameObject> representations = new List<GameObject>();
         private GameObject beam;
+        private GameObject hitPoint;
 
         public bool isSending = true;
         public bool isShowing = true;
@@ -93,6 +94,7 @@ namespace Photon_IATK
         public Material wrist;
         public Material beamRight;
         public Material beamLeft;
+        public Material hit;
 
         void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
@@ -122,7 +124,7 @@ namespace Photon_IATK
                 representations[i].transform.localPosition = handData.myPositions[i];
             }
 
-            updateBeam(myHandData.tip, myHandData.orgin);
+            updateBeamAndHitLocation(handData);
         }
 
         public void setUp()
@@ -133,6 +135,17 @@ namespace Photon_IATK
             {
                 Destroy(obj);
             }
+
+            if (beam != null)
+            {
+                Destroy(beam);
+            }
+
+            if (hitPoint != null)
+            {
+                Destroy(hitPoint);
+            }
+
 
             myHandData.myJoints = new List<string>();
             myHandData.myPositions = new List<Vector3>();
@@ -190,6 +203,23 @@ namespace Photon_IATK
                 }
 
                 Collider tmpCol = beam.GetComponent<Collider>();
+                if (tmpCol != null)
+                {
+                    Destroy(tmpCol);
+                }
+
+                hitPoint = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+                hitPoint.name = "HitPoint";
+                hitPoint.transform.localScale = new Vector3(scale, scale, scale);
+                hitPoint.transform.parent = this.transform;
+
+                tmp = hitPoint.GetComponent<Renderer>();
+                if (tmp != null)
+                {
+                    tmp.material = hit;
+                }
+
+                tmpCol = hitPoint.GetComponent<Collider>();
                 if (tmpCol != null)
                 {
                     Destroy(tmpCol);
@@ -270,21 +300,6 @@ namespace Photon_IATK
                     {
                         representations[i].transform.position = myHandData.myPositions[i];
                     }
-
-                    if (jointToTrack == TrackedHandJoint.IndexTip)
-                    {
-                        myHandData.tip = i;
-                    }
-                    else if (jointToTrack == TrackedHandJoint.Wrist && handedness == Handedness.Right)
-                    {
-                        myHandData.orgin = i;
-                    }
-                    else if (jointToTrack == TrackedHandJoint.IndexDistalJoint && handedness == Handedness.Left)
-                    {
-                        myHandData.orgin = i;
-                    }
-
-
                 }
 
 
@@ -293,6 +308,8 @@ namespace Photon_IATK
                     // Ignore anything that is not a hand because we want articulated hands
                     if (source.SourceType == Microsoft.MixedReality.Toolkit.Input.InputSourceType.Hand)
                     {
+                        if (!source.SourceName.Contains(handedness.ToString())) { continue; }
+
                         foreach (var p in source.Pointers)
                         {
                             if (p is IMixedRealityNearPointer)
@@ -302,37 +319,65 @@ namespace Photon_IATK
                             }
                             if (p.Result != null)
                             {
-                                var startPoint = p.Position;
-                                var endPoint = p.Result.Details.Point;
-                                var hitObject = p.Result.Details.Object;
-                                if (hitObject)
-                                {
-                                    var sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-                                    sphere.transform.localScale = Vector3.one * 0.01f;
-                                    sphere.transform.position = endPoint;
-                                }
+                                myHandData.startPoint = PlayspaceAnchor.Instance.gameObject.transform.InverseTransformPoint(p.Position);
+                                myHandData.endPoint = PlayspaceAnchor.Instance.gameObject.transform.InverseTransformPoint(p.Result.Details.Point);
+                                myHandData.hitObj = p.Result.Details.Object;
+                                break;
                             }
-
                         }
+                    } else
+                    {
+                        myHandData.startPoint = new Vector3(10f, 10f, 10f);
+                        myHandData.endPoint = new Vector3(10f, 10f, 10f);
+                        myHandData.hitObj = false;
                     }
                 }
+
+                if (isShowing)
+                {
+                    updateBeamAndHitLocation(myHandData);
+                }
+
+
+
             }
         }
 
-        }
+        //private void updateBeam(int startJointIndex, int nextBackJointIndex)
+        //{
+        //    if (!isShowing || beam == null) { return; }
 
-        private void updateBeam(int startJointIndex, int nextBackJointIndex)
+        //    Vector3 dir = myHandData.myPositions[startJointIndex] - myHandData.myPositions[nextBackJointIndex];
+
+        //    Quaternion q = Quaternion.FromToRotation(transform.up, dir);
+        //    //Quaternion rot = q * beam.transform.rotation;
+
+        //    beam.transform.position = myHandData.myPositions[nextBackJointIndex] + (beam.transform.localScale.y * 1 * dir.normalized);
+        //    beam.transform.rotation = q;
+        //}
+
+        private void updateBeamAndHitLocation(SerializeableHandData handData)
         {
-            if (!isShowing || beam == null) { return; }
+            if (!isShowing || beam == null || hitPoint == null) { return; }
 
-            Vector3 dir = myHandData.myPositions[startJointIndex] - myHandData.myPositions[nextBackJointIndex];
+            if (myHandData.hitObj)
+            {
+                hitPoint.transform.position = handData.endPoint;
+            } else
+            {
+                hitPoint.transform.position = new Vector3(10f, 10f, 10f);
+            }
+
+            Vector3 dir = handData.endPoint - handData.startPoint;
 
             Quaternion q = Quaternion.FromToRotation(transform.up, dir);
             //Quaternion rot = q * beam.transform.rotation;
 
-            beam.transform.position = myHandData.myPositions[nextBackJointIndex] + (beam.transform.localScale.y * 1 * dir.normalized);
+            beam.transform.position = handData.startPoint + (beam.transform.localScale.y * 1 * dir.normalized);
             beam.transform.rotation = q;
         }
+
+
 
         private void Update()
         {
@@ -341,6 +386,7 @@ namespace Photon_IATK
                 updateLocations();
             }
 
+        }
     }
 
     [System.Serializable]
