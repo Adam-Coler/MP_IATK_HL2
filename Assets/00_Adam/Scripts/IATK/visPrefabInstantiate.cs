@@ -53,8 +53,10 @@ namespace Photon_IATK
             theVis.visualisationType = AbstractVisualisation.VisualisationTypes.SCATTERPLOT;
             theVis.geometry = AbstractVisualisation.GeometryType.Points;
             theVis.xDimension = myCSVDataSource[0].Identifier;
-            theVis.yDimension = myCSVDataSource[Mathf.CeilToInt(myCSVDataSource.DimensionCount / 3f)].Identifier;
-            theVis.zDimension = myCSVDataSource[Mathf.CeilToInt(myCSVDataSource.DimensionCount / 3f * 2)].Identifier;
+            theVis.yDimension = myCSVDataSource[0].Identifier;
+            theVis.zDimension = myCSVDataSource[0].Identifier;
+
+            Debug.Log("TEST,  " + Mathf.CeilToInt(myCSVDataSource.DimensionCount / 2f));
 
             //theVis.updateView(AbstractVisualisation.PropertyType.GeometryType);
 

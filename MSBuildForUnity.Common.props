@@ -2,9 +2,9 @@
   
   <!-- These are specific to this Unity project and can't be overridden -->
   <PropertyGroup>
-    <UnityProjectAssetsPath>C:\Users\NuiLab00\Desktop\IATK_Unity\IA_Env\MP_IATK_HL2\Assets</UnityProjectAssetsPath>
+    <UnityProjectAssetsPath>C:\Users\adam6\Desktop\MP_IATK_HL2-main\Assets</UnityProjectAssetsPath>
     
-    <_MSBuildForUnityGeneratedOutputDirectory>C:\Users\NuiLab00\Desktop\IATK_Unity\IA_Env\MP_IATK_HL2\MSBuild</_MSBuildForUnityGeneratedOutputDirectory>
+    <_MSBuildForUnityGeneratedOutputDirectory>C:\Users\adam6\Desktop\MP_IATK_HL2-main\MSBuild</_MSBuildForUnityGeneratedOutputDirectory>
     <MSBuildForUnityGeneratedProjectDirectory>$(_MSBuildForUnityGeneratedOutputDirectory)\Projects</MSBuildForUnityGeneratedProjectDirectory>
   </PropertyGroup>
   

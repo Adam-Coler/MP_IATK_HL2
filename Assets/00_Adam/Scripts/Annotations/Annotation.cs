@@ -135,8 +135,6 @@ namespace Photon_IATK
 
         private void Awake()
         {
-
-
             Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "New annotation loaded", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             //attach to or make parents
@@ -167,17 +165,7 @@ namespace Photon_IATK
 
         private void _setAxisNames()
         {
-
-            if (myVisParent == null)
-            {
-                Debug.LogFormat(GlobalVariables.cOnDestory + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "destorying new annotaiton, no vis parent", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-                PhotonNetwork.Destroy(this.gameObject);
-                return;
-            }
-
             VisualizationEvent_Calls myParentsVisRPCClass = myVisParent.GetComponent<VisualizationEvent_Calls>();
-
-            
 
             if (myParentsVisRPCClass == null)
             {
@@ -209,20 +197,14 @@ namespace Photon_IATK
 
         private void _setupParentObjects()
         {
-            if (!HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.visTag, out myVisParent, true, System.Reflection.MethodBase.GetCurrentMethod()))
-            {
-                Debug.LogFormat(GlobalVariables.cOnDestory + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "destorying new annotaiton, no vis parent", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-                PhotonNetwork.Destroy(this.gameObject);
-            }
-
+            HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.visTag, out myVisParent, true, System.Reflection.MethodBase.GetCurrentMethod());
             if (HelperFunctions.FindGameObjectOrMakeOneWithTag(GlobalVariables.annotationCollectionTag, out myAnnotationCollectionParent, true, System.Reflection.MethodBase.GetCurrentMethod()))
             {
                 this.transform.parent = myAnnotationCollectionParent.transform;
             }
             else
             {
-                Debug.LogFormat(GlobalVariables.cOnDestory + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "destorying new annotaiton, no annotation parent", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-                PhotonNetwork.Destroy(this.gameObject);
+                //destroy it over the network
             }
         }
 
