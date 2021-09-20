@@ -56,8 +56,6 @@ namespace Photon_IATK
             theVis.yDimension = myCSVDataSource[0].Identifier;
             theVis.zDimension = myCSVDataSource[0].Identifier;
 
-            Debug.Log("TEST,  " + Mathf.CeilToInt(myCSVDataSource.DimensionCount / 2f));
-
             //theVis.updateView(AbstractVisualisation.PropertyType.GeometryType);
 
             theVis.CreateVisualisation(theVis.visualisationType);
@@ -70,7 +68,7 @@ namespace Photon_IATK
             if (visualisationLoadingDelegate != null)
                 visualisationLoadingDelegate(false);
 
-            theVis.gameObject.transform.localScale = new Vector3(.5f, .5f, .5f);
+            theVis.gameObject.transform.localScale = new Vector3(.33f, .33f, .33f);
 
             theVis.isTriggeringEvents = true;
 

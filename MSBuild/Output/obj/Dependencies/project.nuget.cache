@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "IJnk8ntL5lUtDmoZsm1nvzuz0srwoC+8Ugv2hZ/6MMVdyJeAYyIXIAjsuMY5LcrZBnHqKE5nKDkTTOPZrcwCdQ==",
+  "dgSpecHash": "23GPwY4B+g3903DGQgGBLPHYfCdulEf0YLyZak3xd3vCFUeB9g54lHqqN1bNy3pP6ACePvxu/DVenqTaY6e6uA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\adam6\\Desktop\\MP_IATK_HL2-main\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj",
+  "projectFilePath": "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\adam6\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.0\\microsoft.netframework.referenceassemblies.1.0.0.nupkg.sha512",
     "C:\\Users\\adam6\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net46\\1.0.0\\microsoft.netframework.referenceassemblies.net46.1.0.0.nupkg.sha512",

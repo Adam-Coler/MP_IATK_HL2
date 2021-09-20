@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\adam6\\Desktop\\MP_IATK_HL2-main\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj": {}
+    "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj": {}
   },
   "projects": {
-    "C:\\Users\\adam6\\Desktop\\MP_IATK_HL2-main\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj": {
+    "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adam6\\Desktop\\MP_IATK_HL2-main\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj",
+        "projectUniqueName": "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj",
         "projectName": "IATK_VIVE.Dependencies.msb4u",
-        "projectPath": "C:\\Users\\adam6\\Desktop\\MP_IATK_HL2-main\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj",
+        "projectPath": "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj",
         "packagesPath": "C:\\Users\\adam6\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adam6\\Desktop\\MP_IATK_HL2-main\\MSBuild\\Output\\obj\\Dependencies\\",
+        "outputPath": "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\MSBuild\\Output\\obj\\Dependencies\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\adam6\\Desktop\\MP_IATK_HL2-main\\Assets\\NuGet.Config",
+          "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Assets\\NuGet.Config",
           "C:\\Users\\adam6\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
@@ -30,8 +30,8 @@
           "net46": {
             "targetAlias": "net46",
             "projectReferences": {
-              "C:\\Users\\adam6\\Desktop\\MP_IATK_HL2-main\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj": {
-                "projectPath": "C:\\Users\\adam6\\Desktop\\MP_IATK_HL2-main\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj",
+              "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj": {
+                "projectPath": "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj",
                 "privateAssets": "analyzers"
               }
             }
@@ -64,14 +64,14 @@
         }
       }
     },
-    "C:\\Users\\adam6\\Desktop\\MP_IATK_HL2-main\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj": {
+    "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adam6\\Desktop\\MP_IATK_HL2-main\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj",
+        "projectUniqueName": "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj",
         "projectName": "DotNetAdapter",
-        "projectPath": "C:\\Users\\adam6\\Desktop\\MP_IATK_HL2-main\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj",
+        "projectPath": "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj",
         "packagesPath": "C:\\Users\\adam6\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adam6\\Desktop\\MP_IATK_HL2-main\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\.obj\\",
+        "outputPath": "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\.obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\adam6\\AppData\\Roaming\\NuGet\\NuGet.Config",
