@@ -564,13 +564,13 @@ namespace Photon_IATK
         private void _sendAddPointEvent(Vector3 point)
         {
 
-            if (firstPoint == Vector3.one || firstPoint == Vector3.zero)
-            {
-                Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "FirstPoint: ", point, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            //if (firstPoint == Vector3.one || firstPoint == Vector3.zero)
+            //{
+            //    Debug.LogFormat(GlobalVariables.cAlert + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "FirstPoint: ", point, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-                firstPoint = point;
-                this.transform.position = point;
-            }
+            //    firstPoint = point;
+            //    this.transform.position = point;
+            //}
 
             point = this.transform.InverseTransformPoint(point);
 

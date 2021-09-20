@@ -240,11 +240,11 @@ namespace Photon_IATK
                     loadControllerModelsLeft.isLeft = true;
                     loadControllerModelsLeft.setUp();
 
-                    Debug.LogFormat(GlobalVariables.cComponentAddition + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Adding Right Controller", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                    //Debug.LogFormat(GlobalVariables.cComponentAddition + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Adding Right Controller", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-                    LoadControllerModels loadControllerModelsRight = this.gameObject.AddComponent<LoadControllerModels>();
-                    loadControllerModelsRight.isLeft = false;
-                    loadControllerModelsRight.setUp();
+                    //LoadControllerModels loadControllerModelsRight = this.gameObject.AddComponent<LoadControllerModels>();
+                    //loadControllerModelsRight.isLeft = false;
+                    //loadControllerModelsRight.setUp();
 
                     //this.gameObject.AddComponent<ButtonListeners>();
 

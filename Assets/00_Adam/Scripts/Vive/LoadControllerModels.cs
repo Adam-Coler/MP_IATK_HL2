@@ -13,32 +13,27 @@ namespace Photon_IATK
 
         public bool isLeft = false;
 
-        private InputDeviceRole inputDeviceRole;
-
-        InputDevice myDevice;
         GameObject thisModel;
 
+        private Dictionary<InputDevice, GameObject> inputs = new Dictionary<InputDevice, GameObject>();
 
 #if VIVE
         // Start is called before the first frame update
         public void setUp()
         {
-            if (isLeft)
-            {
-                inputDeviceRole = InputDeviceRole.LeftHanded;
-            } 
-            else
-            {
-                inputDeviceRole = InputDeviceRole.RightHanded;
-            }
-
             //Catch new devices
             InputDevices.deviceConnected += registerDevice;
             InputDevices.deviceDisconnected += removeDevice;
 
             //Catch existing devices
-            InputDevices.GetDevicesWithRole(inputDeviceRole, devices);
+            InputDevices.GetDevicesWithRole(InputDeviceRole.LeftHanded, devices);
             foreach(InputDevice inputDevice in devices)
+            {
+                registerDevice(inputDevice);
+            }
+
+            InputDevices.GetDevicesWithRole(InputDeviceRole.RightHanded, devices);
+            foreach (InputDevice inputDevice in devices)
             {
                 registerDevice(inputDevice);
             }
@@ -53,37 +48,58 @@ namespace Photon_IATK
 
         private void removeDevice(InputDevice inputDevice)
         {
-            Debug.Log(inputDevice.name + " disconnected");
-            if (inputDevice == myDevice)
+            GameObject tmpModel;
+            if (inputs.TryGetValue(inputDevice, out tmpModel))
             {
-                if (thisModel != null)
-                {
-                    PhotonNetwork.Destroy(thisModel);
-                    InputDevices.deviceConnected += registerDevice;
-                }
+                PhotonNetwork.Destroy(tmpModel);
+                inputs.Remove(inputDevice);
+
+                Debug.LogFormat(GlobalVariables.cOnDestory + "Input destroyed, {0}, {1}, {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", inputDevice.name, inputDevice.role, name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                //if (inputDevice.role == InputDeviceRole.RightHanded)
+                //{
+                //    foreach(InputDevice device in inputs.Keys)
+                //    {
+                //        PhotonNetwork.Destroy(inputs[device]);
+                //    }
+
+                //    inputs = new Dictionary<InputDevice, GameObject>();
+
+                //    InputDevices.GetDevicesWithRole(InputDeviceRole.RightHanded, devices);
+                //    foreach (InputDevice input in devices)
+                //    {
+                //        registerDevice(input);
+                //    }
+
+                //    InputDevices.GetDevicesWithRole(InputDeviceRole.LeftHanded, devices);
+                //    foreach (InputDevice input in devices)
+                //    {
+                //        registerDevice(input);
+                //    }
+
+                //}
             }
         }
 
             private void registerDevice(InputDevice inputDevice)
-        {
-            //this will not register inputs on the HL2 need something else
-
-            if (inputDevice.role == inputDeviceRole)
             {
-                InputDevices.deviceConnected -= registerDevice;
+            GameObject tmpModel;
+            if (inputs.TryGetValue(inputDevice, out tmpModel)) {
+                Debug.LogFormat(GlobalVariables.cTest + "Input already tracked, {0}, {1}, {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", inputDevice.name, inputDevice.role, name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                return;
+            } else if (inputDevice.role == InputDeviceRole.HardwareTracker)
+            {
+                Debug.LogFormat(GlobalVariables.cTest + "Input is HardwareTracker, {0}, {1}, {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", inputDevice.name, inputDevice.role, name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                return;
+            } else 
+            {
+                Debug.LogFormat(GlobalVariables.cTest + "New input found, {0}, {1}, {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", inputDevice.name, inputDevice.role, name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            }
 
-                Debug.LogFormat(GlobalVariables.purple + "InputDevice registered: {0}, {1}" + GlobalVariables.endColor + " : registerDevice(), " + this.GetType(), inputDevice.name, inputDevice.role);
-
-                if (inputDevice.name.Contains("VIVE"))
+                if (inputDevice.name.Contains("VIVE") && !inputDevice.name.Contains("logi"))
                 {
-
-                    myDevice = inputDevice;
-
+                
                     thisModel = PhotonNetwork.Instantiate("ViveController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-
-                    //HelperFunctions.ParentInSharedPlayspaceAnchor(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
-
-                    //thisModel.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
 
                     HelperFunctions.ParentInSharedPlayspaceAnchor(thisModel, System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -91,26 +107,27 @@ namespace Photon_IATK
                     TrackControllerByRefereance trackControllerByRefereance = thisModel.AddComponent<TrackControllerByRefereance>();
                     trackControllerByRefereance.thisInputDevice = inputDevice;
 
-                    Debug.LogFormat(GlobalVariables.cInstance + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Instantiated Vive Controller", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                    Debug.LogFormat(GlobalVariables.cInstance + "{0}{1}, {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Instantiated Vive Controller", "", name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                    inputs.Add(inputDevice, thisModel);
 
                 } else if (inputDevice.name.Contains("logi"))
                 {
-                    myDevice = inputDevice;
 
                     thisModel = PhotonNetwork.Instantiate("LogitechController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
 
                     HelperFunctions.ParentInSharedPlayspaceAnchor(thisModel, System.Reflection.MethodBase.GetCurrentMethod());
 
-                    //thisModel.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
                     thisModel.name = inputDevice.name;
                     TrackControllerByRefereance trackControllerByRefereance = thisModel.AddComponent<TrackControllerByRefereance>();
                     trackControllerByRefereance.thisInputDevice = inputDevice;
 
-                    Debug.LogFormat(GlobalVariables.cInstance + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Instantiated Logitech Controller", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                    Debug.LogFormat(GlobalVariables.cInstance + "{0}{1}, {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Instantiated Logitech Controller", "", this.gameObject.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+                    inputs.Add(inputDevice, thisModel);
                 }
                 
             }
-        }
 
 #else
         private void Awake()
