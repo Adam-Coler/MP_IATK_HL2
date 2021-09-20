@@ -45,17 +45,9 @@ namespace Photon_IATK
 
             foreach (InputDevice device in allDevices)
             {
-                if (!device.name.Contains("Logi"))
+                if (!device.name.ToLower().Contains("logi"))
                 {
                     filterDevices(device);
-
-                    Debug.LogFormat(GlobalVariables.cCommon + "Controller connected: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", device.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-                }
-                else
-                {
-                    allDevices.Remove(device);
-
-                    Debug.LogFormat(GlobalVariables.cError + "Controller does not meet reqs: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", device.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                 }
             }
         }
@@ -81,13 +73,9 @@ namespace Photon_IATK
             bool discardedValue;
             if (device.TryGetFeatureValue(CommonUsages.triggerButton, out discardedValue))
             {
-                Debug.LogFormat(GlobalVariables.cCommon + "Adding device {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", device.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                Debug.LogFormat(GlobalVariables.cRegister + "Adding device {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", device.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 devicesWithTriggerButton.Add(device); // Add any devices that have a primary button.
-            }
-            else
-            {
-                Debug.LogFormat(GlobalVariables.cError + "Device connected but not added.  Device name: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", device.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 

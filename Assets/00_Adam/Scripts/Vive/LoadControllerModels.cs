@@ -14,7 +14,9 @@ namespace Photon_IATK
         public bool isLeft = false;
 
         private InputDeviceRole inputDeviceRole;
-        private Handedness handedness;
+
+        InputDevice myDevice;
+        GameObject thisModel;
 
 
 #if VIVE
@@ -23,17 +25,16 @@ namespace Photon_IATK
         {
             if (isLeft)
             {
-                handedness = Handedness.Left;
                 inputDeviceRole = InputDeviceRole.LeftHanded;
             } 
             else
             {
-                handedness = Handedness.Right;
                 inputDeviceRole = InputDeviceRole.RightHanded;
             }
 
             //Catch new devices
             InputDevices.deviceConnected += registerDevice;
+            InputDevices.deviceDisconnected += removeDevice;
 
             //Catch existing devices
             InputDevices.GetDevicesWithRole(inputDeviceRole, devices);
@@ -47,20 +48,38 @@ namespace Photon_IATK
         private void OnDestroy()
         {
             InputDevices.deviceConnected -= registerDevice;
+            InputDevices.deviceDisconnected -= removeDevice;
         }
 
-        private void registerDevice(InputDevice inputDevice)
+        private void removeDevice(InputDevice inputDevice)
+        {
+            Debug.Log(inputDevice.name + " disconnected");
+            if (inputDevice == myDevice)
+            {
+                if (thisModel != null)
+                {
+                    PhotonNetwork.Destroy(thisModel);
+                    InputDevices.deviceConnected += registerDevice;
+                }
+            }
+        }
+
+            private void registerDevice(InputDevice inputDevice)
         {
             //this will not register inputs on the HL2 need something else
 
             if (inputDevice.role == inputDeviceRole)
             {
                 InputDevices.deviceConnected -= registerDevice;
+
                 Debug.LogFormat(GlobalVariables.purple + "InputDevice registered: {0}, {1}" + GlobalVariables.endColor + " : registerDevice(), " + this.GetType(), inputDevice.name, inputDevice.role);
 
                 if (inputDevice.name.Contains("VIVE"))
                 {
-                    GameObject thisModel = PhotonNetwork.Instantiate("ViveController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+
+                    myDevice = inputDevice;
+
+                    thisModel = PhotonNetwork.Instantiate("ViveController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
 
                     //HelperFunctions.ParentInSharedPlayspaceAnchor(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -76,7 +95,9 @@ namespace Photon_IATK
 
                 } else if (inputDevice.name.Contains("logi"))
                 {
-                    GameObject thisModel = PhotonNetwork.Instantiate("LogitechController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
+                    myDevice = inputDevice;
+
+                    thisModel = PhotonNetwork.Instantiate("LogitechController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
 
                     HelperFunctions.ParentInSharedPlayspaceAnchor(thisModel, System.Reflection.MethodBase.GetCurrentMethod());
 
