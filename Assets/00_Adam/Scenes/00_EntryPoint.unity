@@ -8984,6 +8984,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 695230049}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &696837728 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 376374633030839811, guid: c1e504c4233d326468b87d19eb464d5b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1640557990}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &698294341
 GameObject:
   m_ObjectHideFlags: 0
@@ -10753,9 +10759,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36e0fae1d60377e4c978d87759d8c620, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tracker1: {fileID: 0}
-  tracker2: {fileID: 0}
-  tracker3: {fileID: 0}
+  tracker1: {fileID: 1440643690}
+  tracker2: {fileID: 696837728}
+  tracker3: {fileID: 1239041008}
   angle: -58
   distSecond: 0.03
   distFirst: 0.012
@@ -17640,6 +17646,12 @@ Transform:
   m_Father: {fileID: 553963688}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1239041008 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 376374633030839811, guid: c1e504c4233d326468b87d19eb464d5b,
+    type: 3}
+  m_PrefabInstance: {fileID: 606948912}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1244076007
 GameObject:
   m_ObjectHideFlags: 0
@@ -20850,6 +20862,12 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1436157672}
   m_Mesh: {fileID: 4300010, guid: b566bbce04d66f4428421e81a3af0299, type: 3}
+--- !u!1 &1440643690 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 376374633030839811, guid: c1e504c4233d326468b87d19eb464d5b,
+    type: 3}
+  m_PrefabInstance: {fileID: 1366601967}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1442627322
 GameObject:
   m_ObjectHideFlags: 0
@@ -27005,6 +27023,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32ee43fd85c50b74388ddc455edc2e3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  closestTrackerPosition: {x: 0, y: 0, z: 0}
+  closestTrackerRotation: {x: 0, y: 0, z: 0, w: 0}
+  closestTrackerID: 0
+  isUseClosestTrackingReferance: 1
+  positionOffset: {x: 0, y: 0, z: 0}
+  rotationOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &1720533481
 MonoBehaviour:
   m_ObjectHideFlags: 0

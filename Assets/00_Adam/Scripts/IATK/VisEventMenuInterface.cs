@@ -191,7 +191,7 @@ namespace Photon_IATK
 
             if (isOptionsDivdedIntoThreeAxis)
             {
-                List<List<TMP_Dropdown.OptionData>> partititionedList = HelperFunctions.Split(listDataDimensions, 3);
+                List<List<TMP_Dropdown.OptionData>> partititionedList = HelperFunctions.Split(listDataDimensions, 2);
 
                 xAxisDropdown.AddOptions(partititionedList[0]);
                 yAxisDropdown.AddOptions(partititionedList[1]);

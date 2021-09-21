@@ -45,17 +45,11 @@ namespace Photon_IATK
 
             foreach (InputDevice device in allDevices)
             {
-                if (!device.name.Contains("Logi"))
+                if (!device.name.Contains("logi"))
                 {
                     filterDevices(device);
 
                     Debug.LogFormat(GlobalVariables.cCommon + "Controller connected: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", device.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-                }
-                else
-                {
-                    allDevices.Remove(device);
-
-                    Debug.LogFormat(GlobalVariables.cError + "Controller does not meet reqs: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", device.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                 }
             }
         }
