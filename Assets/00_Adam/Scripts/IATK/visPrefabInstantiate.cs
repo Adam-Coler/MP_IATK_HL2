@@ -53,8 +53,8 @@ namespace Photon_IATK
             theVis.visualisationType = AbstractVisualisation.VisualisationTypes.SCATTERPLOT;
             theVis.geometry = AbstractVisualisation.GeometryType.Points;
             theVis.xDimension = myCSVDataSource[0].Identifier;
-            theVis.yDimension = myCSVDataSource[Mathf.CeilToInt(myCSVDataSource.DimensionCount / 3f)].Identifier;
-            theVis.zDimension = myCSVDataSource[Mathf.CeilToInt(myCSVDataSource.DimensionCount / 3f * 2)].Identifier;
+            theVis.yDimension = myCSVDataSource[0].Identifier;
+            theVis.zDimension = myCSVDataSource[0].Identifier;
 
             //theVis.updateView(AbstractVisualisation.PropertyType.GeometryType);
 
@@ -68,7 +68,7 @@ namespace Photon_IATK
             if (visualisationLoadingDelegate != null)
                 visualisationLoadingDelegate(false);
 
-            theVis.gameObject.transform.localScale = new Vector3(.5f, .5f, .5f);
+            theVis.gameObject.transform.localScale = new Vector3(.33f, .33f, .33f);
 
             theVis.isTriggeringEvents = true;
 

@@ -9,9 +9,13 @@ namespace Photon_IATK
 {
     public class TriggerButtonSync : MonoBehaviour
     {
-        public GameObject tracker1;
-        public GameObject tracker2;
-        public GameObject tracker3;
+        public float angle = -58f;
+        public float distSecond = 0.03f;
+        public float distFirst = 0.012f;
+
+        private GameObject tracker1;
+        private GameObject tracker2;
+        private GameObject tracker3;
 
         private GameObject currentTracker;
         private bool lastButtonState = false;
@@ -25,6 +29,28 @@ namespace Photon_IATK
             Destroy(this.gameObject);
 #endif
             devicesWithTriggerButton = new List<InputDevice>();
+
+
+            GameObject trackerPreFab = (GameObject)Resources.Load("Tracker");
+            tracker1 = Instantiate(trackerPreFab);
+            tracker2 = Instantiate(trackerPreFab);
+            tracker3 = Instantiate(trackerPreFab);
+
+            setupTrackers(tracker1);
+            setupTrackers(tracker2);
+            setupTrackers(tracker3);
+
+        }
+
+        private void setupTrackers(GameObject tracker)
+        {
+            if (tracker.GetComponent<TrackerNameUpdate>())
+            {
+                Destroy(tracker.GetComponent<TrackerNameUpdate>());
+            }
+
+            tracker.transform.parent = this.transform;
+            tracker.transform.localScale = new Vector3(.25f, .25f, .25f);
         }
 
         void OnEnable()
@@ -36,8 +62,6 @@ namespace Photon_IATK
 
         public void getDevices()
         {
-
-
             List<InputDevice> allDevices = new List<InputDevice>();
             InputDevices.GetDevices(allDevices);
 
@@ -45,9 +69,11 @@ namespace Photon_IATK
 
             foreach (InputDevice device in allDevices)
             {
-                if (!device.name.ToLower().Contains("logi"))
+                if (!device.name.Contains("logi") && device.role != InputDeviceRole.HardwareTracker)
                 {
                     filterDevices(device);
+
+                    Debug.LogFormat(GlobalVariables.cCommon + "Controller connected: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", device.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                 }
             }
         }
@@ -73,9 +99,13 @@ namespace Photon_IATK
             bool discardedValue;
             if (device.TryGetFeatureValue(CommonUsages.triggerButton, out discardedValue))
             {
-                Debug.LogFormat(GlobalVariables.cRegister + "Adding device {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", device.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                Debug.LogFormat(GlobalVariables.cCommon + "Adding device {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", device.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 devicesWithTriggerButton.Add(device); // Add any devices that have a primary button.
+            }
+            else
+            {
+                Debug.LogFormat(GlobalVariables.cError + "Device connected but not added.  Device name: {0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", device.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
             }
         }
 
@@ -122,10 +152,6 @@ namespace Photon_IATK
                 }
             }
         }
-
-        public float angle = -58f;
-        public float distSecond = 0.03f;
-        public float distFirst = 0.012f;
 
         private void getmiddleOfRingOnViveControler(out Vector3 middleOfRing, out Quaternion rotation)
         {
