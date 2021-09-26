@@ -12208,7 +12208,7 @@ GameObject:
   - component: {fileID: 931472377}
   - component: {fileID: 931472376}
   m_Layer: 0
-  m_Name: btn_CenterVis
+  m_Name: btn_LockContent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12411,7 +12411,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 906630166}
-        m_MethodName: CenterVis
+        m_MethodName: localLockContent
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15682,7 +15682,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Center Visualization
+  m_text: Lock Vis
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 6a84f857bec7e7345843ae29404c57ce, type: 2}
   m_sharedMaterial: {fileID: 21202819797275496, guid: 6a84f857bec7e7345843ae29404c57ce,
@@ -15752,12 +15752,12 @@ MonoBehaviour:
   m_margin: {x: 0, y: -0.0022691963, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1112606544}
-    characterCount: 20
+    characterCount: 8
     spriteCount: 0
     spaceCount: 1
     wordCount: 2
     linkCount: 0
-    lineCount: 2
+    lineCount: 1
     pageCount: 1
     materialCount: 1
   m_isUsingLegacyAnimationComponent: 0

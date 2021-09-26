@@ -159,6 +159,11 @@ namespace Photon_IATK
 
         private void _setAxisNames()
         {
+            if (myVisParent == null) {
+                RequestDelete();
+                return; 
+            }
+
             VisualizationEvent_Calls myParentsVisRPCClass;
             
             

@@ -138,6 +138,14 @@ namespace Photon_IATK
             GetOrAddComponent<MRTK_Scene_Manager>().unload_04_TriVuforia();
         }
 
+        public void localLockContent()
+        {
+            LockContent[] locks = Object.FindObjectsOfType<LockContent>();
+            foreach (LockContent objLock in locks)
+            {
+                objLock.positionLock();
+            }
+        }
 
         public void participantSetup()
         {

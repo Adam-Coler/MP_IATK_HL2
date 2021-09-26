@@ -345,6 +345,7 @@ GameObject:
   - component: {fileID: 2503380007071009939}
   - component: {fileID: 537515674916307674}
   - component: {fileID: 7478803458617241449}
+  - component: {fileID: 4546937733565622449}
   m_Layer: 0
   m_Name: AnnotationStation
   m_TagString: Untagged
@@ -648,6 +649,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4546937733565622449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7076972121738544485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 893c4a1e2bf9fd644a5279962a32dbde, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectManipulator: {fileID: 3765743338847787732}
 --- !u!1 &7730215465788673672
 GameObject:
   m_ObjectHideFlags: 0
