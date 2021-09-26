@@ -398,7 +398,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: -7457856195486156659}
-        m_MethodName: GrabbedHandle
+        m_MethodName: GrabbedScale
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -470,7 +470,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grabbedMaterial: {fileID: 2100000, guid: 9bd231f1aa2bf0b479b641984a2ac5e1, type: 2}
-  grabbedHandleMaterial: {fileID: 0}
+  grabbedRotateMaterial: {fileID: 0}
+  grabbeScaleMaterial: {fileID: 0}
 --- !u!82 &7730178154748743306
 AudioSource:
   m_ObjectHideFlags: 0
