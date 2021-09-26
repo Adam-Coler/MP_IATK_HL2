@@ -1,15 +1,9 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
-using System.IO;
-using IATK;
-using ExitGames.Client.Photon;
-using Photon.Realtime;
+﻿using ExitGames.Client.Photon;
 using Photon.Pun;
-using Photon.Compression;
-using Photon.Utilities;
-using System.Runtime.Serialization.Formatters.Binary;
+using Photon.Realtime;
 using System;
-using Microsoft.MixedReality.Toolkit.UI.BoundsControl;
+using System.Collections.Generic;
+using UnityEngine;
 
 
 namespace Photon_IATK
@@ -227,6 +221,7 @@ namespace Photon_IATK
                 case typesOfAnnotations.LINERENDER:
                     prefabGameObject = Resources.Load<GameObject>("LineDrawing");
                     prefabGameObject = Instantiate(prefabGameObject, Vector3.zero, Quaternion.identity);
+                    Invoke("removeCollider", 15);
                     break;
                 case typesOfAnnotations.HIGHLIGHTCUBE:
                     prefabGameObject = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -536,6 +531,61 @@ namespace Photon_IATK
             }
 
             lineRenderPoints = tmpComponenet.GetPoints();
+
+            //start collider disable routine
+            if (!removeShortLine())
+            {
+                Invoke("removeCollider", 15);
+            }
+
+        }
+
+        private void removeCollider()
+        {
+            ManipulationControls tmpMaipulationControls;
+            tmpMaipulationControls = this.gameObject.GetComponent<ManipulationControls>();
+            if (tmpMaipulationControls != null)
+            {
+                tmpMaipulationControls.enabled = !tmpMaipulationControls.enabled;
+            }
+
+            Collider tmp;
+            tmp = this.gameObject.GetComponent<Collider>();
+            if (tmp != null)
+            {
+                tmp.enabled = !tmp.enabled;
+            }
+
+            tmp = myObjectRepresentation.GetComponent<Collider>();
+            if (tmp != null)
+            {
+                tmp.enabled = !tmp.enabled;
+            }
+        }
+
+        private bool removeShortLine()
+        {
+            if (lineRenderPoints == null) { return false; }
+
+            float dist = 0f;
+            float minDist = .1f;
+            bool output = true;
+
+            for (int i = 1; i < lineRenderPoints.Length; i++)
+            {
+                dist += Vector3.Distance(lineRenderPoints[i], lineRenderPoints[i - 1]);
+                if (dist >= minDist) { output = false; }
+            }
+
+            Debug.LogFormat(GlobalVariables.cTest + "LineRenderCompleate: length: {0}, delete: {1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", dist, output, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            
+            if (output)
+            {
+                RequestDelete();
+            }
+
+            return output;
+
         }
 
         public bool isFirstPoint = true;

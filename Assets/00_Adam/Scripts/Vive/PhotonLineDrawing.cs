@@ -19,7 +19,7 @@ namespace Photon_IATK
         [SerializeField]
         private Material _lineMaterial;
 
-        public float _maxLineWidth = .005f;
+        public float _maxLineWidth = .00025f;
         private LineRenderer _currentLine = null;
 
         private void Awake()
@@ -50,8 +50,8 @@ namespace Photon_IATK
             _currentLine.widthMultiplier = .005f;
             _currentLine.positionCount = 0;
             _currentLine.useWorldSpace = false;
-            _currentLine.startWidth = 0.005f;
-            _currentLine.endWidth = 0.005f;
+            _currentLine.startWidth = _maxLineWidth;
+            _currentLine.endWidth = _maxLineWidth;
 
         }
 

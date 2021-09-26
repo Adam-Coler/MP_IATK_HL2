@@ -591,6 +591,8 @@ namespace Photon_IATK
             isFirstLoad = false;
             if (!PhotonNetwork.IsMasterClient) { return; }
 
+            RespondToRequestAnnotationRemoval();
+
             Debug.LogFormat(GlobalVariables.cCommon + "I am the MasterClient: {0}, Loading annotaitons." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             //get file path

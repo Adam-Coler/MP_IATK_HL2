@@ -1927,7 +1927,7 @@ MonoBehaviour:
   meshCollider: {fileID: -6244496131311407914}
   _useAnalog: 1
   _lineMaterial: {fileID: 2100000, guid: 1ecb9f3a7c2e6e24c93e156351265310, type: 2}
-  _maxLineWidth: 0.005
+  _maxLineWidth: 0.0025
 --- !u!120 &1058062613174048810
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -1975,8 +1975,8 @@ LineRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 1
+        time: 0.032302856
+        value: 0.517046
         inSlope: 0
         outSlope: 0
         tangentMode: 0
