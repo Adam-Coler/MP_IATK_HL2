@@ -516,7 +516,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grabbedMaterial: {fileID: 0}
-  grabbedHandleMaterial: {fileID: 0}
+  grabbedRotateMaterial: {fileID: 0}
+  grabbeScaleMaterial: {fileID: 0}
 --- !u!114 &6823237123297244333
 MonoBehaviour:
   m_ObjectHideFlags: 0

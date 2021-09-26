@@ -27715,12 +27715,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32ee43fd85c50b74388ddc455edc2e3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  closestTrackerPosition: {x: 0, y: 0, z: 0}
-  closestTrackerRotation: {x: 0, y: 0, z: 0, w: 0}
-  closestTrackerID: 0
-  isUseClosestTrackingReferance: 1
-  positionOffset: {x: 0, y: 0, z: 0}
-  rotationOffset: {x: 0, y: 0, z: 0}
 --- !u!114 &1720533481
 MonoBehaviour:
   m_ObjectHideFlags: 0

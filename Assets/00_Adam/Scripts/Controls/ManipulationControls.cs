@@ -1437,25 +1437,61 @@ namespace Photon_IATK
                         }
                     }
 
-                    Target.transform.localScale = clampedTransform.Scale;
+                    Target.transform.localScale = scaleConstraintHandler(clampedTransform.Scale);
                     Target.transform.position = initialPositionOnGrabStart * scaleFactor + (1 - scaleFactor) * oppositeCorner;
                     } else
                     {
-                        
+
+
+
                         Vector3 initialDist = (initialGrabPoint - oppositeCorner);
                         Vector3 currentDist = (currentGrabPoint - oppositeCorner);
                         Vector3 grabDiff = (currentDist - initialDist);
                         Vector3 scaleFactor = Target.transform.localScale;
                         scaleFactor = Vector3.one + grabDiff.Div(initialDist);
                         Vector3 newScale = initialScaleOnGrabStart.Mul(scaleFactor);
-
                         MixedRealityTransform clampedTransform = MixedRealityTransform.NewScale(newScale);
 
-                        Target.transform.localScale = clampedTransform.Scale;
+                        Debug.Log(GlobalVariables.cTest + clampedTransform.Scale + GlobalVariables.endColor);
+
+                        Target.transform.localScale = scaleConstraintHandler(clampedTransform.Scale);
+
+
                         //Target.transform.position = initialPositionOnGrabStart * scaleFactor + (1 - scaleFactor) * oppositeCorner;
                     }
                 }
             }
+        }
+
+        private Vector3 scaleConstraintHandler(Vector3 scale)
+        {
+            if (scale.x > scaleMaximum)
+            {
+                scale.x = scaleMaximum;
+            } else if (scale.x < scaleMinimum)
+            {
+                scale.x = scaleMinimum;
+            }
+
+            if (scale.y > scaleMaximum)
+            {
+                scale.y = scaleMaximum;
+            }
+            else if (scale.y < scaleMinimum)
+            {
+                scale.y = scaleMinimum;
+            }
+
+            if (scale.z > scaleMaximum)
+            {
+                scale.z = scaleMaximum;
+            }
+            else if (scale.z < scaleMinimum)
+            {
+                scale.z = scaleMinimum;
+            }
+
+            return scale;
         }
 
         private Vector3 GetRotationAxis(Transform handle)

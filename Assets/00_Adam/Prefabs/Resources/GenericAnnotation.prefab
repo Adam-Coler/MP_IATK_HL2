@@ -267,8 +267,8 @@ MonoBehaviour:
   boundsCalculationMethod: 0
   activation: 0
   isUniformScale: 1
-  scaleMinimum: 0.1
-  scaleMaximum: 2
+  scaleMinimum: 0.06
+  scaleMaximum: 0.3
   flattenAxis: 0
   flattenAxisDisplayScale: 0
   boxPadding: {x: 0, y: 0, z: 0}
