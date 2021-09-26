@@ -137,6 +137,43 @@ namespace Photon_IATK
         {
             GetOrAddComponent<MRTK_Scene_Manager>().unload_04_TriVuforia();
         }
+
+
+        public void participantSetup()
+        {
+            CenterVis();
+
+            GameObject[] Trackers = GameObject.FindGameObjectsWithTag(GlobalVariables.TrackerTag);
+
+            foreach (GameObject tracker in Trackers)
+            {
+                tracker.transform.GetChild(0).gameObject.SetActive(!tracker.transform.GetChild(0).gameObject.activeSelf);
+            }
+
+            HelperFunctions.hideShowChildrenOfTag(GlobalVariables.gameControllerModelTag);
+
+            GameObject[] extras = GameObject.FindGameObjectsWithTag(GlobalVariables.ExtraTag);
+
+            foreach (GameObject extra in extras)
+            {
+                bool currentState = extra.transform.GetChild(0).gameObject.activeSelf;
+
+                if (currentState)
+                {
+                    extra.transform.GetChild(0).gameObject.SetActive(false);
+
+                    Debug.LogFormat(GlobalVariables.cCommon + "Hiding {0}, current state: {1}, settting to: {2}, parent: {3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", extra.name, "True", "False", extra.transform.parent.name, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                }
+                else
+                {
+                    extra.transform.GetChild(0).gameObject.SetActive(true);
+
+                    Debug.LogFormat(GlobalVariables.cCommon + "Hiding {0}, current state: {1}, settting to: {2}, parent: {3}" + GlobalVariables.endColor + " {4}: {5} -> {6} -> {7}", extra.name, "False", "True", extra.transform.parent.name, this.name, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                }
+
+            }
+        }
+
         #endregion
 
         #region Photon

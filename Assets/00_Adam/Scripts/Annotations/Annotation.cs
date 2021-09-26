@@ -159,9 +159,11 @@ namespace Photon_IATK
 
         private void _setAxisNames()
         {
-            VisualizationEvent_Calls myParentsVisRPCClass = myVisParent.GetComponent<VisualizationEvent_Calls>();
+            VisualizationEvent_Calls myParentsVisRPCClass;
+            
+            
 
-            if (myParentsVisRPCClass == null)
+            if (!myVisParent.TryGetComponent<VisualizationEvent_Calls>(out myParentsVisRPCClass))
             {
                 myVisXAxis = "Fake X Axis Title";
                 myVisYAxis = "Fake Y Axis Title";
