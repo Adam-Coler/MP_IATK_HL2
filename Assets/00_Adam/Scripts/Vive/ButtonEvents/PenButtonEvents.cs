@@ -7,6 +7,7 @@ using UnityEngine.XR;
 namespace Photon_IATK
 {
     public class PenTriggerButtonPressEvent : UnityEvent<bool> { }
+    public class PenGripButtonPressEvent : UnityEvent<bool> { }
     public class PenTriggerButtonPressFoceEvent : UnityEvent<float> { }
     public class PenTriggerButtonPressedLocation : UnityEvent<Vector3> { }
 
@@ -20,9 +21,11 @@ namespace Photon_IATK
         public PenTriggerButtonPressEvent penTriggerPress;
         public PenTriggerButtonPressFoceEvent penTriggerPressedForce;
         public PenTriggerButtonPressedLocation penTriggerPressedLocation;
+        public PenGripButtonPressEvent penGripButtonPressEvent;
 
         private float lastButtonPressure = 0f;
         private bool lastButtonState = false;
+        private bool lastGripState = false;
         private Vector3 lastTriggerLocation = Vector3.zero;
 
         private void Awake()
@@ -38,6 +41,9 @@ namespace Photon_IATK
             if (penTriggerPressedLocation == null)
                 penTriggerPressedLocation = new PenTriggerButtonPressedLocation();
 
+            if (penGripButtonPressEvent == null)
+                penGripButtonPressEvent = new PenGripButtonPressEvent();
+
             drawingVariables = DrawingVariables.Instance;
             if (drawingVariables == null)
             {
@@ -51,6 +57,7 @@ namespace Photon_IATK
         {
             if (!penSet) return;
 
+            bool tempGripState = false;
             bool tempPenPressedState = false;
             float tempPenPressure = 0f;
             Vector3 tempPenPressedLocation = Vector3.zero;
@@ -101,6 +108,16 @@ namespace Photon_IATK
                     }
                 }
             }
+
+            if (penInputDevice.TryGetFeatureValue(CommonUsages.gripButton, out tempGripState))
+            {
+                if (tempGripState != lastGripState)
+                {
+                    penGripButtonPressEvent.Invoke(tempGripState);
+                    lastGripState = tempGripState;
+                }
+            }
+
         }
 
         private bool GetDrawingVariables()

@@ -25,8 +25,22 @@ namespace Photon_IATK
             }
 
             penButtonEvents.penTriggerPress.AddListener(onPenTriggerPress);
+            penButtonEvents.penGripButtonPressEvent.AddListener(onPenGripPress);
             penButtonEvents.penTriggerPressedLocation.AddListener(OnPenTriggerPosition);
             Debug.LogFormat(GlobalVariables.blue + "Listeners started" + GlobalVariables.endColor + " : Start()" + this.GetType());
+        }
+
+        public void onPenGripPress(bool pressed)
+        {
+            Debug.LogFormat(GlobalVariables.blue + "Grip button pressed = {0}" + GlobalVariables.endColor + " : onTriggerPress()" + this.GetType(), pressed);
+
+            if (pressed)
+            {
+                annotationManager.requestDisableFarInteractions();
+            } else
+            {
+                annotationManager.requestEnableFarInteractions();
+            }
         }
 
         bool tmp_Line_Render_Prefab;

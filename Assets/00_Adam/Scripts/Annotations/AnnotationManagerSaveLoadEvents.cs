@@ -7,7 +7,7 @@ using Photon.Realtime;
 using Photon.Pun;
 using Photon.Compression;
 using Photon.Utilities;
-
+using Microsoft.MixedReality.Toolkit.Input;
 using System.Runtime.Serialization.Formatters.Binary;
 using System;
 
@@ -135,6 +135,12 @@ namespace Photon_IATK
                     break;
                 case GlobalVariables.RequestSaveAnnotation:
                     _saveAnnotations(data);
+                    break;
+                case GlobalVariables.RequestDisableFarInteraction:
+                    _requestDisableFarInteractions();
+                    break;
+                case GlobalVariables.RequestEnableFarInteraction:
+                    _requestEnableFarInteractions();
                     break;
                 default:
                     break;
@@ -617,7 +623,40 @@ namespace Photon_IATK
 
 #endregion AnnotationLoading
 
-#endregion Events
+        public void requestDisableFarInteractions()
+        {
+            Debug.LogFormat(GlobalVariables.cEvent + "Any ~ Calling: {0}, Receivers: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Sending Event Code: {5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "RequestDisableFarInteraction()", "MasterClient", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestEventAnnotationRemoval, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            object[] content = new object[] { photonView.ViewID };
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+
+            PhotonNetwork.RaiseEvent(GlobalVariables.RequestDisableFarInteraction, content, raiseEventOptions, GlobalVariables.sendOptions);
+        }
+
+        private void _requestDisableFarInteractions()
+        {
+            PointerUtils.SetHandRayPointerBehavior(PointerBehavior.AlwaysOff, Microsoft.MixedReality.Toolkit.Utilities.Handedness.Any);
+
+        }
+
+        public void requestEnableFarInteractions()
+        {
+            Debug.LogFormat(GlobalVariables.cEvent + "Any ~ Calling: {0}, Receivers: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Sending Event Code: {5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "RequestEnableFarInteraction()", "MasterClient", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestEventAnnotationRemoval, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            object[] content = new object[] { photonView.ViewID };
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+
+            PhotonNetwork.RaiseEvent(GlobalVariables.RequestEnableFarInteraction, content, raiseEventOptions, GlobalVariables.sendOptions);
+        }
+
+        private void _requestEnableFarInteractions()
+        {
+            PointerUtils.SetHandRayPointerBehavior(PointerBehavior.Default, Microsoft.MixedReality.Toolkit.Utilities.Handedness.Any);
+        }
+
+        #endregion Events
     }
 }
 

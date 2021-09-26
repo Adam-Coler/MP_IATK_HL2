@@ -65,7 +65,6 @@ namespace Photon_IATK
             //make sure that this object is the same as the sender object
             if (photonView.ViewID != callerPhotonViewID)
             {
-                Debug.LogFormat("OnEvent will not trigger View ID's do not match. Caller ID: {0}, My ID: {1}", callerPhotonViewID, photonView.ViewID);
                 return;
             }
 

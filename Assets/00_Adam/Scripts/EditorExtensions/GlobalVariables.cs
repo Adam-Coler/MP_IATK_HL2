@@ -157,7 +157,8 @@ namespace Photon_IATK
         public const byte RequestHideTrackers = 112;
 
 
-
+        public const byte RequestDisableFarInteraction = 114;
+        public const byte RequestEnableFarInteraction = 115;
 
 
         //Debug.LogFormat(GlobalVariables.cRegister + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
