@@ -10,15 +10,3 @@ C:\Users\NuiLab00\Desktop\IATK_Unity\MP_IATK_HL2_01\MP_IATK_HL2\Assets\Dependenc
 C:\Users\NuiLab00\Desktop\IATK_Unity\MP_IATK_HL2_01\MP_IATK_HL2\Assets\Dependencies\netstandard2.0\Microsoft.Windows.MixedReality.DotNetWinRT.dll
 C:\Users\NuiLab00\Desktop\IATK_Unity\MP_IATK_HL2_01\MP_IATK_HL2\Assets\Dependencies\netstandard2.0\System.Drawing.Primitives.dll
 C:\Users\NuiLab00\Desktop\IATK_Unity\MP_IATK_HL2_01\MP_IATK_HL2\MSBuild\Output\obj\Dependencies\Release\netstandard2.0\IATK_HL2.Dependencies.msb4u.csproj.CopyComplete
-C:\Users\NuiLab00\Desktop\IATK_Unity\IA_Env\MP_IATK_HL2\Assets\Dependencies\netstandard2.0\Microsoft.Windows.MixedReality.DotNetWinRT\Editor\Microsoft.Windows.MixedReality.DotNetWinRT.Editor.asmdef
-C:\Users\NuiLab00\Desktop\IATK_Unity\IA_Env\MP_IATK_HL2\Assets\Dependencies\netstandard2.0\Microsoft.Windows.MixedReality.DotNetWinRT\Editor\Microsoft.Windows.MixedReality.DotNetWinRT.Editor.asmdef.meta
-C:\Users\NuiLab00\Desktop\IATK_Unity\IA_Env\MP_IATK_HL2\Assets\Dependencies\netstandard2.0\Microsoft.Windows.MixedReality.DotNetWinRT\Editor\Microsoft.Windows.MixedReality.DotNetWinRT.Init.cs
-C:\Users\NuiLab00\Desktop\IATK_Unity\IA_Env\MP_IATK_HL2\Assets\Dependencies\netstandard2.0\Microsoft.Windows.MixedReality.DotNetWinRT\Editor\Microsoft.Windows.MixedReality.DotNetWinRT.Init.cs.meta
-C:\Users\NuiLab00\Desktop\IATK_Unity\IA_Env\MP_IATK_HL2\Assets\Dependencies\netstandard2.0\Microsoft.Windows.MixedReality.DotNetWinRT\x64\MonoSupport.dll
-C:\Users\NuiLab00\Desktop\IATK_Unity\IA_Env\MP_IATK_HL2\Assets\Dependencies\netstandard2.0\Microsoft.Windows.MixedReality.DotNetWinRT\x64\MonoSupport.dll.meta
-C:\Users\NuiLab00\Desktop\IATK_Unity\IA_Env\MP_IATK_HL2\Assets\Dependencies\netstandard2.0\IATK_HL2.Dependencies.msb4u.deps.json
-C:\Users\NuiLab00\Desktop\IATK_Unity\IA_Env\MP_IATK_HL2\Assets\Dependencies\netstandard2.0\Microsoft.Windows.MixedReality.DotNetWinRT.dll.meta
-C:\Users\NuiLab00\Desktop\IATK_Unity\IA_Env\MP_IATK_HL2\Assets\Dependencies\netstandard2.0\System.Drawing.Primitives.dll.meta
-C:\Users\NuiLab00\Desktop\IATK_Unity\IA_Env\MP_IATK_HL2\Assets\Dependencies\netstandard2.0\Microsoft.Windows.MixedReality.DotNetWinRT.dll
-C:\Users\NuiLab00\Desktop\IATK_Unity\IA_Env\MP_IATK_HL2\Assets\Dependencies\netstandard2.0\System.Drawing.Primitives.dll
-C:\Users\NuiLab00\Desktop\IATK_Unity\IA_Env\MP_IATK_HL2\MSBuild\Output\obj\Dependencies\Release\netstandard2.0\IATK_HL2.Dependencies.msb4u.csproj.CopyComplete

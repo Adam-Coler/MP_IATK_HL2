@@ -1,21 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj": {}
+    "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\IA_Env\\MP_IATK_HL2\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj": {}
   },
   "projects": {
-    "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj": {
+    "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\IA_Env\\MP_IATK_HL2\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj",
+        "projectUniqueName": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\IA_Env\\MP_IATK_HL2\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj",
         "projectName": "IATK_VIVE.Dependencies.msb4u",
-        "projectPath": "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj",
-        "packagesPath": "C:\\Users\\adam6\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\MSBuild\\Output\\obj\\Dependencies\\",
+        "projectPath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\IA_Env\\MP_IATK_HL2\\Assets\\IATK_VIVE.Dependencies.msb4u.csproj",
+        "packagesPath": "C:\\Users\\NuiLab00\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\IA_Env\\MP_IATK_HL2\\MSBuild\\Output\\obj\\Dependencies\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Assets\\NuGet.Config",
-          "C:\\Users\\adam6\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\IA_Env\\MP_IATK_HL2\\Assets\\NuGet.Config",
+          "C:\\Users\\NuiLab00\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -30,8 +33,8 @@
           "net46": {
             "targetAlias": "net46",
             "projectReferences": {
-              "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj": {
-                "projectPath": "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj",
+              "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\IA_Env\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj": {
+                "projectPath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\IA_Env\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj",
                 "privateAssets": "analyzers"
               }
             }
@@ -60,21 +63,24 @@
               "autoReferenced": true
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj": {
+    "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\IA_Env\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj",
+        "projectUniqueName": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\IA_Env\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj",
         "projectName": "DotNetAdapter",
-        "projectPath": "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj",
-        "packagesPath": "C:\\Users\\adam6\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\adam6\\Documents\\GitHub\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\.obj\\",
+        "projectPath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\IA_Env\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\DotNetAdapter.csproj",
+        "packagesPath": "C:\\Users\\NuiLab00\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\NuiLab00\\Desktop\\IATK_Unity\\IA_Env\\MP_IATK_HL2\\Library\\PackageCache\\com.microsoft.mixedreality.toolkit.foundation@2.5.1\\Providers\\WindowsMixedReality\\Shared\\DotNetAdapter\\.obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\adam6\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\NuiLab00\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -112,7 +118,7 @@
               "version": "[0.5.1049, )"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.104\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.103\\RuntimeIdentifierGraph.json"
         }
       }
     }
