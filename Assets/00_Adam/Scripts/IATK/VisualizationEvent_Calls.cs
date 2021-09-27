@@ -64,6 +64,29 @@ namespace Photon_IATK
             }
         }
 
+        public string getVisDimension(AbstractVisualisation.PropertyType property)
+        {
+            switch (property){
+                case (AbstractVisualisation.PropertyType.X):
+                    return xDimension;
+                    break;
+                case (AbstractVisualisation.PropertyType.Y):
+                    return yDimension;
+                    break;
+                case (AbstractVisualisation.PropertyType.Z):
+                    return zDimension;
+                    break;
+                case (AbstractVisualisation.PropertyType.Colour):
+                    return colourDimension;
+                    break;
+                case (AbstractVisualisation.PropertyType.Size):
+                    return sizeDimension;
+                    break;
+                default:
+                    return "Null";
+                    break;
+            }
+        }
 
         private void Awake()
         {

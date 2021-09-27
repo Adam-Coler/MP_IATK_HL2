@@ -457,6 +457,7 @@ namespace Photon_IATK
                 if (HelperFunctions.GetComponent<ManipulationControls>(out manipulationControls, System.Reflection.MethodBase.GetCurrentMethod()))
                 {
                     manipulationControls.enabled = true;
+                    manipulationControls.ShowScaleHandles = false;
                 }
 
                 return;
@@ -535,6 +536,7 @@ namespace Photon_IATK
             if (HelperFunctions.GetComponent<ManipulationControls>(out manipulationControls, System.Reflection.MethodBase.GetCurrentMethod()))
             {
                 manipulationControls.enabled = true;
+                manipulationControls.ShowScaleHandles = false;
             }
 
             lineRenderPoints = tmpComponenet.GetPoints();
@@ -542,6 +544,7 @@ namespace Photon_IATK
             //start collider disable routine
             if (!removeShortLine())
             {
+                Debug.LogFormat(GlobalVariables.cTest + "Invoking remove collider in 15 seconds{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                 Invoke("removeCollider", 15);
             }
 

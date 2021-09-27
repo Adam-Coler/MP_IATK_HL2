@@ -48,6 +48,20 @@ namespace Photon_IATK
             return chunks;
         }
 
+        public static List<List<string>> Split(string[] collection, int size)
+        {
+            var chunks = new List<List<string>>();
+            var chunkCount = collection.Count() / size;
+
+            if (collection.Length % size > 0)
+                chunkCount++;
+
+            for (var i = 0; i < chunkCount; i++)
+                chunks.Add(collection.Skip(i * size).Take(size).ToList());
+
+            return chunks;
+        }
+
         public static void hideShowChildrenOfTag(string tag)
         {
             GameObject[] objectsWithTag = GameObject.FindGameObjectsWithTag(tag);

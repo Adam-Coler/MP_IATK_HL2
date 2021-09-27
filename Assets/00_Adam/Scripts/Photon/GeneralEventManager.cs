@@ -148,7 +148,8 @@ namespace Photon_IATK
                 Debug.LogFormat(GlobalVariables.cEvent + "SendVisSceneInstantiateEvent() triggered but you are offline, loading Vis offline{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 GameObject prefab = Resources.Load("Vis") as GameObject;
-                GameObject prefabAnnotationStation = Resources.Load("AnnotationStation") as GameObject;
+                //GameObject prefabAnnotationStation = Resources.Load("AnnotationStation") as GameObject;
+                GameObject prefabAnnotationStation = Resources.Load("AnnotationStationBtns") as GameObject;
                 GameObject prefabTrashCube = Resources.Load("TrashCube") as GameObject;
 
                 obj = Instantiate(prefab, new Vector3(0, 0, 0), Quaternion.identity);
@@ -323,7 +324,7 @@ namespace Photon_IATK
 
 
             visObj = PhotonNetwork.InstantiateRoomObject("Vis", Vector3.zero, Quaternion.identity);
-            annotationObj = PhotonNetwork.InstantiateRoomObject("AnnotationStation", Vector3.zero, Quaternion.identity);
+            annotationObj = PhotonNetwork.InstantiateRoomObject("AnnotationStationBtns", Vector3.zero, Quaternion.identity);
             trashCube = PhotonNetwork.InstantiateRoomObject("TrashCube", Vector3.zero, Quaternion.identity);
 
 

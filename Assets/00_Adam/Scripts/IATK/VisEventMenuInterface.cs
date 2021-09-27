@@ -4,6 +4,7 @@ using TMPro;
 using IATK;
 using System.Linq;
 using Photon.Pun;
+using Microsoft.MixedReality.Toolkit.UI;
 
 namespace Photon_IATK
 {
@@ -20,6 +21,7 @@ namespace Photon_IATK
         private VisualizationEvent_Calls theVisualizationEvent_Calls;
 
 
+
         // Start is called before the first frame update
         //void Awake()
         //{
@@ -32,16 +34,34 @@ namespace Photon_IATK
                 theVisualizationEvent_Calls.RequestChangeXAxisEvent(xAxisDropdown.options[xAxisDropdown.value].text);
         }
 
+        public void changeXAxis(string newValue)
+        {
+            if (theVisualizationEvent_Calls.xDimension != newValue)
+                theVisualizationEvent_Calls.RequestChangeXAxisEvent(newValue);
+        }
+
         public void changeYAxis()
         {
             if (theVisualizationEvent_Calls.yDimension != yAxisDropdown.options[yAxisDropdown.value].text)
                 theVisualizationEvent_Calls.RequestChangeYAxisEvent(yAxisDropdown.options[yAxisDropdown.value].text);
         }
 
+        public void changeYAxis(string newValue)
+        {
+            if (theVisualizationEvent_Calls.yDimension != newValue)
+                theVisualizationEvent_Calls.RequestChangeYAxisEvent(newValue);
+        }
+
         public void changeZAxis()
         {
             if (theVisualizationEvent_Calls.zDimension != zAxisDropdown.options[zAxisDropdown.value].text)
                 theVisualizationEvent_Calls.RequestChangeZAxisEvent(zAxisDropdown.options[zAxisDropdown.value].text);
+        }
+
+        public void changeZAxis(string newValue)
+        {
+            if (theVisualizationEvent_Calls.zDimension != newValue)
+                theVisualizationEvent_Calls.RequestChangeZAxisEvent(newValue);
         }
 
         public void changeColorDimension()
@@ -54,6 +74,15 @@ namespace Photon_IATK
         {
             if (theVisualizationEvent_Calls.sizeDimension != sizeDimensionDropdown.options[sizeDimensionDropdown.value].text)
                 theVisualizationEvent_Calls.RequestChangeSizeDimensionEvent(sizeDimensionDropdown.options[sizeDimensionDropdown.value].text);
+        }
+
+        public void changeSizeAndColarDimension(string newValue)
+        {
+            if (theVisualizationEvent_Calls.sizeDimension != newValue)
+            {
+                theVisualizationEvent_Calls.RequestChangeSizeDimensionEvent(newValue);
+                theVisualizationEvent_Calls.RequestChangeColorDimensionEvent(newValue);
+            }
         }
 
         private void OnEnable()
