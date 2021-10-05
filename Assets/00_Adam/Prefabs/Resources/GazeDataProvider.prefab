@@ -9,11 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7312498185000307536}
-  - component: {fileID: 7312498185000307539}
   - component: {fileID: -504451630883806981}
+  - component: {fileID: 3104016437120064629}
+  - component: {fileID: 6004339209652893181}
   m_Layer: 0
   m_Name: GazeDataProvider
-  m_TagString: Untagged
+  m_TagString: GameController
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -32,20 +33,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7312498185000307539
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7312498185000307538}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e7e2ba83999bdd419ae38e51123179f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  beamColor: {fileID: 2100000, guid: 8b746dff4d460544a8d8db717ae58c7c, type: 2}
-  isBeam: 1
 --- !u!114 &-504451630883806981
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65,7 +52,34 @@ MonoBehaviour:
   Synchronization: 3
   OwnershipTransfer: 0
   ObservedComponents:
-  - {fileID: 7312498185000307539}
+  - {fileID: 0}
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &3104016437120064629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7312498185000307538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2a72508280be074393d41f528120948, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myType: 2
+--- !u!114 &6004339209652893181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7312498185000307538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e7e2ba83999bdd419ae38e51123179f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  beamColor: {fileID: 2100000, guid: 8b746dff4d460544a8d8db717ae58c7c, type: 2}
+  isBeam: 1

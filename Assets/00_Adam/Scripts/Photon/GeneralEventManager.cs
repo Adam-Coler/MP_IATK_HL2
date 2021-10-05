@@ -18,6 +18,10 @@ namespace Photon_IATK
         public static GeneralEventManager instance;
         public bool isElictationOnPC = false;
 
+        public bool showingGameControllers = true;
+        public bool showingExtras = false;
+        public bool showingTrackers = false;
+
         #region Setup
 
         private void Awake()

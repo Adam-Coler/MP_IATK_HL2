@@ -194,6 +194,13 @@ namespace Photon_IATK
                 }
 
             }
+
+            if (GeneralEventManager.instance != null)
+            {
+                GeneralEventManager.instance.showingExtras = !GeneralEventManager.instance.showingExtras;
+                GeneralEventManager.instance.showingGameControllers = !GeneralEventManager.instance.showingGameControllers;
+                GeneralEventManager.instance.showingTrackers = !GeneralEventManager.instance.showingTrackers;
+            }
         }
 
         #endregion

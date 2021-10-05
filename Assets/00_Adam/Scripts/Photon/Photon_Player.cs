@@ -272,9 +272,9 @@ namespace Photon_IATK
                     isSetup = true;
                     Microsoft.MixedReality.Toolkit.MixedRealityPlayspace.AddChild(this.gameObject.transform);
 
-#if UNITY_EDITOR
-                    return;
-#endif
+//#if UNITY_EDITOR
+//                    return;
+//#endif
                     GameObject rightHand = PhotonNetwork.Instantiate("NetworkedHandSender", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
                     NetworkedHandDataSender rightHandInterface = rightHand.GetComponent<NetworkedHandDataSender>();
 
@@ -307,6 +307,9 @@ namespace Photon_IATK
                         PhotonNetwork.Destroy(leftHand);
                     }
 
+#if UNITY_EDITOR
+                    return;
+#endif
                     GameObject Gaze = PhotonNetwork.Instantiate("GazeDataProvider", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
                     NetworkedGazeDataSender networkedGazeData = Gaze.GetComponent<NetworkedGazeDataSender>();
 
