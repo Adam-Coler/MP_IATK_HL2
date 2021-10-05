@@ -85,7 +85,7 @@ Material:
     - _ClippingBorder: 0
     - _ClippingBorderWidth: 0.025
     - _ColorWriteMask: 15
-    - _CullMode: 0
+    - _CullMode: 2
     - _CustomMode: 1
     - _Cutoff: 1
     - _DetailNormalMapScale: 1
@@ -159,7 +159,7 @@ Material:
     - _ZOffsetFactor: 0
     - _ZOffsetUnits: 0
     - _ZTest: 8
-    - _ZWrite: 0
+    - _ZWrite: 1
     m_Colors:
     - _ClippingBorderColor: {r: 1, g: 0.2, b: 0, a: 1}
     - _Color: {r: 0.9622642, g: 0, b: 0, a: 1}

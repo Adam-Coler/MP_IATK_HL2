@@ -147,6 +147,20 @@ namespace Photon_IATK
             }
         }
 
+        public void localLevelVis()
+        {
+            GameObject[] viss = GameObject.FindGameObjectsWithTag(GlobalVariables.visTag);
+
+            foreach (GameObject vis in viss)
+            {
+                Vector3 rightMove = vis.transform.position + vis.transform.localScale.x / 2 * vis.transform.right;
+                Vector3 middle = rightMove + vis.transform.localScale.z / 2 * vis.transform.forward;
+                Vector3 upMove = vis.transform.position + (middle.y - vis.transform.position.y) * Vector3.up;
+                vis.transform.position = upMove;
+            }
+        }
+
+
         public void participantSetup()
         {
             CenterVis();
