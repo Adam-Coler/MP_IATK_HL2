@@ -165,6 +165,13 @@ namespace Photon_IATK
             }
         }
 
+        public void logRowTest()
+        {
+            if (DataCollectionMgr.Instance != null)
+            {
+                DataCollectionMgr.Instance.logRowsTest();
+            }
+        }
 
         public void participantSetup()
         {

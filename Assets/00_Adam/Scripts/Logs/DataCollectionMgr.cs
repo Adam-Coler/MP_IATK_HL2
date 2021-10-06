@@ -9,12 +9,26 @@ namespace Photon_IATK
         private const string SessionFolderRoot = "csvDataLogs";
         private const string delim = ",";
 
+        public static DataCollectionMgr Instance;
+
         private static CSVWritter GeneralData;
         private string[] generalDataHeader = new string[] { "Test", "PID" };
 
         private void Start()
         {
+            if (Instance != null)
+            {
+                Destroy(Instance);
+            }
+            Instance = this;
+
             setupGeneralDataRecording();
+
+            logRowsTest();
+        }
+
+        public void logRowsTest()
+        {
             GeneralData.AddRow(new string[] { "1", "2" });
             GeneralData.FlushData();
             GeneralData.AddRow(new string[] { "2", "2" });
@@ -25,11 +39,11 @@ namespace Photon_IATK
             GeneralData.AddRow(new string[] { "6", "2" });
         }
 
-        private void setupGeneralDataRecording()
+        private async void setupGeneralDataRecording()
         {
             GeneralData = gameObject.AddComponent<CSVWritter>();
             GeneralData.Initalize(SessionFolderRoot, delim, "GeneralData", generalDataHeader);
-            GeneralData.MakeNewSession();
+            await GeneralData.MakeNewSession();
             GeneralData.StartNewCSV();
         }
 
