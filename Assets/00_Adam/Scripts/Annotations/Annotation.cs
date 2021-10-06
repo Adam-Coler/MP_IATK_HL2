@@ -766,7 +766,7 @@ namespace Photon_IATK
 
             myTextContents.Add(text);
             myTextContent = text;
-            textManager.updateContentLocal(text);
+            textManager.updateContent(text);
         }
 
         #endregion Text

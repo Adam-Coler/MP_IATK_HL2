@@ -142,11 +142,20 @@ namespace Photon_IATK
             float.TryParse(rotY_TMP.text, NumberStyles.Any, CultureInfo.CurrentCulture, out rotY);
             float.TryParse(rotZ_TMP.text, NumberStyles.Any, CultureInfo.CurrentCulture, out rotZ);
 
-            string requestedID = players[playerDropDown.value - 2].UserId;
+            if (playerDropDown.options.Count >= 3) {
+                string requestedID = players[playerDropDown.value - 2].UserId;
+                mpi.SendUpdatePlayspaceTransform(posX, posY, posZ, rotX, rotY, rotZ, players[playerDropDown.value - 2]);
 
-            Debug.LogFormat(GlobalVariables.cCommon + "Values updated, Position: X {0}, Y {1}, Z {2}. Rotation: X {3}, Y {4}, Z {5}, Requsted ID: {6}, Requestor ID: {7}." + GlobalVariables.endColor + " {8}: {9} -> {10} -> {11}", posX, posY, posZ, rotX, rotY, rotZ, requestedID, PhotonNetwork.LocalPlayer.UserId, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                Debug.LogFormat(GlobalVariables.cCommon + "Values updated, Position: X {0}, Y {1}, Z {2}. Rotation: X {3}, Y {4}, Z {5}, Requsted ID: {6}, Requestor ID: {7}." + GlobalVariables.endColor + " {8}: {9} -> {10} -> {11}", posX, posY, posZ, rotX, rotY, rotZ, requestedID, PhotonNetwork.LocalPlayer.UserId, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            mpi.SendUpdatePlayspaceTransform(posX, posY, posZ, rotX, rotY, rotZ, players[playerDropDown.value - 2]);
+
+            }
+
+
+
+            Debug.LogFormat(GlobalVariables.cCommon + "Values updated, Position: X {0}, Y {1}, Z {2}. Rotation: X {3}, Y {4}, Z {5}, Requsted ID: {6}, Requestor ID: {7}." + GlobalVariables.endColor + " {8}: {9} -> {10} -> {11}", posX, posY, posZ, rotX, rotY, rotZ, "Null", PhotonNetwork.LocalPlayer.UserId, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+
         }
 
     }

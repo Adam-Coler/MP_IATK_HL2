@@ -31,6 +31,7 @@ namespace Photon_IATK
         public static string cFileOperations = orange;
         public static string cEvent = yellow;
         public static string cJSON = purple;
+        public static string cDataCollection = "Data Collection: " + purple;
 
         public static string endColor = "</color>";
         public static string newLine = "\n";
@@ -56,6 +57,7 @@ namespace Photon_IATK
         public static string ExtraTag = "Extra";
         public static string AnchorMenuTag = "AnchorMenu";
         public static string TrackerTag = "Tracker";
+        public static string DataCollectionTag = "DataCollection";
 
 
         public enum allSymbols

@@ -156,6 +156,11 @@ namespace Photon_IATK
                 Vector3 rightMove = vis.transform.position + vis.transform.localScale.x / 2 * vis.transform.right;
                 Vector3 middle = rightMove + vis.transform.localScale.z / 2 * vis.transform.forward;
                 Vector3 upMove = vis.transform.position + (middle.y - vis.transform.position.y) * Vector3.up;
+
+                float eulerY = vis.transform.eulerAngles.y;
+                Quaternion rotation = Quaternion.Euler(0, eulerY, 0);
+
+                vis.transform.rotation = rotation;
                 vis.transform.position = upMove;
             }
         }

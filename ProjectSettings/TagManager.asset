@@ -27,6 +27,7 @@ TagManager:
   - Extra
   - AnchorMenu
   - Tracker
+  - DataCollection
   layers:
   - Default
   - TransparentFX

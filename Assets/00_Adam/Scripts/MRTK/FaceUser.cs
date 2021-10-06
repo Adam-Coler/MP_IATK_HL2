@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class FaceUser : MonoBehaviour
 {
@@ -15,7 +13,10 @@ public class FaceUser : MonoBehaviour
             Vector3 direction = transform.position - Camera.main.transform.position;
             transform.rotation = Quaternion.LookRotation(direction);
         }
+    }
 
-
+    public void toggleFaceUser()
+    {
+        isFaceUser = !isFaceUser;
     }
 }

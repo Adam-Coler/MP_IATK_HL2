@@ -16,8 +16,8 @@ GameObject:
   - component: {fileID: 5646032009005643188}
   - component: {fileID: -8205097489125937555}
   - component: {fileID: 8753394847294861529}
-  - component: {fileID: -7457856195486156659}
   - component: {fileID: 7730178154748743306}
+  - component: {fileID: 4124051360600632282}
   m_Layer: 0
   m_Name: GenericAnnotation
   m_TagString: Annotation
@@ -170,7 +170,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: -7457856195486156659}
+      - m_Target: {fileID: 4124051360600632282}
         m_MethodName: Grabbed
         m_Mode: 1
         m_Arguments:
@@ -207,7 +207,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: -7457856195486156659}
+      - m_Target: {fileID: 4124051360600632282}
         m_MethodName: Released
         m_Mode: 1
         m_Arguments:
@@ -323,7 +323,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: -7457856195486156659}
+      - m_Target: {fileID: 4124051360600632282}
         m_MethodName: GrabbedHandle
         m_Mode: 1
         m_Arguments:
@@ -360,8 +360,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: -7457856195486156659}
-        m_MethodName: ReleasedHandle
+      - m_Target: {fileID: 4124051360600632282}
+        m_MethodName: Released
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -397,7 +397,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: -7457856195486156659}
+      - m_Target: {fileID: 4124051360600632282}
         m_MethodName: GrabbedScale
         m_Mode: 1
         m_Arguments:
@@ -434,8 +434,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: -7457856195486156659}
-        m_MethodName: ReleasedHandle
+      - m_Target: {fileID: 4124051360600632282}
+        m_MethodName: Released
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -457,21 +457,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &-7457856195486156659
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7496671545426428096}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d261215af4977964e90857debec9549a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  grabbedMaterial: {fileID: 2100000, guid: 9bd231f1aa2bf0b479b641984a2ac5e1, type: 2}
-  grabbedRotateMaterial: {fileID: 0}
-  grabbeScaleMaterial: {fileID: 0}
 --- !u!82 &7730178154748743306
 AudioSource:
   m_ObjectHideFlags: 0
@@ -568,3 +553,18 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &4124051360600632282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7496671545426428096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d261215af4977964e90857debec9549a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  grabbedMaterial: {fileID: 0}
+  grabbedRotateMaterial: {fileID: 0}
+  grabbeScaleMaterial: {fileID: 0}
