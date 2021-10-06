@@ -12,6 +12,10 @@ namespace Photon_IATK
 {
     public class CSVWritter : MonoBehaviour
     {
+        #region Consts to modify
+        private const int FlushAfter = 10;
+        #endregion
+
         #region Statics to modify
         public static string SessionFolderRoot;
         public static string Delim;
@@ -25,6 +29,7 @@ namespace Photon_IATK
             Delim = delim;
             DataSuffix = dataSuffix;
             CSVHeader = string.Join(delim, header);
+            CSVHeader += Delim + "TimeStamp";
         }
 
         #region private members
@@ -42,7 +47,7 @@ namespace Photon_IATK
 
         public async Task MakeNewSession()
         {
-            m_sessionId = DateTime.Now.ToString("yyyyMMdd_HHmmss");
+            m_sessionId = DateTime.Now.ToString("yyyyMMdd_HHmm");
             string rootPath = "";
 #if WINDOWS_UWP
             StorageFolder sessionParentFolder = await KnownFolders.PicturesLibrary
@@ -104,7 +109,12 @@ namespace Photon_IATK
 
         public void AddRow(string row)
         {
-            m_csvData.AppendLine(row);
+            m_csvData.AppendLine(row + Delim + DateTime.Now.ToString("yyyyMMdd_HHmmss_fff"));
+
+            if (m_csvData.Length >= FlushAfter)
+            {
+                FlushData();
+            }
         }
 
         /// <summary>

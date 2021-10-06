@@ -268,6 +268,8 @@ namespace Photon_IATK
 
         public void RequestChangeXAxisEvent(string newAxisDimension)
         {
+            if (newAxisDimension == xDimension) { return; }
+
             //Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: Masterclient ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", GlobalVariables.PhotonRequestTransformEvent, "Requesting transform from master", "Others", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRespondToRequestTransformEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "RequestChangeXAxisEvent, New dimension: ", newAxisDimension, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(),
@@ -278,7 +280,7 @@ System.Reflection.MethodBase.GetCurrentMethod());
 
             if (PhotonNetwork.IsConnected)
             {
-                object[] content = new object[] { photonView.ViewID, newAxisDimension };
+                object[] content = new object[] { photonView.ViewID, newAxisDimension, PhotonNetwork.NickName };
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
@@ -291,6 +293,8 @@ System.Reflection.MethodBase.GetCurrentMethod());
 
         public void RequestChangeYAxisEvent(string newAxisDimension)
         {
+            if (newAxisDimension == yDimension) { return; }
+
             Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "RequestChangeYAxisEvent, New dimension: ", newAxisDimension, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(),
 System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -299,7 +303,7 @@ System.Reflection.MethodBase.GetCurrentMethod());
 
             if (PhotonNetwork.IsConnected)
             {
-                object[] content = new object[] { photonView.ViewID, newAxisDimension };
+                object[] content = new object[] { photonView.ViewID, newAxisDimension , PhotonNetwork.NickName};
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
@@ -313,6 +317,8 @@ System.Reflection.MethodBase.GetCurrentMethod());
 
         public void RequestChangeZAxisEvent(string newAxisDimension)
         {
+            if (newAxisDimension == zDimension) { return; }
+
             Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "RequestChangeZAxisEvent, New dimension: ", newAxisDimension, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(),
 System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -321,7 +327,7 @@ System.Reflection.MethodBase.GetCurrentMethod());
 
             if (PhotonNetwork.IsConnected)
             {
-                object[] content = new object[] { photonView.ViewID, newAxisDimension };
+                object[] content = new object[] { photonView.ViewID, newAxisDimension, PhotonNetwork.NickName };
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
@@ -335,6 +341,8 @@ System.Reflection.MethodBase.GetCurrentMethod());
 
         public void RequestChangeColorDimensionEvent(string newAxisDimension)
         {
+            if (newAxisDimension == colourDimension) { return; }
+
             Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "RequestChangeColorDimensionEvent, New dimension: ", newAxisDimension, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(),
 System.Reflection.MethodBase.GetCurrentMethod());
 
@@ -343,7 +351,7 @@ System.Reflection.MethodBase.GetCurrentMethod());
 
             if (PhotonNetwork.IsConnected)
             {
-                object[] content = new object[] { photonView.ViewID, newAxisDimension };
+                object[] content = new object[] { photonView.ViewID, newAxisDimension, PhotonNetwork.NickName };
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
@@ -357,6 +365,7 @@ System.Reflection.MethodBase.GetCurrentMethod());
 
         public void RequestChangeSizeDimensionEvent(string newAxisDimension)
         {
+            if (newAxisDimension == sizeDimension) { return; }
 
             Debug.LogFormat(GlobalVariables.cCommon + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "RequestChangeSizeDimensionEvent, New dimension: ", newAxisDimension, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(),
 System.Reflection.MethodBase.GetCurrentMethod());
@@ -366,7 +375,7 @@ System.Reflection.MethodBase.GetCurrentMethod());
 
             if (PhotonNetwork.IsConnected)
             {
-                object[] content = new object[] { photonView.ViewID, newAxisDimension };
+                object[] content = new object[] { photonView.ViewID, newAxisDimension, PhotonNetwork.NickName };
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 

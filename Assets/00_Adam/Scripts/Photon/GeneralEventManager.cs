@@ -164,7 +164,7 @@ namespace Photon_IATK
             {
                 Debug.LogFormat(GlobalVariables.cEvent + "{0}Any ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", "", "Requesting Vis Instantiate", "MasterClient", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonVisSceneInstantiateEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-                object[] content = new object[] { photonView.ViewID };
+                object[] content = new object[] { photonView.ViewID, PhotonNetwork.NickName };
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient }; //Will not recived own message
 
@@ -174,7 +174,7 @@ namespace Photon_IATK
 
         public void SendDeleteAllObjectsWithComponentRequest(string className)
         {
-            object[] data = new object[] { photonView.ViewID, className };
+            object[] data = new object[] { photonView.ViewID, className, PhotonNetwork.NickName };
 
             if (!PhotonNetwork.IsConnected)
             {
@@ -195,7 +195,7 @@ namespace Photon_IATK
             //is connect and has veiw
             if (PhotonNetwork.IsConnected && obj.GetComponent<PhotonView>() != null)
             {
-                object[] data = new object[] { photonView.ViewID, obj.GetComponent<PhotonView>().ViewID };
+                object[] data = new object[] { photonView.ViewID, obj.GetComponent<PhotonView>().ViewID, PhotonNetwork.NickName, obj.name };
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
 
