@@ -155,6 +155,7 @@ namespace Photon_IATK
         public const byte SendPlayspaceTransform = 110;
         public const byte RequestUpdatePlayspaceTransform = 111;
         public const byte RequestHideTrackers = 112;
+        public const byte RequestNameUpdate = 116;
 
 
         public const byte RequestDisableFarInteraction = 114;

@@ -24,6 +24,8 @@ namespace Photon_IATK
         public TMP_InputField rotY_TMP;
         public TMP_InputField rotZ_TMP;
 
+        public TMP_InputField nickname;
+
         public MovePlayspaceInterface mpi;
 
         public float posX;
@@ -70,6 +72,26 @@ namespace Photon_IATK
 
 
             playerDropDown.AddOptions(listDataDimensions);
+        }
+
+        public void setPlayerName()
+        {
+            Debug.Log("button pressed");
+            if (playerDropDown.options[playerDropDown.value].text == "Undefined")
+            {
+                getplayers();
+            }
+            else if (playerDropDown.options[playerDropDown.value].text == "FindPlayers")
+            {
+
+            }
+            else
+            {
+                mpi.requestPlayerNameChange(players[playerDropDown.value - 2], nickname.text);
+                nickname.text = "";
+                getplayers();
+            }
+
         }
 
         public void getplayers()

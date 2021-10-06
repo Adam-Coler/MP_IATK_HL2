@@ -52,7 +52,6 @@ namespace Photon_IATK
                     }
                     break;
                 case type.Default:
-                    transform.GetChild(0).gameObject.SetActive(false);
                     break;
                 default:
                     break;

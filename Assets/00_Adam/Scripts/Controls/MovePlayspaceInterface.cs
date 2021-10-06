@@ -83,9 +83,21 @@ namespace Photon_IATK
                 case GlobalVariables.RequestHideTrackers:
                     updateTrackerVisability(data);
                     break;
+                case GlobalVariables.RequestNameUpdate:
+                    updateName(data);
+                    break;
                 default:
                     break;
             }
+        }
+
+        public void requestPlayerNameChange(Player selcetedPlayer, string newName)
+        {
+            object[] content = new object[] { photonView.ViewID, selcetedPlayer.UserId, newName};
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; //Will not recived own message
+
+            PhotonNetwork.RaiseEvent(GlobalVariables.RequestNameUpdate, content, raiseEventOptions, GlobalVariables.sendOptions);
         }
 
         public void requestPlayspaceTransform(Player selcetedPlayer)
@@ -174,11 +186,7 @@ namespace Photon_IATK
 
             Vector3 eulars = rotation.eulerAngles;
 
-
             Debug.LogFormat(GlobalVariables.cCommon + "Transform recived, position: {0}, rotation: {1}, ID: {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", position.ToString(), eulars.ToString(), userID, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-
-            baseValues.Add(userID, new Vector3[] { position, eulars });
-
 
             Vector3[] tmp;
             if (baseValues.TryGetValue(userID, out tmp)) {
@@ -203,6 +211,34 @@ namespace Photon_IATK
             {
                 tracker.transform.GetChild(0).gameObject.SetActive(!tracker.transform.GetChild(0).gameObject.activeSelf); 
 
+            }
+
+        }
+
+        private void updateName(object[] data)
+        {
+            string userID = (string)data[1];
+            if (userID != PhotonNetwork.LocalPlayer.UserId) { return; }
+
+            Debug.LogFormat(GlobalVariables.cEvent + "updating nickname{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+
+            PhotonView view;
+            Photon_Player player;
+
+            if (HelperFunctions.getLocalPlayer(out view, out player, System.Reflection.MethodBase.GetCurrentMethod()))
+            {
+                string newName = (string)data[2];
+                view.Owner.NickName = newName;
+                player.txtNickName.text = newName;
+                player.RequestNicknameChangeEvent();
+                string playerNamePrefKey = GlobalVariables.PlayerPrefsKeys.ParticipantID.ToString();
+
+                if (PlayerPrefs.HasKey(playerNamePrefKey))
+                {
+                    PlayerPrefs.SetString(playerNamePrefKey, newName);
+                }
+                
             }
 
         }
