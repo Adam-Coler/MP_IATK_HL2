@@ -750,7 +750,7 @@ namespace Photon_IATK
 
             object[] content = new object[] { photonView.ViewID, text, PhotonNetwork.NickName };
 
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
             PhotonNetwork.RaiseEvent(GlobalVariables.RequestTextUpdate, content, raiseEventOptions, GlobalVariables.sendOptions);
 
@@ -763,6 +763,8 @@ namespace Photon_IATK
             string text = (string)data[1];
 
             Debug.LogFormat(GlobalVariables.cEvent + "{0} Any ~ Reciving Text, " + ", My text content: " + myTextContent + ", MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, reciving Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestTextUpdate, "Others", " Text: ", text, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            if (myTextContent == text) { return; }
 
             myTextContents.Add(text);
             myTextContent = text;
@@ -816,7 +818,7 @@ namespace Photon_IATK
 
             object[] content = new object[] { photonView.ViewID, summeryValueType.ToString(), axisSelection.ToString(), PhotonNetwork.NickName };
 
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
             PhotonNetwork.RaiseEvent(GlobalVariables.RequestCentralityUpdate, content, raiseEventOptions, GlobalVariables.sendOptions);
 

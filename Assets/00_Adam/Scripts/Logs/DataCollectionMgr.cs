@@ -142,7 +142,7 @@ namespace Photon_IATK
         {
             byte eventCode = photonEventData.Code;
 
-            Debug.LogError(eventCode);
+            //Debug.LogError(eventCode);
 
             //Check that the event was one we made, photon reserves 0, 200+
             if (eventCode == 0 || eventCode > 199) { return; }
