@@ -13,7 +13,7 @@ namespace Photon_IATK
     public class CSVWritter : MonoBehaviour
     {
         #region Consts to modify
-        private const int FlushAfter = 10;
+        private const int FlushAfter = 1000;
         #endregion
 
         #region Statics to modify

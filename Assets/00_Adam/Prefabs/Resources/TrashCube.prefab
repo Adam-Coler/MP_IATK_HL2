@@ -402,6 +402,8 @@ MonoBehaviour:
   isCoroutineRunning: 0
   time: 0.1
   meaningfulDist: 0.015
+  hasAnnotaiton: 1
+  annotation: {fileID: 0}
   movingToPosition: {x: 0, y: 0, z: 0}
 --- !u!114 &6364477026908512514
 MonoBehaviour:
