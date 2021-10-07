@@ -14,15 +14,18 @@ namespace Photon_IATK
     {
         private const string SessionFolderRoot = "csvDataLogs";
         private const string delim = ",";
+        private const string nan = "null";
 
         public static DataCollectionMgr Instance;
 
         private static CSVWritter GeneralData;
-        private string[] generalDataHeader = new string[] { "Caller", "EventCode", "CallerNickname", "Content1", "Content2", "Content3" };
+        private string[] generalDataHeader = new string[] { "Caller", "EventCode", "CallerNickname", "Content"};
 
         private static CSVWritter GeneralVisData;
         private string[] generalVisDataHeader = new string[] { "Caller", "EventCode", "CallerNickname", "NewDimension" };
 
+        private static CSVWritter AnnotationUpdatesData;
+        private string[] AnnotationUpdatesDataHeader = new string[] { "Caller", "EventCode", "CallerNickname", "AnnotationID", "AnnotationType", "AxisX", "AxisY", "AxisZ", "AxisSize", "AxisColor", "AxisKey", "Content00", "Content01", "Content3" };
 
         private static CSVWritter GenericTransformSyncData;
         private string[] GenericTransformSyncDataHeader = new string[] { "Caller", "EventCode", "CallerNickname", "ObjName", "ObjTag", "PositionX", "PositionY", "PositionZ", "RotationX", "RotationY", "RotationZ", "ScaleX", "ScaleY", "ScaleZ", "InstanceID", "RotX", "RotY", "RotZ", "RotW", "AnnotationType", "AnnotationID" };
@@ -54,6 +57,7 @@ namespace Photon_IATK
             setupGeneralDataRecording();
             setupGeneralVisRecording();
             GenericTransformSyncDataRecording();
+            AnnotationDataRecording();
         }
         public void logRowsTest()
         {
@@ -86,9 +90,17 @@ namespace Photon_IATK
             GenericTransformSyncData.StartNewCSV();
         }
 
-#endregion
+        private async void AnnotationDataRecording()
+        {
+            AnnotationUpdatesData = gameObject.AddComponent<CSVWritter>();
+            AnnotationUpdatesData.Initalize(SessionFolderRoot, delim, "AnnotationUpdatesData", AnnotationUpdatesDataHeader);
+            await AnnotationUpdatesData.MakeNewSession();
+            AnnotationUpdatesData.StartNewCSV();
+        }
 
-#region Logging code
+        #endregion
+
+        #region Logging code
 
         private void logAxisChange(int callerPhotonViewID, byte eventCode, object[] data)
         {
@@ -102,19 +114,19 @@ namespace Photon_IATK
             //Debug.LogFormat(GlobalVariables.cDataCollection + "logAxisChange: caller {0}, EventCode: {1}, caller nickname: {2}, new dimension: {3}{4}{5}" + GlobalVariables.endColor +  " : {6} -> {7} -> {8}", callerPhotonViewID, eventCode.ToString(), callerNickname, newDimension, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
-        private void logGeneralEvent(int callerPhotonViewID, byte eventCode, string callerNickname, string content1, string content2, string content3)
+        private void logGeneralEvent(int callerPhotonViewID, byte eventCode, string callerNickname, string content1)
         {
  
-            string[] rowContent = new string[] { callerPhotonViewID.ToString(), eventCode.ToString(), callerNickname, content1, content2, content3 };
+            string[] rowContent = new string[] { callerPhotonViewID.ToString(), eventCode.ToString(), callerNickname, content1};
 
             GeneralData.AddRow(rowContent);
 
-            Debug.LogFormat(GlobalVariables.cDataCollection + "logGeneralEvent: caller {0}, EventCode: {1}, caller nickname: {2}, content: {3}{4}{5}" + GlobalVariables.endColor + " : {6} -> {7} -> {8}", callerPhotonViewID, eventCode.ToString(), callerNickname, content1, content2 + " " + content3, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            //Debug.LogFormat(GlobalVariables.cDataCollection + "logGeneralEvent: caller {0}, EventCode: {1}, caller nickname: {2}, content: {3}{4}{5}" + GlobalVariables.endColor + " : {6} -> {7} -> {8}", callerPhotonViewID, eventCode.ToString(), callerNickname, content1, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
         private void logGeneralEvent(int callerPhotonViewID, byte eventCode, string nickName)
         {
-            logGeneralEvent(callerPhotonViewID, eventCode, nickName, "null", "null", "null");
+            logGeneralEvent(callerPhotonViewID, eventCode, nickName, nan);
         }
 
         private void logGenericTransformSyncEvent(int callerPhotonViewID, byte eventCode, object[] data)
@@ -125,7 +137,6 @@ namespace Photon_IATK
             Quaternion rot = (Quaternion)data[2];
             Vector3 scale = (Vector3)data[3];
             int instanceID = (int)data[4];
-            //5 is orgin name
             string callerNickname = (string)data[5];
             string name = (string)data[6];
             string tag = (string)data[7];
@@ -136,7 +147,78 @@ namespace Photon_IATK
 
             GenericTransformSyncData.AddRow(rowContent);
         }
-#endregion
+
+        private void logAnnotationUpdateEvent(int callerPhotonViewID, byte eventCode, string callerNickname, int annotationID, string annotationType)
+        {
+            //private string[] AnnotationUpdatesDataHeader = new string[] { "Caller", "EventCode", "CallerNickname", "AnnotationID", "AnnotationType", "AxisX", "AxisY", "AxisZ", "AxisSize", "AxisColor", "Text" };
+            if (visDataInterface == null) { getVisInterface(); }
+
+            string[] visAxis = getVisAxisState();
+
+            string[] rowContent = new string[] { callerPhotonViewID.ToString(), eventCode.ToString(), callerNickname, annotationID.ToString(), annotationType, visAxis[0], visAxis[1], visAxis[2], visAxis[3], visAxis[4], visAxis[5], nan, nan, nan };
+
+            AnnotationUpdatesData.AddRow(rowContent);
+        }
+
+        private void logAnnotationUpdateEvent(int callerPhotonViewID, byte eventCode, string callerNickname, int annotationID, string annotationType, string summaryvalue, string axisSelection)
+        {
+            if (visDataInterface == null) { getVisInterface(); }
+
+            //private string[] AnnotationUpdatesDataHeader = new string[] { "Caller", "EventCode", "CallerNickname", "AnnotationID", "AnnotationType", "AxisX", "AxisY", "AxisZ", "AxisSize", "AxisColor", "Text" };
+
+            string[] visAxis = getVisAxisState();
+
+            string[] rowContent = new string[] { callerPhotonViewID.ToString(), eventCode.ToString(), callerNickname, annotationID.ToString(), annotationType, visAxis[0], visAxis[1], visAxis[2], visAxis[3], visAxis[4], visAxis[5], summaryvalue, axisSelection, nan};
+
+            AnnotationUpdatesData.AddRow(rowContent);
+        }
+
+        private void logAnnotationUpdateEvent(int callerPhotonViewID, byte eventCode, string callerNickname, int annotationID, string annotationType, Vector3 point)
+        {
+            if (visDataInterface == null) { getVisInterface(); }
+
+            //private string[] AnnotationUpdatesDataHeader = new string[] { "Caller", "EventCode", "CallerNickname", "AnnotationID", "AnnotationType", "AxisX", "AxisY", "AxisZ", "AxisSize", "AxisColor", "Text" };
+
+            string[] visAxis = getVisAxisState();
+
+            string[] rowContent = new string[] { callerPhotonViewID.ToString(), eventCode.ToString(), callerNickname, annotationID.ToString(), annotationType, visAxis[0], visAxis[1], visAxis[2], visAxis[3], visAxis[4], visAxis[5], point.x.ToString(), point.y.ToString(), point.z.ToString() };
+
+            AnnotationUpdatesData.AddRow(rowContent);
+        }
+
+        private void logAnnotationUpdateEvent(int callerPhotonViewID, byte eventCode, string callerNickname, int annotationID, string annotationType, string text)
+        {
+            if (visDataInterface == null) { getVisInterface(); }
+
+            //private string[] AnnotationUpdatesDataHeader = new string[] { "Caller", "EventCode", "CallerNickname", "AnnotationID", "AnnotationType", "AxisX", "AxisY", "AxisZ", "AxisSize", "AxisColor", "Text" };
+            string[] visAxis = getVisAxisState();
+
+            string[] rowContent = new string[] { callerPhotonViewID.ToString(), eventCode.ToString(), callerNickname, annotationID.ToString(), annotationType, visAxis[0], visAxis[1], visAxis[2], visAxis[3], visAxis[4], visAxis[5], text, nan, nan };
+
+            AnnotationUpdatesData.AddRow(rowContent);
+        }
+        #endregion
+        
+        private VisualizationEvent_Calls visDataInterface;
+        private void getVisInterface()
+        {
+            GameObject vis = GameObject.FindGameObjectWithTag(GlobalVariables.visTag);
+            if (vis != null)
+            {
+                vis.TryGetComponent<VisualizationEvent_Calls>(out visDataInterface);
+            }
+        }
+
+        private string[] getVisAxisState()
+        {
+            if (visDataInterface != null)
+            {
+                return new string[] {visDataInterface.xDimension, visDataInterface.yDimension, visDataInterface.zDimension, visDataInterface.sizeDimension, visDataInterface.colourDimension, visDataInterface.axisKey};
+            } else
+            {
+                return new string[] { nan, nan, nan, nan, nan, nan };
+            }
+        }
 
         private void OnEvent(EventData photonEventData)
         {
@@ -168,6 +250,9 @@ namespace Photon_IATK
 
                 // genreal events
                 case (GlobalVariables.PhotonVisSceneInstantiateEvent):
+                    logGeneralEvent(callerPhotonViewID, eventCode, (string)data[1]);
+                    Invoke("getVisInterface", 2);
+                    break;
                 //object[] content = new object[] { photonView.ViewID, PhotonNetwork.NickName };
                 case (GlobalVariables.RequestGrabEvent):
                 //object[] content = new object[] { photonView.ViewID, PhotonNetwork.NickName };
@@ -187,42 +272,54 @@ namespace Photon_IATK
                 //object[] content = new object[] { photonView.ViewID, photonView.Owner.NickName };
                     logGeneralEvent(callerPhotonViewID, eventCode, (string)data[1]);
                     break;
-                case (GlobalVariables.RequestEventAnnotationCreation):
-                    //object[] content = new object[] { photonView.ViewID, HelperFunctions.SerializeToByteArray(annotationType, System.Reflection.MethodBase.GetCurrentMethod()), PhotonNetwork.NickName };
-                    Annotation.typesOfAnnotations annotationType = HelperFunctions.DeserializeFromByteArray<Annotation.typesOfAnnotations>((byte[])data[1], System.Reflection.MethodBase.GetCurrentMethod());
-                    logGeneralEvent(callerPhotonViewID, eventCode, (string)data[2], annotationType.ToString(), "null", "null");
-                    break;
                 case (GlobalVariables.PhotonDeleteAllObjectsWithComponentEvent):
                     //object[] data = new object[] { photonView.ViewID, className, PhotonNetwork.NickName };
                     string tmp = (string)data[2];
                     tmp = tmp.Replace(delim, "~");
-                    logGeneralEvent(callerPhotonViewID, eventCode, (string)data[1], tmp, "null", "null");
+                    logGeneralEvent(callerPhotonViewID, eventCode, (string)data[1], tmp);
                     break;
                 case (GlobalVariables.PhotonDeleteSingleObjectsWithViewIDEvent):
                     //{ photonView.ViewID, obj.GetComponent<PhotonView>().ViewID, PhotonNetwork.NickName, obj.name };
-                    logGeneralEvent(callerPhotonViewID, eventCode, (string)data[2], (string)data[4], "null", "null");
+                    logGeneralEvent(callerPhotonViewID, eventCode, (string)data[2], (string)data[4]);
                     break;
                 case (GlobalVariables.PhotonMoveEvent):
                     logGenericTransformSyncEvent(callerPhotonViewID, eventCode, data);
                     break;
                 //object[] content = new object[] { photonView.ViewID, myTransform.localPosition, myTransform.localRotation, myTransform.localScale, this.photonView.GetInstanceID(), "GenericTransformSync", PhotonNetwork.NickName, this.name, this.tag };
+
+                //annoation events
+                case (GlobalVariables.RequestEventAnnotationCreation):
+                    //object[] content = new object[] { photonView.ViewID, HelperFunctions.SerializeToByteArray(annotationType, System.Reflection.MethodBase.GetCurrentMethod()), PhotonNetwork.NickName, annotationID};
+                    Annotation.typesOfAnnotations annotationType = HelperFunctions.DeserializeFromByteArray<Annotation.typesOfAnnotations>((byte[])data[1], System.Reflection.MethodBase.GetCurrentMethod());
+                    int annotationID = (int)data[3];
+
+                    logAnnotationUpdateEvent(callerPhotonViewID, eventCode, (string)data[2], annotationID, annotationType.ToString());
+
+                    break;
                 case (GlobalVariables.RequestCentralityUpdate):
-                    logGeneralEvent(callerPhotonViewID, eventCode, (string)data[3], (string)data[1], (string)data[2], "centralityTest");
-                    //object[] content = new object[] { photonView.ViewID, summeryValueType.ToString(), axisSelection.ToString(), PhotonNetwork.NickName };
+                    //object[] content = new object[] { photonView.ViewID, summeryValueType.ToString(), axisSelection.ToString(), PhotonNetwork.NickName, myUniqueAnnotationNumber };
+
+                    logAnnotationUpdateEvent(callerPhotonViewID, eventCode, (string)data[3], (int)data[4], Annotation.typesOfAnnotations.CENTRALITY.ToString(), (string)data[1], (string)data[2]);
+
                     break;
                 case (GlobalVariables.RequestAddPointEvent):
-                    //object[] content = new object[] { photonView.ViewID, pointString, PhotonNetwork.NickName };
+                    //object[] content = new object[] { photonView.ViewID, pointString, PhotonNetwork.NickName, myUniqueAnnotationNumber };
+
                     Vector3 point = (Vector3)data[1];
-                    logGeneralEvent(callerPhotonViewID, eventCode, (string)data[2], point.x.ToString(), point.y.ToString(), point.z.ToString());
-                    break;
-                case (GlobalVariables.RequestTextUpdate):
-                    //object[] content = new object[] { photonView.ViewID, text, PhotonNetwork.NickName };
-                    logGeneralEvent(callerPhotonViewID, eventCode, (string)data[2], (string)data[1], "null", "textTest");
+
+                    logAnnotationUpdateEvent(callerPhotonViewID, eventCode, (string)data[3], (int)data[4], Annotation.typesOfAnnotations.LINERENDER.ToString(), point);
+
                     break;
                 case (GlobalVariables.RequestLineCompleation):
-                    //object[] content = new object[] { photonView.ViewID, PhotonNetwork.NickName };
-                    logGeneralEvent(callerPhotonViewID, eventCode, (string)data[1], "null", "null", "null");
+                    //object[] content = new object[] { photonView.ViewID, PhotonNetwork.NickName, myUniqueAnnotationNumber};
+                    logAnnotationUpdateEvent(callerPhotonViewID, eventCode, (string)data[1], (int)data[3], Annotation.typesOfAnnotations.LINERENDER.ToString());
                     break;
+                case (GlobalVariables.RequestTextUpdate):
+                    //object[] content = new object[] { photonView.ViewID, text, PhotonNetwork.NickName, myUniqueAnnotationNumber};
+                    logAnnotationUpdateEvent(callerPhotonViewID, eventCode, (string)data[2], (int)data[3], Annotation.typesOfAnnotations.LINERENDER.ToString(), (string)data[1]);
+
+                    break;
+
                 default:
                     break;
             }

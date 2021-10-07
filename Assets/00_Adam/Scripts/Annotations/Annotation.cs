@@ -517,7 +517,7 @@ namespace Photon_IATK
         {
             Debug.LogFormat(GlobalVariables.cEvent + "{0} Any ~ Sending Line complete event, MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestLineCompleation, "all", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            object[] content = new object[] { photonView.ViewID , PhotonNetwork.NickName};
+            object[] content = new object[] { photonView.ViewID, PhotonNetwork.NickName, myUniqueAnnotationNumber };
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
@@ -628,7 +628,7 @@ namespace Photon_IATK
 
             Debug.LogFormat(GlobalVariables.cEvent + "{0} Any ~ Sending point, MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestAddPointEvent, "all", " Point: ", pointString, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            object[] content = new object[] { photonView.ViewID, pointString, PhotonNetwork.NickName };
+            object[] content = new object[] { photonView.ViewID, pointString, PhotonNetwork.NickName, myUniqueAnnotationNumber};
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
@@ -748,7 +748,7 @@ namespace Photon_IATK
 
             Debug.LogFormat(GlobalVariables.cEvent + "{0} Any ~ Sending Text, MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestTextUpdate, "Others", ", Text: ", text, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            object[] content = new object[] { photonView.ViewID, text, PhotonNetwork.NickName };
+            object[] content = new object[] { photonView.ViewID, text, PhotonNetwork.NickName, myUniqueAnnotationNumber };
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
@@ -816,7 +816,7 @@ namespace Photon_IATK
 
             Debug.LogFormat(GlobalVariables.cEvent + "{0} Any ~ Sending RequestCentralityUpdate: , MyViewID: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "", photonView.ViewID, PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestCentralityUpdate, "Others", " Text: ", summeryValueType.ToString() + " , " + axisSelection.ToString(), Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            object[] content = new object[] { photonView.ViewID, summeryValueType.ToString(), axisSelection.ToString(), PhotonNetwork.NickName };
+            object[] content = new object[] { photonView.ViewID, summeryValueType.ToString(), axisSelection.ToString(), PhotonNetwork.NickName, myUniqueAnnotationNumber };
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
