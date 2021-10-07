@@ -182,38 +182,31 @@ namespace Photon_IATK
                 case GlobalVariables.PhotonChangeX_AxisEvent:
                     _RPCvisualisationUpdateRequestDelegate();
                     _changeXAxis((string)data[1]);
-                    Debug.Log("PhotonChangeX_AxisEvent");
                     propertyType = AbstractVisualisation.PropertyType.X;
                     break;
                 case GlobalVariables.PhotonChangeY_AxisEvent:
                     _RPCvisualisationUpdateRequestDelegate();
                     _changeYAxis((string)data[1]);
-                    Debug.Log("PhotonChangeY_AxisEvent");
                     propertyType = AbstractVisualisation.PropertyType.Y;
                     break;
                 case GlobalVariables.PhotonChangeZ_AxisEvent:
                     _RPCvisualisationUpdateRequestDelegate();
                     _changeZAxis((string)data[1]);
                     propertyType = AbstractVisualisation.PropertyType.Z;
-                    Debug.Log("PhotonChangeZ_AxisEvent");
                     break;
                 case GlobalVariables.PhotonChangeColorDimensionEvent:
                     _changeColorDimension((string)data[1]);
                     propertyType = AbstractVisualisation.PropertyType.Colour;
-                    Debug.Log("PhotonChangeSizeDimensionEvent");
                     break;
                 case GlobalVariables.PhotonChangeSizeDimensionEvent:
                     _changeSizeDimension((string)data[1]);
                     propertyType = AbstractVisualisation.PropertyType.Size;
-                    Debug.Log("PhotonChangeColorDimensionEvent");
                     break;
                 case GlobalVariables.PhotonRequestStateEvent:
                     _sendStateEvent();
-                    Debug.Log("PhotonRequestStateEvent");
                     break;
                 case GlobalVariables.PhotonRequestStateEventResponse:
                     _processRequestStateEventResponse(data);
-                    Debug.Log("PhotonRequestStateEventResponse");
                     break;
                 default:
                     break;
@@ -238,7 +231,7 @@ namespace Photon_IATK
         {
             object[] content = new object[] { photonView.ViewID, xDimension, yDimension, zDimension, colourDimension, sizeDimension };
 
-            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: Masterclient ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6} Sending Data =  X Axis: {7}, Y Axis: {8}, Z Axis: {9}, Color: {10}, Size: {11}." + GlobalVariables.endColor + " {12}: {13} -> {14} -> {15}", GlobalVariables.PhotonRespondToRequestTransformEvent, "Requesting transform from master", "Others", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRequestStateEventResponse, xDimension, yDimension, zDimension, colourDimension, sizeDimension, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: Masterclient ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6} Sending Data =  X Axis: {7}, Y Axis: {8}, Z Axis: {9}, Color: {10}, Size: {11}." + GlobalVariables.endColor + " {12}: {13} -> {14} -> {15}", GlobalVariables.PhotonRequestStateEvent, "Requesting transform from master", "Others", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRequestStateEventResponse, xDimension, yDimension, zDimension, colourDimension, sizeDimension, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
 

@@ -20,6 +20,12 @@ namespace Photon_IATK
         private static CSVWritter GeneralVisData;
         private string[] generalVisDataHeader = new string[] { "Caller", "EventCode", "CallerNickname", "NewDimension" };
 
+
+        private static CSVWritter GenericTransformSyncData;
+        private string[] GenericTransformSyncDataHeader = new string[] { "Caller", "EventCode", "CallerNickname", "ObjName", "ObjTag", "PositionX", "PositionY", "PositionZ", "RotationX", "RotationY", "RotationZ", "ScaleX", "ScaleY", "ScaleZ", "InstanceID", "RotX", "RotY", "RotZ", "RotW", "AnnotationType", "AnnotationID" };
+
+        //string[] rowContent = new string[] { callerPhotonViewID.ToString(), eventCode.ToString(), callerNickname, name, tag, position.x.ToString(), position.y.ToString(), position.z.ToString(), rot.eulerAngles.x.ToString(), rot.eulerAngles.y.ToString(), rot.eulerAngles.z.ToString(), scale.x.ToString(), scale.y.ToString(), scale.z.ToString(), instanceID.ToString(), rot.x.ToString(), rot.y.ToString(), rot.z.ToString(), rot.w.ToString() };
+
         private void Awake()
         {
             PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
@@ -40,14 +46,15 @@ namespace Photon_IATK
 
             setupGeneralDataRecording();
             setupGeneralVisRecording();
+            GenericTransformSyncDataRecording();
         }
-
         public void logRowsTest()
         {
             GeneralData.AddRow(new string[] { "Caller", "Nickname" });
             GeneralData.FlushData();
         }
 
+        #region setup writters
         private async void setupGeneralDataRecording()
         {
             GeneralData = gameObject.AddComponent<CSVWritter>();
@@ -64,6 +71,18 @@ namespace Photon_IATK
             GeneralVisData.StartNewCSV();
         }
 
+        private async void GenericTransformSyncDataRecording()
+        {
+            GenericTransformSyncData = gameObject.AddComponent<CSVWritter>();
+            GenericTransformSyncData.Initalize(SessionFolderRoot, delim, "GenericTransformSyncData", GenericTransformSyncDataHeader);
+            await GenericTransformSyncData.MakeNewSession();
+            GenericTransformSyncData.StartNewCSV();
+        }
+
+        #endregion
+
+        #region Logging code
+
         private void logAxisChange(int callerPhotonViewID, byte eventCode, object[] data)
         {
             string newDimension = (string)data[1];
@@ -73,7 +92,7 @@ namespace Photon_IATK
 
             GeneralVisData.AddRow(rowContent);
 
-            Debug.LogFormat(GlobalVariables.cDataCollection + "logAxisChange: caller {0}, EventCode: {1}, caller nickname: {2}, new dimension: {3}{4}{5}" + GlobalVariables.endColor +  " : {6} -> {7} -> {8}", callerPhotonViewID, eventCode.ToString(), callerNickname, newDimension, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            //Debug.LogFormat(GlobalVariables.cDataCollection + "logAxisChange: caller {0}, EventCode: {1}, caller nickname: {2}, new dimension: {3}{4}{5}" + GlobalVariables.endColor +  " : {6} -> {7} -> {8}", callerPhotonViewID, eventCode.ToString(), callerNickname, newDimension, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
         private void logGeneralEvent(int callerPhotonViewID, byte eventCode, string callerNickname, string content)
@@ -83,13 +102,34 @@ namespace Photon_IATK
 
             GeneralData.AddRow(rowContent);
 
-            Debug.LogFormat(GlobalVariables.cDataCollection + "logGeneralEvent: caller {0}, EventCode: {1}, caller nickname: {2}, content: {3}{4}{5}" + GlobalVariables.endColor + " : {6} -> {7} -> {8}", callerPhotonViewID, eventCode.ToString(), callerNickname, content, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            //Debug.LogFormat(GlobalVariables.cDataCollection + "logGeneralEvent: caller {0}, EventCode: {1}, caller nickname: {2}, content: {3}{4}{5}" + GlobalVariables.endColor + " : {6} -> {7} -> {8}", callerPhotonViewID, eventCode.ToString(), callerNickname, content, "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
         }
 
         private void logGeneralEvent(int callerPhotonViewID, byte eventCode, string nickName)
         {
             logGeneralEvent(callerPhotonViewID, eventCode, nickName, "null");
         }
+
+        private void logGenericTransformSyncEvent(int callerPhotonViewID, byte eventCode, object[] data)
+        {
+            //object[] content = new object[] { photonView.ViewID, myTransform.localPosition, myTransform.localRotation, myTransform.localScale, this.photonView.GetInstanceID(), PhotonNetwork.NickName, this.name, this.tag, annotationType, annotationID };
+
+            Vector3 position = (Vector3)data[1];
+            Quaternion rot = (Quaternion)data[2];
+            Vector3 scale = (Vector3)data[3];
+            int instanceID = (int)data[4];
+            //5 is orgin name
+            string callerNickname = (string)data[5];
+            string name = (string)data[6];
+            string tag = (string)data[7];
+            string annotationType = (string)data[8];
+            string annotationID = (string)data[9];
+
+            string[] rowContent = new string[] { callerPhotonViewID.ToString(), eventCode.ToString(), callerNickname, name, tag, position.x.ToString(), position.y.ToString(), position.z.ToString(), rot.eulerAngles.x.ToString(), rot.eulerAngles.y.ToString(), rot.eulerAngles.z.ToString(), scale.x.ToString(), scale.y.ToString(), scale.z.ToString(), instanceID.ToString(), rot.x.ToString(), rot.y.ToString(), rot.z.ToString(), rot.w.ToString(), annotationType, annotationID};
+
+            GenericTransformSyncData.AddRow(rowContent);
+        }
+        #endregion
 
         private void OnEvent(EventData photonEventData)
         {
@@ -153,6 +193,10 @@ namespace Photon_IATK
                     //{ photonView.ViewID, obj.GetComponent<PhotonView>().ViewID, PhotonNetwork.NickName, obj.name };
                     logGeneralEvent(callerPhotonViewID, eventCode, (string)data[2], (string)data[4]);
                     break;
+                case (GlobalVariables.PhotonMoveEvent):
+                    logGenericTransformSyncEvent(callerPhotonViewID, eventCode, data);
+                    break;
+                //object[] content = new object[] { photonView.ViewID, myTransform.localPosition, myTransform.localRotation, myTransform.localScale, this.photonView.GetInstanceID(), "GenericTransformSync", PhotonNetwork.NickName, this.name, this.tag };
 
                 default:
                     break;
@@ -174,18 +218,15 @@ namespace Photon_IATK
             {
                 //Movement 1-9
                 case (GlobalVariables.PhotonMoveEvent):
-                case (GlobalVariables.PhotonRequestTransformEvent):
-                case (GlobalVariables.PhotonRespondToRequestTransformEvent):
+                    //object[] content = new object[] { photonView.ViewID, myTransform.localPosition, myTransform.localRotation, myTransform.localScale, this.photonView.GetInstanceID(), "GenericTransformSync", PhotonNetwork.NickName, this.name, this.tag };
 
-                // new annotation, send id event next
-                case (GlobalVariables.RequestEventAnnotationCreation):
-                    //object[] content = new object[] { photonView.ViewID, HelperFunctions.SerializeToByteArray(annotationType, System.Reflection.MethodBase.GetCurrentMethod()), PhotonNetwork.NickName };
-                    //Annotation.typesOfAnnotations annotationType = HelperFunctions.DeserializeFromByteArray<Annotation.typesOfAnnotations>((Byte[])data[1], System.Reflection.MethodBase.GetCurrentMethod());
+                //// only in generic sync, if connected and not master client this gets sent
+                //case (GlobalVariables.PhotonRequestTransformEvent):
 
-                // just asks for content
-                //case (GlobalVariables.RequestEventAnnotationContent):
+                ////only in generic transform sync
+                //case (GlobalVariables.PhotonRespondToRequestTransformEvent):
 
-                // this is good
+                // this is good, might find a different way to get at this, this sends every graph state change, I want on destory
                 case (GlobalVariables.RespondEventWithContent):
                 //object[] content = new object[] { photonView.ViewID, this.GetJSONSerializedAnnotationString(), PhotonNetwork.NickName };
 

@@ -35,108 +35,109 @@ namespace Photon_IATK
 
         private void OnEnable()
         {
-            Debug.LogFormat(GlobalVariables.cRegister + "GenericTransformSync registering OnEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-            PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+            //Debug.LogFormat(GlobalVariables.cRegister + "GenericTransformSync registering OnEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            //PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
 
+            Debug.LogError("AnnotationSync attached to " + name);
         }
 
-        private void OnDisable()
-        {
-            Debug.LogFormat(GlobalVariables.cRegister + "GenericTransformSync unregistering OnEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        //private void OnDisable()
+        //{
+        //    Debug.LogFormat(GlobalVariables.cRegister + "GenericTransformSync unregistering OnEvent.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
-        }
+        //    PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+        //}
 
-        private void LateUpdate()
-        {
-            movementCheck();
-        }
+        //private void LateUpdate()
+        //{
+        //    movementCheck();
+        //}
 
-        /// <summary>
-        /// Checks the relavance of the event then routes the event to the right funciton.
-        /// Data = Object[]
-        /// </summary>
-        private void OnEvent(EventData photonEventData)
-        {
-            byte eventCode = photonEventData.Code;
+        ///// <summary>
+        ///// Checks the relavance of the event then routes the event to the right funciton.
+        ///// Data = Object[]
+        ///// </summary>
+        //private void OnEvent(EventData photonEventData)
+        //{
+        //    byte eventCode = photonEventData.Code;
 
-            //Check that the event was one we made, photon reserves 0, 200+
-            if (eventCode == 0 || eventCode > 199) { return; }
+        //    //Check that the event was one we made, photon reserves 0, 200+
+        //    if (eventCode == 0 || eventCode > 199) { return; }
 
-            object[] data = (object[])photonEventData.CustomData;
-            int callerPhotonViewID = (int)data[0];
+        //    object[] data = (object[])photonEventData.CustomData;
+        //    int callerPhotonViewID = (int)data[0];
 
-            //make sure that this object is the same as the sender object
-            if (photonView.ViewID != callerPhotonViewID) { return; }
+        //    //make sure that this object is the same as the sender object
+        //    if (photonView.ViewID != callerPhotonViewID) { return; }
 
-            //route the event
-            switch (eventCode)
-            {
-                case GlobalVariables.PhotonMoveEvent:
-                    PhotonMoveEvent(data);
-                    break;
-                default:
-                    break;
-            }
-        }
+        //    //route the event
+        //    switch (eventCode)
+        //    {
+        //        case GlobalVariables.PhotonMoveEvent:
+        //            PhotonMoveEvent(data);
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //}
 
-        /// <summary>
-        /// Sends request to update the objects local position.
-        /// Data = (photonView.ViewID, myTransform.localPosition, myTransform.localRotation, myTransform.localScale);
-        /// </summary>
-        private void SendMovementEvent()
-        {
-            Debug.LogFormat(GlobalVariables.cEvent + "{0}Any ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", "", "Sending movement event", "Others", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonMoveEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        ///// <summary>
+        ///// Sends request to update the objects local position.
+        ///// Data = (photonView.ViewID, myTransform.localPosition, myTransform.localRotation, myTransform.localScale);
+        ///// </summary>
+        //private void SendMovementEvent()
+        //{
+        //    Debug.LogFormat(GlobalVariables.cEvent + "{0}Any ~ {1}, Receivers: {2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", "", "Sending movement event", "Others", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonMoveEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            Transform myTransform = this.gameObject.transform;
+        //    Transform myTransform = this.gameObject.transform;
 
-            //object[] content = new object[] { photonView.ViewID, myTransform.localPosition, myTransform.localRotation, myTransform.localScale };
+        //    //object[] content = new object[] { photonView.ViewID, myTransform.localPosition, myTransform.localRotation, myTransform.localScale };
 
-            object[] content = new object[] { photonView.ViewID, HelperFunctions.PRA(this.gameObject), HelperFunctions.RRA(this.gameObject), myTransform.localScale, this.photonView.GetInstanceID() };
+        //    object[] content = new object[] { photonView.ViewID, HelperFunctions.PRA(this.gameObject), HelperFunctions.RRA(this.gameObject), myTransform.localScale, this.photonView.GetInstanceID(), "AnnotationSync", PhotonNetwork.NickName };
 
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; //Will not recived own message
+        //    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; //Will not recived own message
 
-            PhotonNetwork.RaiseEvent(GlobalVariables.PhotonMoveEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
+        //    PhotonNetwork.RaiseEvent(GlobalVariables.PhotonMoveEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
 
-            lastLocalLocation = myTransform.localPosition;
-            lastLocalRotation = myTransform.localRotation;
-            lastLocalScale = myTransform.localScale;
-        }
+        //    lastLocalLocation = myTransform.localPosition;
+        //    lastLocalRotation = myTransform.localRotation;
+        //    lastLocalScale = myTransform.localScale;
+        //}
 
-        private void PhotonMoveEvent(object[] data)
-        {
+        //private void PhotonMoveEvent(object[] data)
+        //{
 
-            if (this.photonView.GetInstanceID() == (int)data[4]) { return; }
+        //    if (this.photonView.GetInstanceID() == (int)data[4]) { return; }
 
 
-            Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: Any ~ {1}{2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", GlobalVariables.PhotonMoveEvent, " Move Event", "", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRespondToRequestTransformEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+        //    Debug.LogFormat(GlobalVariables.cEvent + "Recived Code {0}: Any ~ {1}{2}, My Name: {3}, I am the Master Client: {4}, Server Time: {5}, Sending Event Code: {6}{7}{8}{9}." + GlobalVariables.endColor + " {10}: {11} -> {12} -> {13}", GlobalVariables.PhotonMoveEvent, " Move Event", "", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, "None", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            Vector3 newLocalPosition = (Vector3)data[1];
-            Quaternion newLocalRotation = (Quaternion)data[2];
-            Vector3 newLocalScale = (Vector3)data[3];
+        //    Vector3 newLocalPosition = (Vector3)data[1];
+        //    Quaternion newLocalRotation = (Quaternion)data[2];
+        //    Vector3 newLocalScale = (Vector3)data[3];
 
-            //SetLocalTransformAndLastTransform(newLocalPosition, newLocalRotation, newLocalScale);
-            lastLocalLocation = newLocalPosition;
-            lastLocalRotation = newLocalRotation;
-            lastLocalScale = newLocalScale;
-        }
+        //    //SetLocalTransformAndLastTransform(newLocalPosition, newLocalRotation, newLocalScale);
+        //    lastLocalLocation = newLocalPosition;
+        //    lastLocalRotation = newLocalRotation;
+        //    lastLocalScale = newLocalScale;
+        //}
 
-        private void movementCheck()
-        {
-            //if I moved 
-            //did my parent move
-            bool iMoved = myLastPosition == transform.localPosition;
-            bool myParentMoved = myParentsLastPosition == transform.parent.localPosition;
+        //private void movementCheck()
+        //{
+        //    //if I moved 
+        //    //did my parent move
+        //    bool iMoved = myLastPosition == transform.localPosition;
+        //    bool myParentMoved = myParentsLastPosition == transform.parent.localPosition;
 
-            myParentsLastPosition = transform.parent.localPosition;
-            myLastPosition = transform.localPosition;
+        //    myParentsLastPosition = transform.parent.localPosition;
+        //    myLastPosition = transform.localPosition;
 
-            if (iMoved && !myParentMoved)
-            {
-                SendMovementEvent();
-            }
+        //    if (iMoved && !myParentMoved)
+        //    {
+        //        SendMovementEvent();
+        //    }
 
-        }
+        //}
 
     }
 }
