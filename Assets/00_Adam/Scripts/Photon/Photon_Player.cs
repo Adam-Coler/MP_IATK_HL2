@@ -114,7 +114,7 @@ namespace Photon_IATK
             {
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All }; //Will not recived own message
 
-                object[] content = new object[] { photonView.ViewID };
+                object[] content = new object[] { photonView.ViewID, photonView.Owner.NickName };
 
                 PhotonNetwork.RaiseEvent(GlobalVariables.PhotonRequestNicknameUpdateEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
             }
@@ -164,7 +164,6 @@ namespace Photon_IATK
         void setNickname()
         {
             txtNickName.text = photonView.Owner.NickName;
-
         }
 
         public void showHideControllerModels()

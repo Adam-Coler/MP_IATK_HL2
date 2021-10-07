@@ -108,7 +108,7 @@ namespace Photon_IATK
         public const byte PhotonRequestAnnotationsLoadAllEvent = 53;
         public const byte SendEventNewAnnotationID = 54;
 
-        public const byte PhotonRequestAnnotationsListOfIDsEvent = 55;
+        //public const byte PhotonRequestAnnotationsListOfIDsEvent = 55;
         //public const byte PhotonResponseRequestAnnotationsListOfIDsEventNONE_FOUNDEvent = 55;
         //public const byte PhotonResponseToRequestAnnotationsListOfIDsEvent = 56;
         //public const byte PhotonRequestAnnotationsByListOfIDsEvent = 57;

@@ -105,10 +105,15 @@ namespace Photon_IATK
             {
                 // Vis change events
                 case (GlobalVariables.PhotonChangeX_AxisEvent):
+                //object[] content = new object[] { photonView.ViewID, newAxisDimension, PhotonNetwork.NickName };
                 case (GlobalVariables.PhotonChangeY_AxisEvent):
+                //object[] content = new object[] { photonView.ViewID, newAxisDimension, PhotonNetwork.NickName };
                 case (GlobalVariables.PhotonChangeZ_AxisEvent):
+                //object[] content = new object[] { photonView.ViewID, newAxisDimension, PhotonNetwork.NickName };
                 case (GlobalVariables.PhotonChangeColorDimensionEvent):
+                //object[] content = new object[] { photonView.ViewID, newAxisDimension, PhotonNetwork.NickName };
                 case (GlobalVariables.PhotonChangeSizeDimensionEvent):
+                //object[] content = new object[] { photonView.ViewID, newAxisDimension, PhotonNetwork.NickName };
                     logAxisChange(callerPhotonViewID, eventCode, data);
                     break;
 
@@ -128,12 +133,21 @@ namespace Photon_IATK
                 case (GlobalVariables.RequestDisableFarInteraction):
                 //object[] content = new object[] { photonView.ViewID, PhotonNetwork.NickName };
                 case (GlobalVariables.RequestEnableFarInteraction):
-                //object[] content = new object[] { photonView.ViewID, PhotonNetwork.NickName };
+                //object[] content = new object[] { photonView.ViewID, PhotonNetwork.NickName };.
+                case (GlobalVariables.PhotonRequestNicknameUpdateEvent):
+                //object[] content = new object[] { photonView.ViewID, photonView.Owner.NickName };
                     logGeneralEvent(callerPhotonViewID, eventCode, (string)data[1]);
+                    break;
+                case (GlobalVariables.RequestEventAnnotationCreation):
+                    //object[] content = new object[] { photonView.ViewID, HelperFunctions.SerializeToByteArray(annotationType, System.Reflection.MethodBase.GetCurrentMethod()), PhotonNetwork.NickName };
+                    Annotation.typesOfAnnotations annotationType = HelperFunctions.DeserializeFromByteArray<Annotation.typesOfAnnotations>((byte[])data[1], System.Reflection.MethodBase.GetCurrentMethod());
+                    logGeneralEvent(callerPhotonViewID, eventCode, (string)data[2], annotationType.ToString());
                     break;
                 case (GlobalVariables.PhotonDeleteAllObjectsWithComponentEvent):
                     //object[] data = new object[] { photonView.ViewID, className, PhotonNetwork.NickName };
-                    logGeneralEvent(callerPhotonViewID, eventCode, (string)data[2], (string)data[1]);
+                    string tmp = (string)data[2];
+                    tmp = tmp.Replace(delim, "~");
+                    logGeneralEvent(callerPhotonViewID, eventCode, tmp, (string)data[1]);
                     break;
                 case (GlobalVariables.PhotonDeleteSingleObjectsWithViewIDEvent):
                     //{ photonView.ViewID, obj.GetComponent<PhotonView>().ViewID, PhotonNetwork.NickName, obj.name };
@@ -148,51 +162,52 @@ namespace Photon_IATK
     }
 }
 
-class tmp
+namespace Photon_IATK
 {
-    //Movement 1-9
-    public const byte PhotonMoveEvent = 1;
-    public const byte PhotonRequestTransformEvent = 2;
-    public const byte PhotonRespondToRequestTransformEvent = 3;
-
-    //Instancing 10 - 19
-    public const byte PhotonVisSceneInstantiateEvent = 10;
-    public const byte PhotonDeleteAllObjectsWithComponentEvent = 11;
-    public const byte PhotonDeleteSingleObjectsWithViewIDEvent = 12;
-
-    //Player 40 - 49
-
-    public const byte PhotonRequestNicknameUpdateEvent = 41;
+    class tmp
+    {
 
 
+        public void tmp2()
+        {
+            switch (1)
+            {
+                //Movement 1-9
+                case (GlobalVariables.PhotonMoveEvent):
+                case (GlobalVariables.PhotonRequestTransformEvent):
+                case (GlobalVariables.PhotonRespondToRequestTransformEvent):
 
-    public const byte SendEventNewAnnotationID = 54;
+                // new annotation, send id event next
+                case (GlobalVariables.RequestEventAnnotationCreation):
+                    //object[] content = new object[] { photonView.ViewID, HelperFunctions.SerializeToByteArray(annotationType, System.Reflection.MethodBase.GetCurrentMethod()), PhotonNetwork.NickName };
+                    //Annotation.typesOfAnnotations annotationType = HelperFunctions.DeserializeFromByteArray<Annotation.typesOfAnnotations>((Byte[])data[1], System.Reflection.MethodBase.GetCurrentMethod());
 
-    public const byte PhotonRequestAnnotationsListOfIDsEvent = 55;
+                // just asks for content
+                //case (GlobalVariables.RequestEventAnnotationContent):
 
+                // this is good
+                case (GlobalVariables.RespondEventWithContent):
+                //object[] content = new object[] { photonView.ViewID, this.GetJSONSerializedAnnotationString(), PhotonNetwork.NickName };
 
-    //Annotations 2 70 - 79
-    public const byte RequestEventAnnotationCreation = 70;
-    public const byte RequestEventAnnotationContent = 71;
-    public const byte RespondEventWithContent = 72;
+                // destroys all annotations
+                //case (GlobalVariables.RequestEventAnnotationRemoval):
 
-    public const byte RequestEventAnnotationRemoval = 80;
+                //One offs 90-99
 
+                //Pen 
+                case (GlobalVariables.RequestAddPointEvent):
+                case (GlobalVariables.RequestLineCompleation):
 
-    //One offs 90-99
+                //Text Annotation
+                case (GlobalVariables.RequestTextUpdate):
 
-    //Pen 
-    public const byte RequestAddPointEvent = 90;
-    public const byte RequestLineCompleation = 91;
-
-
-    //Text Annotation
-    public const byte RequestTextUpdate = 92;
-
-    //Centrality
-    public const byte RequestCentralityUpdate = 93;
-
-
-
+                //Centrality
+                case (GlobalVariables.RequestCentralityUpdate):
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
-//|| (int)GlobalVariables.PhotonChangeZ_AxisEvent || (int)GlobalVariables.PhotonChangeColorDimensionEvent || (int)GlobalVariables.PhotonChangeSizeDimensionEvent)
+
