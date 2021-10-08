@@ -38,7 +38,13 @@ namespace Photon_IATK
 
         private static CSVWritter HandData;
         private string[] HandDataHeader = new string[] { "Caller", "EventCode", "CallerNickname", "ObjName", "HandJson" };
-        //string[] rowContent = new string[] { callerPhotonViewID.ToString(), eventCode.ToString(), (string)data[2], (string)data[1], pos.x.ToString(), pos.y.ToString(), pos.z.ToString(), rot.x.ToString(), rot.y.ToString(), rot.z.ToString(), rot.w.ToString(), rotEular.x.ToString(), rotEular.y.ToString(), rotEular.z.ToString() };
+
+        private static CSVWritter AnnotationData;
+        private string[] AnnotationDataHeader = new string[] { "Caller", "EventCode", "CallerNickname", "Annotation" };
+
+
+        private static CSVWritter ViewIDData;
+        private string[] ViewIDDataHeader = new string[] { "ID", "ObjName", "isSceneView", "ObjTag" };
 
         private void Awake()
         {
@@ -69,6 +75,8 @@ namespace Photon_IATK
             setupGazeDataRecording();
             setupPosDataRecording();
             setupHandDataRecording();
+            //setUpAnnotationDataRecording();
+            setUpViewDataRecording();
         }
         public void logRowsTest()
         {
@@ -133,23 +141,54 @@ namespace Photon_IATK
             HandData.StartNewCSV();
         }
 
+        private async void setUpAnnotationDataRecording()
+        {
+            AnnotationData = gameObject.AddComponent<CSVWritter>();
+            AnnotationData.Initalize(SessionFolderRoot, delim, "AnnotationData", AnnotationDataHeader);
+            await AnnotationData.MakeNewSession();
+            AnnotationData.StartNewCSV();
+        }
+
+        private async void setUpViewDataRecording()
+        {
+            ViewIDData = gameObject.AddComponent<CSVWritter>();
+            ViewIDData.Initalize(SessionFolderRoot, delim, "ViewIDData", AnnotationDataHeader);
+            await ViewIDData.MakeNewSession();
+            ViewIDData.StartNewCSV();
+        }
 
         #endregion
 
-        private void getViewIDs()
+        Dictionary<int, PhotonView> photonViews = new Dictionary<int, PhotonView>();
+        private void logViewIDs()
         {
-        //public const byte RPC = 200;
-        //public const byte SendSerialize = 201;
-        //public const byte Instantiation = 202;
-        //public const byte CloseConnection = 203;
-        //public const byte Destroy = 204;
-        //public const byte RemoveCachedRPCs = 205;
-        //public const byte SendSerializeReliable = 206; // TS: added this but it's not really needed anymore
-        //public const byte DestroyPlayer = 207; // TS: added to make others remove all GOs of a player
-        //public const byte OwnershipRequest = 209;
-        //public const byte OwnershipTransfer = 210;
-        //public const byte VacantViewIds = 211;
-        //public const byte OwnershipUpdate = 212;
+            //public const byte RPC = 200;
+            //public const byte SendSerialize = 201;
+            //public const byte Instantiation = 202;
+            //public const byte CloseConnection = 203;
+            //public const byte Destroy = 204;
+            //public const byte RemoveCachedRPCs = 205;
+            //public const byte SendSerializeReliable = 206; // TS: added this but it's not really needed anymore
+            //public const byte DestroyPlayer = 207; // TS: added to make others remove all GOs of a player
+            //public const byte OwnershipRequest = 209;
+            //public const byte OwnershipTransfer = 210;
+            //public const byte VacantViewIds = 211;
+            //public const byte OwnershipUpdate = 212;
+
+            PhotonView[] views = PhotonNetwork.PhotonViews;
+
+            foreach (PhotonView view in views)
+            {
+                if (!photonViews.ContainsKey(view.ViewID))
+                {
+                    string[] rowContent = new string[] { view.ViewID.ToString(), view.gameObject.name, view.IsSceneView.ToString(), view.tag };
+                    ViewIDData.AddRow(rowContent);
+
+                    photonViews.Add(view.ViewID, view);
+                }
+
+            }
+
         }
 
         
@@ -286,6 +325,18 @@ namespace Photon_IATK
 
             HandData.AddRow(rowContent);
         }
+
+        private void logAnnotations(int callerPhotonViewID, byte eventCode, object[] data)
+        {
+            string annotation = (string)data[1];
+            annotation = annotation.Replace(delim, "~");
+            annotation = annotation.Replace("\n", "_");
+
+            string[] rowContent = new string[] { callerPhotonViewID.ToString(), eventCode.ToString(), annotation };
+
+            AnnotationData.AddRow(rowContent);
+            Debug.LogError(annotation);
+        }
         #endregion
 
         private VisualizationEvent_Calls visDataInterface;
@@ -333,7 +384,8 @@ namespace Photon_IATK
                 case (GlobalVariables.PhotonChangeColorDimensionEvent):
                 //object[] content = new object[] { photonView.ViewID, newAxisDimension, PhotonNetwork.NickName };
                 case (GlobalVariables.PhotonChangeSizeDimensionEvent):
-                //object[] content = new object[] { photonView.ViewID, newAxisDimension, PhotonNetwork.NickName };
+                    //object[] content = new object[] { photonView.ViewID, newAxisDimension, PhotonNetwork.NickName };
+                    logViewIDs();
                     logAxisChange(callerPhotonViewID, eventCode, data);
                     break;
 
@@ -341,6 +393,7 @@ namespace Photon_IATK
                 case (GlobalVariables.PhotonVisSceneInstantiateEvent):
                     logGeneralEvent(callerPhotonViewID, eventCode, (string)data[1]);
                     Invoke("getVisInterface", 2);
+                    logViewIDs();
                     break;
                 //object[] content = new object[] { photonView.ViewID, PhotonNetwork.NickName };
                 case (GlobalVariables.RequestGrabEvent):
@@ -383,7 +436,7 @@ namespace Photon_IATK
                     int annotationID = (int)data[3];
 
                     logAnnotationUpdateEvent(callerPhotonViewID, eventCode, (string)data[2], annotationID, annotationType.ToString());
-
+                    logViewIDs();
                     break;
                 case (GlobalVariables.RequestCentralityUpdate):
                     //object[] content = new object[] { photonView.ViewID, summeryValueType.ToString(), axisSelection.ToString(), PhotonNetwork.NickName, myUniqueAnnotationNumber };
@@ -418,6 +471,11 @@ namespace Photon_IATK
                 case (GlobalVariables.PhotonSendHandEvent):
                     logHandData(callerPhotonViewID, eventCode, data);
                     break;
+
+                //case (GlobalVariables.RequestSaveAnnotation):
+                //    logAnnotations(callerPhotonViewID, eventCode, data);
+                //    Debug.LogError(GlobalVariables.RequestSaveAnnotation);
+                //    break;
                 default:
                     break;
             }

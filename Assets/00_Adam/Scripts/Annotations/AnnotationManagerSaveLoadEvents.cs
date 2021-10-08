@@ -419,9 +419,11 @@ namespace Photon_IATK
 
         private void PushAllData()
         {
-            Debug.LogFormat(GlobalVariables.cFileOperations + "PushAllData called{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cFileOperations + "PushAllData called: is master?{0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            if (!PhotonNetwork.IsConnected || !PhotonNetwork.IsMasterClient || PhotonNetwork.PlayerList.Length <= 1) { return; }
+            if (!PhotonNetwork.IsConnected || !PhotonNetwork.IsMasterClient) { return; }
+
+            //if (!PhotonNetwork.IsConnected || !PhotonNetwork.IsMasterClient || PhotonNetwork.PlayerList.Length <= 1) { return; }
 
             bool loadSuccessfull = false;
             var anno = _getAllAnnotationsAndConvertToSerializeableAnnotations(out loadSuccessfull);
@@ -430,10 +432,11 @@ namespace Photon_IATK
             {
                 foreach(SerializeableAnnotation annotation in anno)
                 {
+
                     string jsonFormatAnnotion = JsonUtility.ToJson(annotation, true);
                     object[] content = new object[] { photonView.ViewID, jsonFormatAnnotion };
 
-                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
                     PhotonNetwork.RaiseEvent(GlobalVariables.RequestSaveAnnotation, content, raiseEventOptions, GlobalVariables.sendOptionsReliable);
                 }
@@ -444,6 +447,8 @@ namespace Photon_IATK
 
         private void _saveAnnotations(object[] data)
         {
+            if (PhotonNetwork.IsMasterClient) { return; }
+
             Debug.LogFormat(GlobalVariables.cCommon + "Annotation reviced, saving now: {0}." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             string jsonAnnotation = (string)data[1];
