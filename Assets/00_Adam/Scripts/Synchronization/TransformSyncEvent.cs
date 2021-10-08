@@ -65,11 +65,28 @@ namespace Photon_IATK
                         sendHand();
                         break;
                     case TypeOfTracking.Headset:
+                        sendPosRot();
                         break;
                     default:
                         break;
                 }
             }
+        }
+        private void sendPosRot()
+        {
+            object[] content = new object[] { photonView.ViewID, name, PhotonNetwork.NickName, transform.localPosition, transform.localRotation };
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+
+            PhotonNetwork.RaiseEvent(GlobalVariables.PhotonSendPosEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
+
+            PhotonNetwork.SendAllOutgoingCommands();
+        }
+
+        private void updatepos(object[] data)
+        {
+            transform.localPosition = (Vector3)data[3];
+            transform.localRotation = (Quaternion)data[4];
         }
 
         private void sendGaze()
@@ -87,7 +104,7 @@ namespace Photon_IATK
 
             object[] content = new object[] { photonView.ViewID, name, PhotonNetwork.NickName, newPoint, newPoint1, gazeName };
 
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
             PhotonNetwork.RaiseEvent(GlobalVariables.PhotonSendGazeEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
 
@@ -111,7 +128,7 @@ namespace Photon_IATK
 
             object[] content = new object[] { photonView.ViewID, name, PhotonNetwork.NickName,  handDataSender.updateLocations()};
 
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
             PhotonNetwork.RaiseEvent(GlobalVariables.PhotonSendHandEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
 
@@ -127,6 +144,8 @@ namespace Photon_IATK
 
         private void OnEvent(EventData photonEventData)
         {
+            if (isLocal) { return; }
+
             byte eventCode = photonEventData.Code;
 
             //Debug.LogError(eventCode);
@@ -146,6 +165,9 @@ namespace Photon_IATK
                     break;
                 case (GlobalVariables.PhotonSendHandEvent):
                     updateHand(data);
+                    break;
+                case (GlobalVariables.PhotonSendPosEvent):
+                    updatepos(data);
                     break;
                 default:
                     break;

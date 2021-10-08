@@ -266,6 +266,7 @@ GameObject:
   - component: {fileID: 9073483100879710932}
   - component: {fileID: 4072795461329610504}
   - component: {fileID: 4475275744106828187}
+  - component: {fileID: 2451771841699679147}
   m_Layer: 0
   m_Name: PhotonPlayerPrefab
   m_TagString: Untagged
@@ -307,8 +308,7 @@ MonoBehaviour:
   observableSearch: 2
   Synchronization: 3
   OwnershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 4475275744106828187}
+  ObservedComponents: []
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -360,6 +360,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isUser: 1
+--- !u!114 &2451771841699679147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7063603630193427939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c3d59e8dc1d4214ebe9f753fbfeb7e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfTracking: 2
+  isLocal: 0
+  networkedGazeDataSender: {fileID: 0}
+  handDataSender: {fileID: 0}
 --- !u!1001 &4661218205453499594
 PrefabInstance:
   m_ObjectHideFlags: 0

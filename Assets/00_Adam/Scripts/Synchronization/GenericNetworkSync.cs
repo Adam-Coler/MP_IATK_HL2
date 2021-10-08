@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Photon_IATK
 {
-    public class GenericNetworkSync : MonoBehaviourPun, IPunObservable
+    public class GenericNetworkSync : MonoBehaviourPun //, IPunObservable
     {
         [SerializeField] private bool isUser = default;
 
@@ -15,21 +15,21 @@ namespace Photon_IATK
         private Vector3 startingLocalPosition;
         private Quaternion startingLocalRotation;
 
-        void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-        {
-            if (stream.IsWriting)
-            {
-                if (networkLocalPosition == transform.localPosition || networkLocalRotation == transform.localRotation) { return; };
+        //void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        //{
+        //    if (stream.IsWriting)
+        //    {
+        //        if (networkLocalPosition == transform.localPosition || networkLocalRotation == transform.localRotation) { return; };
 
-                stream.SendNext(transform.localPosition);
-                stream.SendNext(transform.localRotation);
-            }
-            else
-            {
-                networkLocalPosition = (Vector3)stream.ReceiveNext();
-                networkLocalRotation = (Quaternion)stream.ReceiveNext();
-            }
-        }
+        //        stream.SendNext(transform.localPosition);
+        //        stream.SendNext(transform.localRotation);
+        //    }
+        //    else
+        //    {
+        //        networkLocalPosition = (Vector3)stream.ReceiveNext();
+        //        networkLocalRotation = (Quaternion)stream.ReceiveNext();
+        //    }
+        //}
 
         private void Start()
         {
@@ -74,18 +74,18 @@ namespace Photon_IATK
         // private void FixedUpdate()
         private void Update()
         {
-            if (!photonView.IsMine)
-            {
-                // if not the local user
+            //if (!photonView.IsMine)
+            //{
+            //    // if not the local user
 
-                //get PhotonUser transform 
-                var trans = transform;
+            //    //get PhotonUser transform 
+            //    var trans = transform;
 
-                //move the users local position to the network position
-                // the network position is the information sent from the other users local poisitons
-                trans.localPosition = networkLocalPosition;
-                trans.localRotation = networkLocalRotation;
-            }
+            //    //move the users local position to the network position
+            //    // the network position is the information sent from the other users local poisitons
+            //    trans.localPosition = networkLocalPosition;
+            //    trans.localRotation = networkLocalRotation;
+            //}
 
             if (photonView.IsMine && isUser)
             {

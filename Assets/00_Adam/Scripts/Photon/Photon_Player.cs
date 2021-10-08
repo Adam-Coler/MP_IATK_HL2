@@ -271,9 +271,15 @@ namespace Photon_IATK
                     isSetup = true;
                     Microsoft.MixedReality.Toolkit.MixedRealityPlayspace.AddChild(this.gameObject.transform);
 
-//#if UNITY_EDITOR
-//                    return;
-//#endif
+                    TransformSyncEvent headsetSync;
+                    if (this.TryGetComponent<TransformSyncEvent>(out headsetSync))
+                    {
+                        headsetSync.isLocal = true;
+                    }
+
+                    //#if UNITY_EDITOR
+                    //                    return;
+                    //#endif
                     GameObject rightHand = PhotonNetwork.Instantiate("NetworkedHandSender", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
                     NetworkedHandDataSender rightHandInterface = rightHand.GetComponent<NetworkedHandDataSender>();
 
