@@ -82,6 +82,10 @@ namespace Photon_IATK
         public const byte PhotonRequestTransformEvent = 2;
         public const byte PhotonRespondToRequestTransformEvent = 3;
 
+        public const byte PhotonSendGazeEvent = 4;
+        public const byte PhotonSendPosEvent = 5;
+        public const byte PhotonSendHandEvent = 6;
+
         //Instancing 10 - 19
         public const byte PhotonVisSceneInstantiateEvent = 10;
         public const byte PhotonDeleteAllObjectsWithComponentEvent = 11;

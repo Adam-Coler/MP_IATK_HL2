@@ -9,36 +9,12 @@ using System.Collections.Generic;
 
 namespace Photon_IATK
 {
-    public class NetworkedGazeDataSender : MonoBehaviourPun, IPunObservable
+    public class NetworkedGazeDataSender : MonoBehaviourPun
     {
 
         public Material beamColor;
         public bool isBeam = true;
         private GameObject beam;
-
-
-        void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-        {
-            if (stream.IsWriting)
-            {
-                if (PlayspaceAnchor.Instance == null) { return; }
-
-                Vector3 orgin = CoreServices.InputSystem.GazeProvider.GazeOrigin;
-                Vector3 direction = CoreServices.InputSystem.GazeProvider.GazeDirection;
-
-                Vector3 newPoint1 = PlayspaceAnchor.Instance.transform.InverseTransformPoint(orgin);
-                Vector3 newPoint =  PlayspaceAnchor.Instance.transform.InverseTransformPoint(orgin + (direction * .1f));
-
-                stream.SendNext(newPoint1);
-                stream.SendNext(newPoint);
-            }
-            else
-            {
-                Vector3 orgin = (Vector3)stream.ReceiveNext();
-                Vector3 orginPlus = (Vector3)stream.ReceiveNext();
-                updateBeam(orgin, orginPlus);
-            }
-        }
 
         private void Awake()
         {
@@ -74,28 +50,7 @@ namespace Photon_IATK
             }
         }
 
-        //void UpdateBeam()
-        //{
-        //    if (beam != null)
-        //    {
-        //        if (PlayspaceAnchor.Instance == null) { return; }
-
-        //        Vector3 orgin = CoreServices.InputSystem.GazeProvider.GazeOrigin;
-        //        Vector3 direction = CoreServices.InputSystem.GazeProvider.GazeDirection;
-
-
-        //        Vector3 newPoint1 = PlayspaceAnchor.Instance.transform.InverseTransformPoint(orgin);
-        //        Vector3 newPoint = PlayspaceAnchor.Instance.transform.InverseTransformPoint(orgin + (direction * .1f));
-
-        //        updateBeam(newPoint, newPoint1);
-        //    } else
-        //    {
-        //        setUp();
-        //    }
-
-        //}
-
-        private void updateBeam(Vector3 orgin, Vector3 orginPlus)
+        public void updateBeam(Vector3 orgin, Vector3 orginPlus)
         {
             //Debug.Log("reciving beam: " + orgin + " to " + orginPlus);
             if (beam == null) { return; }

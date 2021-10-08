@@ -311,6 +311,11 @@ namespace Photon_IATK
 #endif
                     GameObject Gaze = PhotonNetwork.Instantiate("GazeDataProvider", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
                     NetworkedGazeDataSender networkedGazeData = Gaze.GetComponent<NetworkedGazeDataSender>();
+                    TransformSyncEvent gazeSync;
+                    if (Gaze.TryGetComponent<TransformSyncEvent>(out gazeSync))
+                    {
+                        gazeSync.isLocal = true;
+                    }
 
                     if (networkedGazeData != null)
                     {

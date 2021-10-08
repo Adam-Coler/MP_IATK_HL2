@@ -343,7 +343,7 @@ namespace Photon_IATK
                     updateBeamAndHitLocation(myHandData);
                 }
 
-
+                return HelperFunctions.getJson(myHandData, name);
 
             }
         }

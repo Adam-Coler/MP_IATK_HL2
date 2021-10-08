@@ -245,7 +245,7 @@ namespace Photon_IATK
             //Debug.LogError(eventCode);
 
             //Check that the event was one we made, photon reserves 0, 200+
-            if (eventCode == 0 || eventCode > 199) { return; }
+            if (eventCode == 0 || eventCode > 199) { Debug.Log("EVENTCODE" + " " + eventCode); return; }
 
             object[] data = (object[])photonEventData.CustomData;
             int callerPhotonViewID = (int)data[0];
@@ -335,9 +335,11 @@ namespace Photon_IATK
                 case (GlobalVariables.RequestTextUpdate):
                     //object[] content = new object[] { photonView.ViewID, text, PhotonNetwork.NickName, myUniqueAnnotationNumber};
                     logAnnotationUpdateEvent(callerPhotonViewID, eventCode, (string)data[2], (int)data[3], Annotation.typesOfAnnotations.LINERENDER.ToString(), (string)data[1]);
-
+                    
                     break;
-
+                case (GlobalVariables.PhotonSendGazeEvent):
+                    Debug.LogError("Gaze data: " + (Vector3)data[3] + " " + (Vector3)data[4] + " " + (string)data[5]);
+                    break;
                 default:
                     break;
             }
@@ -345,24 +347,3 @@ namespace Photon_IATK
 
     }
 }
-
-//namespace Photon_IATK
-//{
-//    class tmp
-//    {
-
-
-//        public void tmp2()
-//        {
-//            switch (1)
-//            {
-//                // this is good, might find a different way to get at this, this sends every graph state change, I want on destory
-//                case (GlobalVariables.RespondEventWithContent):
-//                    break;
-//                default:
-//                    break;
-//            }
-//        }
-//    }
-//}
-
