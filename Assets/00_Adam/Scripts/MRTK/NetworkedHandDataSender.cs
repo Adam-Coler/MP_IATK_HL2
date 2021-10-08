@@ -336,7 +336,7 @@ namespace Photon_IATK
                     updateBeamAndHitLocation(myHandData);
                 }
             }
-            return HelperFunctions.getJson(myHandData, PhotonNetwork.NickName);
+            return JsonUtility.ToJson(myHandData, false);
         }
 
         //private void updateBeam(int startJointIndex, int nextBackJointIndex)

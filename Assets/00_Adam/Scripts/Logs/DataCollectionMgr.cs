@@ -30,7 +30,15 @@ namespace Photon_IATK
         private static CSVWritter GenericTransformSyncData;
         private string[] GenericTransformSyncDataHeader = new string[] { "Caller", "EventCode", "CallerNickname", "ObjName", "ObjTag", "PositionX", "PositionY", "PositionZ", "RotationX", "RotationY", "RotationZ", "ScaleX", "ScaleY", "ScaleZ", "InstanceID", "RotX", "RotY", "RotZ", "RotW", "AnnotationType", "AnnotationID" };
 
-        //string[] rowContent = new string[] { callerPhotonViewID.ToString(), eventCode.ToString(), callerNickname, name, tag, position.x.ToString(), position.y.ToString(), position.z.ToString(), rot.eulerAngles.x.ToString(), rot.eulerAngles.y.ToString(), rot.eulerAngles.z.ToString(), scale.x.ToString(), scale.y.ToString(), scale.z.ToString(), instanceID.ToString(), rot.x.ToString(), rot.y.ToString(), rot.z.ToString(), rot.w.ToString() };
+        private static CSVWritter GazeData;
+        private string[] GazeDataHeader = new string[] { "Caller", "EventCode", "CallerNickname","ObjName",  "HitObjName", "OrginX", "OrginY", "OrginZ", "DestX", "DestY", "DestZ" };
+
+        private static CSVWritter PosData;
+        private string[] PosDataHeader = new string[] { "Caller", "EventCode", "CallerNickname", "ObjName", "PosX", "PosY", "PosZ", "RotX", "RotY", "RotZ", "RotW", "RotEularX", "RotEularY", "RotEularZ"};
+
+        private static CSVWritter HandData;
+        private string[] HandDataHeader = new string[] { "Caller", "EventCode", "CallerNickname", "ObjName", "HandJson" };
+        //string[] rowContent = new string[] { callerPhotonViewID.ToString(), eventCode.ToString(), (string)data[2], (string)data[1], pos.x.ToString(), pos.y.ToString(), pos.z.ToString(), rot.x.ToString(), rot.y.ToString(), rot.z.ToString(), rot.w.ToString(), rotEular.x.ToString(), rotEular.y.ToString(), rotEular.z.ToString() };
 
         private void Awake()
         {
@@ -58,6 +66,9 @@ namespace Photon_IATK
             setupGeneralVisRecording();
             GenericTransformSyncDataRecording();
             AnnotationDataRecording();
+            setupGazeDataRecording();
+            setupPosDataRecording();
+            setupHandDataRecording();
         }
         public void logRowsTest()
         {
@@ -97,6 +108,31 @@ namespace Photon_IATK
             await AnnotationUpdatesData.MakeNewSession();
             AnnotationUpdatesData.StartNewCSV();
         }
+
+        private async void setupGazeDataRecording()
+        {
+            GazeData = gameObject.AddComponent<CSVWritter>();
+            GazeData.Initalize(SessionFolderRoot, delim, "GazeData", GazeDataHeader);
+            await GazeData.MakeNewSession();
+            GazeData.StartNewCSV();
+        }
+
+        private async void setupPosDataRecording()
+        {
+            PosData = gameObject.AddComponent<CSVWritter>();
+            PosData.Initalize(SessionFolderRoot, delim, "PosData", PosDataHeader);
+            await PosData.MakeNewSession();
+            PosData.StartNewCSV();
+        }
+
+        private async void setupHandDataRecording()
+        {
+            HandData = gameObject.AddComponent<CSVWritter>();
+            HandData.Initalize(SessionFolderRoot, delim, "HandData", HandDataHeader);
+            await HandData.MakeNewSession();
+            HandData.StartNewCSV();
+        }
+
 
         #endregion
 
@@ -215,8 +251,43 @@ namespace Photon_IATK
             AnnotationUpdatesData.AddRow(rowContent);
 
         }
+
+        private void logGazeData(int callerPhotonViewID, byte eventCode, object[] data)
+        {
+            Vector3 orgin = (Vector3)data[3];
+            Vector3 dest = (Vector3)data[4];
+
+            //nickname, name, 
+            string[] rowContent = new string[] { callerPhotonViewID.ToString(), eventCode.ToString(), (string)data[2], (string)data[1], (string)data[5], orgin.x.ToString(), orgin.y.ToString(), orgin.z.ToString(), dest.x.ToString(), dest.y.ToString(), dest.z.ToString() };
+
+            GazeData.AddRow(rowContent);
+
+        }
+
+        private void logPosData(int callerPhotonViewID, byte eventCode, object[] data)
+        {
+            Vector3 pos = (Vector3)data[3];
+            Quaternion rot = (Quaternion)data[4];
+            Vector3 rotEular = rot.eulerAngles;
+
+            //nickname, name, 
+            string[] rowContent = new string[] { callerPhotonViewID.ToString(), eventCode.ToString(), (string)data[2], (string)data[1], pos.x.ToString(), pos.y.ToString(), pos.z.ToString(), rot.x.ToString(), rot.y.ToString(), rot.z.ToString(), rot.w.ToString(), rotEular.x.ToString(), rotEular.y.ToString(), rotEular.z.ToString() };
+
+            PosData.AddRow(rowContent);
+
+        }
+
+        private void logHandData(int callerPhotonViewID, byte eventCode, object[] data)
+        {
+            string handData = (string)data[3];
+            SerializeableHandData serializeableHandData = (SerializeableHandData)JsonUtility.FromJson(handData, typeof(SerializeableHandData));
+
+            string[] rowContent = new string[] { callerPhotonViewID.ToString(), eventCode.ToString(), (string)data[2], (string)data[1], handData.Replace(delim, "~")};
+
+            HandData.AddRow(rowContent);
+        }
         #endregion
-        
+
         private VisualizationEvent_Calls visDataInterface;
         private void getVisInterface()
         {
@@ -324,7 +395,6 @@ namespace Photon_IATK
                     //object[] content = new object[] { photonView.ViewID, pointString, PhotonNetwork.NickName, myUniqueAnnotationNumber };
 
                     Vector3 point = (Vector3)data[1];
-
                     logAnnotationUpdateEvent(callerPhotonViewID, eventCode, (string)data[3], (int)data[4], Annotation.typesOfAnnotations.LINERENDER.ToString(), point);
 
                     break;
@@ -338,7 +408,15 @@ namespace Photon_IATK
                     
                     break;
                 case (GlobalVariables.PhotonSendGazeEvent):
-                    //Debug.LogError("Gaze data: " + (Vector3)data[3] + " " + (Vector3)data[4] + " " + (string)data[5]);
+                    logGazeData(callerPhotonViewID, eventCode, data);
+                    break;
+
+                case (GlobalVariables.PhotonSendPosEvent):
+                    logPosData(callerPhotonViewID, eventCode, data);
+                    break;
+
+                case (GlobalVariables.PhotonSendHandEvent):
+                    logHandData(callerPhotonViewID, eventCode, data);
                     break;
                 default:
                     break;

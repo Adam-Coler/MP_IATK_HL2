@@ -72,8 +72,12 @@ namespace Photon_IATK
                 }
             }
         }
+        private Vector3 lastPos = Vector3.zero;
         private void sendPosRot()
         {
+            if (lastPos == transform.localPosition) { return; }
+            lastPos = transform.localPosition;
+
             object[] content = new object[] { photonView.ViewID, name, PhotonNetwork.NickName, transform.localPosition, transform.localRotation };
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
@@ -89,9 +93,15 @@ namespace Photon_IATK
             transform.localRotation = (Quaternion)data[4];
         }
 
+        private Vector3 lastOrgin = Vector3.zero;
         private void sendGaze()
         {
+
             Vector3 orgin = CoreServices.InputSystem.GazeProvider.GazeOrigin;
+
+            if (lastOrgin == orgin) { return; }
+            lastOrgin = orgin;
+
             Vector3 direction = CoreServices.InputSystem.GazeProvider.GazeDirection;
 
             Vector3 newPoint = PlayspaceAnchor.Instance.transform.InverseTransformPoint(orgin);
@@ -122,11 +132,16 @@ namespace Photon_IATK
             networkedGazeDataSender.updateBeam((Vector3)data[3], (Vector3)data[4]);
         }
 
+        private string lastHand = "";
         private void sendHand()
         {
             if (handDataSender == null) { return; }
+            string hand = handDataSender.updateLocations();
 
-            object[] content = new object[] { photonView.ViewID, name, PhotonNetwork.NickName,  handDataSender.updateLocations()};
+            if (lastHand == hand) { return; }
+            lastHand = hand;
+
+            object[] content = new object[] { photonView.ViewID, name, PhotonNetwork.NickName, hand};
 
             RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
