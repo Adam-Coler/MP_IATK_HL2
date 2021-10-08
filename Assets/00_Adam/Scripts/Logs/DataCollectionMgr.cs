@@ -100,6 +100,23 @@ namespace Photon_IATK
 
         #endregion
 
+        private void getViewIDs()
+        {
+        //public const byte RPC = 200;
+        //public const byte SendSerialize = 201;
+        //public const byte Instantiation = 202;
+        //public const byte CloseConnection = 203;
+        //public const byte Destroy = 204;
+        //public const byte RemoveCachedRPCs = 205;
+        //public const byte SendSerializeReliable = 206; // TS: added this but it's not really needed anymore
+        //public const byte DestroyPlayer = 207; // TS: added to make others remove all GOs of a player
+        //public const byte OwnershipRequest = 209;
+        //public const byte OwnershipTransfer = 210;
+        //public const byte VacantViewIds = 211;
+        //public const byte OwnershipUpdate = 212;
+        }
+
+        
         #region Logging code
 
         private void logAxisChange(int callerPhotonViewID, byte eventCode, object[] data)
@@ -196,6 +213,7 @@ namespace Photon_IATK
             string[] rowContent = new string[] { callerPhotonViewID.ToString(), eventCode.ToString(), callerNickname, annotationID.ToString(), annotationType, visAxis[0], visAxis[1], visAxis[2], visAxis[3], visAxis[4], visAxis[5], text, nan, nan };
 
             AnnotationUpdatesData.AddRow(rowContent);
+
         }
         #endregion
         
