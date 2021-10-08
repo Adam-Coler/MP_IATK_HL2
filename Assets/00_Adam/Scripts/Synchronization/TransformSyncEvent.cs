@@ -45,8 +45,9 @@ namespace Photon_IATK
             PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
         }
 
-        private float updateRate = (1 / 30);
-        private float nextUpdate = (1/30);
+        private float updateRate = (1 / 15);
+        private float nextUpdate = (1 / 15);
+
         private void LateUpdate()
         {
             if (Time.time >= nextUpdate)

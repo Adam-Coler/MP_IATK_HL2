@@ -33,7 +33,6 @@ namespace Photon_IATK
 
             HelperFunctions.ParentInSharedPlayspaceAnchor(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
 
-
             var trans = transform;
             trans.localPosition = networkLocalPosition;
             trans.localRotation = networkLocalRotation;

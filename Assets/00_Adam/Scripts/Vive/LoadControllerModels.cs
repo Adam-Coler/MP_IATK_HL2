@@ -62,11 +62,15 @@ namespace Photon_IATK
                 {
                     GameObject thisModel = PhotonNetwork.Instantiate("ViveController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
 
-                    //HelperFunctions.ParentInSharedPlayspaceAnchor(this.gameObject, System.Reflection.MethodBase.GetCurrentMethod());
-
                     //thisModel.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
 
                     HelperFunctions.ParentInSharedPlayspaceAnchor(thisModel, System.Reflection.MethodBase.GetCurrentMethod());
+
+                        TransformSyncEvent Sync;
+                        if (thisModel.TryGetComponent<TransformSyncEvent>(out Sync))
+                        {
+                            Sync.isLocal = true;
+                        }
 
                     thisModel.name = inputDevice.name;
                     TrackControllerByRefereance trackControllerByRefereance = thisModel.AddComponent<TrackControllerByRefereance>();
@@ -77,8 +81,13 @@ namespace Photon_IATK
                 } else if (inputDevice.name.Contains("logi"))
                 {
                     GameObject thisModel = PhotonNetwork.Instantiate("LogitechController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-
                     HelperFunctions.ParentInSharedPlayspaceAnchor(thisModel, System.Reflection.MethodBase.GetCurrentMethod());
+
+                    TransformSyncEvent Sync;
+                    if (thisModel.TryGetComponent<TransformSyncEvent>(out Sync))
+                    {
+                        Sync.isLocal = true;
+                    }
 
                     //thisModel.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
                     thisModel.name = inputDevice.name;
