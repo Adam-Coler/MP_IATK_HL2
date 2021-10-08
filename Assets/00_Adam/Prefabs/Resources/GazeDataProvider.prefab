@@ -98,3 +98,4 @@ MonoBehaviour:
   typeOfTracking: 0
   isLocal: 0
   networkedGazeDataSender: {fileID: 6004339209652893181}
+  handDataSender: {fileID: 0}

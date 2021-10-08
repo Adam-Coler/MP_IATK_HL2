@@ -283,7 +283,13 @@ namespace Photon_IATK
                         rightHandInterface.isShowing = false;
                         rightHandInterface.isUpdating = true;
                         rightHandInterface.setUp();
-                                                
+
+                        TransformSyncEvent rightHandSync;
+                        if (rightHand.TryGetComponent<TransformSyncEvent>(out rightHandSync))
+                        {
+                            rightHandSync.isLocal = true;
+                        }
+
                     }
                     else
                     {
@@ -300,27 +306,33 @@ namespace Photon_IATK
                         leftHandInterface.isUpdating = true;
                         leftHandInterface.setUp();
 
+                        TransformSyncEvent leftHandSync;
+                        if (leftHand.TryGetComponent<TransformSyncEvent>(out leftHandSync))
+                        {
+                            leftHandSync.isLocal = true;
+                        }
                     }
                     else
                     {
                         PhotonNetwork.Destroy(leftHand);
                     }
 
-#if UNITY_EDITOR
-                    return;
-#endif
+//#if UNITY_EDITOR
+//                    return;
+//#endif
                     GameObject Gaze = PhotonNetwork.Instantiate("GazeDataProvider", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
                     NetworkedGazeDataSender networkedGazeData = Gaze.GetComponent<NetworkedGazeDataSender>();
-                    TransformSyncEvent gazeSync;
-                    if (Gaze.TryGetComponent<TransformSyncEvent>(out gazeSync))
-                    {
-                        gazeSync.isLocal = true;
-                    }
 
                     if (networkedGazeData != null)
                     {
                         networkedGazeData.isBeam = false;
                         networkedGazeData.setUp();
+
+                        TransformSyncEvent gazeSync;
+                        if (Gaze.TryGetComponent<TransformSyncEvent>(out gazeSync))
+                        {
+                            gazeSync.isLocal = true;
+                        }
                     }
                     else
                     {

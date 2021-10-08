@@ -33,8 +33,7 @@ namespace Photon_IATK
         public bool isLocal = false;
 
         public NetworkedGazeDataSender networkedGazeDataSender;
-
-        public float updatesPerSecond = 30f;
+        public NetworkedHandDataSender handDataSender;
 
         private void Awake()
         {
@@ -46,12 +45,17 @@ namespace Photon_IATK
             PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
         }
 
-
+        private float updateRate = (1 / 30);
+        private float nextUpdate = (1/30);
         private void LateUpdate()
         {
-            if (!isLocal) { return; }
+            if (Time.time >= nextUpdate)
+            {
+                // Change the next update (current second+1)
+                nextUpdate = Time.time + updateRate;
+                // Call your fonction
+                if (!isLocal) { return; }
 
- 
                 switch (typeOfTracking)
                 {
                     case TypeOfTracking.Gaze:
@@ -65,9 +69,7 @@ namespace Photon_IATK
                     default:
                         break;
                 }
-
-
-
+            }
         }
 
         private void sendGaze()
@@ -78,13 +80,14 @@ namespace Photon_IATK
             Vector3 newPoint = PlayspaceAnchor.Instance.transform.InverseTransformPoint(orgin);
             Vector3 newPoint1 = PlayspaceAnchor.Instance.transform.InverseTransformPoint(orgin + (direction * .1f));
 
-            string gazeLocation = CoreServices.InputSystem.GazeProvider.GazeTarget.name;
+            GameObject gazeLocation = CoreServices.InputSystem.GazeProvider.GazeTarget;
+            string gazeName = "";
 
-            if (gazeLocation == null) { gazeLocation = ""; }
+            if (gazeLocation != null) { gazeName = gazeLocation.name; }
 
-            object[] content = new object[] { photonView.ViewID, name, PhotonNetwork.NickName, newPoint, newPoint1, gazeLocation};
+            object[] content = new object[] { photonView.ViewID, name, PhotonNetwork.NickName, newPoint, newPoint1, gazeName };
 
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
 
             PhotonNetwork.RaiseEvent(GlobalVariables.PhotonSendGazeEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
 
@@ -104,7 +107,22 @@ namespace Photon_IATK
 
         private void sendHand()
         {
+            if (handDataSender == null) { return; }
 
+            object[] content = new object[] { photonView.ViewID, name, PhotonNetwork.NickName,  handDataSender.updateLocations()};
+
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
+
+            PhotonNetwork.RaiseEvent(GlobalVariables.PhotonSendHandEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
+
+            PhotonNetwork.SendAllOutgoingCommands();
+        }
+
+        private void updateHand(object[] data)
+        {
+            if (handDataSender == null) { return; }
+
+            handDataSender.updateFromSerializedHandData((string)data[3]);
         }
 
         private void OnEvent(EventData photonEventData)
@@ -125,6 +143,9 @@ namespace Photon_IATK
             {
                 case (GlobalVariables.PhotonSendGazeEvent):
                     updateGaze(data);
+                    break;
+                case (GlobalVariables.PhotonSendHandEvent):
+                    updateHand(data);
                     break;
                 default:
                     break;

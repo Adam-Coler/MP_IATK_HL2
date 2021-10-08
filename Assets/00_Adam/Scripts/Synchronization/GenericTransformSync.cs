@@ -94,8 +94,8 @@ namespace Photon_IATK
                 PhotonRespondToRequestTransformEvent(data);
                 break;
             case GlobalVariables.PhotonRespondToRequestTransformEvent:
-                    PhotonProcessResponseToRequestTransformEvent(data);
-                    break;
+                PhotonProcessResponseToRequestTransformEvent(data);
+                break;
             default:
                 break;
             }

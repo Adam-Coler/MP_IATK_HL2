@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace Photon_IATK
 {
-    public class NetworkedHandDataSender : MonoBehaviourPun, IPunObservable
+    public class NetworkedHandDataSender : MonoBehaviourPun
     {
         public bool Wrist = false;
         public bool Palm = false;
@@ -96,26 +96,13 @@ namespace Photon_IATK
         public Material beamLeft;
         public Material hit;
 
-        void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-        {
-            if (stream.IsWriting)
-            {
-                updateLocations();
-                stream.SendNext(HelperFunctions.getJson(myHandData, PhotonNetwork.NickName));
-            }
-            else
-            {
-                string handData = (string)stream.ReceiveNext();
-                updateFromSerializedHandData(handData);
-            }
-        }
 
         private void Awake()
         {
             setUp();
         }
 
-        private void updateFromSerializedHandData(string serializedHandData)
+        public void updateFromSerializedHandData(string serializedHandData)
         {
             SerializeableHandData handData = JsonUtility.FromJson<SerializeableHandData>(serializedHandData);
 
@@ -277,7 +264,7 @@ namespace Photon_IATK
         }
 
 
-        private void updateLocations()
+        public string updateLocations()
         {
             if (handedness == Handedness.Right || handedness == Handedness.Left)
             {
@@ -327,6 +314,11 @@ namespace Photon_IATK
                                 myHandData.startPoint = PlayspaceAnchor.Instance.gameObject.transform.InverseTransformPoint(p.Position);
                                 myHandData.endPoint = PlayspaceAnchor.Instance.gameObject.transform.InverseTransformPoint(p.Result.Details.Point);
                                 myHandData.hitObj = p.Result.Details.Object;
+
+                                GameObject hit = p.Result.Details.Object;
+                                string hitname = "";
+                                if (hit != null) { hitname = hit.name; }
+                                myHandData.hitObjName = hitname;
                                 break;
                             }
                         }
@@ -335,6 +327,7 @@ namespace Photon_IATK
                         myHandData.startPoint = new Vector3(10f, 10f, 10f);
                         myHandData.endPoint = new Vector3(10f, 10f, 10f);
                         myHandData.hitObj = false;
+                        myHandData.handedness = handedness.ToString();
                     }
                 }
 
@@ -342,10 +335,8 @@ namespace Photon_IATK
                 {
                     updateBeamAndHitLocation(myHandData);
                 }
-
-                return HelperFunctions.getJson(myHandData, name);
-
             }
+            return HelperFunctions.getJson(myHandData, PhotonNetwork.NickName);
         }
 
         //private void updateBeam(int startJointIndex, int nextBackJointIndex)
@@ -380,11 +371,10 @@ namespace Photon_IATK
 
         private void Update()
         {
-            if (isShowing && PhotonNetwork.PlayerList.Length == 1)
-            {
-                updateLocations();
-            }
-
+            //if (isShowing && PhotonNetwork.PlayerList.Length == 1)
+            //{
+            //    updateLocations();
+            //}
         }
     }
 
@@ -396,6 +386,8 @@ namespace Photon_IATK
         public Vector3 startPoint = Vector3.one;
         public Vector3 endPoint = Vector3.one;
         public bool hitObj;
+        public string handedness;
+        public string hitObjName;
     }
 }
 

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 976693754824224369}
   - component: {fileID: 7064617132185654698}
   - component: {fileID: 6659559092973244894}
+  - component: {fileID: -5502735082841250799}
   m_Layer: 0
   m_Name: NetworkedHandSenderLeft
   m_TagString: GameController
@@ -51,8 +52,7 @@ MonoBehaviour:
   observableSearch: 2
   Synchronization: 3
   OwnershipTransfer: 0
-  ObservedComponents:
-  - {fileID: 0}
+  ObservedComponents: []
   viewIdField: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -119,3 +119,19 @@ MonoBehaviour:
   beamRight: {fileID: 2100000, guid: caae297c3d0b3eb40a8cd005742ca8b0, type: 2}
   beamLeft: {fileID: 2100000, guid: e631bca21a3104e4caea0ae309ab5f97, type: 2}
   hit: {fileID: 2100000, guid: ac8bef554d904e5459c662614fb6237d, type: 2}
+--- !u!114 &-5502735082841250799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 976693754824224368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c3d59e8dc1d4214ebe9f753fbfeb7e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  typeOfTracking: 1
+  isLocal: 0
+  networkedGazeDataSender: {fileID: 0}
+  handDataSender: {fileID: 6659559092973244894}

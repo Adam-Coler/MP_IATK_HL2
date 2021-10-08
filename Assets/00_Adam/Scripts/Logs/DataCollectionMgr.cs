@@ -338,7 +338,7 @@ namespace Photon_IATK
                     
                     break;
                 case (GlobalVariables.PhotonSendGazeEvent):
-                    Debug.LogError("Gaze data: " + (Vector3)data[3] + " " + (Vector3)data[4] + " " + (string)data[5]);
+                    //Debug.LogError("Gaze data: " + (Vector3)data[3] + " " + (Vector3)data[4] + " " + (string)data[5]);
                     break;
                 default:
                     break;
