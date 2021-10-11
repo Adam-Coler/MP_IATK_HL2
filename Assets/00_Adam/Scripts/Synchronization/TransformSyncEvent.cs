@@ -74,10 +74,14 @@ namespace Photon_IATK
             }
         }
         private Vector3 lastPos = Vector3.zero;
+        private Quaternion lastRot = Quaternion.identity;
         private void sendPosRot()
         {
             if (lastPos == transform.localPosition) { return; }
             lastPos = transform.localPosition;
+
+            if (lastRot == transform.localRotation) { return; }
+            lastRot = transform.localRotation;
 
             object[] content = new object[] { photonView.ViewID, name, PhotonNetwork.NickName, transform.localPosition, transform.localRotation };
 

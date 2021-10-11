@@ -126,10 +126,11 @@ namespace Photon_IATK
         public const byte RequestEventAnnotationRemoval = 80;
         public const byte RequestEventAnnotationFileSystemDeletion = 81;
         public const byte RequestSaveAnnotation = 82;
+        public const byte RequestTransferAnnotations = 83;
         //public const byte RespondToRequestAnnotationDeletionAll = 81;
 
         //One offs 90-99
-        
+
         //Pen 
         public const byte RequestAddPointEvent = 90;
         public const byte RequestLineCompleation = 91;

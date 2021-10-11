@@ -16,7 +16,7 @@ namespace Photon_IATK
 {
     [DisallowMultipleComponent]
     [RequireComponent(typeof(Photon.Pun.PhotonView))]
-    public class AnnotationManagerSaveLoadEvents : MonoBehaviourPun
+    public class AnnotationManagerSaveLoadEvents : MonoBehaviourPunCallbacks
     {
         public bool isWaitingForListOfAnnotationIDs = false;
         public int annotationsCreated = 0;
@@ -45,7 +45,7 @@ namespace Photon_IATK
 
         private void OnDisable()
         {
-            Debug.LogFormat(GlobalVariables.cRegister + "GenericTransformSync unregistering OnEvent, RPCvisualisationUpdateRequestDelegate, RPCvisualisationUpdatedDelegate.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            Debug.LogFormat(GlobalVariables.cRegister + "unregistering OnEvent and transfering annotations, RPCvisualisationUpdateRequestDelegate, RPCvisualisationUpdatedDelegate.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
             VisualizationEvent_Calls.RPCvisualisationUpdateRequestDelegate -= UpdatedViewRequested;
@@ -53,15 +53,18 @@ namespace Photon_IATK
 
             saveAnnotations();
             PushAllData();
-        
-            //send all annoations to next client if master
-
+            loadAndSendAnnotations();
         }
 
-        private void OnApplicationQuit()
+        private void OnPlayerDisconnected()
         {
-            saveAnnotations();
-            PushAllData();
+            loadAndSendAnnotations();
+        }
+
+        public override void OnDisconnected(DisconnectCause cause)
+        {
+            loadAndSendAnnotations();
+            base.OnDisconnected(cause);
         }
 
         #endregion Setup and Teardown
@@ -315,7 +318,6 @@ namespace Photon_IATK
                 annotation.wasLoaded = true;
                 annotation.SendContentFromMaster();
                 annotation.SetAnnotationObject();
-
             }
             lastMadeAnnotationPhotonViewID = annotation.photonView.ViewID;
             sendAnnotationIDEvent();
@@ -434,7 +436,7 @@ namespace Photon_IATK
                 {
 
                     string jsonFormatAnnotion = JsonUtility.ToJson(annotation, true);
-                    object[] content = new object[] { photonView.ViewID, jsonFormatAnnotion };
+                    object[] content = new object[] { photonView.ViewID, jsonFormatAnnotion, PhotonNetwork.NickName };
 
                     RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
@@ -627,8 +629,42 @@ namespace Photon_IATK
 
         }
 
+        public void loadAndSendAnnotations()
+        {
 
-#endregion AnnotationLoading
+            Debug.LogFormat(GlobalVariables.cCommon + "I am the MasterClient: {0}, Transfering annotaitons." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            //get file path
+            string getFolderPath = _getFolderPath();
+
+            string[] filePaths = Directory.GetFiles(getFolderPath, "*.json");
+
+            Debug.LogFormat(GlobalVariables.cFileOperations + "{0} .json annotation records found in {1}, {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", filePaths.Length, getFolderPath, "Sending annotations now.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            foreach (string jsonPath in filePaths)
+            {
+
+                string annotationString = File.ReadAllText(jsonPath);
+
+                object[] content = new object[] { photonView.ViewID, annotationString, PhotonNetwork.NickName };
+
+                DataCollectionMgr.Instance.logAnnotations(photonView.ViewID, GlobalVariables.RequestTransferAnnotations, content);
+
+                if (PhotonNetwork.IsConnected)
+                {
+                    RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+
+                    PhotonNetwork.RaiseEvent(GlobalVariables.RequestTransferAnnotations, content, raiseEventOptions, GlobalVariables.sendOptions);
+                    PhotonNetwork.SendAllOutgoingCommands();
+                }
+
+                Debug.LogFormat(GlobalVariables.cFileOperations + "sending {0} to all from {1}, {2}. Event code: " + GlobalVariables.RequestTransferAnnotations + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", jsonPath, getFolderPath, "Sending annotations now.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            }
+
+        }
+
+
+        #endregion AnnotationLoading
 
         public void requestDisableFarInteractions()
         {
