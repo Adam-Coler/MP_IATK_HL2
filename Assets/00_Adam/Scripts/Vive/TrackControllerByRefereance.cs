@@ -12,6 +12,7 @@ namespace Photon_IATK
         private void Awake()
         {
             Debug.LogFormat(GlobalVariables.green + "TrackControllerByRefereance attached to {0}" + GlobalVariables.endColor + " : Awake() " + this.GetType(), this.gameObject.name);
+
         }
 
         private void UpdateLocation()

@@ -92,7 +92,7 @@ MonoBehaviour:
   enableControllerMapping: 1
   controllerMappingProfile: {fileID: 11400000, guid: 6cc3d0b79dfe2c346aaad711ab14ae3b,
     type: 2}
-  controllerVisualizationProfile: {fileID: 11400000, guid: 345c06fdf3732db46b96299bd3cba653,
+  controllerVisualizationProfile: {fileID: 11400000, guid: fd97e00a08e344f4893850dd5847a2d4,
     type: 2}
   handTrackingProfile: {fileID: 11400000, guid: ab4182bec3ca5d6488da7d5abb817de1,
     type: 2}

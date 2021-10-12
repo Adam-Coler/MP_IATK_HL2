@@ -12,10 +12,11 @@ namespace Photon_IATK
         static List<InputDevice> devices = new List<InputDevice>();
 
         public bool isLeft = false;
+        public GameObject thisModel;
 
         private InputDeviceRole inputDeviceRole;
         private Handedness handedness;
-
+        private InputDevice thisInput;
 
 #if VIVE
         // Start is called before the first frame update
@@ -35,6 +36,8 @@ namespace Photon_IATK
             //Catch new devices
             InputDevices.deviceConnected += registerDevice;
 
+            InputDevices.deviceDisconnected += deviceDisconnected;
+
             //Catch existing devices
             InputDevices.GetDevicesWithRole(inputDeviceRole, devices);
             foreach(InputDevice inputDevice in devices)
@@ -47,7 +50,18 @@ namespace Photon_IATK
         private void OnDestroy()
         {
             InputDevices.deviceConnected -= registerDevice;
+            InputDevices.deviceDisconnected -= deviceDisconnected;
         }
+
+        private void deviceDisconnected(InputDevice disconnectedInput)
+        {
+            if (disconnectedInput == thisInput)
+            {
+                InputDevices.deviceConnected += registerDevice;
+                Photon.Pun.PhotonNetwork.Destroy(thisModel);
+            }
+        }
+
 
         private void registerDevice(InputDevice inputDevice)
         {
@@ -56,54 +70,39 @@ namespace Photon_IATK
             if (inputDevice.role == inputDeviceRole)
             {
                 InputDevices.deviceConnected -= registerDevice;
+                thisInput = inputDevice;
                 Debug.LogFormat(GlobalVariables.purple + "InputDevice registered: {0}, {1}" + GlobalVariables.endColor + " : registerDevice(), " + this.GetType(), inputDevice.name, inputDevice.role);
 
                 if (inputDevice.name.Contains("VIVE"))
                 {
-                    GameObject thisModel = PhotonNetwork.Instantiate("ViveController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-
-                    //thisModel.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
-
-                    HelperFunctions.ParentInSharedPlayspaceAnchor(thisModel, System.Reflection.MethodBase.GetCurrentMethod());
-
-                        TransformSyncEvent Sync;
-                        if (thisModel.TryGetComponent<TransformSyncEvent>(out Sync))
-                        {
-                            Sync.isLocal = true;
-                        }
-
-                    thisModel.name = inputDevice.name;
-                    TrackControllerByRefereance trackControllerByRefereance = thisModel.AddComponent<TrackControllerByRefereance>();
-                    trackControllerByRefereance.thisInputDevice = inputDevice;
+                    thisModel = PhotonNetwork.Instantiate("ViveController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
 
                     Debug.LogFormat(GlobalVariables.cInstance + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Instantiated Vive Controller", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 } else if (inputDevice.name.Contains("logi"))
                 {
-                    GameObject thisModel = PhotonNetwork.Instantiate("LogitechController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
-                    HelperFunctions.ParentInSharedPlayspaceAnchor(thisModel, System.Reflection.MethodBase.GetCurrentMethod());
-
-                    TransformSyncEvent Sync;
-                    if (thisModel.TryGetComponent<TransformSyncEvent>(out Sync))
-                    {
-                        Sync.isLocal = true;
-                    }
-
-                    //thisModel.GetComponent<GenericNetworkSyncTrackedDevice>().isUser = true;
-                    thisModel.name = inputDevice.name;
-                    TrackControllerByRefereance trackControllerByRefereance = thisModel.AddComponent<TrackControllerByRefereance>();
-                    trackControllerByRefereance.thisInputDevice = inputDevice;
+                    thisModel = PhotonNetwork.Instantiate("LogitechController", new Vector3(0f, 0f, 0f), Quaternion.identity, 0);
 
                     Debug.LogFormat(GlobalVariables.cInstance + "{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "Instantiated Logitech Controller", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
                 }
-                
+
+                HelperFunctions.ParentInSharedPlayspaceAnchor(thisModel, System.Reflection.MethodBase.GetCurrentMethod());
+                TrackControllerByRefereance trackControllerByRefereance = thisModel.AddComponent<TrackControllerByRefereance>();
+                trackControllerByRefereance.thisInputDevice = inputDevice;
+                thisModel.name = inputDevice.name;
+                TransformSyncEvent Sync;
+                if (thisModel.TryGetComponent<TransformSyncEvent>(out Sync))
+                {
+                    Sync.isLocal = true;
+                }
+
             }
         }
 
 #else
         private void Awake()
         {
-            Debug.Log(GlobalVariables.purple + "Destorying LoadContollerModels, Game not set tt Vive" + GlobalVariables.endColor + " : Awake(), " + this.GetType());
+            Debug.Log(GlobalVariables.purple + "Destorying LoadContollerModels, Game not set to Vive" + GlobalVariables.endColor + " : Awake(), " + this.GetType());
             Destroy(this);
         }
 #endif
