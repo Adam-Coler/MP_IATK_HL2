@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace Photon_IATK
 {
@@ -9,6 +10,9 @@ namespace Photon_IATK
         public Collider mesh;
         public GameObject highlightSphereCollection;
         Material newMat;
+        public TMPro.TextMeshPro countText;
+        private GameObject text;
+
 
         // Start is called before the first frame update
         private void Awake()
@@ -39,6 +43,12 @@ namespace Photon_IATK
                 return;
             }
 
+            text = (GameObject)Resources.Load("MainText");
+            text = Instantiate(text);
+            text.transform.parent = highlightSphereCollection.transform;
+
+            text.TryGetComponent<TMPro.TextMeshPro>(out countText);
+
             newMat = Resources.Load("Highlight", typeof(Material)) as Material;
             DrawnSpheres = new List<GameObject>();
         }
@@ -56,7 +66,7 @@ namespace Photon_IATK
         List<GameObject> DrawnSpheres;
         private void drawEncapsalatedPoints()
         {
-            Debug.LogFormat(GlobalVariables.cCommon + "Drawing encapsalated points.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+            //Debug.LogFormat(GlobalVariables.cCommon + "Drawing encapsalated points.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             List<Vector3> encapsalatedPoints = visDataInterface.IsInsideMesh(mesh);
             
@@ -74,9 +84,9 @@ namespace Photon_IATK
                 }
             }
 
-            foreach (Vector3 point in encapsalatedPoints)
+            foreach (Vector3 point in encapsalatedPoints.Distinct())
             {
-                Debug.LogFormat(GlobalVariables.cCommon + "Generating Sphere.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                //Debug.LogFormat(GlobalVariables.cCommon + "Generating Sphere.{0}" + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
                 GameObject newSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
                 newSphere.transform.position = point;
@@ -86,7 +96,24 @@ namespace Photon_IATK
                 Destroy(newSphere.GetComponent<Collider>());
                 DrawnSpheres.Add(newSphere);
             }
+
+            if (countText != null)
+            {
+                float largestScale = Mathf.Max(transform.localScale.x, transform.localScale.y, transform.localScale.z);
+                countText.text = DrawnSpheres.Count.ToString() + " points highlighted";
+                Vector3 pos = transform.position + (largestScale / 1.5f) * Vector3.up;
+
+                Collider collider;
+
+                if (this.gameObject.TryGetComponent<Collider>(out collider))
+                {
+                    countText.transform.position = collider.ClosestPoint(pos) + .025f * Vector3.up;
+                }
+
+
+            }
         }
+
 
         private void OnDestroy()
         {
@@ -94,6 +121,8 @@ namespace Photon_IATK
             {
                     Destroy(obj);
             }
+
+            Destroy(text);
         }
     }
 }

@@ -18,6 +18,8 @@ namespace Photon_IATK
         public TMPro.TextMeshPro zText;
         public TMPro.TextMeshPro closestPointText;
 
+        public bool isMarkersClosestPoint = true;
+
         private void Awake()
         {
             matchToCurrentVis();
@@ -82,10 +84,20 @@ namespace Photon_IATK
                 z = string.Format("{0:0.##}", zF);
             }
 
+            
+
             closestPointText.text = "Closest Point\n";
-            closestPointText.text += "X: " + x + "\n";
-            closestPointText.text += "Y: " + y + "\n";
-            closestPointText.text += "Z: " + z + "\n";
+            closestPointText.text += "(X) " + visDataInterface.xAxis.AttributeName + " : " + x + "\n";
+            closestPointText.text += "(Y) " + visDataInterface.yAxis.AttributeName + " : " + y + "\n";
+            closestPointText.text += "(Z) " + visDataInterface.zAxis.AttributeName + " : " + z + "\n";
+
+            if (isMarkersClosestPoint)
+            {
+                xText.text = "(X) " + visDataInterface.xAxis.AttributeName + " : " + x + "\n";
+                yText.text = "(Y) " + visDataInterface.yAxis.AttributeName + " : " + y + "\n";
+                zText.text = "(Z) " + visDataInterface.zAxis.AttributeName + " : " + z + "\n";
+            }
+
         }
 
         private void setMainText()
@@ -117,9 +129,9 @@ namespace Photon_IATK
             }
 
             mainText.text = "Location\n";
-            mainText.text += "X: " + x + "\n";
-            mainText.text += "Y: " + y + "\n";
-            mainText.text += "Z: " + z + "\n";
+            mainText.text += "(X) " + visDataInterface.xAxis.AttributeName + " : " + x + "\n";
+            mainText.text += "(Y) " + visDataInterface.yAxis.AttributeName + " : " + y + "\n";
+            mainText.text += "(Z) " + visDataInterface.zAxis.AttributeName + " : " + z + "\n";
         }
 
         private void setIndicatorText()
@@ -150,22 +162,45 @@ namespace Photon_IATK
                 z = string.Format("{0:0.##}", zF);
             }
 
-            xText.text = x.ToString();
-            yText.text = y.ToString();
-            zText.text = z.ToString();
+            //xText.text = visDataInterface.xAxis.AttributeName + " : " + x + "\n";
+            //yText.text = visDataInterface.yAxis.AttributeName + " : " + y + "\n";
+            //zText.text = visDataInterface.zAxis.AttributeName + " : " + z + "\n";
+
+            if (!isMarkersClosestPoint)
+            {
+                xText.text = "(X) " + visDataInterface.xAxis.AttributeName + " : " + x + "\n";
+                yText.text = "(Y) " + visDataInterface.yAxis.AttributeName + " : " + y + "\n";
+                zText.text = "(Z) " + visDataInterface.zAxis.AttributeName + " : " + z + "\n";
+            }
         }
 
 
         private void setIndicators()
         {
-            xIndicator.transform.position = visDataInterface.GetClosestPointOnAxis(1, transform.position);
-            xIndicator.transform.rotation = visDataInterface.xAxisRotation;
+            if (isMarkersClosestPoint)
+            {
+                xIndicator.transform.position = visDataInterface.GetClosestPointOnAxis(1, visDataInterface.GetClosestPoint(this.transform.position));
+                xIndicator.transform.rotation = visDataInterface.xAxisRotation;
 
-            yIndicator.transform.position = visDataInterface.GetClosestPointOnAxis(2, transform.position);
-            yIndicator.transform.rotation = visDataInterface.yAxisRotation;
+                yIndicator.transform.position = visDataInterface.GetClosestPointOnAxis(2, visDataInterface.GetClosestPoint(this.transform.position));
+                yIndicator.transform.rotation = visDataInterface.yAxisRotation;
 
-            zIndicator.transform.position = visDataInterface.GetClosestPointOnAxis(3, transform.position);
-            zIndicator.transform.rotation = visDataInterface.zAxisRotation;
+                zIndicator.transform.position = visDataInterface.GetClosestPointOnAxis(3, visDataInterface.GetClosestPoint(this.transform.position));
+                zIndicator.transform.rotation = visDataInterface.zAxisRotation;
+            } else
+            {
+                xIndicator.transform.position = visDataInterface.GetClosestPointOnAxis(1, transform.position);
+                xIndicator.transform.rotation = visDataInterface.xAxisRotation;
+
+                yIndicator.transform.position = visDataInterface.GetClosestPointOnAxis(2, transform.position);
+                yIndicator.transform.rotation = visDataInterface.yAxisRotation;
+
+                zIndicator.transform.position = visDataInterface.GetClosestPointOnAxis(3, transform.position);
+                zIndicator.transform.rotation = visDataInterface.zAxisRotation;
+            }
+
+
+
         }
     }
 }

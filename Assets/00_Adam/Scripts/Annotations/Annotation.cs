@@ -401,7 +401,23 @@ namespace Photon_IATK
         {
             Debug.LogFormat(GlobalVariables.cEvent + "SendContentFromMaster: Recived Code: {0}, MasterClient ~ Sending Content{1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Raising Code: {5}, Recipents: {6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", GlobalVariables.RequestEventAnnotationCreation, "", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RespondEventWithContent, "Others", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-            object[] content = new object[] { photonView.ViewID, this.GetJSONSerializedAnnotationString(), PhotonNetwork.NickName };
+            string json = this.GetJSONSerializedAnnotationString();
+            object[] content;
+
+            if (json.Length * sizeof(Char) > 32000)
+            {
+                content = new object[] { photonView.ViewID, json, PhotonNetwork.NickName + " BACKUP" };
+                DataCollectionMgr.Instance.logAnnotations(photonView.ViewID, GlobalVariables.RequestTransferAnnotations, content);
+                myStartTimesofMoves.Clear();
+                myEndTimesofMoves.Clear();
+                myLocations.Clear();
+                myRotations.Clear();
+                myRelativeScales.Clear();
+            }
+
+            json = this.GetJSONSerializedAnnotationString();
+
+            content = new object[] { photonView.ViewID, json, PhotonNetwork.NickName };
 
                 RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.Others };
 
