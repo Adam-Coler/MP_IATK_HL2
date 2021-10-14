@@ -457,7 +457,7 @@ namespace Photon_IATK
                 if (HelperFunctions.GetComponent<ManipulationControls>(out manipulationControls, System.Reflection.MethodBase.GetCurrentMethod()))
                 {
                     manipulationControls.enabled = true;
-                    manipulationControls.ShowScaleHandles = false;
+                    manipulationControls.ShowScaleHandles = true;
                 }
 
                 return;
@@ -556,21 +556,46 @@ namespace Photon_IATK
             tmpMaipulationControls = this.gameObject.GetComponent<ManipulationControls>();
             if (tmpMaipulationControls != null)
             {
-                tmpMaipulationControls.enabled = !tmpMaipulationControls.enabled;
+                tmpMaipulationControls.enabled = false;
             }
 
             Collider tmp;
             tmp = this.gameObject.GetComponent<Collider>();
             if (tmp != null)
             {
-                tmp.enabled = !tmp.enabled;
+                tmp.enabled = false;
             }
 
             tmp = myObjectRepresentation.GetComponent<Collider>();
             if (tmp != null)
             {
-                tmp.enabled = !tmp.enabled;
+                tmp.enabled = false;
             }
+        }
+
+        private void enableCollider()
+        {
+            ManipulationControls tmpMaipulationControls;
+            tmpMaipulationControls = this.gameObject.GetComponent<ManipulationControls>();
+            if (tmpMaipulationControls != null)
+            {
+                tmpMaipulationControls.enabled = true;
+            }
+
+            Collider tmp;
+            tmp = this.gameObject.GetComponent<Collider>();
+            if (tmp != null)
+            {
+                tmp.enabled = true;
+            }
+
+            tmp = myObjectRepresentation.GetComponent<Collider>();
+            if (tmp != null)
+            {
+                tmp.enabled = true;
+            }
+
+            Invoke("removeCollider", 15f);
         }
 
         private bool removeShortLine()

@@ -1437,8 +1437,11 @@ namespace Photon_IATK
                         }
                     }
 
-                    Target.transform.localScale = scaleConstraintHandler(clampedTransform.Scale);
-                    Target.transform.position = initialPositionOnGrabStart * scaleFactor + (1 - scaleFactor) * oppositeCorner;
+                        //if ((Target.transform.localScale - clampedTransform.Scale) >=  Vector3{ .01f, .01f, .01f })
+                        //    { return; }
+
+                        Target.transform.localScale = scaleConstraintHandler(clampedTransform.Scale);
+                        Target.transform.position = initialPositionOnGrabStart * scaleFactor + (1 - scaleFactor) * oppositeCorner;
                     } else
                     {
 
@@ -1451,13 +1454,10 @@ namespace Photon_IATK
                         scaleFactor = Vector3.one + grabDiff.Div(initialDist);
                         Vector3 newScale = initialScaleOnGrabStart.Mul(scaleFactor);
                         MixedRealityTransform clampedTransform = MixedRealityTransform.NewScale(newScale);
-
-                        Debug.Log(GlobalVariables.cTest + clampedTransform.Scale + GlobalVariables.endColor);
-
                         Target.transform.localScale = scaleConstraintHandler(clampedTransform.Scale);
 
 
-                        //Target.transform.position = initialPositionOnGrabStart * scaleFactor + (1 - scaleFactor) * oppositeCorner;
+                        //Target.transform.position = initialPositionOnGrabStart * scaleFactor.x + (1 - scaleFactor.x) * oppositeCorner;
                     }
                 }
             }
