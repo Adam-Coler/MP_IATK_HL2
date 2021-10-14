@@ -550,8 +550,10 @@ namespace Photon_IATK
 
         }
 
-        private void removeCollider()
+        public void removeCollider()
         {
+            if (myAnnotationType != typesOfAnnotations.LINERENDER) { return; }
+
             ManipulationControls tmpMaipulationControls;
             tmpMaipulationControls = this.gameObject.GetComponent<ManipulationControls>();
             if (tmpMaipulationControls != null)
@@ -566,15 +568,17 @@ namespace Photon_IATK
                 tmp.enabled = false;
             }
 
-            tmp = myObjectRepresentation.GetComponent<Collider>();
-            if (tmp != null)
-            {
-                tmp.enabled = false;
-            }
+            //tmp = myObjectRepresentation.GetComponent<Collider>();
+            //if (tmp != null)
+            //{
+            //    tmp.enabled = false;
+            //}
         }
 
-        private void enableCollider()
+        public void enableCollider()
         {
+            if (myAnnotationType != typesOfAnnotations.LINERENDER) { return; }
+
             ManipulationControls tmpMaipulationControls;
             tmpMaipulationControls = this.gameObject.GetComponent<ManipulationControls>();
             if (tmpMaipulationControls != null)
@@ -589,13 +593,13 @@ namespace Photon_IATK
                 tmp.enabled = true;
             }
 
-            tmp = myObjectRepresentation.GetComponent<Collider>();
-            if (tmp != null)
-            {
-                tmp.enabled = true;
-            }
+            //tmp = myObjectRepresentation.GetComponent<Collider>();
+            //if (tmp != null)
+            //{
+            //    tmp.enabled = true;
+            //}
 
-            Invoke("removeCollider", 15f);
+            //Invoke("removeCollider", 15f);
         }
 
         private bool removeShortLine()

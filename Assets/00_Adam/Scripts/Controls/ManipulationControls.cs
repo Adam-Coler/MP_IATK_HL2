@@ -1437,11 +1437,12 @@ namespace Photon_IATK
                         }
                     }
 
-                        //if ((Target.transform.localScale - clampedTransform.Scale) >=  Vector3{ .01f, .01f, .01f })
-                        //    { return; }
+
 
                         Target.transform.localScale = scaleConstraintHandler(clampedTransform.Scale);
-                        Target.transform.position = initialPositionOnGrabStart * scaleFactor + (1 - scaleFactor) * oppositeCorner;
+                        if (Vector3.Distance(Target.transform.localScale, clampedTransform.Scale) <= .01f)
+                        { Target.transform.position = initialPositionOnGrabStart * scaleFactor + (1 - scaleFactor) * oppositeCorner; }
+                        
                     } else
                     {
 

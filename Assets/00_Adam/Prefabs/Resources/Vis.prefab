@@ -400,7 +400,7 @@ MonoBehaviour:
   flattenAxis: 0
   flattenAxisDisplayScale: 0
   boxPadding: {x: 0, y: 0, z: 0}
-  boxMaterial: {fileID: 2100000, guid: 476c6d1c4fe377f4282c1355827da7b2, type: 2}
+  boxMaterial: {fileID: 0}
   boxGrabbedMaterial: {fileID: 0}
   showWireframe: 1
   wireframeShape: 0
