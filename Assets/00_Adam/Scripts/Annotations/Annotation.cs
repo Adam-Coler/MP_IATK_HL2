@@ -473,7 +473,9 @@ namespace Photon_IATK
                 if (HelperFunctions.GetComponent<ManipulationControls>(out manipulationControls, System.Reflection.MethodBase.GetCurrentMethod()))
                 {
                     manipulationControls.enabled = true;
-                    manipulationControls.ShowScaleHandles = true;
+                    manipulationControls.ShowScaleHandles = false;
+                    //manipulationControls.ScaleMinimum = .5f;
+                    //manipulationControls.ScaleMaximum = 1.5f;
                 }
 
                 return;
@@ -566,6 +568,11 @@ namespace Photon_IATK
 
         }
 
+        public void cancelInvoke()
+        {
+            CancelInvoke();
+        }
+
         public void removeCollider()
         {
             if (myAnnotationType != typesOfAnnotations.LINERENDER) { return; }
@@ -615,7 +622,7 @@ namespace Photon_IATK
             //    tmp.enabled = true;
             //}
 
-            //Invoke("removeCollider", 15f);
+            Invoke("removeCollider", 5f);
         }
 
         private bool removeShortLine()

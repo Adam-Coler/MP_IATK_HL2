@@ -287,6 +287,15 @@ namespace Photon_IATK
                 }
                 return scaleMinimum;
             }
+
+            set
+            {
+                if (scaleConstraint != null)
+                {
+                    scaleConstraint.ScaleMinimum = value;
+                }
+                scaleMinimum = value;
+            }
         }
 
         /// <summary>
@@ -304,6 +313,15 @@ namespace Photon_IATK
                     return scaleConstraint.ScaleMaximum;
                 }
                 return scaleMaximum;
+            }
+
+            set
+            {
+                if (scaleConstraint != null)
+                {
+                    scaleConstraint.ScaleMaximum = value;
+                }
+                ScaleMaximum = value;
             }
         }
 
@@ -1436,9 +1454,6 @@ namespace Photon_IATK
                             scaleFactor = clampedTransform.Scale[0] / initialScaleOnGrabStart[0];
                         }
                     }
-
-
-
                         Target.transform.localScale = scaleConstraintHandler(clampedTransform.Scale);
                         if (Vector3.Distance(Target.transform.localScale, clampedTransform.Scale) <= .01f)
                         { Target.transform.position = initialPositionOnGrabStart * scaleFactor + (1 - scaleFactor) * oppositeCorner; }
