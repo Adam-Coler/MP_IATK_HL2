@@ -407,7 +407,10 @@ namespace Photon_IATK
             if (json.Length * sizeof(Char) > 32000)
             {
                 content = new object[] { photonView.ViewID, json, PhotonNetwork.NickName + " BACKUP" };
-                DataCollectionMgr.Instance.logAnnotations(photonView.ViewID, GlobalVariables.RequestTransferAnnotations, content);
+                if (DataCollectionMgr.Instance != null)
+                {
+                    DataCollectionMgr.Instance.logAnnotations(photonView.ViewID, GlobalVariables.RequestTransferAnnotations, content);
+                }
                 myStartTimesofMoves.Clear();
                 myEndTimesofMoves.Clear();
                 myLocations.Clear();
@@ -563,7 +566,7 @@ namespace Photon_IATK
             if (!removeShortLine())
             {
                 Debug.LogFormat(GlobalVariables.cTest + "Invoking remove collider in 15 seconds{0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
-                Invoke("removeCollider", 15);
+                Invoke("_removeCollider", 15);
             }
 
         }
@@ -573,8 +576,19 @@ namespace Photon_IATK
             CancelInvoke();
         }
 
+        private bool isHoverActive = false;
+
+        private void _removeCollider()
+        {
+            isHoverActive = true;
+            removeCollider();
+        }
+
         public void removeCollider()
         {
+
+            if (!isHoverActive) { return; }
+
             if (myAnnotationType != typesOfAnnotations.LINERENDER) { return; }
 
             ManipulationControls tmpMaipulationControls;
@@ -630,7 +644,7 @@ namespace Photon_IATK
             if (lineRenderPoints == null) { return false; }
 
             float dist = 0f;
-            float minDist = .1f;
+            float minDist = .045f;
             bool output = true;
 
             for (int i = 1; i < lineRenderPoints.Length; i++)
