@@ -420,7 +420,7 @@ MonoBehaviour:
   rotationHandleSize: 0.016
   rotateHandleColliderPadding: {x: 0.016, y: 0.016, z: 0.016}
   rotationHandlePrefabColliderType: 1
-  showScaleHandles: 0
+  showScaleHandles: 1
   showRotationHandleForX: 1
   showRotationHandleForY: 1
   showRotationHandleForZ: 1

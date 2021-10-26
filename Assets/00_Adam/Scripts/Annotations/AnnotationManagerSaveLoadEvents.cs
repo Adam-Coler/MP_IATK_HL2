@@ -299,8 +299,6 @@ namespace Photon_IATK
                     return;
                 }
 
-                annotationsCreated++;
-
                 genericAnnotationObj = PhotonNetwork.InstantiateRoomObject("GenericAnnotation", Vector3.zero, Quaternion.identity);
                 HelperFunctions.SetObjectLocalTransformToZero(genericAnnotationObj, System.Reflection.MethodBase.GetCurrentMethod());
                 genericAnnotationObj.name = "LoadedAnnotation_" + serializeableAnnotation.myAnnotationNumber;
@@ -362,6 +360,8 @@ namespace Photon_IATK
         public void RequestAnnotationRemoval()
         {
             Debug.LogFormat(GlobalVariables.cEvent + "Any ~ Calling: {0}, Receivers: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Sending Event Code: {5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "RequestAnnotationDeletionAll()", "MasterClient", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.RequestEventAnnotationRemoval, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            localSaveAnnotations();
 
             object[] content = new object[] { photonView.ViewID };
 
@@ -629,7 +629,42 @@ namespace Photon_IATK
 
         }
 
-        public void loadAndSendAnnotations()
+        public void localSaveAnnotation(string annotationString)
+        {
+            object[] content = new object[] { photonView.ViewID, annotationString, PhotonNetwork.NickName };
+
+            if (DataCollectionMgr.Instance != null)
+            {
+                DataCollectionMgr.Instance.logAnnotations(photonView.ViewID, GlobalVariables.RequestTransferAnnotations, content);
+            }
+            
+        }
+
+        public void localSaveAnnotations()
+        {
+            string getFolderPath = _getFolderPath();
+
+            string[] filePaths = Directory.GetFiles(getFolderPath, "*.json");
+
+            Debug.LogFormat(GlobalVariables.cFileOperations + "{0} .json annotation records found in {1}, {2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", filePaths.Length, getFolderPath, "Sending annotations now.", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+
+            foreach (string jsonPath in filePaths)
+            {
+
+                string annotationString = File.ReadAllText(jsonPath);
+
+                object[] content = new object[] { photonView.ViewID, annotationString, PhotonNetwork.NickName };
+
+                if (DataCollectionMgr.Instance != null)
+                {
+                    DataCollectionMgr.Instance.logAnnotations(photonView.ViewID, GlobalVariables.RequestTransferAnnotations, content);
+                }
+            }
+
+
+        }
+
+            public void loadAndSendAnnotations()
         {
 
             Debug.LogFormat(GlobalVariables.cCommon + "I am the MasterClient: {0}, Transfering annotaitons." + GlobalVariables.endColor + " {1}: {2} -> {3} -> {4}", PhotonNetwork.IsMasterClient, Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
@@ -648,7 +683,10 @@ namespace Photon_IATK
 
                 object[] content = new object[] { photonView.ViewID, annotationString, PhotonNetwork.NickName };
 
-                DataCollectionMgr.Instance.logAnnotations(photonView.ViewID, GlobalVariables.RequestTransferAnnotations, content);
+                if (DataCollectionMgr.Instance != null)
+                {
+                    DataCollectionMgr.Instance.logAnnotations(photonView.ViewID, GlobalVariables.RequestTransferAnnotations, content);
+                }
 
                 if (PhotonNetwork.IsConnected)
                 {

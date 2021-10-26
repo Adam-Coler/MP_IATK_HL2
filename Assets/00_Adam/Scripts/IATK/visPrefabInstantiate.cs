@@ -68,7 +68,8 @@ namespace Photon_IATK
             if (visualisationLoadingDelegate != null)
                 visualisationLoadingDelegate(false);
 
-            theVis.gameObject.transform.localScale = new Vector3(.33f, .33f, .33f);
+            //theVis.gameObject.transform.localScale = new Vector3(.33f, .33f, .33f);
+            theVis.gameObject.transform.localScale = new Vector3(.4f, .4f, .4f);
 
             theVis.isTriggeringEvents = true;
 

@@ -334,11 +334,12 @@ namespace Photon_IATK
 
         public void RequestDelete()
         {
+
             Debug.LogFormat(GlobalVariables.cEvent + "Any ~ Calling: {0}, Receivers: {1}, My Name: {2}, I am the Master Client: {3}, Server Time: {4}, Sending Event Code: {5}{6}{7}{8}." + GlobalVariables.endColor + " {9}: {10} -> {11} -> {12}", "PhotonRequestAnnotationsDeleteOneEvent", "Master", PhotonNetwork.NickName, PhotonNetwork.IsMasterClient, PhotonNetwork.Time, GlobalVariables.PhotonRequestAnnotationsDeleteOneEvent, "", "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
             object[] content = new object[] { photonView.ViewID };
 
-            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.MasterClient };
+            RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
 
             PhotonNetwork.RaiseEvent(GlobalVariables.PhotonRequestAnnotationsDeleteOneEvent, content, raiseEventOptions, GlobalVariables.sendOptions);
 
@@ -349,14 +350,13 @@ namespace Photon_IATK
         {
             this.isDeleted = true;
 
+            if (AnnotationManagerSaveLoadEvents.Instance != null) { AnnotationManagerSaveLoadEvents.Instance.localSaveAnnotation(this.GetJSONSerializedAnnotationString()); }
+
             if (PhotonNetwork.IsMasterClient)
             {
-                //save all annoatations
-                //need to not overwrite stuff anymore
-                //save to deleted folder?
-                Debug.LogFormat(GlobalVariables.cOnDestory + "Deleting: {0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", gameObject.name, "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
+                Debug.LogFormat(GlobalVariables.cOnDestory + "Master = Deleting: {0}{1}{2}." + GlobalVariables.endColor + " {3}: {4} -> {5} -> {6}", gameObject.name, "", "", Time.realtimeSinceStartup, this.gameObject.name, this.GetType(), System.Reflection.MethodBase.GetCurrentMethod());
 
-                AnnotationManagerSaveLoadEvents.Instance.saveAnnotations();
+                //AnnotationManagerSaveLoadEvents.Instance.saveAnnotations();
 
                 PhotonNetwork.Destroy(this.gameObject);
 

@@ -304,8 +304,6 @@ namespace Photon_IATK
                         {
                             if (p is IMixedRealityNearPointer)
                             {
-                                Debug.Log("Not sending data for " + p.PointerName);
-                                // Ignore near pointers, we only want the rays
                                 continue;
                             }
                             if (p.Result != null)
